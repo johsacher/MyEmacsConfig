@@ -59,7 +59,6 @@
 (if (display-graphic-p)
     (toggle-scroll-bar -1)
   )
-;; hmmm
 ;; tool bar off
 (tool-bar-mode -1)
 
@@ -244,10 +243,10 @@
   (evil-leader/set-key "s" 'save-buffer) 
   (evil-leader/set-key "i" 'org-insert-clipboard-image) 
   (evil-leader/set-key "f" 'helm-find) 
-  (evil-leader/set-key "d" 'dired) 
+  (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
   (evil-leader/set-key "p" 'helm-projectile-find-file) 
-  (evil-leader/set-key "d" 'dired) 
+  (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "x" 'helm-M-x)
   (evil-leader/set-key "2" 'split-window-below) 
   (evil-leader/set-key "3" 'split-window-right) 
@@ -575,6 +574,11 @@
  (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
  (define-key dired-mode-map (kbd "Y") 'dired-ranger-paste)
 
+;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
+(defun dired-go-current-buffer ()
+   (interactive)
+       (dired default-directory)
+  )
 
 ;;; evil dired - (results in mixture of evil and dired, evil: gg,G,/,?,yy,v  , dired, s,m,W,X,Y, etc.)
  (evil-define-key 'normal dired-mode-map (kbd "W") 'dired-ranger-copy)
@@ -595,6 +599,7 @@
   (evil-define-key 'normal dired-mode-map "n" 'evil-search-next)
   (evil-define-key 'normal dired-mode-map "N" 'evil-search-previous)
   (evil-define-key 'normal dired-mode-map "q" 'kill-this-buffer)
+
 
 ;; *)  by hitting enter -> exit narrow-mode and enter file/dir
 ;; --------------------------------------------------------------------
