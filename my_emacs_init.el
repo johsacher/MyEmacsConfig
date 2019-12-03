@@ -59,6 +59,7 @@
 (if (display-graphic-p)
     (toggle-scroll-bar -1)
   )
+;; hmmm
 ;; tool bar off
 (tool-bar-mode -1)
 
