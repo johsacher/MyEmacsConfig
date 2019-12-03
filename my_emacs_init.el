@@ -292,12 +292,12 @@
 ;; (evil-leader/set-key-for-mode 'term-mode "k" 'term-char-mode) 
 (evil-leader/set-key-for-mode 'term-mode "k" 'term-switch-char-mode-emacs-state) 
 
-
 (defun term-switch-line-mode-normal-state()
   (interactive)
   (evil-normal-state)
   (term-line-mode)
   )
+
 (defun term-switch-char-mode-emacs-state()
   (interactive)
   (evil-emacs-state)
