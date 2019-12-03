@@ -56,7 +56,9 @@
 ;*) global line number mode on
 (global-display-line-numbers-mode)
 ;*) scroll bar off
-;;(toggle-scroll-bar -1) 
+(if (display-graphic-p)
+    (toggle-scroll-bar -1)
+  )
 ;; tool bar off
 (tool-bar-mode -1)
 
