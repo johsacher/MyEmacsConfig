@@ -263,8 +263,8 @@
 (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
-;;; TERMINAL
-;; +) stickyterm
+;;;* TERMINAL
+;;** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
@@ -278,16 +278,46 @@
  (add-hook 'term-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
 
+;;** short cut for term-paste
+ (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
+ (evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
+ (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
+ (evil-define-key 'instert term-raw-map (kbd "C-p") 'term-paste)
 
-;; evil term
+;;** switch only between (term char with emacs-state) and (term line with normal-state)
+ (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
+ (evil-define-key 'normal term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state) ;; this is just to not get undesired error messages when repeating
+
+(evil-leader/set-key-for-mode 'term-mode "j" 'term-line-mode)
+;; (evil-leader/set-key-for-mode 'term-mode "k" 'term-char-mode) 
+(evil-leader/set-key-for-mode 'term-mode "k" 'term-switch-char-mode-emacs-state) 
+
+
+(defun term-switch-line-mode-normal-state()
+  (interactive)
+  (evil-normal-state)
+  (term-line-mode)
+  )
+(defun term-switch-char-mode-emacs-state()
+  (interactive)
+  (evil-emacs-state)
+  (term-char-mode)
+  )
+
+;;** evil term
  (evil-define-key 'normal term-raw-map (kbd "RET") 'term-send-raw)
  (evil-define-key 'normal term-raw-map (kbd "h") 'term-send-left)
  (evil-define-key 'normal term-raw-map (kbd "l") 'term-send-right)
  (evil-define-key 'normal term-raw-map (kbd "k") 'term-send-up)
  (evil-define-key 'normal term-raw-map (kbd "j") 'term-send-down)
  (evil-define-key 'normal term-raw-map (kbd "x") 'term-send-del)
-(evil-leader/set-key-for-mode 'term-mode "j" 'term-line-mode)
-(evil-leader/set-key-for-mode 'term-mode "k" 'term-char-mode) 
+
+;;*** make initial state for term emacs-state
+;; this did not work:
+ ;; (add-hook 'term-mode-hook
+           ;; (lambda nil (evil-emacs-state)))
+;; this did work:
+(evil-set-initial-state 'term-mode 'emacs)
 
 ;; +) tramp connection to hlrn (fast command)
 (load "hlrn_tramp_connect.el")
