@@ -21,12 +21,10 @@
 ;;; END USER CONTROL
 
 ;;; TODOS
-;; .ok) move buffer to specific window (drag/drop or good command)
-;; .) dired directory up --> use the same buffer
-;; .ok) dired copy/paste folders/files quicker! -> ranger
 
 
-;;; HLRN (remote ssh)
+;;; copy/paste in terminal-mode, also remote
+;; todo: first check if xclip is installed in system
 ;;(require 'xclip)
 ;;(xclip-mode 1)
 

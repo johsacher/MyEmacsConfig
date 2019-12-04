@@ -90,5 +90,3 @@
 )
 
 (tool-bar-add-item "terminal" 'stickyterm-noninteractive 'stickyterm-noninteractive "blablabla")
-
-		 
