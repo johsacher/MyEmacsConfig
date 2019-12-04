@@ -1,0 +1,21 @@
+* me: "emacs in not a text-editor. emacs is a text-based interface-platform, to automize your work flow."
+* thus ANY text-editing style can be plugged-in (vim-style, emacs-style, etc.)
+* everything is a function. every function can be called via customized short cut. --> everything can be done via short-cut.
+
+#                                   Emacs                            
+#           ____________________________^___________________________
+#          /                                                        \
+#                                              
+#              +--text-editing-------------+                      
+#              |                           |                       
+#              |                 +---------+-----system-admin-------+
+#              |                 |         |                        |
+#              |                 |         |                        |
+#              |                 |         |   file operations      |
+#              |                 |         |                        |
+#              |                 |         |   terminal-commands    |
+#              |                 |         |                        |
+#              +-----------------+---------+   third-party programs |
+#                                |                                  |
+#                                |                                  |
+#                                +----------------------------------+

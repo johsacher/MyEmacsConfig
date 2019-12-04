@@ -1,0 +1,25 @@
+* short-cuts and evil integration: "benefit from emacs packages' *functionalities*, do not 'hang on' short-cut-*implementations* of these packages. short-cuts are more importantly *your concept* of doing things consistantly, and you grow organically/symbiotically with them"
+** consequence --> remain in normal mode as initial mode for *every mode*, be it org-mode, magit-mode, or whatever. use/explore their wonderfully programmed functions, firstly by the good old M-x / helm-M-x. and then assign short-cuts - possibly inspired by the packages' default short-cuts - as you use some of them heavily, by implementing these via evil-define-key. this way you ll have the best of 2 worlds: "kind of global" evil-style functions (heavy-use evil-leader short-cuts, killer-vim-style yank/search/replace/etc.) and package/mode's heavy use operations - recommendedly simplified to single touch variants, e.g. ctrl-<key> to evil-leader-<key> or simply normal-mode-<key>.
+** results heavy use of evil-define-key (since we will live in evil). mind that - as of now 2019 - due to a bug, we have to use evil-define-minor-mode-key instead for minor-mode evil key map manipulation (evil-mode issue #301) 
+** interpretation with respect to emacs-philosophy: "let the user grow organically with emacs - with learning by doing". 
+** only exception: terminal-buffer --> do it just like you would do it in an "outside-emacs"-terminal. for evil-like treatment of buffer --> C-c j (char-mode to inline-mode) / C-z (normal-mode)
+** most pinky-wearing Emacs standard key-bindings, evil-leader equivalent:
+*** C-x <key> --> <evil-leader>-<key>
+**** C-x-C-<key> --> <evil-leader>-<key>
+
+* short cut concept
+** conflicting interests / priorities
+*** of coarse there are some conflicting interests and priority decision making, when it comes to this issue. "we want to unite different worlds (package authors, our own global window management, etc.), and these worlds claim the prime spots on the key board. 
+*** e.g. org-mode Alt-right, evilified would result to Alt-l. But Alt-h/j/k/l are "the place to be" for window-navigation.
+*** so analysing these conflicts, we have two groups of heavy keybindings / functionalities, with order of priority: 
+**** "global" heavy use 
+***** concerning all buffers/windows
+***** e.g. window management (especially navigate, but also close, split)
+***** we want this to work *everywhere*, so this will have priority
+**** "local" heavy use
+***** concerning *one specific* buffer/window, so this equates to package/major mode-functionalities
+***** e.g. org-mode functions: indent, move/indent heading
+***** in case of conflict, sacrificed for the "next better alternative"
+** avoid arrow-keys - preferably never use them
+*** arrow keys are seductive, since intuitive, but necessary hand movement off the *home row* (asdf/jkl;).
+*** vim espouses this principle even several degrees more then emacs-default-keys, which is *one* of the compelling arguments to use evil-mode.
