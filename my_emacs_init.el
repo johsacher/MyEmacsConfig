@@ -105,6 +105,15 @@
   ;; (insert command_string)
   (org-display-inline-images)
   )
+;; open 'standard quick' notes.org file
+(defun myorg-open-quick-notes ()
+  (interactive)
+  (find-file "~/org/notes.org")
+  )
+
+(evil-leader/set-key-for-mode 'org-mode "n" 'myorg-open-quick-notes) 
+;; paste image from clipboard
+(evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
 
 ;; in dired -> create org mode file within hidden folder (of same name)
 ;; (we don t want all the "junk" to be seen, images, latex aux files, etc.)
@@ -239,7 +248,6 @@
   (evil-leader/set-key "c" 'comment-dwim-2) ;
   (evil-leader/set-key "k" 'kill-this-buffer)
   (evil-leader/set-key "s" 'save-buffer) 
-  (evil-leader/set-key "i" 'org-insert-clipboard-image) 
   (evil-leader/set-key "f" 'helm-find) 
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
