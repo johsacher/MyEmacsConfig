@@ -1,0 +1,8 @@
+* questions open:
+** what is breakpoint-number bp-num
+
+
+* bp.el: setting icons (symbols) for breakpoints
+** realgud-bp-put-icon pos enabled?   --> puts the currently "designed" icon on the fringe
+real
+* 
