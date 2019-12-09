@@ -625,7 +625,6 @@
   ;; (evil-define-key 'normal dired-mode-map "l" 'dired-find-alternate-file)
  ;; (evil-define-key 'normal dired-mode-map "o" 'dired-sort-toggle-or-edit)
   (evil-define-key 'normal dired-mode-map "s" 'dired-sort-toggle-or-edit)
-  (evil-define-key 'normal dired-mode-map "g" 'revert-buffer)
   (evil-define-key 'normal dired-mode-map "(" 'dired-hide-details-mode)
   (evil-define-key 'normal dired-mode-map "m" 'dired-mark)
   (evil-define-key 'normal dired-mode-map "o" 'dired-mark)

@@ -1,6 +1,7 @@
-* me: "emacs in not a text-editor. emacs is a text-based interface-platform, to automize your work flow."
-* thus ANY text-editing style can be plugged-in (vim-style, emacs-style, etc.)
-* everything is a function. every function can be called via customized short cut. --> everything can be done via short-cut.
+* what is Emacs?
+** me: "emacs is not a text-editor. emacs is a text-based interface-platform, to automize your work flow."
+** thus ANY text-editing style can be plugged-in (vim-style, emacs-style, etc.)
+** everything is a function. every function can be called via customized short cut. --> everything can be done via short-cut.
 
 #                                   Emacs                            
 #           ____________________________^___________________________
@@ -19,3 +20,15 @@
 #                                |                                  |
 #                                |                                  |
 #                                +----------------------------------+
+
+
+* latex (auctex)
+** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
+
+* the vim text editing language
+** Emacs cannot be compared to VIM, VIM text editing system can be used in Emacs
+*** VIM is more a concept for short-cut-design for text-editing
+*** since in emacs short cuts are fully customizable, using VIM in Emacs just means redefining the default short-cuts the "VIM-way"
+** why the VIM short-cut system is awesome - demo of cool work flow features:
+*** navigate h,j,k,l
+*** modal editing -> no pain of ctrl-/alt-key-combinations
