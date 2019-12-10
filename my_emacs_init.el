@@ -761,6 +761,7 @@
  (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
  (define-key dired-mode-map (kbd "Y") 'dired-ranger-paste)
 
+
 ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
 (defun dired-go-current-buffer ()
    (interactive)
