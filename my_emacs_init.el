@@ -190,7 +190,6 @@
    (cd original-default-directory)
 )
 
-(string-match "^\..*\.org$" last-daily-file-name)
 
 (defun delete-all-symbolic-links (&optional path)
   (interactive)

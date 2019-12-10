@@ -1,7 +1,7 @@
-* atoms:
 ** symbol (asdf, bob, +, -, etc.)
-** string ("asdf", "my name is bob", etc.)
-** number (12, 124.1245, etc.)
+** atoms:
+*** string ("asdf", "my name is bob", etc.)
+*** number (12, 124.1245, etc.)
 * everything (both code and data) is a list of atoms and/or (sub)lists
 ** ... well "almost" there s also arrays ...:
 [[./screenshot_20191209_152229.png]]
