@@ -13,8 +13,6 @@ date2)
     (setq date (decode-time (encode-time 1 1 0 day month year)))
   date)
 
-(decode-time (encode-time 1 1 0 day month year))
-
 (defun org-planner-create-daily-org-files (&optional days)
     " creates daily files in $ORG/daily/ . determines the latest daily-file, and adds new daily-files for <days> number of days (default 60 days)."
     (interactive)
@@ -94,17 +92,17 @@ last-date)
   (setq file-full-name (concat  (file-name-as-directory org-planner-daily-dir) filename))
   )
 
-(setq date-raw-2 (time-add date-raw date-raw))
-(decode-time date-raw)
-(setq date2 (decode-time date-raw-2))
+;; (setq date-raw-2 (time-add date-raw date-raw))
+;; (decode-time date-raw)
+;; (setq date2 (decode-time date-raw-2))
 
-(setq t1 (encode-time 1 1 0 31 3 2019))
-(decode-time (encode-time 1 1 0 33 3 2019))
+;; (setq t1 (encode-time 1 1 0 31 3 2019))
+;; (decode-time (encode-time 1 1 0 33 3 2019))
 
-(apply 'encode-time (decode-time (current-time)))
+;; (apply 'encode-time (decode-time (current-time)))
 
-(setq a 3)
-(format "%02i" a)
+;; (setq a 3)
+;; (format "%02i" a)
 
 
 (defun org-planner-open-today ()

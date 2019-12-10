@@ -392,6 +392,10 @@
 (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
+
+;;* org-planner
+(load (concat my_load_path "org-planner/org-planner.el"))
+
 ;;;* TERMINAL
 ;;** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
