@@ -1,3 +1,6 @@
+;; format of daily files: <year>_<month>_<day>_<weekday>.org
+;; format of weekly files: <year>_<month>_<day>_week.org
+
 (defvar planet-mode-map
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "C-.") 'planet-next-day)
@@ -76,14 +79,37 @@ date2)
     (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
     )
 
-(defun planet-get-last-daily-org-file-date ()
-    ;;** get list of files
+(defun planet-create-week-org-files (&optional days)
+    " creates week files in $ORG/daily/ . only for existing daily-files. simply, for each existing monday-file a nearly equal org-file-folder is created, where only ..._Mon is replaced by ..._week"
+    (interactive)
+    ;* filter daily-files for mondays
+    (setq daily-files (planet-get-all-daily-files))
+    (setq daily-files (-filter (lambda (x) (string-match "^\..*_Mon\.org$" x)) daily-files))
+    (dolist (file daily-files) 
+      (setq filebasename (file-name-base file))
+      ;; replace "Mon" by "week"
+      (setq fixedcase t)
+      (setq week-filebasename (replace-regexp-in-string "Mon" "week" filebasename fixedcase))
+      (setq week-filebasename (replace-regexp-in-string "^." "" week-filebasename))
+      (create-hidden-org-file-folder week-filebasename planet-daily-dir)
+      )
+
+    ;;* run create symlinks to "update" symlinks (existing are not changed)
+    (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
+    )
+
+(defun planet-get-all-daily-files ()
     (setq daily-files (directory-files planet-daily-dir))
     ;;** filter
     (setq daily-files (-filter (lambda (x) (string-match "^\..*\.org$" x)) daily-files))
     (cd planet-daily-dir)
     (setq daily-files (-filter (lambda (x) (file-directory-p x)) daily-files)) ;; get the wuckin symlinks out (above regex could not filter them, prob. elisp bug)
     ;;** extract year/month/day of last file
+daily-files)
+
+(defun planet-get-last-daily-org-file-date ()
+    ;;** get list of files
+    (setq daily-files (planet-get-all-daily-files))
     (setq last-daily-file-name (car (last daily-files)))
 
     ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
@@ -163,7 +189,6 @@ last-date)
   (find-file (concat planet-daily-dir "/." next-day-filebasename ".org" "/" next-day-filebasename ".org"))
   )
 
-;;test: (planet-open-today)
 (defun planet-previous-day ()
   (interactive)
   (setq this-file-date (planet-get-daily-file-date))
@@ -187,9 +212,52 @@ last-date)
   (find-file (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
   )
 ;;test: (planet-open-today)
+(evil-leader/set-key "t" 'planet-today)
+(evil-leader/set-key "w" 'planet-this-week)
+
+(defun planet-this-week ()
+  (interactive)
+  (setq date (decode-time (current-time)))
+  (planet-go-week-file-for-date date)
+  )
+;;test: (planet-open-today)
 
 
+(defun planet-go-week-file-for-current-buffer-daily-file ()
+  (interactive)
+  (setq filebasename (file-name-sans-extension (buffer-name)))
+  (setq this-file-date (planet-convert-filebasename-to-date filebasename))
+  (planet-go-week-file-for-date this-file-date)
+  )
+
+(defun planet-go-week-file-for-date (date)
+  (setq dow_monday 1)
+  (setq dow (planet-date-get-dow date))
+  (while (not (= dow dow_monday))
+    (setq date (planet-subtract-one-day date))
+    (setq dow (planet-date-get-dow date))
+    )
   
+  (setq found-monday-filebasename (planet-convert-date-to-filebasename date))
+  (setq week-filebasename (replace-regexp-in-string "Mon" "week" found-monday-filebasename fixedcase))
+  (find-file (concat planet-daily-dir "/." week-filebasename ".org" "/" week-filebasename ".org"))
+  )
+
+(defun planet-date-get-dow (date)
+  (setq day  (nth 6 date))
+day)
+
+(defun planet-date-get-year (date)
+  (setq year  (nth 5 date))
+year)
+
+(defun planet-date-get-month (date)
+  (setq month  (nth 4 date))
+month)
+  
+(defun planet-date-get-day (date)
+  (setq day  (nth 3 date))
+day)
 
 (defun planet-convert-filebasename-to-date (filenamebase)
     ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
@@ -207,13 +275,12 @@ date)
   (setq month (format "%02i" (nth 4 date)))
   (setq day   (format "%02i" (nth 3 date)))
 
-  (setq weekday-int (nth 6 date))
-  (setq weekday-abbr (convert-dow-abbreviation weekday-int))
+  (setq dow (nth 6 date))
+  (setq weekday-abbr (convert-dow-abbreviation dow))
 
    (setq filebasename (concat year "_" month "_" day "_" weekday-abbr ))
 
   filebasename)
-
 
 ;; open 'standard quick' notes.org file
 (defun planet-open-quick-notes ()

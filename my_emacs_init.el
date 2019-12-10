@@ -386,7 +386,7 @@
   (evil-leader/set-key "r" 'quick-evil-search-replace)  ; quick way to replace expression in region
   (evil-leader/set-key "v" 'evil-select-pasted)  ; quick way to replace expression in region
   (evil-leader/set-key "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))) ; quick way to replace expression in region
-  (evil-leader/set-key "w" 'iresize-mode)
+  (evil-leader/set-key "'" 'iresize-mode)
 )                 
 
 (require 'evil-numbers)
