@@ -105,11 +105,6 @@
   ;; (insert command_string)
   (org-display-inline-images)
   )
-;; open 'standard quick' notes.org file
-(defun myorg-open-quick-notes ()
-  (interactive)
-  (find-file "~/org/notes.org")
-  )
 
 (evil-leader/set-key "n" 'myorg-open-quick-notes) 
 ;; paste image from clipboard
@@ -406,6 +401,10 @@
            (planet-mode)
           ))
           
+(add-hook 'planet-mode-hook
+         (lambda ()
+           (outline-show-all)
+           ))
 
 
 ;;;* TERMINAL

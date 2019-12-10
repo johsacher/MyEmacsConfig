@@ -124,6 +124,7 @@ last-date)
   )
 
 (defvar planet-daily-dir "~/org/daily")
+(defvar planet-dir "~/org")
 
 (defun convert-dow-abbreviation (dow)
   (setq weekday-abbr (nth dow dow-time-days))
@@ -212,3 +213,10 @@ date)
    (setq filebasename (concat year "_" month "_" day "_" weekday-abbr ))
 
   filebasename)
+
+
+;; open 'standard quick' notes.org file
+(defun planet-open-quick-notes ()
+  (interactive)
+  (find-file (concat planet-dir "/" "notes.org"))
+  )
