@@ -111,7 +111,7 @@
   (find-file "~/org/notes.org")
   )
 
-(evil-leader/set-key-for-mode 'org-mode "n" 'myorg-open-quick-notes) 
+(evil-leader/set-key "n" 'myorg-open-quick-notes) 
 ;; paste image from clipboard
 (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
 
