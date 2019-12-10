@@ -1,0 +1,214 @@
+(defvar planet-mode-map
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "C-.") 'planet-next-day)
+    (define-key m (kbd "C-,") 'planet-previous-day)
+    m))
+
+(define-minor-mode planet-mode
+  :initial-value nil
+  :lighter " planet"
+  :keymap planet-mode-map
+  :group 'planet
+  :global nil)
+
+;;* planet evil
+;; this also did not work out:
+;; (evil-define-minor-mode-key 'normal planet-mode (kbd ">") 'planet-next-day)
+;; (evil-define-minor-mode-key 'normal planet-mode (kbd "<") 'planet-previous-day)
+;; intermediate work-around -> enable for all org files:
+(evil-define-key 'normal org-mode-map (kbd ">") 'planet-next-day)
+(evil-define-key 'normal org-mode-map (kbd "<") 'planet-previous-day)
+
+;; that did not work: (would be nice for android usage)
+;; (evil-define-minor-mode-key 'normal planet-mode-map (kbd "<up>") 'planet-next-day)
+;; (evil-define-minor-mode-key 'normal planet-mode-map (kbd "up") 'planet-next-day)
+;; (evil-define-minor-mode-key 'normal planet-mode-map (kbd "down") 'planet-previous-day)
+
+(evil-define-minor-mode-key 'insert planet-mode (kbd ">") 'planet-next-day)
+(evil-define-minor-mode-key 'insert planet-mode (kbd "<") 'planet-previous-day)
+;; (evil-define-minor-mode-key 'insert planet-mode (kbd "up") 'planet-next-day)
+;; (evil-define-minor-mode-key 'insert planet-mode (kbd "down") 'planet-previous-day)
+
+(evil-define-minor-mode-key 'emacs planet-mode (kbd ">") 'planet-next-day)
+(evil-define-minor-mode-key 'emacs planet-mode (kbd "<") 'planet-previous-day)
+;; (evil-define-minor-mode-key 'emacs planet-mode-map (kbd "up") 'planet-next-day)
+;; (evil-define-minor-mode-key 'emacs planet-mode-map (kbd "down") 'planet-previous-day)
+
+
+(provide 'planet)
+
+(defun planet-add-one-day (date)
+  ;; (setq date (decode-time (current-time)))
+(setq date2 date)
+(setq day (nth 3 date2))
+(setq day-incremented (1+ day))
+(setf (nth 3 date2) day-incremented)
+(setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
+;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
+date2)
+
+(defun planet-subtract-one-day (date)
+  ;; (setq date (decode-time (current-time)))
+(setq date2 date)
+(setq day (nth 3 date2))
+(setq day-incremented (1- day))
+(setf (nth 3 date2) day-incremented)
+(setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
+;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
+date2)
+
+(defun planet-create-date (day month year)
+    (setq date (decode-time (encode-time 1 1 0 day month year)))
+  date)
+
+(defun planet-create-daily-org-files (&optional days)
+    " creates daily files in $ORG/daily/ . determines the latest daily-file, and adds new daily-files for <days> number of days (default 60 days)."
+    (interactive)
+    ;* determine latest daily-file
+    (setq date (planet-get-last-daily-org-file-date))
+    (setq i 1)
+    (while (< i 60)
+      (setq i (1+ i))
+      ;; add one day
+      (setq date (planet-add-one-day date))
+      (create-daily-hidden-org-file date)
+      )
+    (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
+    )
+
+(defun planet-get-last-daily-org-file-date ()
+    ;;** get list of files
+    (setq daily-files (directory-files planet-daily-dir))
+    ;;** filter
+    (setq daily-files (-filter (lambda (x) (string-match "^\..*\.org$" x)) daily-files))
+    (cd planet-daily-dir)
+    (setq daily-files (-filter (lambda (x) (file-directory-p x)) daily-files)) ;; get the wuckin symlinks out (above regex could not filter them, prob. elisp bug)
+    ;;** extract year/month/day of last file
+    (setq last-daily-file-name (car (last daily-files)))
+
+    ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
+    (when (string-match ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$" last-daily-file-name)
+      (setq year (string-to-number (substring last-daily-file-name 1 5)))
+      (setq month (string-to-number (substring last-daily-file-name 6 8)))
+      (setq day (string-to-number (substring last-daily-file-name 9 11)))
+      )
+    ;;** set last-date
+    (setq last-date (planet-create-date day month year))
+  ;; last-date)
+last-date)
+;; test: (planet-get-last-daily-org-file-date)
+
+(defun get-current-path ()
+  (interactive)
+  (cond ( (equal major-mode 'dired-mode)
+	      (setq currentpath (dired-current-directory))
+	)
+	( (equal major-mode 'term-mode)
+	     (setq currentpath default-directory)
+	)
+	(t ;; else
+	     (setq currentpath (file-name-directory buffer-file-name))
+	)
+   )
+ currentpath)
+
+
+
+(defvar dow-time-days '("Sun"  ;; 0
+                        "Mon"  ;; 1
+                        "Tue"  ;; 2
+                        "Wed"  ;; 3
+                        "Thu"  ;; 4
+                        "Fri"  ;; 5
+                        "Sat") ;; 6
+  )
+
+(defvar planet-daily-dir "~/org/daily")
+
+(defun convert-dow-abbreviation (dow)
+  (setq weekday-abbr (nth dow dow-time-days))
+ weekday-abbr)
+
+(defun create-daily-hidden-org-file(date)
+  " creates daily file <year>_<month>_<day>_<weekdayname>.org for <date> in planet-daily-directory. 
+    1 argument: date ...  format elisp date list (run decode-time first): (16 50 15 9 12 2019 1 nil 3600)
+    "
+  (interactive)
+  ;;* concat file name 
+  (setq filebasename (planet-convert-date-to-filebasename (date)))
+  (create-hidden-org-file-folder filebasename planet-daily-dir)
+  (setq file-full-name (concat  (file-name-as-directory planet-daily-dir) filename))
+  )
+
+;; (setq date-raw-2 (time-add date-raw date-raw))
+;; (decode-time date-raw)
+;; (setq date2 (decode-time date-raw-2))
+
+;; (setq t1 (encode-time 1 1 0 31 3 2019))
+;; (decode-time (encode-time 1 1 0 33 3 2019))
+
+;; (apply 'encode-time (decode-time (current-time)))
+
+;; (setq a 3)
+;; (format "%02i" a)
+
+(defun planet-next-day ()
+  (interactive)
+  (setq this-file-date (planet-get-daily-file-date))
+  (setq next-day-date (planet-add-one-day this-file-date))
+
+  (setq next-day-filebasename (planet-convert-date-to-filebasename next-day-date))
+
+  (find-file (concat planet-daily-dir "/." next-day-filebasename ".org" "/" next-day-filebasename ".org"))
+  )
+
+;;test: (planet-open-today)
+(defun planet-previous-day ()
+  (interactive)
+  (setq this-file-date (planet-get-daily-file-date))
+  (setq previous-day-date (planet-subtract-one-day this-file-date))
+
+  (setq previous-day-filebasename (planet-convert-date-to-filebasename previous-day-date))
+
+  (find-file (concat planet-daily-dir "/." previous-day-filebasename ".org" "/" previous-day-filebasename ".org"))
+  )
+
+(defun planet-get-daily-file-date ()
+  (interactive)
+  (setq filebasename (file-name-sans-extension (buffer-name)))
+  (setq this-file-date (planet-convert-filebasename-to-date filebasename))
+  this-file-date)
+
+(defun planet-today ()
+  (interactive)
+  (setq date (decode-time (current-time)))
+  (setq filebasename (planet-convert-date-to-filebasename date))
+  (find-file (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
+  )
+;;test: (planet-open-today)
+
+
+  
+
+(defun planet-convert-filebasename-to-date (filenamebase)
+    ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
+    (when (string-match "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_..." filenamebase)
+      (setq year (string-to-number (substring filenamebase 0 4)))
+      (setq month (string-to-number (substring filenamebase 5 7)))
+      (setq day (string-to-number (substring filenamebase 8 10)))
+      )
+    ;;** set last-date
+    (setq date (planet-create-date day month year))
+date)
+
+(defun planet-convert-date-to-filebasename (date)
+  (setq year  (format "%02i" (nth 5 date)))
+  (setq month (format "%02i" (nth 4 date)))
+  (setq day   (format "%02i" (nth 3 date)))
+
+  (setq weekday-int (nth 6 date))
+  (setq weekday-abbr (convert-dow-abbreviation weekday-int))
+
+   (setq filebasename (concat year "_" month "_" day "_" weekday-abbr ))
+
+  filebasename)

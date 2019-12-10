@@ -315,6 +315,12 @@
 (evil-define-key 'insert org-mode-map (kbd "C-k") 'org-metaup)
 (evil-define-key 'insert org-mode-map (kbd "C-j") 'org-metadown)
 
+;; (evil-define-key 'normal org-mode-map (kbd "left") 'dummy-message)
+(defun dummy-message ()
+  (interactive)
+  (message "dummy message")
+  )
+
 (evil-define-key 'normal org-mode-map (kbd "M-L") 'org-shiftmetaright)
 (evil-define-key 'normal org-mode-map (kbd "M-H") 'org-shiftmetaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
@@ -393,8 +399,14 @@
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 
-;;* org-planner
-(load (concat my_load_path "org-planner/org-planner.el"))
+;;* planet-mode (my org extension)
+(load (concat my_load_path "planet/planet.el"))
+(add-hook 'org-mode-hook
+         (lambda ()
+           (planet-mode)
+          ))
+          
+
 
 ;;;* TERMINAL
 ;;** use my own term version: stickyterm (slightly modified ansi-term)
@@ -666,17 +678,30 @@
 (setq dired-dwim-target nil)
 
 
-
-
-;;;; *))  DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;*  DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; +) hide details by default
+;;** hide details by default
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-hide-details-mode)
             (dired-sort-toggle-or-edit)))
-;; +) add option to list directories first
+
+;;** dired omit files
+(require 'dired-x)
+  (defun dired-dotfiles-toggle ()
+    "Show/hide dot-files"
+    (interactive)
+    (when (equal major-mode 'dired-mode)
+      (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
+	  (progn 
+	    (set (make-local-variable 'dired-dotfiles-show-p) nil)
+	    (message "h")
+	    (dired-mark-files-regexp "^\\\.")
+	    (dired-do-kill-lines))
+	(progn (revert-buffer) ; otherwise just revert to re-show
+               (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+;;** add option to list directories first
 ;;(setq dired-listing-switches "-aBhl  --group-directories-first")
 
 ;; easy open with external applications
