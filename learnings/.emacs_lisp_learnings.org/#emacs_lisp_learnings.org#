@@ -1,0 +1,71 @@
+** symbol (asdf, bob, +, -, etc.)
+** atoms:
+*** string ("asdf", "my name is bob", etc.)
+*** number (12, 124.1245, etc.)
+* everything (both code and data) is a list of atoms and/or (sub)lists
+** ... well "almost" there s also arrays ...:
+[[./screenshot_20191209_152229.png]]
+* functions and variables
+** every symbol can have a function or variable /attached/ to it.
+* /evaluation/ (= running code with interpreter)
+** find a function for first atom in list (has to be a symbol) and run it
+** when no function exists for the symbol --> error, e.g. running (a b) --> void-function-definition.
+** when quoted (quote or ') --> do not look for a function and evaluate, just return the list.
+*** (quote (a b))   or '(a b)
+** important note: when not quoted - i.e. evaluated - *every symbol* in the list also will tried to be evaluated as a variable (!), so quoting also exists for symbols, just like for lists.
+
+* elisp-python cheat sheet
+|---------------------+-----------------------------------------+-----------------------------------|
+| python (numpy)      | elisp                                   | description                       |
+|---------------------+-----------------------------------------+-----------------------------------|
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     |                                         |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+| list[i]             | (nth i list)                            | get i'th element of list          |
+|---------------------+-----------------------------------------+-----------------------------------|
+| def fun(arg1,arg2): | (defun fun (arg1 arg2)                  | function arguments / return value |
+| ...                 | ...                                     |                                   |
+| return value        | value)                                  |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (defun fun (arg1 arg2 &optional         | optional arguments                |
+|                     | optarg1 optarg2 )                       |                                   |
+|                     | ...)                                    | date                              |
+|---------------------+-----------------------------------------+-----------------------------------|
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     |                                         | conditional statements            |
+|---------------------+-----------------------------------------+-----------------------------------|
+| if (<condition>):   | (if (<condition>)                       |                                   |
+| ...                 | (<then-command>)                        |                                   |
+| else:               | (<else-command>)                        |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (when (<condition>)                     |                                   |
+|                     | (<multiple>)                            |                                   |
+|                     | (<then-commands>)                       |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     |                                         | File Operations                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (write-file <filename>)                 | save as..                         |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (write-region <string> nil file-name)   | append <string> to file           |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (write-region    ""    nil file-name)   | create new file                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (while (< num 4)                        | for loop                          |
+|                     | (setq num (1+ num))                     |                                   |
+|                     | ...)                                    |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (setf (nth i list) new-element)         | replace element in list           |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     |                                         | File-/Directory- name operations  |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (file-name-directory <filefullname>)    |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | (file-name-nondirectory <filefullname>) |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | file-name-base / file-name-extension    |                                   |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     |                                         | strings and regex                 |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     | string-match <regex> <string>           | match string                      |
+|---------------------+-----------------------------------------+-----------------------------------|
+|                     |                                         |                                   |

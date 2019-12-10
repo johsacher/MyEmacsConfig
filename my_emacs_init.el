@@ -73,7 +73,7 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize) ;; You might already have this line
 
-;;; org-mode
+;;;* org-mode
 
 (require 'org-install)
 
@@ -115,25 +115,131 @@
 ;; paste image from clipboard
 (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
 
+
 ;; in dired -> create org mode file within hidden folder (of same name)
 ;; (we don t want all the "junk" to be seen, images, latex aux files, etc.)
 ;; (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are "mistreated/violated" by Dropbox)
-(defun dired-create-org-file-hidden-folder ()
+(defun create-hidden-org-file-folder (&optional filebasename path)
    (interactive)
+   ;;* determine filename
+   (if (not filebasename)
+       (setq filebasename (read-string "Org-file-name (without .org-extension):"))
+     )
+
+   ;;* path
+   (if (not path) ;; default --> put to current path
+        (setq path (get-current-path))
+     )
    ;; create the hidden (dotted) folder with same name of org file
-   (setq filename (read-string "Org-file-name (without .org-extension):"))
-   (setq currentpath (dired-current-directory))
-   (setq new-directory-full-name (concat currentpath "/" "." filename ".org"))
-   (make-directory new-directory-full-name)
+     (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
+    (make-directory new-directory-full-name)
    ;; create the org file within that folder
-   (setq new-org-file-full-name (concat new-directory-full-name "/" filename ".org"))
-   (with-temp-buffer (write-file new-org-file-full-name))
-   ;; create softlink --> discarded, see above
-   ;; (setq target-name (concat "./." filename ".org/" filename ".org" )) ;; relative path to org file in hidden folder
-   ;; (setq link-name (concat currentpath "/" filename ".org"))
-   ;; (make-symbolic-link target-name link-name)
+   (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
+   ;;* create file (2 options)
+   ;;** option1: with-temp-buffer
+   ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
+   ;;** option2: write-region
+   (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
+   ;; option2 safer, in case dayfile exists, content is not deleted
 )
 
+(defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
+   (interactive)
+   (setq orgdotfolder (file-name-nondirectory orgdotfolder-full))
+   ;; create softlink --> discarded, see above
+   (when (string-match "^\.\\(.*\\)\.org$" orgdotfolder)
+     (setq filebasename (match-string 1 file))
+     (setq link-name (concat default-directory "/" filebasename ".org"))
+     (setq target-name (concat "./." filebasename ".org/" filebasename ".org" )) ;; relative path to org file in hidden folder
+     (when (not (file-exists-p link-name))
+       (make-symbolic-link target-name link-name)
+       )
+     )
+   )
+
+
+(defun create-symlinks-for-all-hidden-org-file-folders (&optional path)
+   (interactive)
+   ;; process opt. arg
+   (when (not path)
+     (setq path (get-current-path))
+     )
+
+    ;; later restore default-directory (don t know if necessary...)
+   (setq original-default-directory default-directory)
+   (cd path)
+   (setq files (directory-files default-directory))
+   (setq N (length files))
+   (setq i 0)
+   (while (< i N)
+     (setq file (nth i files))
+     (when (file-directory-p file)
+       (when (string-match "^\..*\.org$" file)
+         (setq orgfilefolder-full (concat default-directory "/" file))
+         (create-symlink-for-hidden-org-file-folder orgfilefolder-full)
+         ;; (setq filebasename (match-string 1 file))
+         ;; (setq link-name (concat default-directory "/" filebasename ".org"))
+         ;; (setq target-name (concat "./." filebasename ".org/" filebasename ".org" )) ;; relative path to org file in hidden folder
+         ;; (when (not (file-exists-p link-name))
+         ;;   (make-symbolic-link target-name link-name)
+         ;;   )
+         )
+       )
+     (setq i (1+ i))
+     )
+   (cd original-default-directory)
+)
+
+(string-match "^\..*\.org$" last-daily-file-name)
+
+(defun delete-all-symbolic-links (&optional path)
+  (interactive)
+   (when (not path)
+     (setq path (get-current-path))
+     )
+
+    ;; later restore default-directory (don t know if necessary...)
+   (setq original-default-directory default-directory)
+   (cd path)
+   (setq files (directory-files default-directory))
+   (setq N (length files))
+   (setq i 0)
+   (while (< i N)
+     (setq file (nth i files))
+     (when (file-symlink-p file)
+       (delete-file file)
+       )
+     (setq i (1+ i))
+     )
+   (cd original-default-directory)
+   )
+
+(defun create-hidden-org-file-folder-with-symlink (&optional filename)
+   (interactive)
+   (if (not filename)
+       (setq filename (read-string "Org-file-name (without .org-extension):"))
+     )
+   ;; create dot-folder (above function)
+   (dired-create-org-file-hidden-folder)
+   ;; create softlink --> discarded, see above
+   (setq target-name (concat "./." filename ".org/" filename ".org" )) ;; relative path to org file in hidden folder
+   (setq link-name (concat currentpath "/" filename ".org"))
+   (make-symbolic-link target-name link-name)
+)
+
+(defun get-current-path ()
+  (interactive)
+  (cond ( (equal major-mode 'dired-mode)
+	      (setq currentpath (dired-current-directory))
+	)
+	( (equal major-mode 'term-mode)
+	     (setq currentpath default-directory)
+	)
+	(t ;; else
+	     (setq currentpath (file-name-directory buffer-file-name))
+	)
+   )
+ currentpath)
 
 (defun dired-create-new-empty-file ()
    (interactive)
@@ -178,10 +284,23 @@
 ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
 (evil-leader/set-key "l" 'org-preview-latex-fragment) 
 
-;; basic navigation, consistent evil
+;;** basic navigation, consistent evil
+(defun myorg-new-heading-enter-insert-state ()
+  (interactive)
+  (org-insert-heading-respect-content)
+  (evil-insert-state)
+  )
+
+(defun myorg-meta-return-enter-insert-state ()
+  (interactive)
+  (org-meta-return)
+  (evil-insert-state)
+  )
 
 (evil-define-key 'normal org-mode-map (kbd "L") 'org-shiftright)
-(evil-define-key 'normal org-mode-map (kbd "RET") 'org-insert-heading-respect-content)
+(evil-define-key 'normal org-mode-map (kbd "RET") 'myorg-new-heading-enter-insert-state)
+(evil-define-key 'insert org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
+(evil-define-key 'normal org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
 (evil-define-key 'normal org-mode-map (kbd "H") 'org-shiftleft)
 (evil-define-key 'normal org-mode-map (kbd "K") 'org-shiftup)
 (evil-define-key 'normal org-mode-map (kbd "J") 'org-shiftdown)
@@ -192,10 +311,15 @@
 (evil-define-key 'normal org-mode-map (kbd "C-k") 'org-metaup)
 (evil-define-key 'normal org-mode-map (kbd "C-j") 'org-metadown)
 
+(evil-define-key 'insert org-mode-map (kbd "C-l") 'org-metaright)
+(evil-define-key 'insert org-mode-map (kbd "C-h") 'org-metaleft)
+(evil-define-key 'insert org-mode-map (kbd "C-k") 'org-metaup)
+(evil-define-key 'insert org-mode-map (kbd "C-j") 'org-metadown)
+
 (evil-define-key 'normal org-mode-map (kbd "M-L") 'org-shiftmetaright)
 (evil-define-key 'normal org-mode-map (kbd "M-H") 'org-shiftmetaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
-(evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)nil
+(evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
 
 (evil-leader/set-key-for-mode 'org-mode "*" 'org-toggle-heading)
 (evil-leader/set-key-for-mode 'org-mode "8" 'org-toggle-heading) ;; lazy, 8 for *
@@ -625,7 +749,6 @@
   ;; (evil-define-key 'normal dired-mode-map "l" 'dired-find-alternate-file)
  ;; (evil-define-key 'normal dired-mode-map "o" 'dired-sort-toggle-or-edit)
   (evil-define-key 'normal dired-mode-map "s" 'dired-sort-toggle-or-edit)
-  (evil-define-key 'normal dired-mode-map "g" 'revert-buffer)
   (evil-define-key 'normal dired-mode-map "(" 'dired-hide-details-mode)
   (evil-define-key 'normal dired-mode-map "m" 'dired-mark)
   (evil-define-key 'normal dired-mode-map "o" 'dired-mark)
