@@ -1272,9 +1272,19 @@ load-path
 
 ;; END GENREAL STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;* recentf (recent files) 
+(require 'recentf)
+; Enable recentf mode
+(recentf-mode t)
+; Show last 10 files
+(setq recentf-max-menu-items 10)
+; Reset C-x C-r to display recently opened files
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-(setq TeX-view-program-list '(("Okular" "okular --unique %u")))
 
+;;;* latex (auctex) 
+
+;;;** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
 (add-hook 'LaTeX-mode-hook '(lambda ()
                   (add-to-list 'TeX-expand-list
                        '("%u" Okular-make-url))))
@@ -1291,23 +1301,19 @@ load-path
 
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 
-
-
-;;; LATEX STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;; setup viewer (okular) with synref
+;;;*** setup viewer (okular) with synref
 (server-start)
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 (setq TeX-source-correlate-mode t)
 
 
-;;; reftex
+;;;** reftex
      (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
 (setq reftex-plug-into-AUCTeX t)
 ;;
 (setq reftex-cite-format 'natbib)
-;;; aspell
+
+;;;** aspell
 (setq-default ispell-program-name "aspell")
 ;(setq ispell-program-name "aspell") 
      ; could be ispell as well, depending on your preferences ;
@@ -1326,17 +1332,6 @@ load-path
 ;(add-hook 'LaTeX-mode-hook 'flymake-mode)
 
 
-;;; Recently Opened Files - use recentf
-(require 'recentf)
-; Enable recentf mode
-(recentf-mode t)
-; Show last 10 files
-(setq recentf-max-menu-items 10)
-; Reset C-x C-r to display recently opened files
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
-
-
 ;;; My personal redefinition of menu-item appearance (before i could not see
   ; the filenames since the path s were so long)
 (defsubst recentf-make-default-menu-element (file)
@@ -1345,7 +1340,7 @@ This a menu element (FILE . FILE)."
   (setq menu-item-string (format "%s" (file-name-nondirectory file)))
   (recentf-make-menu-element menu-item-string file))
 
-;;; LATEX/auctex STUFF
+;;** misc settings
      (setq TeX-parse-self t) ; Enable parse on load.
      (setq TeX-auto-save t) ; Enable parse on save.
      (setq TeX-save-query nil) ; Dont ask if to save every time, just save and run LaTeX
@@ -1355,7 +1350,7 @@ This a menu element (FILE . FILE)."
 	
 (setq-default TeX-master nil) ; Query for master file.
 
-; ;; My Latex-Editing functions
+;;;** my latex-editing functions
 (defun include-input-toggle ()
 "This function toggles between include and input"
 (interactive)
@@ -1448,9 +1443,7 @@ This a menu element (FILE . FILE)."
 
 (global-set-key (kbd "<f9>") 'paste-image-latex)
 
-
-
-;;; Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
+;;;*** Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
 (defun insert-latex-environment-align ()
 (interactive)
 (LaTeX-environment-menu "align")
@@ -1512,6 +1505,7 @@ This a menu element (FILE . FILE)."
 )
 (global-set-key (kbd "C-S-t") 'insert-latex-environment-table)
 
+;;* misc
 
 ;; quickly add relative path of some file
 (defun find-file-insert-relative-path ()
@@ -1522,13 +1516,8 @@ This a menu element (FILE . FILE)."
 )
 
 
-;;;;; END LATEX STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;;;; OPENFOAM STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;;;* openfoam 
 (defun openfoam-dired-tutorials ()
    (interactive)
    (dired "/opt/OpenFOAM-6/tutorials")
@@ -1609,8 +1598,8 @@ region, clear header."
      (shell-command-on-region start end "bash -l" ))) ;; If start is a string, then write-region writes or appends that string, rather than text from the buffer. end is ignored in this case. 
 )                                      ;;  bash with -l option --> login --> so it will read .bash_profile (--> includes bashrc) --> so the openfoam-environment sourcing functions are known
 
-
-;;; SEND TO NONINTERACTIVE SHELL (not "so" usefull, only for whole loops ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;** shell workflow openfoam
+;;; send to noninteractive shell (not "so" usefull, only for whole loops 
 (defun sh-execute-line-openfoam ()
 (interactive)
 (move-beginning-of-line nil)
@@ -1630,11 +1619,8 @@ region, clear header."
 )
 
 
-
-
 ;; modified function from append-to-buffer
 
-;;;; SEND TO INTERACTIVE SHELL :::::::::::::::::::::::::::::::::::::::::
 (defun send-string-to-shell-buffer-and-execute (sendstring)
   "execute region line by line in interactive shell (buffer *shell*)."
   (interactive)
@@ -1732,34 +1718,14 @@ region, clear header."
 ;; 	    (delete-region sh-header-marker end)))
 ;;       (shell-command-on-region start end (concat sh-shell-file " -")))))
 
+;;** open-foam-workflow tipps 
 
-;;;;; END OPENFOAM STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-;;;;; OPEN-FOAM-WORKFLOW TIPPS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 1. quickly open my personal emacs file (my_emacs_init.el)
-;; dired --> ~/.emacs file
-;; go to "load  ..../my_emacs_init.el"
-;; --> open-file-at-point
-
-
-
-;; (global-set-key (kbd "M-o")  'mode-line-other-buffer)
-
-(defun switch-to-previous-buffer ()
-(interactive)
-(switch-to-buffer (other-buffer (current-buffer) 1)))
-
-;;; +) zoom frame on smaller monitor
+;;;* zoom frame on smaller monitor
 ;;;    status: no working solution, but no priority
 ;; (require 'zoom-frm)
 
 
-;;; +) move buffers arrows key bindings  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;* move buffers - key bindings
 (require 'windmove)
 (require 'framemove)
 (setq framemove-hook-into-windmove t)
@@ -1800,7 +1766,7 @@ region, clear header."
 ;;      term.el:912   (define-key term-raw-map term-escape-char term-raw-escape-map)
 ;;      just leads to a second map where a new command can be executed (e.g. M-x)
 
-
+;;* mode-line appearance
 ;; set mode line to show full path of current file
 ;; (setq-default mode-line-format
 ;;    (list '((buffer-file-name " %f"
@@ -1808,13 +1774,24 @@ region, clear header."
 ;;                dired-directory
 ;;                 (revert-buffer-function " %b"
 ;;                ("%b - Dir:  " default-directory))))))) 
+;;; *) set mode line appearance
+;;;    (has to come AFTER  color themes, don t ask why)
+;; don t ask why exactly, but the following (in order (!)) resulted nice in combi with zenburn
+;; i.e.  .) modest visual difference of current buffer's mode line
+;;       .) decent layout  
+;;       .) harmonic colors with zenburn 
+;; (require 'powerline)
+;; (require 'smart-mode-line)
+;; (sml/setup)
+;; (setq sml/no-confirm-load-theme t) ;; avoid being asked "wanna compile theme in elisp" (or so..) everytime
 
-;; better short cuts for previous / next buffer
+
+;;* buffer/window navigation management
+;;** better short cuts for previous / next buffer
 (global-set-key (kbd "M-'") 'previous-buffer)
 (global-set-key (kbd "M-\\") 'next-buffer)
 
-;;; pdf-view
-
+;;;* pdf-view
 (require 'pdf-view)
  
  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
@@ -1830,17 +1807,3 @@ region, clear header."
  (provide 'init-pdfview)
 
 
-
-
-
-
-;;; *) set mode line appearance
-;;;    (has to come AFTER  color themes, don t ask why)
-;; don t ask why exactly, but the following (in order (!)) resulted nice in combi with zenburn
-;; i.e.  .) modest visual difference of current buffer's mode line
-;;       .) decent layout  
-;;       .) harmonic colors with zenburn 
-;; (require 'powerline)
-;; (require 'smart-mode-line)
-;; (sml/setup)
-;; (setq sml/no-confirm-load-theme t) ;; avoid being asked "wanna compile theme in elisp" (or so..) everytime
