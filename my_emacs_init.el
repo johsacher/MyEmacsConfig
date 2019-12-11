@@ -78,6 +78,96 @@
 (package-initialize) ;; You might already have this line
 
 
+;;;* evil - load/ general
+;; necessary for evil-collection (before load evil first time):
+(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+(setq evil-want-keybinding nil)
+(require 'evil)
+
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode 1)
+  ;; (add-to-list 'evil-emacs-state-modes 'dired-mode) 
+  (add-to-list 'evil-emacs-state-modes 'term-mode) ;; according to my emacs-policy -> only exception starting in emacs-state 
+  ;;; quirk to allow to move beyond last character of line to evaluate lisp expressions
+  (setq evil-move-beyond-eol t)
+)
+
+;;; evil-collection --> set for certain modes
+(evil-collection-init
+ 'dired
+ )
+
+;;** search string under visual selection (commonly used also by vimmers) 
+(require 'evil-visualstar)
+
+;; quick search replace
+(defun quick-evil-search-replace ()
+  (interactive)
+(let ((my-string "'<,'>s///g"))
+  (minibuffer-with-setup-hook
+   ;; (lambda () (backward-char  4))
+    (lambda () (backward-char (/ 7 2)))
+    (evil-ex my-string)))
+)
+
+;; quickly select pasted region
+(defun evil-select-pasted ()
+  "Visually select last pasted text."
+  (interactive)
+  (evil-goto-mark ?\[)
+  (evil-visual-char)
+  (evil-goto-mark ?\]))
+;; ( -> mapped to evil leader v)
+
+;; evil leader
+(use-package evil-leader
+  :ensure t
+  :config
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>") ;; space is handy, no interference with other functionalities, ',' is not a good choice, conflicts with repeat motion
+  (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
+
+  (evil-leader/set-key "c" 'comment-dwim-2) ;
+  (evil-leader/set-key "k" 'kill-this-buffer)
+  (evil-leader/set-key "s" 'save-buffer) 
+  (evil-leader/set-key "f" 'helm-find) 
+  (evil-leader/set-key "d" 'dired-go-current-buffer) 
+  (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
+  (evil-leader/set-key "p" 'helm-projectile-find-file) 
+  (evil-leader/set-key "d" 'dired-go-current-buffer) 
+  (evil-leader/set-key "x" 'helm-M-x)
+  (evil-leader/set-key "2" 'split-window-below) 
+  (evil-leader/set-key "3" 'split-window-right) 
+  (evil-leader/set-key "0" 'delete-window) 
+  (evil-leader/set-key "1" 'delete-other-windows) 
+  (evil-leader/set-key "b" 'helm-mini)  ; recent files (better than recentf-open-files and/or helm-buffers-list)
+  (evil-leader/set-key "r" 'quick-evil-search-replace)  ; quick way to replace expression in region
+  (evil-leader/set-key "v" 'evil-select-pasted)  ; quick way to replace expression in region
+  (evil-leader/set-key "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))) ; quick way to replace expression in region
+  (evil-leader/set-key "'" 'iresize-mode)
+)                 
+
+(require 'evil-numbers)
+(global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
+(global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
+
+
+;;* planet-mode (my org extension)
+(load (concat my_load_path "planet/planet.el"))
+(add-hook 'org-mode-hook
+         (lambda ()
+           (planet-mode)
+          ))
+          
+(add-hook 'planet-mode-hook
+         (lambda ()
+           (outline-show-all)
+           ))
+
+
+
 ;;;* elisp mode
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
@@ -116,9 +206,6 @@
 
 (require 'org-install)
 
-;; necessary for evil-collection (before load evil first time):
-(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-(setq evil-want-keybinding nil)
 (require 'evil-org)
 (setq org-M-RET-may-split-line nil)
 
@@ -374,88 +461,6 @@
 (add-to-list 'org-emphasis-alist
              '("^" (:foreground "red")
                ))
-;;; EVIL-MODE STUFF ;;;;;
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode 1)
-  ;; (add-to-list 'evil-emacs-state-modes 'dired-mode) 
-  (add-to-list 'evil-emacs-state-modes 'term-mode) ;; according to my emacs-policy -> only exception starting in emacs-state 
-  ;;; quirk to allow to move beyond last character of line to evaluate lisp expressions
-  (setq evil-move-beyond-eol t)
-)
-
-;;; evil-collection --> set for certain modes
-(evil-collection-init
- 'dired
- )
-
-;;** search string under visual selection (commonly used also by vimmers) 
-(require 'evil-visualstar)
-
-;; quick search replace
-(defun quick-evil-search-replace ()
-  (interactive)
-(let ((my-string "'<,'>s///g"))
-  (minibuffer-with-setup-hook
-   ;; (lambda () (backward-char  4))
-    (lambda () (backward-char (/ 7 2)))
-    (evil-ex my-string)))
-)
-
-;; quickly select pasted region
-(defun evil-select-pasted ()
-  "Visually select last pasted text."
-  (interactive)
-  (evil-goto-mark ?\[)
-  (evil-visual-char)
-  (evil-goto-mark ?\]))
-;; ( -> mapped to evil leader v)
-
-;; evil leader
-(use-package evil-leader
-  :ensure t
-  :config
-  (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>") ;; space is handy, no interference with other functionalities, ',' is not a good choice, conflicts with repeat motion
-  (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
-
-  (evil-leader/set-key "c" 'comment-dwim-2) ;
-  (evil-leader/set-key "k" 'kill-this-buffer)
-  (evil-leader/set-key "s" 'save-buffer) 
-  (evil-leader/set-key "f" 'helm-find) 
-  (evil-leader/set-key "d" 'dired-go-current-buffer) 
-  (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
-  (evil-leader/set-key "p" 'helm-projectile-find-file) 
-  (evil-leader/set-key "d" 'dired-go-current-buffer) 
-  (evil-leader/set-key "x" 'helm-M-x)
-  (evil-leader/set-key "2" 'split-window-below) 
-  (evil-leader/set-key "3" 'split-window-right) 
-  (evil-leader/set-key "0" 'delete-window) 
-  (evil-leader/set-key "1" 'delete-other-windows) 
-  (evil-leader/set-key "b" 'helm-mini)  ; recent files (better than recentf-open-files and/or helm-buffers-list)
-  (evil-leader/set-key "r" 'quick-evil-search-replace)  ; quick way to replace expression in region
-  (evil-leader/set-key "v" 'evil-select-pasted)  ; quick way to replace expression in region
-  (evil-leader/set-key "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))) ; quick way to replace expression in region
-  (evil-leader/set-key "'" 'iresize-mode)
-)                 
-
-(require 'evil-numbers)
-(global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
-(global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
-
-
-;;* planet-mode (my org extension)
-(load (concat my_load_path "planet/planet.el"))
-(add-hook 'org-mode-hook
-         (lambda ()
-           (planet-mode)
-          ))
-          
-(add-hook 'planet-mode-hook
-         (lambda ()
-           (outline-show-all)
-           ))
 
 
 ;;;* term / terminal / ansi-term
@@ -1299,6 +1304,12 @@ load-path
 
 
 ;;;* latex (auctex) 
+;; somehow auctex does not load with (require 'auctex) (i don t like that and think the guys should do loading consistent with standard like other packages, but whatever..)
+;; but auctex-manual instructs like this
+(load "auctex.el" nil t t)
+(load "latex.el" nil t t)
+;;(load "preview-latex.el" nil t t)
+
 
 ;;** F5 -> run pdflatex / F6 -> bibtex
 (defun run-pdflatex-on-master-file ()
