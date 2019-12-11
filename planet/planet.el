@@ -1,6 +1,8 @@
 ;; format of daily files: <year>_<month>_<day>_<weekday>.org
 ;; format of weekly files: <year>_<month>_<day>_week.org
 
+;;* Todos
+;;** insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
 (defvar planet-mode-map
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "C-.") 'planet-next-day)
@@ -239,6 +241,7 @@ last-date)
     )
   
   (setq found-monday-filebasename (planet-convert-date-to-filebasename date))
+  (setq fixedcase t)
   (setq week-filebasename (replace-regexp-in-string "Mon" "week" found-monday-filebasename fixedcase))
   (find-file (concat planet-daily-dir "/." week-filebasename ".org" "/" week-filebasename ".org"))
   )
