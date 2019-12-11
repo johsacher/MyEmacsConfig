@@ -99,8 +99,20 @@
             (auto-complete-mode)))
 
 
+;;;* ipython-calculator (my)
+;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
+(defvar ipython-calculator-buffer-name "*ipython-calculator*")
+(defun ipython-calculator ()
+  (interactive)
+  (switch-to-buffer ipython-calculator-buffer-name)
+  )
+(evil-leader/set-key "a" 'ipython-calculator) 
 
 ;;;* org-mode
+
+;;** disable line-numbers
+ (add-hook 'org-mode-hook
+           (lambda nil (display-line-numbers-mode -1)))
 
 (require 'org-install)
 
@@ -114,9 +126,7 @@
           (lambda ()
             (org-indent-mode)
             (visual-line-mode)))
-(setq org-blank-before-new-entry
-      '((heading . auto)
-       (plain-list-item . auto)))
+
 
 ;; org-mode paste image from clipboard
 (defun org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
@@ -133,7 +143,7 @@
   (org-display-inline-images)
   )
 
-(evil-leader/set-key "n" 'myorg-open-quick-notes) 
+(evil-leader/set-key "n" 'planet-open-quick-notes) 
 ;; paste image from clipboard
 (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
 
@@ -302,16 +312,21 @@
       ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
       ("CANCELLED" :background "lime green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
 
+
 ;; evil org-mode
 ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
 (evil-leader/set-key "l" 'org-preview-latex-fragment) 
 
-;;** basic navigation, consistent evil
+;;** basic behaviour - new headings
 (defun myorg-new-heading-enter-insert-state ()
   (interactive)
   (org-insert-heading-respect-content)
   (evil-insert-state)
   )
+
+(setq org-blank-before-new-entry
+      '((heading . nil)
+       (plain-list-item . auto)))
 
 (defun myorg-meta-return-enter-insert-state ()
   (interactive)
@@ -319,6 +334,7 @@
   (evil-insert-state)
   )
 
+;;** basic navigation, consistent evil
 (evil-define-key 'normal org-mode-map (kbd "L") 'org-shiftright)
 (evil-define-key 'normal org-mode-map (kbd "RET") 'myorg-new-heading-enter-insert-state)
 (evil-define-key 'insert org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
@@ -442,7 +458,7 @@
            ))
 
 
-;;;* TERMINAL
+;;;* term / terminal / ansi-term
 ;;** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
  (load "stickyterm.el")
@@ -1284,6 +1300,28 @@ load-path
 
 ;;;* latex (auctex) 
 
+;;** F5 -> run pdflatex / F6 -> bibtex
+(defun run-pdflatex-on-master-file ()
+"This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
+(interactive)
+;;*option1:
+(TeX-command "LaTeX" 'TeX-master-file nil)
+;;*option2: (discarded)
+;; (save-buffer)
+;; (shell-command (format "pdflatex %s.tex" (TeX-master-file)))
+)
+
+(define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
+(define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)  
+
+(defun run-bibtex-on-master-file ()
+"This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
+(interactive)
+(TeX-command "BibTeX" 'TeX-master-file nil)
+)
+
+
+
 ;;;** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
 (add-hook 'LaTeX-mode-hook '(lambda ()
                   (add-to-list 'TeX-expand-list
@@ -1378,19 +1416,6 @@ This a menu element (FILE . FILE)."
 (shell-command "texworks c:/Users/Joe/Documents/Beruf/PUC/'Trabajo de investigacion'/Studienarbeit/Alembic_Final_Report.pdf"))
 ;; 
 
-(defun run-pdflatex-on-master-file ()
-"This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
-(interactive)
-(save-buffer)
-;(TeX-command "LaTeX" 'TeX-master-file)
-(shell-command (format "pdflatex %s.tex" (TeX-master-file)))
-;(setq thisbuffer (current-buffer))
-;(switch-to-buffer "Diploma_Thesis.tex")
-;(shell-command "cd C:/Users/Joe/Documents/Beruf/LindeDiplom/Diplom_Linde/Diplomarbeit_Projekt/Berichte/Diploma_Thesis/Diploma_Thesis.tex")
-;(shell-command "pdflatex C:/Users/Joe/Documents/Beruf/LindeDiplom/Diplom_Linde/Diplomarbeit_Projekt/Berichte/Diploma_Thesis/Diploma_Thesis.tex")
-;(switch-to-buffer thisbuffer)
-;(delete-other-windows)
-)
 
 
 (defun eps-convert-all-in-folder ()
