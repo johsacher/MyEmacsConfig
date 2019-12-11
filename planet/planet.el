@@ -7,7 +7,7 @@
 ;;*** :LOGBOOK:.. and stuff --> grey ; style heading (*) ; style entry (**)
 ;;*** find way --> appearance only take effect for daily files
 ;;*** define appearance seperate for daily / weekly -> find way to recognize/define what type of org file it is (maybe over local variables, ooooor (even better) --> make file-name analysis as org-mode-hook -> determine type --> fire-up respective minor-mode --> do some learnings about minor-mode priorities (make sure the minor-mode does not get "corrupted/dominated" by other-minor mode)
-
+;;** concept about categories/tags/properties -> work / privat / projects / task-clocking
 (defvar planet-mode-map
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "C-.") 'planet-next-day)
