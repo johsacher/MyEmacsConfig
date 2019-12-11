@@ -1,3 +1,7 @@
+;;*TODOs
+;;** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
+
+
 ; overlay an arrow where the mark is
   (defvar mp-overlay-arrow-position)
   (make-variable-buffer-local 'mp-overlay-arrow-position)
@@ -72,6 +76,29 @@
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize) ;; You might already have this line
+
+
+;;;* elisp mode
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (auto-complete-mode)))
+
+;;;* bash (=shell-script-mode)
+(add-hook 'shell-script-mode-hook
+          (lambda ()
+            (auto-complete-mode)))
+
+;;;* c++
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (auto-complete-mode)))
+
+;;;* python
+(add-hook 'python-mode-hook
+          (lambda ()
+            (auto-complete-mode)))
+
+
 
 ;;;* org-mode
 
@@ -257,12 +284,13 @@
       "QUESTION"
       "ANSWERED"
       "DONE"
+      "DEFERRED"
       "CANCELLED")))
 
   (setq org-todo-keyword-faces
     '(("PROJ" :background "blue" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("TODO" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
-      ("QUESTION" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("QUESTION" :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("CURRENT..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("WAITING" :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
@@ -313,7 +341,7 @@
 ;; (evil-define-key 'normal org-mode-map (kbd "left") 'dummy-message)
 (defun dummy-message ()
   (interactive)
-  (message "dummy message")
+  (message "this is a message from dummy-message")
   )
 
 (evil-define-key 'normal org-mode-map (kbd "M-L") 'org-shiftmetaright)
@@ -323,6 +351,13 @@
 
 (evil-leader/set-key-for-mode 'org-mode "*" 'org-toggle-heading)
 (evil-leader/set-key-for-mode 'org-mode "8" 'org-toggle-heading) ;; lazy, 8 for *
+
+
+;; new emphasis-markers
+(setq org-hide-emphasis-markers t)
+(add-to-list 'org-emphasis-alist
+             '("^" (:foreground "red")
+               ))
 ;;; EVIL-MODE STUFF ;;;;;
 (use-package evil
   :ensure t
@@ -339,7 +374,7 @@
  'dired
  )
 
-;; *) search string under visual selection (commonly used also by vimmers) 
+;;** search string under visual selection (commonly used also by vimmers) 
 (require 'evil-visualstar)
 
 ;; quick search replace
@@ -732,6 +767,13 @@
 ;;     (add-to-list 'tramp-default-proxies-alist
 ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 
+;;** dired short cut -> "go home"
+(defun dired-go-home ()
+  (interactive)
+  (dired "~")
+  )
+
+(evil-leader/set-key "h" 'dired-go-home)
 
 ;;    .) auto revert dired default
 (add-hook 'dired-mode-hook 'auto-revert-mode)
@@ -928,7 +970,10 @@
 (setq helm-exit-idle-delay 0)
 
 
-;;; Matlab matlab-emacs project;;
+;;;* matlab
+
+
+;;;** Matlab matlab-emacs project;;
 load-path
 (setq path_to_matlab_emacs (concat my_load_path "matlab-emacs-src")) ;; the init file folder contains also all manual packages
 (add-to-list 'load-path path_to_matlab_emacs)
@@ -939,6 +984,9 @@ load-path
 
 (add-hook 'matlab-mode-hook
  	     (lambda nil (auto-complete-mode)))
+
+(add-hook 'M-shell-mode-hook
+ 	     (lambda nil (company-mode)))
 
 ;; ;; turn off auto-fill-mode
 ;; ;; (still does not work --> todo)
