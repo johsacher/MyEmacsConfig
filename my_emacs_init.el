@@ -372,8 +372,19 @@
 (setq org-image-actual-width 300) ;; --> makes images more readable, for closer look, just open in image viewer
 
 
+;;** emphasis markers
+;; (setq org-hide-emphasis-markers t)                            
+(setq org-emphasis-alist   
+(quote (("*" bold)
+("/" italic)
+("_" underline)
+("=" (:foreground "white" :background "red"))
+("~" org-verbatim verbatim)
+("+"
+(:strike-through t))
+))) 
 
-;; add some new labels
+;;** add some new labels
 (setq org-todo-keywords
   '((sequence "TODO"
       "CURRENT..."
@@ -733,14 +744,15 @@
 (setq dired-dwim-target nil)
 
 
-;;;*  DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;* dired
 
 ;;** hide details by default
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-hide-details-mode)
+            (display-line-numbers-mode -1)
             (dired-sort-toggle-or-edit)))
+
 
 ;;** dired omit files
 (require 'dired-x)
