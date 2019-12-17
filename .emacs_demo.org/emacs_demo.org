@@ -32,3 +32,7 @@
 ** why the VIM short-cut system is awesome - demo of cool work flow features:
 *** navigate h,j,k,l
 *** modal editing -> no pain of ctrl-/alt-key-combinations
+** goodies:
+*** "electric" indentation
+mark region and hit "=="
+*** mark just pasted region "SPC-v"

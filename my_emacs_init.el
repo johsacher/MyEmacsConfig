@@ -200,6 +200,27 @@
 
 ;;;* org-mode
 
+;;** org bullets
+(require 'org-bullets)
+(add-hook 'org-mode-hook
+          (lambda nil (org-bullets-mode 1)))
+(setq org-bullets-bullet-list
+  '(;;; Large
+    "◉"
+    "○"
+    "•"
+    "★"
+    "✸"
+    "◆"
+    "♣"
+    "♠"
+    "♥"
+    "♦"
+    ;; ◉ ○ ●  ★  ♥ ◇ ✚ ✜ ☯ ◆ ♠ ♣ ♦ ☢ ❀ ◆ ◖ ▶ ✿
+    ;; ► • ★ ▸
+    )
+  )
+
 ;;** disable line-numbers
  (add-hook 'org-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
@@ -1327,6 +1348,8 @@ load-path
 (defun run-pdflatex-on-master-file ()
 "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 (interactive)
+;;save buffer
+(save-buffer)
 ;;*option1:
 (TeX-command "LaTeX" 'TeX-master-file nil)
 ;;*option2: (discarded)
