@@ -225,10 +225,19 @@
  (add-hook 'org-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
 
+ (add-hook 'org-mode-hook
+           (lambda nil
+             (org-bullets-mode 1)
+             ))
 (require 'org-install)
 
+;;** evil org
 (require 'evil-org)
 (setq org-M-RET-may-split-line nil)
+
+
+;;;*** make tab key work as org-cycle in terminal
+(evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
 
 (add-hook 'org-mode-hook
           (lambda ()
