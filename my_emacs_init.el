@@ -409,11 +409,19 @@
 ("/" italic)
 ("_" underline)
 ("=" (:foreground "white" :background "red"))
+("|" (:foreground "white" :background "green"))
+("!" (:foreground "white" :background "green"))
+("&" (:foreground "white" :background "green"))
+("\\" (:foreground "white" :background "green"))
+("°" (:foreground "white" :background "green"))
+(">" (:foreground "white" :background "green"))
+("?" (:foreground "white" :background "green"))
+("€" (:foreground "white" :background "green"))
 ("~" org-verbatim verbatim)
 ("+"
 (:strike-through t))
-))) 
-
+)))
+;; ( org-set-emph-re) 
 ;;** add some new labels
 (setq org-todo-keywords
   '((sequence "TODO"
