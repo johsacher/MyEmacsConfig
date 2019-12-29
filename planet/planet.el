@@ -3,6 +3,9 @@
 
 ;;* Todos
 ;;** insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
+;;** calendar-date picker
+;;** week view (8 windows, quit-week-view --> winner-undo/or better: remember windows arrangement and go back) + move forward week
+;;** month view
 ;;** font styling / appearence:
 ;;*** :LOGBOOK:.. and stuff --> grey ; style heading (*) ; style entry (**)
 ;;*** find way --> appearance only take effect for daily files

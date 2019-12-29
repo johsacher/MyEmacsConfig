@@ -1,4 +1,5 @@
 ;;*TODOs
+;;** better mode-line color inactive window light-grey (?), active --> black??
 ;;** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
 
