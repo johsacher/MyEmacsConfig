@@ -50,19 +50,22 @@
 ;;(add-to-list 'image-load-path my_load_path)
 
 
-;;; GENERAL SETTINGS
+;;;* GENERAL SETTINGS
 
-;; title (play around -> tribute to emacs)
+;;** title (play around -> tribute to emacs)
 (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
 
-;*) global line number mode on
+;** global line number mode on
 (global-display-line-numbers-mode)
-;*) scroll bar off
+;** scroll bar off
 (if (display-graphic-p)
     (toggle-scroll-bar -1)
   )
-;; tool bar off
+;;** tool bar off
 (tool-bar-mode -1)
+
+;;** menu bar off
+(menu-bar-mode -1)
 
 ;;; *)  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;-----------------------------------------------------------
