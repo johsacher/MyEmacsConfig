@@ -462,6 +462,8 @@
   (evil-insert-state)
   )
 
+;;** copy/paste - behavior
+(evil-define-key 'insert org-mode-map (kbd "C-p") 'evil-paste-after)
 ;;** basic navigation, consistent evil
 (evil-define-key 'normal org-mode-map (kbd "L") 'org-shiftright)
 (evil-define-key 'normal org-mode-map (kbd "RET") 'myorg-new-heading-enter-insert-state)
