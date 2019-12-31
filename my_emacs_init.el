@@ -1,4 +1,5 @@
 ;;*TODOs
+;;** better mode-line color inactive window light-grey (?), active --> black??
 ;;** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
 
@@ -50,19 +51,22 @@
 ;;(add-to-list 'image-load-path my_load_path)
 
 
-;;; GENERAL SETTINGS
+;;;* GENERAL SETTINGS
 
-;; title (play around -> tribute to emacs)
+;;** title (play around -> tribute to emacs)
 (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
 
-;*) global line number mode on
+;** global line number mode on
 (global-display-line-numbers-mode)
-;*) scroll bar off
+;** scroll bar off
 (if (display-graphic-p)
     (toggle-scroll-bar -1)
   )
-;; tool bar off
+;;** tool bar off
 (tool-bar-mode -1)
+
+;;** menu bar off
+(menu-bar-mode -1)
 
 ;;; *)  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;-----------------------------------------------------------
@@ -409,11 +413,19 @@
 ("/" italic)
 ("_" underline)
 ("=" (:foreground "white" :background "red"))
+("|" (:foreground "white" :background "green"))
+("!" (:foreground "white" :background "green"))
+("&" (:foreground "white" :background "green"))
+("\\" (:foreground "white" :background "green"))
+("°" (:foreground "white" :background "green"))
+(">" (:foreground "white" :background "green"))
+("?" (:foreground "white" :background "green"))
+("€" (:foreground "white" :background "green"))
 ("~" org-verbatim verbatim)
 ("+"
 (:strike-through t))
-))) 
-
+)))
+;; ( org-set-emph-re) 
 ;;** add some new labels
 (setq org-todo-keywords
   '((sequence "TODO"
