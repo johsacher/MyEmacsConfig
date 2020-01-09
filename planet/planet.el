@@ -51,9 +51,13 @@
 
 (provide 'planet)
 
-(defun planet-add-one-day (date)
-  ;; (setq date (decode-time (current-time)))
-(setq date2 date)
+(defun planet-date-deep-copy (date1)
+(setq date2 (decode-time (apply 'encode-time date1)))
+  date2)
+
+(defun planet-add-one-day (date1)
+;; (setq date2 date1) --> this creates problem, is just a shallow copy
+  (setq date2 (planet-date-deep-copy date1))
 (setq day (nth 3 date2))
 (setq day-incremented (1+ day))
 (setf (nth 3 date2) day-incremented)
@@ -62,8 +66,8 @@
 date2)
 
 (defun planet-subtract-one-day (date)
-  ;; (setq date (decode-time (current-time)))
-(setq date2 date)
+;; (setq date2 date1) --> this creates problem, is just a shallow copy
+  (setq date2 (planet-date-deep-copy date1))
 (setq day (nth 3 date2))
 (setq day-incremented (1- day))
 (setf (nth 3 date2) day-incremented)
@@ -216,9 +220,13 @@ last-date)
   (setq this-file-date (planet-convert-filebasename-to-date filebasename))
   this-file-date)
 
+(defun planet-get-todays-date ()
+  (setq date (decode-time (current-time)))
+  )
+
 (defun planet-today ()
   (interactive)
-  (setq date (decode-time (current-time)))
+  (setq date planet-get-todays-date)
   (setq filebasename (planet-convert-date-to-filebasename date))
   (find-file (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
   )
@@ -240,6 +248,18 @@ last-date)
   (setq this-file-date (planet-convert-filebasename-to-date filebasename))
   (planet-go-week-file-for-date this-file-date)
   )
+
+(defun planet-get-previous-monday-date-for-date (date1)
+;; (setq date-iter date1) --> this creates problem, is just a shallow copy
+  (setq date-iter (planet-date-deep-copy date1))
+  (setq dow_monday 1)
+  (setq dow (planet-date-get-dow date-iter))
+  (while (not (= dow dow_monday))
+    (setq date-iter (planet-subtract-one-day date-iter))
+    (setq dow (planet-date-get-dow date-iter))
+    )
+  ;; iterator date reached monday and is returned
+  date-iter)
 
 (defun planet-go-week-file-for-date (date)
   (setq dow_monday 1)
@@ -294,6 +314,11 @@ date)
 
   filebasename)
 
+(defun planet-get-full-file-name-for-date (date)
+  (setq filebasename (planet-convert-date-to-filebasename date))
+  (setq full-file-name (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
+  full-file-name)
+
 ;; open 'standard quick' notes.org file
 (defun planet-open-quick-notes ()
   (interactive)
@@ -306,4 +331,170 @@ date)
   (interactive)
   (setq org-tags-column (- 5 (window-body-width)))
   (org-align-all-tags)
+  )
+
+
+;;* week-view
+;; arrange windows in frame in a 2X4-scheme:
+;; 
+;; |---------------------
+;; |Mo  | Tu | We | Th   |
+;; |---------------------
+;; | Fr | Sa | Su | week |
+;; |---------------------
+
+;;** pseudo code:
+;;*** save the frames window configuration (to return later when whished)
+;; (setq winconf_before_weekview (current-window-configuration))
+;; (set-window-configuration winconf_before_weekview)
+;;*** set up the 2X4-scheme
+
+;; global variables for getting handle to specific windows in a window-configuration
+(defvar win11)
+(defvar win12)
+(defvar win13)
+(defvar win14)
+(defvar win15)
+(defvar win16)
+(defvar win17)
+(defvar win18)
+(defvar win19)
+
+(defvar win21)
+(defvar win22)
+(defvar win23)
+(defvar win24)
+(defvar win25)
+(defvar win26)
+(defvar win27)
+(defvar win28)
+(defvar win29)
+
+(defvar win31)
+(defvar win32)
+(defvar win33)
+(defvar win34)
+(defvar win35)
+(defvar win36)
+(defvar win37)
+(defvar win38)
+(defvar win39)
+
+(defvar win41)
+(defvar win42)
+(defvar win43)
+(defvar win44)
+(defvar win45)
+(defvar win46)
+(defvar win47)
+(defvar win48)
+(defvar win49)
+
+
+(defun planet-view-week2X4 ()
+  (interactive)
+  ;;* make window matrix 2X4
+  (planet-setup-windows-config-2X4)
+  ;;* open day-files in the windows
+  ;;** get the dates for mo,tu,we,th,fr,sa,su of current week
+  ;;*** get today's date
+  (setq date-today (planet-get-todays-date))
+  ;; ;;*** get monday date for today's date, and dates for tuesday,wednesday,..., sunday
+  (message date-today)
+  (setq date-monday (planet-get-previous-monday-date-for-date date-today))
+  (setq date-tuesday (planet-add-one-day date-monday))
+  (setq date-wednesday (planet-add-one-day date-tuesday))
+  (setq date-thursday (planet-add-one-day date-wednesday))
+  (setq date-friday (planet-add-one-day date-thursday))
+  (setq date-saturday (planet-add-one-day date-friday))
+  (setq date-sunday (planet-add-one-day date-saturday))
+  ;;** get file-names for all dates
+  (setq file-monday (planet-get-full-file-name-for-date date-monday))
+  (setq file-tuesday (planet-get-full-file-name-for-date date-tuesday))
+  (setq file-wednesday (planet-get-full-file-name-for-date date-wednesday))
+  (setq file-thursday (planet-get-full-file-name-for-date date-thursday))
+  (setq file-friday (planet-get-full-file-name-for-date date-friday))
+  (setq file-saturday (planet-get-full-file-name-for-date date-saturday))
+  (setq file-sunday (planet-get-full-file-name-for-date date-sunday))
+  ;; ;;** create the buffers for all dates (not displayed, that the elegant trick ;) --> find-file-noselect as the working horse, low level function for all visiting file operations in elisp)
+  (setq buffer-monday (find-file-noselect file-monday))
+  (setq buffer-tuesday (find-file-noselect file-tuesday))
+  (setq buffer-wednesday (find-file-noselect file-wednesday))
+  (setq buffer-thursday (find-file-noselect file-thursday))
+  (setq buffer-friday (find-file-noselect file-friday))
+  (setq buffer-saturday (find-file-noselect file-saturday))
+  (setq buffer-sunday (find-file-noselect file-sunday))
+  ;; ;;** open the buffers in the window arrangement
+  (set-window-buffer win11 buffer-monday) 
+  (set-window-buffer win12 buffer-tuesday) 
+  (set-window-buffer win13 buffer-wednesday) 
+  (set-window-buffer win14 buffer-thursday) 
+  (set-window-buffer win21 buffer-friday) 
+  (set-window-buffer win22 buffer-saturday) 
+  (set-window-buffer win23 buffer-sunday) 
+  )
+
+(defun planet-setup-windows-config-2X4 ()
+  (interactive)
+  ;; creates ("empty") windows in a 2X4-matrix, equally distributed
+
+  ;; create "empty frame" with one dummy buffer
+  (planet-make-empty-frame-one-window)
+  (setq win1 (selected-window))
+  ;; subdivide in 2X4 windows configuration
+  ;;* splitting nr. 1:
+  ;; (divide horizontally (and save new window into variable (return value)) )
+  (setq win2 (split-window win1 nil 'below))
+
+  ;;* splitting nr. 2: 
+  (setq win3 (split-window win1 nil 'right))
+  (setq win4 (split-window win2 nil 'right))
+;; ---------------
+;; | win1 | win3 |
+;; |-------------|
+;; | win2 | win4 |
+;; ---------------
+
+  ;;* splitting nr. 3: 
+  (setq win5 (split-window win1 nil 'right))
+  (setq win6 (split-window win2 nil 'right))
+;; ----------------------
+;; | win1 | win5 |      win3 |
+;; |---------------------
+;; | win2 | win6 |      win4 |
+;; ----------------------
+
+  ;;* splitting nr. 4: 
+  (setq win7 (split-window win3 nil 'right))
+  (setq win8 (split-window win4 nil 'right))
+;; -----------------------------
+;; | win1 | win5 | win3 | win7 |
+;; |----------------------------
+;; | win2 | win6 | win4 | win8 |
+;; -----------------------------
+
+  ;; rename windows systematically
+  (setq win11 win1)
+  (setq win12 win5)
+  (setq win13 win3)
+  (setq win14 win7)
+  (setq win21 win2)
+  (setq win22 win6)
+  (setq win23 win4)
+  (setq win24 win8)
+;; --------------------------------
+;; | win11 | win12 | win13 | win14 |
+;; |--------------------------------
+;; | win21 | win22 | win23 | win24 |
+;; ---------------------------------
+  )
+
+
+(defun planet-make-empty-frame-one-window ()
+  (interactive)
+  (switch-to-buffer "planet-dummy-buffer-empty-frame") ;; (this creates the buffer also if not already exists)
+  ;; in emacs you cannot create a new window without a buffer, so this is the cleanest way
+  ;; now visit this buffer
+  ;; delete all other windows
+  (delete-other-windows)
   )

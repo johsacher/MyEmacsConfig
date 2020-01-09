@@ -460,7 +460,7 @@
 ;;** basic behaviour - new headings
 (defun myorg-new-heading-enter-insert-state ()
   (interactive)
-  (org-insert-heading-respect-content)
+  (org-insert-heading)
   (evil-insert-state)
   )
 
