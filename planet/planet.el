@@ -251,6 +251,7 @@ last-date)
 
 (defun planet-get-previous-monday-date-for-date (date1)
 ;; (setq date-iter date1) --> this creates problem, is just a shallow copy
+  (setq date1 (planet-get-todays-date))
   (setq date-iter (planet-date-deep-copy date1))
   (setq dow_monday 1)
   (setq dow (planet-date-get-dow date-iter))
