@@ -65,6 +65,26 @@
 ;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
 date2)
 
+(defun planet-add-7-days (date1)
+;; (setq date2 date1) --> this creates problem, is just a shallow copy
+  (setq date2 (planet-date-deep-copy date1))
+(setq day (nth 3 date2))
+(setq day-incremented (+ day 7))
+(setf (nth 3 date2) day-incremented)
+(setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
+;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
+date2)
+
+(defun planet-subtract-7-days (date1)
+;; (setq date2 date1) --> this creates problem, is just a shallow copy
+  (setq date2 (planet-date-deep-copy date1))
+(setq day (nth 3 date2))
+(setq day-incremented (- day 7))
+(setf (nth 3 date2) day-incremented)
+(setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
+;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
+date2)
+
 (defun planet-subtract-one-day (date1)
 ;; (setq date2 date1) --> this creates problem, is just a shallow copy
   (setq date2 (planet-date-deep-copy date1))
@@ -196,7 +216,7 @@ last-date)
 
 (defun planet-current-buffer-is-day-file ()
   ;; get current buffer's file base
-  (setq filebasename (file-name-sans-extension (buffer-name)))
+  (setq filebasename (file-name-sans-extension (buffer-name))) ;; todo --> (file-name-base ...)
   (message filebasename)
   (setq return_value (string-match "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...$" filebasename))
   return_value)
@@ -239,24 +259,24 @@ last-date)
   (setq date (decode-time (current-time)))
   )
 
-(planet-get-todays-date)
-
 (defun planet-today ()
   (interactive)
-  (setq date planet-get-todays-date)
+  (setq date (planet-get-todays-date))
   (setq filebasename (planet-convert-date-to-filebasename date))
   (find-file (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
   )
+
+(defun planet-this-week ()
+  (interactive)
+  (setq date-today (planet-get-todays-date))
+  (planet-go-week-file-for-date date-today)
+  )
+
+;;test: (planet-open-today)
 ;;test: (planet-open-today)
 (evil-leader/set-key "t" 'planet-today)
 (evil-leader/set-key "y" 'planet-this-week)
 
-(defun planet-this-week ()
-  (interactive)
-  (setq date (decode-time (current-time)))
-  (planet-go-week-file-for-date date)
-  )
-;;test: (planet-open-today)
 
 
 (defun planet-go-week-file-for-current-buffer-daily-file ()
@@ -268,7 +288,6 @@ last-date)
 
 (defun planet-get-previous-monday-date-for-date (date1)
 ;; (setq date-iter date1) --> this creates problem, is just a shallow copy
-  (setq date1 (planet-get-todays-date))
   (setq date-iter (planet-date-deep-copy date1))
   (setq dow_monday 1)
   (setq dow (planet-date-get-dow date-iter))
@@ -281,7 +300,7 @@ last-date)
   date-previous-monday)
 
 (defun planet-get-week-file-basename-for-date (date)
-  (setq date-previous-monday (planet-get-previous-monday-date-for-date todaysdate))
+  (setq date-previous-monday (planet-get-previous-monday-date-for-date date))
   
   (setq found-monday-filebasename (planet-convert-date-to-filebasename date-previous-monday))
   (setq fixedcase t)
@@ -295,7 +314,7 @@ last-date)
   week-file-fullname)
 
 (defun planet-go-week-file-for-date (date)
-  (setq week-filebasename (planet-get-week-file-basename-for-date date)
+  (setq week-filebasename (planet-get-week-file-basename-for-date date))
   (find-file (concat planet-daily-dir "/." week-filebasename ".org" "/" week-filebasename ".org"))
   )
 
@@ -318,7 +337,8 @@ day)
 
 (defun planet-convert-filebasename-to-date (filenamebase)
     ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
-    (when (string-match "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_..." filenamebase)
+    (when (string-match "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...k?" filenamebase)
+      ;; (this matches _Mon, _Fri etc. , OR _week)
       (setq year (string-to-number (substring filenamebase 0 4)))
       (setq month (string-to-number (substring filenamebase 5 7)))
       (setq day (string-to-number (substring filenamebase 8 10)))
@@ -341,12 +361,16 @@ date)
 
 (defun planet-get-full-file-name-for-date (date)
   (setq filebasename (planet-convert-date-to-filebasename date))
-  (setq full-file-name (planet-convert-filebasename-to-full-file-name filebasename))
+  (setq full-file-name (planet-convert-filebasename-to-filefullname filebasename))
   full-file-name)
 
 (defun planet-convert-filebasename-to-filefullname (filebasename)
   (setq filefullname (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
   filefullname)
+
+(defun planet-convert-filefullname-to-filebasename (filefullname)
+  (setq filebasename (file-name-base filefullname))
+  filebasename)
 
 ;; open 'standard quick' notes.org file
 (defun planet-open-quick-notes ()
@@ -452,8 +476,15 @@ date)
   ;;** get the dates for mo,tu,we,th,fr,sa,su of current week
   ;;*** get today's date
   (setq date-today (planet-get-todays-date))
+  (planet-view-week2X4-for-date date-today)
+  ;; ** set planet-view-state to "view-week2X4"
+  (setq planet-view-state "week2X4")
+  )
+
+
+(defun planet-view-week2X4-for-date (date)
   ;; ;;*** get monday date for today's date, and dates for tuesday,wednesday,..., sunday
-  (setq date-monday (planet-get-previous-monday-date-for-date date-today))
+  (setq date-monday (planet-get-previous-monday-date-for-date date))
   (setq date-tuesday (planet-add-one-day date-monday))
   (setq date-wednesday (planet-add-one-day date-tuesday))
   (setq date-thursday (planet-add-one-day date-wednesday))
@@ -490,10 +521,9 @@ date)
   (set-window-buffer win23 buffer-sunday) 
 
   (set-window-buffer win24 buffer-week) 
+  )
 
   ;; ** set planet-view-state to "view-week2X4"
-  (setq planet-view-state "week2X4")
-  )
 
 (evil-leader/set-key "w" 'planet-view-week2X4)
 
@@ -567,15 +597,23 @@ date)
   (interactive)
   (cond
         ;;if not in a view ...
-        ((string= planent-view-state "none")
-        ;;if in dayfile --> forward day
-            (if (planet-current-buffer-is-day-file)
+        ((string= planet-view-state "none")
+         (cond
+            ;;if in dayfile --> forward day
+            ((planet-current-buffer-is-day-file)
                 (planet-next-day)
-                (message "planet: not in a view-state and either in a day-file. cannot forward.")
                 )
+            ;; if in week file --> forward week
+            ((planet-current-buffer-is-week-file)
+                (planet-next-week)
             )
+            (t
+             (message "planet: not in a view-state (see planet-view-state = 'none') and either in a day-file. cannot forward.")
+             )
+            )
+         )
         ;;if in week view --> forward week
-        ((string= txt-format-text "week2X4")
+        ((string= planet-view-state "week2X4")
             (planet-view-week2X4-next)
             )
         ;; if view-state not valid
@@ -589,15 +627,23 @@ date)
   (interactive)
   (cond
         ;;if not in a view ...
-        ((string= planent-view-state "none")
-        ;;if in dayfile --> backward day
-            (if (planet-current-buffer-is-day-file)
+        ((string= planet-view-state "none")
+         (cond
+            ;;if in dayfile --> backward day
+            ((planet-current-buffer-is-day-file)
                 (planet-previous-day)
-                (message "planet: not in a view-state and either in a day-file. cannot backward.")
                 )
+            ;; if in week file --> forward week
+            ((planet-current-buffer-is-week-file)
+                (planet-previous-week)
             )
+            (t
+             (message "planet: not in a view-state (see planet-view-state = 'none') and either in a day-file. cannot forward.")
+             )
+            )
+         )
         ;;if in week view --> forward week
-        ((string= txt-format-text "week2X4")
+        ((string= planet-view-state "week2X4")
             (planet-view-week2X4-previous)
             )
         ;; if view-state not valid
@@ -606,3 +652,50 @@ date)
             )
         )
   )
+
+
+(defun planet-view-week2X4-next ()
+  ;; get date of monday (in window win11)
+  (setq buffer-monday (window-buffer win11))
+  (setq buffer-monday-filefullname (buffer-file-name buffer-monday))
+  (setq buffer-monday-filebasename (file-name-base buffer-monday-filefullname))
+  (setq date-monday (planet-convert-filebasename-to-date buffer-monday-filebasename))
+  ;; add 7 days
+  (setq date-monday-7days-forward (planet-add-7-days date-monday))
+  ;; set up the windows win11, win12, etc. wit 
+  (planet-view-week2X4-for-date date-monday-7days-forward)
+  )
+
+(defun planet-view-week2X4-previous ()
+  ;; get date of monday (in window win11)
+  (setq buffer-monday (window-buffer win11))
+  (setq buffer-monday-filefullname (buffer-file-name buffer-monday))
+  (setq buffer-monday-filebasename (file-name-base buffer-monday-filefullname))
+  (setq date-monday (planet-convert-filebasename-to-date buffer-monday-filebasename))
+  ;; subtract 7 days
+  (setq date-monday-7days-backward (planet-subtract-7-days date-monday))
+  ;; set up the windows win11, win12, etc. wit 
+  (planet-view-week2X4-for-date date-monday-7days-backward)
+  )
+
+
+
+(defun planet-next-week ()
+  ;; get date of current week file
+  (setq this-weeks-date-monday (planet-get-daily-file-date))
+  (setq date-7days-forward (planet-add-7-days this-weeks-date-monday))
+  (planet-get-previous-monday-date-for-date date-7days-forward)
+  (setq week-file (planet-get-week-file-fullname-for-date date-7days-forward))
+  (find-file week-file)
+  )
+
+(defun planet-previous-week ()
+  ;; get date of current week file
+  (setq this-weeks-date-monday (planet-get-daily-file-date))
+  (setq date-7days-backward (planet-subtract-7-days this-weeks-date-monday))
+  (planet-get-previous-monday-date-for-date date-7days-backward)
+  (setq week-file (planet-get-week-file-fullname-for-date date-7days-backward))
+  (find-file week-file)
+  )
+
+
