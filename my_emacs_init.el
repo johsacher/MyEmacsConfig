@@ -283,17 +283,23 @@
    (if (not path) ;; default --> put to current path
         (setq path (get-current-path))
      )
-   ;; create the hidden (dotted) folder with same name of org file
+   ;; (if not already exists) create the hidden (dotted) folder with same name of org file
      (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
-    (make-directory new-directory-full-name)
-   ;; create the org file within that folder
-   (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
-   ;;* create file (2 options)
-   ;;** option1: with-temp-buffer
-   ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
-   ;;** option2: write-region
-   (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
-   ;; option2 safer, in case dayfile exists, content is not deleted
+     (if (not (file-directory-p new-directory-full-name))
+         (progn
+         (make-directory new-directory-full-name)
+          ;; create the org file within that folder
+          (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
+          ;;* create file (2 options)
+          ;;** option1: with-temp-buffer
+          ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
+          ;;** option2: write-region
+          (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
+          ;; option2 safer, in case dayfile exists, content is not deleted
+          )
+       ;; else
+        (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
+       )
 )
 
 (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)

@@ -3,20 +3,21 @@
 
 ;;* Todos
 ;;** insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
-;;** calendar-date picker
-;;** week view (8 windows, quit-week-view --> winner-undo/or better: remember windows arrangement and go back) + move forward week
-;;** month view
+;;** DONE week view (8 windows, quit-week-view --> winner-undo/or better: remember windows arrangement and go back) + move forward week
 ;;** font styling / appearence:
 ;;*** :LOGBOOK:.. and stuff --> grey ; style heading (*) ; style entry (**)
 ;;*** find way --> appearance only take effect for daily files
 ;;*** define appearance seperate for daily / weekly -> find way to recognize/define what type of org file it is (maybe over local variables, ooooor (even better) --> make file-name analysis as org-mode-hook -> determine type --> fire-up respective minor-mode --> do some learnings about minor-mode priorities (make sure the minor-mode does not get "corrupted/dominated" by other-minor mode)
 ;;** concept about categories/tags/properties -> work / privat / projects / task-clocking
-;;** "sync-save" --> lauch git sync up on save --> shortcut: also spc-s / toggle-sync-save on/off , but only for planet-mode
+;;** ("sync-save" --> lauch git sync up on save --> shortcut: also spc-s / toggle-sync-save on/off , but only for planet-mode) -> not necessary with gsyn checkout / checkin
+
 (defvar planet-mode-map
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "C-.") 'planet-next-day)
     (define-key m (kbd "C-,") 'planet-previous-day)
     m))
+
+(defvar planet-regexp-daily-file-folder ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$")
 
 (define-minor-mode planet-mode
   :initial-value nil
@@ -118,29 +119,46 @@ date2)
     " creates week files in $ORG/daily/ . only for existing daily-files. simply, for each existing monday-file a nearly equal org-file-folder is created, where only ..._Mon is replaced by ..._week"
     (interactive)
     ;* filter daily-files for mondays
-    (setq daily-files (planet-get-all-daily-files))
-    (setq daily-files (-filter (lambda (x) (string-match "^\..*_Mon\.org$" x)) daily-files))
-    (dolist (file daily-files) 
-      (setq filebasename (file-name-base file))
+    (setq daily-file-folders (planet-get-all-daily-file-folders))
+    (setq daily-file-folders (-filter (lambda (x) (string-match "^\..*_Mon\.org$" x)) daily-file-folders))
+    (setq file-folder (nth 1 daily-file-folders))
+    (dolist (file-folder daily-file-folders) 
+      (setq file-folder-basename (file-name-base file-folder))
       ;; replace "Mon" by "week"
       (setq fixedcase t)
-      (setq week-filebasename (replace-regexp-in-string "Mon" "week" filebasename fixedcase))
-      (setq week-filebasename (replace-regexp-in-string "^." "" week-filebasename))
-      (create-hidden-org-file-folder week-filebasename planet-daily-dir)
+      (setq week-filefolder-basename (replace-regexp-in-string "Mon" "week" file-folder-basename fixedcase))
+      (setq week-filebasename (replace-regexp-in-string "^." "" week-filefolder-basename))
+      (setq week-filefullname (planet-convert-filebasename-to-filefullname week-filebasename))
+      ;; create if not already exists
+      (if (not (file-exists-p week-filefullname))
+        (create-hidden-org-file-folder week-filebasename planet-daily-dir)
+        (message (concat "hidden folder \"" week-filefullname "\" already exists."))
+        )
       )
-
     ;;* run create symlinks to "update" symlinks (existing are not changed)
     (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
     )
 
-(defun planet-get-all-daily-files ()
-    (setq daily-files (directory-files planet-daily-dir))
+(defun planet-get-all-daily-file-folders ()
+    (setq daily-file-folders (directory-files planet-daily-dir))
     ;;** filter
-    (setq daily-files (-filter (lambda (x) (string-match "^\..*\.org$" x)) daily-files))
-    (cd planet-daily-dir)
-    (setq daily-files (-filter (lambda (x) (file-directory-p x)) daily-files)) ;; get the wuckin symlinks out (above regex could not filter them, prob. elisp bug)
+    (setq daily-file-folders (-filter (lambda (x) (string-match planet-regexp-daily-file-folder x)) daily-file-folders))
+    (setq daily-file-folders (-filter (lambda (x) (file-directory-p x)) daily-file-folders)) ;; get the wuckin symlinks out (above regex could not filter them, prob. elisp bug)
     ;;** extract year/month/day of last file
-daily-files)
+daily-file-folders)
+
+(defun planet-get-all-daily-filebasenames ()
+  "returns list of daily files with full path (full file names)"
+    (setq daily-file-folders (planet-get-all-daily-file-folders))
+    (setq daily-filebasenames ())
+    (dolist (daily-file-folder daily-file-folders)
+      ;; get the filebasename
+      (setq this-filebasename (replace-regexp-in-string "^." "" daily-file-folder))
+      (setq this-filebasename (replace-regexp-in-string "\.org$" "" this-filebasename))
+      (push this-filebasename daily-filebasenames)
+    )
+    (setq daily-filebasenames (nreverse daily-filebasenames)) ;; (elisp does not have an efficient 'append'-function for lists, only 'push' --> so the best practice is to build a list with push and then reverse it (nreverse))
+daily-filebasenames)
 
 (defun planet-get-last-daily-org-file-date ()
     ;;** get list of files
@@ -175,7 +193,7 @@ last-date)
 
 
 
-(defvar dow-time-days '("Sun"  ;; 0
+(defvar planet-dow-abbreviations '("Sun"  ;; 0
                         "Mon"  ;; 1
                         "Tue"  ;; 2
                         "Wed"  ;; 3
@@ -184,12 +202,71 @@ last-date)
                         "Sat") ;; 6
   )
 
+(defvar planet-dow-abbreviations-upcase '("SUN"  ;; 0
+                        "MON"  ;; 1
+                        "TUE"  ;; 2
+                        "WED"  ;; 3
+                        "THU"  ;; 4
+                        "FRI"  ;; 5
+                        "SAT") ;; 6
+  )
+
+(defvar planet-month-abbreviations '("zero_month_should_not_be"  ;; 0 (month 0 does not exist)
+                        "Jan"  ;; 1
+                        "Feb"  ;; 2
+                        "Mar"  ;; 3
+                        "Apr"  ;; 4
+                        "May"  ;; 5
+                        "Jun"  ;; 6
+                        "Jul"  ;; 7
+                        "Aug"  ;; 8
+                        "Sep"  ;; 9
+                        "Oct"  ;; 10
+                        "Nov"  ;; 11
+                        "Dec")  ;; 12
+  )
+
+(defvar planet-month-abbreviations-upcase '("zero_month_should_not_be"  ;; 0 (month 0 does not exist)
+                        "JAN"  ;; 1
+                        "FEB"  ;; 2
+                        "MAR"  ;; 3
+                        "APR"  ;; 4
+                        "MAY"  ;; 5
+                        "JUN"  ;; 6
+                        "JUL"  ;; 7
+                        "AUG"  ;; 8
+                        "SEP"  ;; 9
+                        "OCT"  ;; 10
+                        "NOV"  ;; 11
+                        "DEC")  ;; 12
+  )
+
+
+(defvar planet-month-fullnames-upcase '("zero_month_should_not_be"  ;; 0 (month 0 does not exist)
+                        "JANUARY"  ;; 1
+                        "FEBRUARY"  ;; 2
+                        "MARCH"  ;; 3
+                        "APRIL"  ;; 4
+                        "MAY"  ;; 5
+                        "JUNE"  ;; 6
+                        "JULY"  ;; 7
+                        "AUGUST"  ;; 8
+                        "SEPTEMBER"  ;; 9
+                        "OCTOBER"  ;; 10
+                        "NOVEMBER"  ;; 11
+                        "DECEMBER")  ;; 12
+  )
+
 (defvar planet-daily-dir "~/org/daily")
 (defvar planet-dir "~/org")
 
 (defun convert-dow-abbreviation (dow)
-  (setq weekday-abbr (nth dow dow-time-days))
+  (setq weekday-abbr (nth dow planet-dow-abbreviations))
  weekday-abbr)
+
+(defun planet-convert-month-abbreviation (month)
+  (setq month-abbr (nth month planet-month-abbreviations-upcase))
+ month-abbr)
 
 (defun create-daily-hidden-org-file(date)
   " creates daily file <year>_<month>_<day>_<weekdayname>.org for <date> in planet-daily-directory. 
@@ -479,6 +556,7 @@ date)
   (planet-view-week2X4-for-date date-today)
   ;; ** set planet-view-state to "view-week2X4"
   (setq planet-view-state "week2X4")
+  (planet-view-week2X4-message-week-from-till)
   )
 
 
@@ -664,7 +742,10 @@ date)
   (setq date-monday-7days-forward (planet-add-7-days date-monday))
   ;; set up the windows win11, win12, etc. wit 
   (planet-view-week2X4-for-date date-monday-7days-forward)
+  ;; make a message like: "1 Dec - 7 Dec"
+  (planet-view-week2X4-message-week-from-till)
   )
+
 
 (defun planet-view-week2X4-previous ()
   ;; get date of monday (in window win11)
@@ -676,9 +757,35 @@ date)
   (setq date-monday-7days-backward (planet-subtract-7-days date-monday))
   ;; set up the windows win11, win12, etc. wit 
   (planet-view-week2X4-for-date date-monday-7days-backward)
+
+  ;; make a message like: "1 Dec - 7 Dec"
+  (planet-view-week2X4-message-week-from-till)
   )
 
 
+(defun planet-view-week2X4-message-week-from-till ()
+  ;; get date of monday (in window win11)
+  (setq buffer-monday (window-buffer win11))
+  (setq buffer-monday-filefullname (buffer-file-name buffer-monday))
+  (setq buffer-monday-filebasename (file-name-base buffer-monday-filefullname))
+  (setq date-monday (planet-convert-filebasename-to-date buffer-monday-filebasename))
+
+  (setq monday-day (planet-date-get-day date-monday))
+  (setq monday-month (planet-date-get-month date-monday))
+  (setq monday-month-abbr (planet-convert-month-abbreviation monday-month))
+
+  ;; get date of sunday (in window win23)
+  (setq buffer-sunday (window-buffer win23))
+  (setq buffer-sunday-filefullname (buffer-file-name buffer-sunday))
+  (setq buffer-sunday-filebasename (file-name-base buffer-sunday-filefullname))
+  (setq date-sunday (planet-convert-filebasename-to-date buffer-sunday-filebasename))
+
+  (setq sunday-day (planet-date-get-day date-sunday))
+  (setq sunday-month (planet-date-get-month date-sunday))
+  (setq sunday-month-abbr (planet-convert-month-abbreviation sunday-month))
+
+  (message (concat (number-to-string monday-day) " " monday-month-abbr " -- " (number-to-string sunday-day) " " sunday-month-abbr))
+  )
 
 (defun planet-next-week ()
   ;; get date of current week file
@@ -699,3 +806,94 @@ date)
   )
 
 
+;;* auto insert titles to all dayly files
+(defun planet-auto-insert-titles-for-daily-files ()
+    (setq daily-filebasenames (planet-get-all-daily-filebasenames))
+    (setq filebasename (nth 1 daily-filebasenames))
+    (dolist (filebasename daily-filebasenames) 
+      (setq this-filefullname (planet-convert-filebasename-to-filefullname filebasename))
+      ;; get dow/day/month and format
+      (setq this-date (planet-convert-filebasename-to-date filebasename))
+
+      (setq dow (planet-date-get-dow this-date))
+      (setq dow-abbr (nth dow planet-dow-abbreviations))
+
+      (setq month (planet-date-get-month this-date))
+      (setq month-abbr (nth month planet-month-abbreviations-upcase))
+      (setq day (planet-date-get-day this-date))
+      (setq day-string (number-to-string day))
+
+      (setq title-string (concat "\*" dow-abbr " " day-string " " month-abbr"\*"))  
+      (setq horizontal-rule-string "----------")  
+
+      (with-temp-file this-filefullname
+        ;; this first line is necessary because "the way elisp/emacs works"...
+        ;; (we create a new 'silent' buffer, which is empty at the beginning, then we create content and put ALL that content to 'file' OVERWRITING it, so as a first thing we have to add all file contents to the temporary buffer)
+        (insert-file-contents file)
+        ;; then we start actuall 'doing stuff'
+
+
+        ;; delete old title
+        (planet-daily-file-delete-lines-until-first-org-heading)
+        (goto-char 1)
+        (newline)
+        (goto-char 1)
+        (insert title-string)
+        (newline)
+        (insert horizontal-rule-string)
+        )
+      )
+    )
+
+(defun planet-insert-string-as-first-line-to-file (file string)
+  (with-temp-file file
+    ;; this first line is necessary because "the way elisp/emacs works"...
+    ;; (we create a new 'silent' buffer, which is empty at the beginning, then we create content and put ALL that content to 'file' OVERWRITING it, so as a first thing we have to add all file contents to the temporary buffer)
+    (insert-file-contents file)
+    ;; then we start actuall 'doing stuff'
+    (goto-char 1)
+    (newline)
+    (goto-char 1)
+    (insert string)
+    )
+  )
+
+;; (write-region (concat "\ue003 "
+;;                       (org-pomodoro-format-seconds)
+;;                       (org-clock-get-clock-string)
+;;                       "\n")
+;;               nil "/tmp/.todo-pipe"
+;;               nil 'quiet)
+;;   (write-region "hellohello" nil file t 'quiet)
+;; (with-current-buffer (find-file-noselect file)
+;;   (goto-char 1)
+;;   (newline)
+;;   (goto-char 1)
+;;   (insert "what the F")
+;;   )
+;; )
+
+(defun planet-read-current-line ()
+  (interactive)
+  (move-beginning-of-line nil)
+  (setq beginofline (point))
+  (move-end-of-line nil)
+  (setq endofline (point))
+  (setq currentlinestring (buffer-substring beginofline endofline))
+  (message currentlinestring)
+  ;; currentlinestring)
+  )
+
+(defun planet-daily-file-delete-lines-until-first-org-heading ()
+  (interactive)
+  (beginning-of-buffer)
+  (setq org-heading-found nil)
+  (while (not (org-heading-found))
+    (setq this-line planet-read-current-line)
+    (string-match "\** .*" this-line) ;; org-headings are : '* blabla' or '** blabla' etc.
+    
+    
+
+    )
+
+  )
