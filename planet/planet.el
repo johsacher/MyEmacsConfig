@@ -224,6 +224,8 @@ last-date)
   (setq date (decode-time (current-time)))
   )
 
+(planet-get-todays-date)
+
 (defun planet-today ()
   (interactive)
   (setq date planet-get-todays-date)
