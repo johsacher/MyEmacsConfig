@@ -68,6 +68,12 @@
 ;;** menu bar off
 (menu-bar-mode -1)
 
+;;** highlight corresponding parenthesis
+(show-paren-mode t)
+
+;;** rainbow delimiters
+(rainbow-delimiters-mode t)
+
 ;;; *)  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;-----------------------------------------------------------
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

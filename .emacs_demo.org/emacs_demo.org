@@ -26,7 +26,7 @@
 ** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
 
 * the vim text editing language
-** Emacs cannot be compared to VIM, VIM text editing system can be used in Emacs
+** Emacs cannot be compared to VIM, but the VIM text editing system can be used inside Emacs
 *** VIM is more a concept for short-cut-design for text-editing
 *** since in emacs short cuts are fully customizable, using VIM in Emacs just means redefining the default short-cuts the "VIM-way"
 ** why the VIM short-cut system is awesome - demo of cool work flow features:
@@ -36,3 +36,4 @@
 *** "electric" indentation
 mark region and hit "=="
 *** mark just pasted region "SPC-v"
+*** jump to corresponding bracket "%"

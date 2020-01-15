@@ -76,6 +76,26 @@ date2)
 ;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
 date2)
 
+(defun planet-date-add-days (date1 number-of-days-to-add)
+;; (setq date2 date1) --> this creates problem, is just a shallow copy
+  (setq date2 (planet-date-deep-copy date1))
+(setq day (nth 3 date2))
+(setq day-incremented (+ day number-of-days-to-add))
+(setf (nth 3 date2) day-incremented)
+(setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
+;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
+date2)
+
+(defun planet-date-subtract-days (date1 number-of-days-to-substract)
+;; (setq date2 date1) --> this creates problem, is just a shallow copy
+  (setq date2 (planet-date-deep-copy date1))
+(setq day (nth 3 date2))
+(setq day-incremented (- day number-of-days-to-substract))
+(setf (nth 3 date2) day-incremented)
+(setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
+;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
+date2)
+
 (defun planet-subtract-7-days (date1)
 ;; (setq date2 date1) --> this creates problem, is just a shallow copy
   (setq date2 (planet-date-deep-copy date1))
@@ -143,6 +163,8 @@ date2)
     (setq daily-file-folders (directory-files planet-daily-dir))
     ;;** filter
     (setq daily-file-folders (-filter (lambda (x) (string-match planet-regexp-daily-file-folder x)) daily-file-folders))
+    (cd planet-daily-dir)
+    (file-directory-p (nth 1 daily-file-folders))
     (setq daily-file-folders (-filter (lambda (x) (file-directory-p x)) daily-file-folders)) ;; get the wuckin symlinks out (above regex could not filter them, prob. elisp bug)
     ;;** extract year/month/day of last file
 daily-file-folders)
@@ -159,6 +181,20 @@ daily-file-folders)
     )
     (setq daily-filebasenames (nreverse daily-filebasenames)) ;; (elisp does not have an efficient 'append'-function for lists, only 'push' --> so the best practice is to build a list with push and then reverse it (nreverse))
 daily-filebasenames)
+
+(defun planet-get-all-daily-filefullnames ()
+  "returns list of daily files with full path (full file names)"
+    (setq daily-file-folders (planet-get-all-daily-file-folders))
+    (setq daily-filefullnames ())
+    (dolist (daily-file-folder daily-file-folders)
+      ;; get the filebasename
+      (setq this-filebasename (replace-regexp-in-string "^." "" daily-file-folder))
+      (setq this-filebasename (replace-regexp-in-string "\.org$" "" this-filebasename))
+      (setq this-filefullname (planet-convert-filebasename-to-filefullname this-filebasename))
+      (push this-filefullname daily-filefullnames)
+    )
+    (setq daily-filefullnames (nreverse daily-filefullnames)) ;; (elisp does not have an efficient 'append'-function for lists, only 'push' --> so the best practice is to build a list with push and then reverse it (nreverse))
+daily-filefullnames)
 
 (defun planet-get-last-daily-org-file-date ()
     ;;** get list of files
@@ -424,6 +460,13 @@ day)
     (setq date (planet-create-date day month year))
 date)
 
+
+(defun planet-convert-filefullname-to-date (filefullname)
+  (setq filebasename (planet-convert-filefullname-to-filebasename filefullname))
+  (setq date (planet-convert-filebasename-to-date filebasename))
+date)
+
+
 (defun planet-convert-date-to-filebasename (date)
   (setq year  (format "%02i" (nth 5 date)))
   (setq month (format "%02i" (nth 4 date)))
@@ -578,7 +621,7 @@ date)
   (setq file-saturday (planet-get-full-file-name-for-date date-saturday))
   (setq file-sunday (planet-get-full-file-name-for-date date-sunday))
 
-  (setq file-week (planet-get-week-file-fullname-for-date date-today))
+  (setq file-week (planet-get-week-file-fullname-for-date date))
   ;; ;;** create the buffers for all dates (not displayed, that the elegant trick ;) --> find-file-noselect as the working horse, low level function for all visiting file operations in elisp)
   (setq buffer-monday (find-file-noselect file-monday))
   (setq buffer-tuesday (find-file-noselect file-tuesday))
@@ -806,42 +849,30 @@ date)
   )
 
 
-;;* auto insert titles to all dayly files
-(defun planet-auto-insert-titles-for-daily-files ()
-    (setq daily-filebasenames (planet-get-all-daily-filebasenames))
-    (setq filebasename (nth 1 daily-filebasenames))
-    (dolist (filebasename daily-filebasenames) 
-      (setq this-filefullname (planet-convert-filebasename-to-filefullname filebasename))
-      ;; get dow/day/month and format
-      (setq this-date (planet-convert-filebasename-to-date filebasename))
+;;* insert titles to all dayly files
+(defun planet-all-daily-files-format-title ()
+  (interactive)
+  (planet-all-daily-files-delete-lines-until-first-org-heading)
+  (planet-all-daily-files-insert-title)
+  )
 
-      (setq dow (planet-date-get-dow this-date))
-      (setq dow-abbr (nth dow planet-dow-abbreviations))
+(defun planet-all-daily-files-insert-title ()
+    (setq daily-filefullnames (planet-get-all-daily-filefullnames))
+    (dolist (filefullname daily-filefullnames) 
+      ;; (setq count 0)
+      ;; (setq count (1+ count))
+      ;; (setq filefullname (nth count daily-filefullnames))
+      (planet-daily-file-insert-title filefullname)
+      )
+    )
 
-      (setq month (planet-date-get-month this-date))
-      (setq month-abbr (nth month planet-month-abbreviations-upcase))
-      (setq day (planet-date-get-day this-date))
-      (setq day-string (number-to-string day))
-
-      (setq title-string (concat "\*" dow-abbr " " day-string " " month-abbr"\*"))  
-      (setq horizontal-rule-string "----------")  
-
-      (with-temp-file this-filefullname
-        ;; this first line is necessary because "the way elisp/emacs works"...
-        ;; (we create a new 'silent' buffer, which is empty at the beginning, then we create content and put ALL that content to 'file' OVERWRITING it, so as a first thing we have to add all file contents to the temporary buffer)
-        (insert-file-contents file)
-        ;; then we start actuall 'doing stuff'
-
-
-        ;; delete old title
-        (planet-daily-file-delete-lines-until-first-org-heading)
-        (goto-char 1)
-        (newline)
-        (goto-char 1)
-        (insert title-string)
-        (newline)
-        (insert horizontal-rule-string)
-        )
+(defun planet-all-daily-files-delete-lines-until-first-org-heading ()
+    (setq daily-filefullnames (planet-get-all-daily-filefullnames))
+    (dolist (filefullname daily-filefullnames) 
+      ;; (setq count 0)
+      ;; (setq count (1+ count))
+      ;; (setq filefullname (nth count daily-filefullnames))
+      (planet-daily-file-delete-lines-until-first-org-heading filefullname)
       )
     )
 
@@ -858,21 +889,6 @@ date)
     )
   )
 
-;; (write-region (concat "\ue003 "
-;;                       (org-pomodoro-format-seconds)
-;;                       (org-clock-get-clock-string)
-;;                       "\n")
-;;               nil "/tmp/.todo-pipe"
-;;               nil 'quiet)
-;;   (write-region "hellohello" nil file t 'quiet)
-;; (with-current-buffer (find-file-noselect file)
-;;   (goto-char 1)
-;;   (newline)
-;;   (goto-char 1)
-;;   (insert "what the F")
-;;   )
-;; )
-
 (defun planet-read-current-line ()
   (interactive)
   (move-beginning-of-line nil)
@@ -881,19 +897,77 @@ date)
   (setq endofline (point))
   (setq currentlinestring (buffer-substring beginofline endofline))
   (message currentlinestring)
-  ;; currentlinestring)
+  currentlinestring)
+
+(defun planet-daily-file-delete-lines-until-first-org-heading (filefullname)
+  (interactive)
+  ;; (setq filefullname (planet-convert-filebasename-to-filefullname (planet-convert-date-to-filebasename (planet-date-add-days (planet-get-previous-monday-date-for-date (planet-get-todays-date)) 5))))
+  ;; (setq tempfile "~/temp.txt")
+  ;; (with-temp-file tempfile
+  (with-temp-file filefullname
+    (insert-file-contents filefullname)
+
+    (beginning-of-buffer)
+
+    ;;* while loop
+    ;;** abort conditions 
+    (setq org-heading-found nil)
+    (setq end-of-buffer-reached nil)
+
+    (setq continue t)
+    (while continue 
+      ;;** determine conditions
+
+      ;;*** end of buffer reached?
+      (setq end-off-buffer-reached (eobp))
+
+      ;;*** org-heading found?
+      (setq this-line (planet-read-current-line))
+      (if (string-match "^\*\** .*$" this-line) ;; org-headings are : '* blabla' or '** blabla' etc.
+          (setq org-heading-found t)
+        )
+
+      (setq continue (and (not org-heading-found) (not end-off-buffer-reached)))
+      (if continue 
+          (planet-delete-current-line)
+        )
+      )
+    )
   )
 
-(defun planet-daily-file-delete-lines-until-first-org-heading ()
-  (interactive)
-  (beginning-of-buffer)
-  (setq org-heading-found nil)
-  (while (not (org-heading-found))
-    (setq this-line planet-read-current-line)
-    (string-match "\** .*" this-line) ;; org-headings are : '* blabla' or '** blabla' etc.
-    
-    
+(defun planet-daily-file-insert-title (fullfilename)
+  ;; (setq filefullname (planet-convert-filebasename-to-filefullname (planet-convert-date-to-filebasename (planet-date-add-days (planet-get-previous-monday-date-for-date (planet-get-todays-date)) 5))))
+  ;; get dow/day/month and format
+  (setq date (planet-convert-filefullname-to-date filefullname))
 
+  (setq dow (planet-date-get-dow date))
+  (setq dow-abbr (nth dow planet-dow-abbreviations))
+
+  (setq month (planet-date-get-month date))
+  (setq month-abbr (nth month planet-month-abbreviations-upcase))
+  (setq day (planet-date-get-day date))
+  (setq day-string (number-to-string day))
+
+  (setq title-string (concat "\*" dow-abbr " " day-string " " month-abbr"\*"))  
+  (setq horizontal-rule-string "-------------")  
+
+  (with-temp-file filefullname
+    ;; this first line is necessary because "the way elisp/emacs works"...
+    ;; (we create a new 'silent' buffer, which is empty at the beginning, then we create content and put ALL that content to 'file' OVERWRITING it, so as a first thing we have to add all file contents to the temporary buffer)
+    (insert-file-contents filefullname)
+    ;; then we start actuall 'doing stuff'
+    (goto-char 1)
+    (newline)
+    (goto-char 1)
+    (insert title-string)
+    (newline)
+    (insert horizontal-rule-string)
     )
+  )
 
+
+(defun planet-delete-current-line ()
+  " like the equivalent of vim 'dd'"
+  (interactive)
+  (kill-whole-line)
   )
