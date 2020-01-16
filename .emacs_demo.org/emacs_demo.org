@@ -1,3 +1,9 @@
+* my (computer) life before Emacs
+** alt-tabbing the hell out of my hands
+** confused, what files / terminals are open, alt-tabbing the shit out of my hands to go somewhere
+** clicking in the file explorer, slow mouse selecting files/directories
+** annoyed by slow editing capabilities in IDE's (e.g. matlab: replace string in selected area -> not possible, arrrgh). many repeated manual editing tasks...
+
 * what is Emacs?
 ** Emacs is one of the 5 oldest software projects (over 40 years, since 1970), written by Richard Stallman ("priest of the church of Emacs") --> reference/ pic of stallman
 *** it is FREE software (GNU public license) - MORE than open-source
@@ -44,6 +50,7 @@
 * EMACS workflow (my stuff)
 ** navigate "windows": alt + h/j/k/l
 ** copy/paste paths: F1 / F2
+*** super practical: context of terminal/file-explorer -> go where your terminal is / cd where your file-explorer is. and both situations occur A LOT. 
 ** move buffer to some other window: F3 / F4
 
 
@@ -67,7 +74,7 @@
 ***** final comment on modal editing: some critisize: extra effort to type something in. but actually the most part of editing text (especially programming) you do not write text, but navigate/copy/paste/delete/replace strings/etc. --> that s why modal editing is more efficient, cause it avoids "hand-tiring" classic ctrl-key-chords... 
 *** VIM's "absolute extra superweapon" - the leader key
 **** when in normal mode: leader key is a "non-cordal" "flying" way to access superfast your favourite functions: e.g. i use : SPC-b --> switch to other file / SPC-s --> save file / etc.
-***** best thing: you can vary the bindings depending on which "mode", i.e. working on python files (python-mode) or 
+***** best thing: you can vary the bindings depending on which "mode", i.e. working on python files (python-mode) or matlab-files or c++ or whatever...
 **** i use it EXTENSIVELY --> bound it to SPACE (most comfortable key by far)
 *** goodies:
 **** "g ;" --> last edited lines
