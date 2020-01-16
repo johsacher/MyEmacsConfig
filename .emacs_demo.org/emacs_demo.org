@@ -1,4 +1,6 @@
 * what is Emacs?
+** Emacs is one of the 5 oldest software projects (over 40 years, since 1970), written by Richard Stallman ("priest of the church of Emacs") --> reference/ pic of stallman
+*** it is FREE software (GNU public license) - MORE than open-source
 ** me: "emacs is not a text-editor. emacs is a text-based interface-platform, to automize your work flow."
 ** thus ANY text-editing style can be plugged-in (vim-style, emacs-style, etc.)
 ** everything is a function. every function can be called via customized short cut. --> everything can be done via short-cut.
@@ -25,15 +27,105 @@
 * latex (auctex)
 ** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
 
-* the vim text editing language
+* EMACS workflow (existing packages)
+** switch file: helm-mini (helm package), recent/current files -> type one or more letter-sequences, order does not matter
+*** (compare to matlabs horrible "tab-workflow" --> little demo with matlab)
+** work with files/directories -> dired
+*** fulltext search super fast: superb interface to ripgrep-search --> demo 
+*** find files/directories recursively - interface
+** use as terminal multiplexer --> ansi-term
+** strongest feature: totally flexible window-arrangement --> "demo split windows"
+*** arrange everything you need for your work in an integrated way in ONE view: (files/terminal/directory/notes-todos/calendar-agenda)
+*** split window vert/horizontally --> view multiple parts of same file --> super practical (no mousescrolling back and forth)
+*** "my add-on-goody" here: resize windows with h/j/k/l (after SPC-')
+** TRAMP --> transfer files between servers
+** the power of emacs 
+
+* EMACS workflow (my stuff)
+** navigate "windows": alt + h/j/k/l
+** copy/paste paths: F1 / F2
+** move buffer to some other window: F3 / F4
+
+
+* emacs with matlab:
+** same experience (use matlab-package and programmed a little on top to have debugging experience)
+
+* *the VIM text editing language* - "SYTH (VIM) + JEDI (EMACS) = SUPERPOWER" evil-mode (emacs-"plugin", best vim-emulation ever) --> the vim text editing language
 ** Emacs cannot be compared to VIM, but the VIM text editing system can be used inside Emacs
 *** VIM is more a concept for short-cut-design for text-editing
 *** since in emacs short cuts are fully customizable, using VIM in Emacs just means redefining the default short-cuts the "VIM-way"
 ** why the VIM short-cut system is awesome - demo of cool work flow features:
 *** navigate h,j,k,l
 *** modal editing -> no pain of ctrl-/alt-key-combinations
-** goodies:
-*** "electric" indentation
-mark region and hit "=="
-*** mark just pasted region "SPC-v"
-*** jump to corresponding bracket "%"
+**** "VIM is an editing language" --> verb + object
+***** verbs: "y" (copy/yank) "d" (delete) "v" (mark) "f" (forward) "F" (backward) "c" (change/substitute) 
+***** objects: "w" (word) "W" (big word) ")" (text within parenthesis)
+***** examples: "vi)" "vi]" "viw" "viW" etc 
+***** --> "VIM knows what I mean in more abstract way" --> super cool: repeat that with "."
+***** line editing super practical: "dd" "yy" --> delete/copy whole current line
+***** go to line --> ":" <line_number> <enter>
+***** final comment on modal editing: some critisize: extra effort to type something in. but actually the most part of editing text (especially programming) you do not write text, but navigate/copy/paste/delete/replace strings/etc. --> that s why modal editing is more efficient, cause it avoids "hand-tiring" classic ctrl-key-chords... 
+*** VIM's "absolute extra superweapon" - the leader key
+**** when in normal mode: leader key is a "non-cordal" "flying" way to access superfast your favourite functions: e.g. i use : SPC-b --> switch to other file / SPC-s --> save file / etc.
+***** best thing: you can vary the bindings depending on which "mode", i.e. working on python files (python-mode) or 
+**** i use it EXTENSIVELY --> bound it to SPACE (most comfortable key by far)
+*** goodies:
+**** "g ;" --> last edited lines
+**** faster moving: "b" "w" "e", repeat movement with ";" -> demo: sentences: "f." ";" ";" etc.
+**** undo/redo: "u" / "ctrl-r" --> super fast
+**** "%" --> jump corresponding parenthesis
+**** mark lines to return to: 
+***** "mm" "'m" or
+***** "ma" "'a"
+**** scroll with: ctrl-e / ctrl-y
+** my goodies:
+*** "electric" indentation (electric-indent-mode)
+**** mark region and hit "="
+**** or hit "==" -> indent line ; 
+**** e.g. new line / next line and then just hit "==" --> no SPC SPC SPC ... puääääähhh
+*** mark just pasted region "SPC-v" --> do something about it (e.g. auto-indent "=")
+*** "live"-replace regex 
+*** auto-complete-mode
+** advantage of knowing vim: vim is installed on every linux system (e.g. servers), quickly edit some file with the "real vim" -> in terminal: vim test.txt
+
+* org-mode - emacs has a lot of great packages, but org-mode IS emacs's SILVERWARE 
+** what is org mode: "basically an outline tool. and a WHOLE LOT more!"
+*** quick demo outlining: headings, move headings, indent headings, add labels (TODO/DONE/etc.) - all super fast (not possible in word this fast...)
+** what's cool: data is PURE text files
+*** something which no proprietary program wants, but it IS the best for the user
+*** you can version control it with git (super good advantage)
+*** full text search with tools that are actually good at that job --> e.g. ripgrep (linux-philosophy)
+*** you can read org files understandably even without emacs (!)
+** so what can you do with it / application cases:
+*** shape thoughts
+*** take notes
+**** superfast for live-note-taking (here speed counts)
+***** at a conference
+***** on the phone
+*** keep track of todos
+*** organise meetings / scheduling
+*** cool goodies:
+**** read latex formulas / preview
+**** insert/preview images
+**** these things made org-mode my MSWORD-substitution
+*** actually produce high quality publishable documents (!)
+**** export -> latex / html (like a charme...) --> some authors/bloggers (not programmers) edit their writings only in org-mode, even whole books (!)
+*** insert and execute code snippets -> the "better jupyther-notebook", because ANY programming language
+*** some goodies:
+**** clock in/out
+** my own "org-mode-extension" for scheduling days/weeks with todos and appointments: planet-mode (on github) --> quick demo
+
+* conclusion 1:  the power of emacs: when you work on all text-files in emacs, you keep your customized/automized/efficient workflow in EVERY programming language / project
+* last but not least - Emacs and all this stuff is working also in a terminal mode - in ssh connections!
+** very economic band width --> "e.g. working when you re in a hostel with shitty internet"
+** all servers today are linux --> so you can use emacs, mostly preinstalled, and if not: just compile it
+** usefull when on server --> work in a screen-session --> "kind of reconnectable desktop experience"
+
+* the learning curve... the price to pay
+** i mean you can use emacs out of the box, without programming anything, but...
+** the "sky-limit" power of emacs only comes to play when you program your own customization
+** and that is where you have to learn the programming language Emacs is based on: LISP
+** but hey: good documentation + it is a very mind-expanding language, different from others, and some cool features
+** apropos documentation: emacs is self-documenting (!)
+*** want to know what a function does? --> C-h f <function-name>
+*** want to know what a key does? --> C-h k <key>

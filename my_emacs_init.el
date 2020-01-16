@@ -60,7 +60,7 @@
 (global-display-line-numbers-mode)
 ;** scroll bar off
 (if (display-graphic-p)
-    (toggle-scroll-bar -1)
+    (scroll-bar-mode -1) 
   )
 ;;** tool bar off
 (tool-bar-mode -1)
@@ -181,22 +181,30 @@
 ;;;* elisp mode
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
-            (auto-complete-mode)))
+            (auto-complete-mode)
+            (rainbow-delimiters-mode t)
+            ))
 
 ;;;* bash (=shell-script-mode)
 (add-hook 'shell-script-mode-hook
           (lambda ()
-            (auto-complete-mode)))
+            (auto-complete-mode)
+            (rainbow-delimiters-mode t)
+            ))
 
 ;;;* c++
 (add-hook 'c++-mode-hook
           (lambda ()
-            (auto-complete-mode)))
+            (auto-complete-mode)
+            (rainbow-delimiters-mode t)
+            ))
 
 ;;;* python
 (add-hook 'python-mode-hook
           (lambda ()
-            (auto-complete-mode)))
+            (auto-complete-mode)
+            (rainbow-delimiters-mode t)
+            ))
 
 
 ;;;* ipython-calculator (my)
@@ -1072,7 +1080,9 @@ load-path
 (matlab-cedet-setup)
 
 (add-hook 'matlab-mode-hook
- 	     (lambda nil (auto-complete-mode)))
+          (lambda nil (auto-complete-mode)
+            (rainbow-delimiters-mode t)
+            ))
 
 (add-hook 'M-shell-mode-hook
  	     (lambda nil (company-mode)))

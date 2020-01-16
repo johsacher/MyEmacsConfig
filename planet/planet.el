@@ -2,8 +2,9 @@
 ;; format of weekly files: <year>_<month>_<day>_week.org
 
 ;;* Todos
-;;** insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
+;;** DONE insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
 ;;** DONE week view (8 windows, quit-week-view --> winner-undo/or better: remember windows arrangement and go back) + move forward week
+;;** planet files --> show only top headings
 ;;** font styling / appearence:
 ;;*** :LOGBOOK:.. and stuff --> grey ; style heading (*) ; style entry (**)
 ;;*** find way --> appearance only take effect for daily files
