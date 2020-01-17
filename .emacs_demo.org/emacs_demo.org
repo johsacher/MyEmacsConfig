@@ -84,6 +84,7 @@
 **** mark lines to return to: 
 ***** "mm" "'m" or
 ***** "ma" "'a"
+**** "copy-history" --> really cool experience, just shuffle through old pastes (I bound it to ctrl-p/n (previous/next) --> demo
 **** scroll with: ctrl-e / ctrl-y
 ** my goodies:
 *** "electric" indentation (electric-indent-mode)
@@ -136,3 +137,6 @@
 ** apropos documentation: emacs is self-documenting (!)
 *** want to know what a function does? --> C-h f <function-name>
 *** want to know what a key does? --> C-h k <key>
+
+* some comments on my own work flow:
+** prefer Alt to CTRL key-combos for short-cuts for most important actions. Alt is sooo much more comfortable than CTRL.
