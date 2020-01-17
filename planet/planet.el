@@ -496,7 +496,7 @@ date)
 ;; open 'standard quick' notes.org file
 (defun planet-open-quick-notes ()
   (interactive)
-  (find-file (concat planet-dir "/" "notes.org"))
+  (find-file (concat planet-dir "/" "lists/quick_notes.org"))
   )
 
 
