@@ -525,7 +525,7 @@ date)
 
 ;; global variables for getting handle to specific windows in a window-configuration
 
-(defvar planet-view-state "none")
+(defvar planet-view-state)
 
 (defvar planet-view-states '("none"  ;; 0
                         "week2X4"  ;; 1

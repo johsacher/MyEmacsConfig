@@ -56,6 +56,9 @@
 
 * emacs with matlab:
 ** same experience (use matlab-package and programmed a little on top to have debugging experience)
+** make matlab-shell / dired-window / etc
+** show a bit debugging experience (F5/F8/F12/F9)
+** completion (company mode)
 
 * *the VIM text editing language* - "SYTH (VIM) + JEDI (EMACS) = SUPERPOWER" evil-mode (emacs-"plugin", best vim-emulation ever) --> the vim text editing language
 ** Emacs cannot be compared to VIM, but the VIM text editing system can be used inside Emacs
@@ -95,6 +98,9 @@
 *** "live"-replace regex 
 *** auto-complete-mode
 ** advantage of knowing vim: vim is installed on every linux system (e.g. servers), quickly edit some file with the "real vim" -> in terminal: vim test.txt
+** final note: Emacs has it s own key-binding-system --> but pinky-problem (demo with CTRL-...)
+*** but also handy to know --> in some packages not "evilized" , and on linux-terminals (ctrl-r, ctrl-g, ctrl-n/p/b/f, ctrl-e/a, ctrl-d
+*** i use emacs-bindings in terminals (did not find modal editing convenient here)
 
 * org-mode - emacs has a lot of great packages, but org-mode IS emacs's SILVERWARE 
 ** what is org mode: "basically an outline tool. and a WHOLE LOT more!"

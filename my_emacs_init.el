@@ -1375,8 +1375,9 @@ load-path
 (require 'recentf)
 ; Enable recentf mode
 (recentf-mode t)
-; Show last 10 files
-(setq recentf-max-menu-items 10)
+; Show last 200 files (with helm-interface no problem, i have easily 100+ files open and want to quickly access them in future session) 
+(setq recentf-max-saved-items 200)
+(setq recentf-max-menu-items 200)
 ; Reset C-x C-r to display recently opened files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 

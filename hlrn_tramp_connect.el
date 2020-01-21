@@ -3,6 +3,18 @@
   (find-file "/ssh:blogin:/home/b/beijsach")
 )
 
+
+(defun hlrn-goettingen-home-tramp ()
+  (interactive)
+  (find-file "/ssh:glogin:/home/beijsach")
+)
+
+(defun hlrn-goettingen-work-tramp ()
+  (interactive)
+  (find-file "/ssh:glogin:/scratch/usr/beijsach")
+)
+
+
 (defun hlrn-work1-tramp ()
   (interactive)
   (find-file "/ssh:blogin:/gfs1/work/beijsach")
