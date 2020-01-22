@@ -40,7 +40,6 @@
 (load custom-file)
 
 
-
 ;;; GENERAL STUFF ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -173,7 +172,7 @@
           
 (add-hook 'planet-mode-hook
          (lambda ()
-           (outline-show-all)
+           ;; (outline-show-all)
            ))
 
 
@@ -845,7 +844,9 @@
 ;; ;;    .) open recent directories
 ;; (global-set-key (kbd "C-x C-d") 'dired-recent-dirs-ivy-bjm) ;; see definition recent_dirs.el
 
-
+;;* helm-rg
+(require 'helm-rg)
+(setq helm-rg-default-extra-args '("--hidden"))
 ;; DIRED+ STUFF -> no longer officially supported MELPA (security reasons) --> outcommented
 ;;  (https://emacs.stackexchange.com/questions/38553/dired-missing-from-melpa)
 ;; ;;    .) reuse buffer,  don't open always new buffer when 

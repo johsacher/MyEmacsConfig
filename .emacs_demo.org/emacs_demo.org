@@ -146,3 +146,12 @@
 
 * some comments on my own work flow:
 ** prefer Alt to CTRL key-combos for short-cuts for most important actions. Alt is sooo much more comfortable than CTRL.
+* funny things "M-x xxx"  everything
+** sketch M-x lightning --> look/google
+** psychotherapist
+** tetris
+** make coffee, ahaha
+*** https://github.com/themad/htcpcp
+*** https://github.com/0mark/htcpcp
+* good links:
+** https://batsov.com/articles/2011/11/19/why-emacs/
