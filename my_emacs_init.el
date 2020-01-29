@@ -257,6 +257,9 @@
 
 ;;;* org-mode
 
+;; make sure we have the latest package of org
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+
 ;;** org bullets
 (require 'org-bullets)
 (add-hook 'org-mode-hook
@@ -287,6 +290,55 @@
              (org-bullets-mode 1)
              ))
 (require 'org-install)
+
+;;** evaluate code snippets in org
+;;*** don t confirm every time
+(setq org-confirm-babel-evaluate nil)
+;;*** add languages: C++/C
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (C . t);; This enables Babel to process C, C++ and D source blocks.
+   (python . t);; 
+   (matlab . t);; 
+   (latex . t);; 
+   (emacs-lisp . t);; 
+   (shell . t);; (sh . t) does not work (docum. faulty)
+   ) 
+ )
+
+;;*** add quick-templates (<s <TAB> / 
+;; delete all that crap and do my own
+;; add c++
+(setq org-structure-template-alist nil)
+;; (add-to-list 'org-structure-template-alist '("s" "#+BEGIN_SRC\n?\n#+END_SRC")) ;; default
+(add-to-list 'org-structure-template-alist '("s" "#+begin_src\n?\n#+end_src")) ;; default
+(add-to-list 'org-structure-template-alist '("c" "#+begin_src C++\n?\n#+end_src")) ;; c++
+(add-to-list 'org-structure-template-alist '("C" "#+begin_src C\n?\n#+end_src")) ;; C
+(add-to-list 'org-structure-template-alist '("p" "#+begin_src python\n?\n#+end_src")) ;; python
+(add-to-list 'org-structure-template-alist '("b" "#+begin_src bash\n?\n#+end_src")) ;; bash
+;; default content of org-structure-template-alist:
+;; (
+;; ("s" "#+BEGIN_SRC ?
+;; #+END_SRC") ("e" "#+BEGIN_EXAMPLE
+;; ?
+;; #+END_EXAMPLE") ("q" "#+BEGIN_QUOTE
+;; ?
+;; #+END_QUOTE") ("v" "#+BEGIN_VERSE
+;; ?
+;; #+END_VERSE") ("V" "#+BEGIN_VERBATIM
+;; ?
+;; #+END_VERBATIM") ("c" "#+BEGIN_CENTER
+;; ?
+;; #+END_CENTER") ("C" "#+BEGIN_COMMENT
+;; ?
+;; #+END_COMMENT") ("l" "#+BEGIN_EXPORT latex
+;; ?
+;; #+END_EXPORT") ("L" "#+LaTeX: ") ("h" "#+BEGIN_EXPORT html
+;; ?
+;; #+END_EXPORT") ("H" "#+HTML: ") ("a" "#+BEGIN_EXPORT ascii
+;; ?
+;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
 ;;** evil org
 (require 'evil-org)
@@ -1673,6 +1725,13 @@ This a menu element (FILE . FILE)."
 (insert rel-path)
 )
 
+;;;* c++
+
+;;** c++ -mode key bindings consistent (overwrite)
+(define-key c++-mode-map "\M-k" 'windmove-up)
+(define-key c++-mode-map "\M-h" 'windmove-left)
+(define-key c++-mode-map "\M-l" 'windmove-right)
+(define-key c++-mode-map "\M-j" 'windmove-down)
 
 
 ;;;* openfoam 
@@ -1965,3 +2024,48 @@ region, clear header."
  (provide 'init-pdfview)
 
 
+;;;* quickly print variable to scratch buffer
+(defun print-var-to-scratch-buffer (var)
+  (interactive)
+  (with-current-buffer "*scratch*"
+    (end-of-buffer)
+    (insert (concat "\n\n" (prin1-to-string var)))
+    )
+  )
+
+(defun dummy-fun (arg)
+  (interactive)
+  ;; ;; (message org-structure-template-alist)
+  ;; (setq name_str "org-structure-template-alist")
+  ;; (setq x (intern-soft name_str))
+  ;; (message (symbol-value x))
+  (message arg)
+  )
+
+
+(debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
+(cancel-debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
+(defun print-value-of-var-under-selection-to-scratch-buffer ()
+  (interactive)
+  ;; read the selection AS VARIABLE into var
+  ;; (setq var (make-symbol "org-structure-template-alist"))
+  (setq var_string (buffer-substring (region-beginning) (region-end)))
+  (setq var (intern-soft var_string))
+  ;; (print-var-to-scratch-buffer var)
+  (setq symbolvalue (symbol-value var))
+  (if (setq var (intern-soft var_string))
+      (with-current-buffer "*scratch*"
+        (end-of-buffer)
+        ;; function "symbol-value" was necessary, otherwise not working (??? but ok)
+        ;; (insert var) ;;--> not working even though it works when using the variable (symbol), e.g. x, directly like this (insert x))
+        (insert (concat "\n\n value of variable '" var_string "':\n"))
+        (insert (prin1-to-string symbolvalue))
+       ;; (eval var_string)
+        ;; https://stackoverflow.com/questions/4651274/convert-symbol-to-a-string-in-elisp
+        )
+    ;; else
+    (message (concat "no such symbol exists with name: " var_string))
+    )
+  )
+
+org-structure-template-alist

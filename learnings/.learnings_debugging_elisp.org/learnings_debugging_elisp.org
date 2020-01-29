@@ -1,0 +1,7 @@
+* best debugging work flow i found: using 'edebug' (not the standard 'debugger')
+** steps:
+*** 'instrument' function (whatever that means...):
+**** go to function body and type C-u C-M-x (i know this is cryptic, currently did not find another way..)
+*** then execute the function
+*** *change to Emacs-mode* in case you use evil-mode
+*** proceed 'next' by pressing 'n'

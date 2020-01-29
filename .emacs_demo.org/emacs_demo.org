@@ -125,6 +125,7 @@
 *** actually produce high quality publishable documents (!)
 **** export -> latex / html (like a charme...) --> some authors/bloggers (not programmers) edit their writings only in org-mode, even whole books (!)
 *** insert and execute code snippets -> the "better jupyther-notebook", because ANY programming language
+**** make demo: write a python / c++ / witch "hello world"
 *** some goodies:
 **** clock in/out
 ** my own "org-mode-extension" for scheduling days/weeks with todos and appointments: planet-mode (on github) --> quick demo
@@ -155,3 +156,6 @@
 *** https://github.com/0mark/htcpcp
 * good links:
 ** https://batsov.com/articles/2011/11/19/why-emacs/
+#+BEGIN_SRC sh
+echo "hello"
+#+END_SRC
