@@ -860,9 +860,9 @@
 
 
 
-;;; WINDOW / BUFFER NAVIGATION STUFF ;;;;
+;;;* WINDOW / BUFFER NAVIGATION STUFF
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; *) copy/paste path between buffers (terminal/dired)
+;;; ** copy/paste path between buffers (terminal/dired)
 (load "copy-paste-paths.el")
 (evil-add-hjkl-bindings dired-mode-map 'emacs) 
 ;; copy current path key bindings
@@ -877,6 +877,10 @@
 (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
 
 
+;;; ** avy/ace jump 
+(require 'avy)
+(evil-leader/set-key "j" 'avy-goto-char-2) ;; 'avy-goto-char
+(evil-leader/set-key "m" 'avy-goto-char) 
 
                 
 (setq dired-recursive-copies 'always)

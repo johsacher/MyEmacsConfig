@@ -28,39 +28,9 @@
 #                                |                                  |
 #                                |                                  |
 #                                +----------------------------------+
-
-
-* latex (auctex)
-** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
-
-* EMACS workflow (existing packages)
-** switch file: helm-mini (helm package), recent/current files -> type one or more letter-sequences, order does not matter
-*** (compare to matlabs horrible "tab-workflow" --> little demo with matlab)
-** work with files/directories -> dired
-*** fulltext search super fast: superb interface to ripgrep-search --> demo 
-*** find files/directories recursively - interface
-** use as terminal multiplexer --> ansi-term
-** strongest feature: totally flexible window-arrangement --> "demo split windows"
-*** arrange everything you need for your work in an integrated way in ONE view: (files/terminal/directory/notes-todos/calendar-agenda)
-*** split window vert/horizontally --> view multiple parts of same file --> super practical (no mousescrolling back and forth)
-*** "my add-on-goody" here: resize windows with h/j/k/l (after SPC-')
-** TRAMP --> transfer files between servers
-** the power of emacs 
-
-* EMACS workflow (my stuff)
-** navigate "windows": alt + h/j/k/l
-** copy/paste paths: F1 / F2
-*** super practical: context of terminal/file-explorer -> go where your terminal is / cd where your file-explorer is. and both situations occur A LOT. 
-** move buffer to some other window: F3 / F4
-
-
-* emacs with matlab:
-** same experience (use matlab-package and programmed a little on top to have debugging experience)
-** make matlab-shell / dired-window / etc
-** show a bit debugging experience (F5/F8/F12/F9)
-** completion (company mode)
-
-* *the VIM text editing language* - "SYTH (VIM) + JEDI (EMACS) = SUPERPOWER" evil-mode (emacs-"plugin", best vim-emulation ever) --> the vim text editing language
+* --> Emacs "is a superb operating system, it just lacks a good text-editor": "OS-part" + "Text-Editor-part" ('text-editing-short-cut-concept')
+* Editor-part:  *the VIM text editing language* - "SYTH (VIM) + JEDI (EMACS) = SUPERPOWER" evil-mode (emacs-"plugin", best vim-emulation ever) --> the vim text editing language
+** "marry the Jedis (emacs) and Syths (vim)" --> the "Syths" just are better in text-editing.. --> plugin the "EVIL-mode" :)
 ** Emacs cannot be compared to VIM, but the VIM text editing system can be used inside Emacs
 *** VIM is more a concept for short-cut-design for text-editing
 *** since in emacs short cuts are fully customizable, using VIM in Emacs just means redefining the default short-cuts the "VIM-way"
@@ -75,10 +45,6 @@
 ***** line editing super practical: "dd" "yy" --> delete/copy whole current line
 ***** go to line --> ":" <line_number> <enter>
 ***** final comment on modal editing: some critisize: extra effort to type something in. but actually the most part of editing text (especially programming) you do not write text, but navigate/copy/paste/delete/replace strings/etc. --> that s why modal editing is more efficient, cause it avoids "hand-tiring" classic ctrl-key-chords... 
-*** VIM's "absolute extra superweapon" - the leader key
-**** when in normal mode: leader key is a "non-cordal" "flying" way to access superfast your favourite functions: e.g. i use : SPC-b --> switch to other file / SPC-s --> save file / etc.
-***** best thing: you can vary the bindings depending on which "mode", i.e. working on python files (python-mode) or matlab-files or c++ or whatever...
-**** i use it EXTENSIVELY --> bound it to SPACE (most comfortable key by far)
 *** goodies:
 **** "g ;" --> last edited lines
 **** faster moving: "b" "w" "e", repeat movement with ";" -> demo: sentences: "f." ";" ";" etc.
@@ -89,19 +55,57 @@
 ***** "ma" "'a"
 **** "copy-history" --> really cool experience, just shuffle through old pastes (I bound it to ctrl-p/n (previous/next) --> demo
 **** scroll with: ctrl-e / ctrl-y
+**** "go to line" with :<line-number>
+**** copy/select inner/outer expression, e.g. vi" / va" / viw / viW 
 ** my goodies:
 *** "electric" indentation (electric-indent-mode)
 **** mark region and hit "="
 **** or hit "==" -> indent line ; 
 **** e.g. new line / next line and then just hit "==" --> no SPC SPC SPC ... puääääähhh
 *** mark just pasted region "SPC-v" --> do something about it (e.g. auto-indent "=")
-*** "live"-replace regex 
+*** "live"-replace regex with looping replace history (super usefull) --> demo 
 *** auto-complete-mode
+
+** VIM's "absolute extra superweapon" - the leader key
+*** when in normal mode: leader key is a "non-cordal" "flying" way to access superfast your favourite functions: e.g. i use : SPC-b --> switch to other file / SPC-s --> save file / etc.
+**** best thing: you can vary the bindings depending on which "mode", i.e. working on python files (python-mode) or matlab-files or c++ or whatever...
+*** i use it EXTENSIVELY --> bound it to SPACE (most comfortable key by far)
 ** advantage of knowing vim: vim is installed on every linux system (e.g. servers), quickly edit some file with the "real vim" -> in terminal: vim test.txt
 ** final note: Emacs has it s own key-binding-system --> but pinky-problem (demo with CTRL-...)
 *** but also handy to know --> in some packages not "evilized" , and on linux-terminals (ctrl-r, ctrl-g, ctrl-n/p/b/f, ctrl-e/a, ctrl-d
 *** i use emacs-bindings in terminals (did not find modal editing convenient here)
+** final note 2: some people say "oouh, that s so many short cuts, it would distract me" the opposite is the case: "you think more about content, less about editing, it get s 'out of the way' while you re doing what you re doing"
+* The OS-part: general navigation: files/windows/directories/terminals
+** EMACS workflow (existing packages)
+*** switch file: helm-mini (helm package), recent/current files -> type one or more letter-sequences, order does not matter
+**** (compare to matlabs horrible "tab-workflow" --> little demo with matlab)
+*** work with files/directories -> dired
+**** fulltext search super fast: superb interface to ripgrep-search --> demo 
+**** find files/directories recursively - interface
+*** use as terminal multiplexer --> ansi-term
+*** strongest feature: totally flexible window-arrangement --> "demo split windows"
+**** arrange everything you need for your work in an integrated way in ONE view: (files/terminal/directory/notes-todos/calendar-agenda)
+**** split window vert/horizontally --> view multiple parts of same file --> super practical (no mousescrolling back and forth)
+**** "my add-on-goody" here: resize windows with h/j/k/l (after SPC-')
+*** avy-mode --> (ace-goto-char) jump super fast
+*** TRAMP --> transfer files between servers
+*** the power of emacs 
 
+** EMACS workflow (my stuff)
+*** navigate "windows": alt + h/j/k/l
+*** copy/paste paths: F1 / F2
+**** super practical: context of terminal/file-explorer -> go where your terminal is / cd where your file-explorer is. and both situations occur A LOT. 
+*** move buffer to some other window: F3 / F4
+
+
+* latex (auctex)
+** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
+
+* emacs with matlab:
+** same experience (use matlab-package and programmed a little on top to have debugging experience)
+** make matlab-shell / dired-window / etc
+** show a bit debugging experience (F5/F8/F12/F9)
+** completion (company mode)
 * org-mode - emacs has a lot of great packages, but org-mode IS emacs's SILVERWARE 
 ** what is org mode: "basically an outline tool. and a WHOLE LOT more!"
 *** quick demo outlining: headings, move headings, indent headings, add labels (TODO/DONE/etc.) - all super fast (not possible in word this fast...)
