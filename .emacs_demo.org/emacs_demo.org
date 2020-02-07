@@ -58,7 +58,7 @@
 **** "go to line" with :<line-number>
 **** copy/select inner/outer expression, e.g. vi" / va" / viw / viW 
 ** my goodies:
-*** "electric" indentation (electric-indent-mode)
+*** "electric" indentation (electric-indent-mode) "it s electric!"
 **** mark region and hit "="
 **** or hit "==" -> indent line ; 
 **** e.g. new line / next line and then just hit "==" --> no SPC SPC SPC ... puääääähhh
