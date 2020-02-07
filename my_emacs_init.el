@@ -205,6 +205,9 @@
             (rainbow-delimiters-mode t)
             ))
 
+(autoload 'pylint "pylint")
+(add-hook 'python-mode-hook 'pylint-add-menu-items)
+(add-hook 'python-mode-hook 'pylint-add-key-bindings)
 
 ;;;* ipython-calculator (my)
 ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
