@@ -99,7 +99,11 @@
 
 
 * latex (auctex)
-** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
+** multi-file /directory support
+*** 'C-=' -> cool navigation in pop-up toc, also multi-file-document 
+*** compile from any file (master doc as meta variable)
+*** preview (a little show off, i don t use it that much)
+*** reftex --> figures / tables / sections / cite --> no copy paste
 
 * emacs with matlab:
 ** same experience (use matlab-package and programmed a little on top to have debugging experience)
