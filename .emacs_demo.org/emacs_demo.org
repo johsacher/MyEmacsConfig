@@ -28,6 +28,10 @@
 #                                |                                  |
 #                                |                                  |
 #                                +----------------------------------+
+* Why emacs?  
+** is is just mental illness?
+** no.
+** it isn't /just/ mental illness! :D
 * --> Emacs "is a superb operating system, it just lacks a good text-editor": "OS-part" + "Text-Editor-part" ('text-editing-short-cut-concept')
 * Editor-part:  *the VIM text editing language* - "SYTH (VIM) + JEDI (EMACS) = SUPERPOWER" evil-mode (emacs-"plugin", best vim-emulation ever) --> the vim text editing language
 ** "marry the Jedis (emacs) and Syths (vim)" --> the "Syths" just are better in text-editing.. --> plugin the "EVIL-mode" :)

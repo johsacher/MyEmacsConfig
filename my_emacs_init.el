@@ -52,6 +52,9 @@
 
 ;;;* GENERAL SETTINGS
 
+;;** suppress "spamy" auto-revert messages
+(setq auto-revert-verbose nil)
+
 ;;** title (play around -> tribute to emacs)
 (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
 
@@ -208,6 +211,46 @@
 (autoload 'pylint "pylint")
 (add-hook 'python-mode-hook 'pylint-add-menu-items)
 (add-hook 'python-mode-hook 'pylint-add-key-bindings)
+;;;* english-german-translator
+(defvar english-german-translator-buffer-name "*english-german-translator*")
+
+
+(defun english-german-translator-init ()
+  (interactive)
+  "currently: Start eww-buffer with dict.cc in a new buffer."
+  (interactive)
+  (eww "dict.cc")
+  (rename-buffer english-german-translator-buffer-name)
+  (english-german-translator-move-point-to-input-field)
+  )
+
+(defun get-point-position ()
+  (interactive)
+  (setq current_pos (point))
+  (message current_pos)
+  current_pos)
+
+(defun english-german-translator-move-point-to-input-field ()
+  (interactive)
+  (goto-char 332)
+  )
+
+(defun english-german-translator ()
+  (interactive)
+  ;; initiate if not already exists
+  (if (not (get-buffer english-german-translator-buffer-name))
+      (english-german-translator-init)
+      )
+  ;; switch to that buffer
+  (switch-to-buffer english-german-translator-buffer-name)
+  (english-german-translator-move-point-to-input-field)
+  ;; (switch-to-buffer english-german-translator-buffer-name)
+  ;; (english-german-translator-move-point-to-input-field)
+  ;; (switch-to-buffer english-german-translator-buffer-name)
+  ;; (english-german-translator-move-point-to-input-field)
+  ;; (switch-to-buffer english-german-translator-buffer-name)
+  ;; (english-german-translator-move-point-to-input-field)
+  )
 
 ;;;* ipython-calculator (my)
 ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
@@ -1490,6 +1533,18 @@ load-path
 ;;(load "preview-latex.el" nil t t)
 
 
+;;** hook latex with minor-outline-mode
+(add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+
+(evil-define-minor-mode-key 'normal 'outline-minor-mode (kbd "TAB") 'org-cycle) ;; comment: org and outline go hand-in-hand, the org-function kind of "expand" the outline-functions, in pure outline-mode there is no toggling function
+
+;;** hook with TeX-fold-mode (the shit to hide figures/tables and stuff)
+;;   (does not conflict with outline-minor-mode, yeah)
+;;   usefull functions:
+;;                     go to figure/table and M-x TeX-fold-env 
+(add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
+
+
 ;;** F5 -> run pdflatex / F6 -> bibtex
 (defun run-pdflatex-on-master-file ()
 "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
@@ -1501,6 +1556,8 @@ load-path
 ;;*option2: (discarded)
 ;; (save-buffer)
 ;; (shell-command (format "pdflatex %s.tex" (TeX-master-file)))
+;;* show compile window, where pointer is always at end
+;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
 )
 
 (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
@@ -1511,7 +1568,6 @@ load-path
 (interactive)
 (TeX-command "BibTeX" 'TeX-master-file nil)
 )
-
 
 
 ;;;** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
@@ -1532,16 +1588,28 @@ load-path
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 
 ;;;*** setup viewer (okular) with synref
+;;;    how to use:
+;;     (https://tex.stackexchange.com/questions/161797/how-to-configure-emacs-and-auctex-to-perform-forward-and-inverse-search)
+;;;              go from emacs to okular ("forward search"): --> hit C-c C-v --> voila, okular opens exactly the position
+;;;              go from okular to emacs ("inverse search"): (mind, only works with emacsclient/daemon)  --> Shift-MouseLeft on position
+;;;     prerequisite - okular settings: simply: okular--> settings --> configure Okular --> Editor --> emacsclient 
 (server-start)
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 (setq TeX-source-correlate-mode t)
 
+;;** make more easy/natural to read
+;;*** break lines naturally
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)  
+;;*** (did not work out) show prose in block text, more easy/natural to read (--> auto-fill-mode)
+;; (add-hook 'LaTeX-mode-hook 'auto-fill-mode)  
 
 ;;;** reftex
-     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
 (setq reftex-plug-into-AUCTeX t)
 ;;
 (setq reftex-cite-format 'natbib)
+
+(setq reftex-refstyle "\\autoref")
 
 ;;;** aspell
 (setq-default ispell-program-name "aspell")
