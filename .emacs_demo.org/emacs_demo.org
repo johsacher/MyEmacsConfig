@@ -171,3 +171,7 @@
 #+BEGIN_SRC sh
 echo "hello"
 #+END_SRC
+
+* misc
+** Machinists make and modify their own tools. Good computer professionals do the same thing. (quelle?)
+** (pers. opinion) keyboard orientstion is a feature, not a bug. mouse and menue are slow! Hands never leaving keyboard means /speed/.
