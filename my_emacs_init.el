@@ -601,7 +601,7 @@
       ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("CURRENT..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("WAITING" :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
-      ("DEFERRED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("DEFERRED" :background "green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DELEGATED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("MAYBE" :background "gray" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("APPT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
