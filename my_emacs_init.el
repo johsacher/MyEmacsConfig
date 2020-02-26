@@ -110,6 +110,17 @@
 (evil-collection-init
  'dired
  )
+;;; use alternative for ESC
+(require 'key-chord)
+(key-chord-mode 1)
+
+(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+(key-chord-define evil-visual-state-map "jk" 'evil-normal-state)
+(key-chord-define evil-replace-state-map "jk" 'evil-normal-state)
+
+(key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+;; (key-chord-define evil-visual-state-map "jj" 'evil-normal-state) # this has nasty effect, commented out
+(key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
 
 ;;** search string under visual selection (commonly used also by vimmers) 
 (require 'evil-visualstar)
@@ -590,9 +601,9 @@
       "WAITING"
       "QUESTION"
       "ANSWERED"
-      "DONE"
       "DEFERRED"
-      "CANCELLED")))
+      "CANCELLED"
+      "DONE")))
 
   (setq org-todo-keyword-faces
     '(("PROJ" :background "blue" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
