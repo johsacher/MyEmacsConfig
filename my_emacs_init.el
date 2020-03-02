@@ -2158,4 +2158,3 @@ region, clear header."
     )
   )
 
-org-structure-template-alist
