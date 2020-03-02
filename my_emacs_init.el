@@ -317,6 +317,10 @@
 ;; make sure we have the latest package of org
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
+;;** fix TAB -> org-cycle for android phone
+(evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
+
+
 ;;** org bullets
 (require 'org-bullets)
 (add-hook 'org-mode-hook
