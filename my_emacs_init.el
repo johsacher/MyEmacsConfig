@@ -695,6 +695,7 @@
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
+(evil-leader/set-key "7" 'stickyterm-noninteractive)
 
 (require 'term)
 ;; (if color-theme-buffer-local-switch
