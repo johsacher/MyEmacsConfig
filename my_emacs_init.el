@@ -401,10 +401,102 @@
 ;; ?
 ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
+;;** org-mode toggle bold/italic
+(defun org-toggle-bold-region ()
+  (interactive)
+  (my-toggle-marker-around-region "*" "\*"  "*" "\*")
+  )
+
+(defun org-toggle-italic-region ()
+  (interactive)
+  (my-toggle-marker-around-region "/" "\/" "/" "\/")
+  )
+(evil-leader/set-key "ob" 'org-toggle-bold-region)
+(evil-leader/set-key "oi" 'org-toggle-italic-region)
+
+(defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
+  (setq begin (region-beginning))
+  (setq end (region-end))
+  (setq region_string (buffer-substring (mark) (point)))
+
+  ;; if begins and ends with single star --> bold 
+  (if (string-match (concat "^" marker-begin-regex ".*" marker-end-regex "$") region_string) ;; org-headings are : '* blabla' or '** blabla' etc.
+      (progn 
+        (save-excursion
+          (goto-char begin)
+          (delete-char (length marker-begin))
+          (goto-char end)
+          (backward-char);; because we deleted the char '*'
+          (delete-char (length marker-begin))
+          (message (concat "region is: " region_string))
+          )
+        )
+      ;; else (toggle state: not marked)
+      (progn 
+        (save-excursion
+          (goto-char begin)
+          (insert marker-begin)
+          (goto-char end)
+          (forward-char) ;; because we added the char '*'
+          (insert marker-end)
+          (message (concat "region is: " region_string))
+          )
+        )
+      )
+  )
+
+;;** org-ref (--> citation management & pdflatex export)
+(require 'org-ref)
+;; org export --> has to run bibtex also
+(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+;;** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
+;;   (wrote this for automatic syncing on compilation in first place
+;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
+
+(defun org-export-latex-pdf-with-hook ()
+  (interactive)
+  ;; export to pdf
+  (org-latex-export-to-pdf)
+
+  ;; apply my hooked process (syncing)
+  (setq export_pdf_hook (org-kwd "EXPORT_PDF_HOOK"))
+  (setq filename-base (file-name-base (buffer-file-name)))
+  (setq pdffile-name (concat filename-base ".pdf"))
+  ;; (message pdffile-name)
+  ;; get the argument for export_hook
+  ;; can be like so: 
+  ;; #+export_hook: rclone {} googledrive:ExistenzGruendungSacherFlitz
+  ;; --> command to be executed "rclone {} googledrive:ExistenzGruendungSacherFlitz"
+  ;; (message export_pdf_hook)
+  ;; {} will be replaced by 
+  (setq export_pdf_hook_final (replace-regexp-in-string "{}" pdffile-name export_pdf_hook))
+  (message (concat "apply export-pdf-hook, executing command: " export_pdf_hook_final " ; output in buffer: *org_export_pdf_hook_process_output*"))
+  (async-shell-command export_pdf_hook_final "*org_export_pdf_hook_process_output*")
+  )
+
+;;*** use of 2 helper functions: org-kwds / org-kwd
+;; (from: http://kitchingroup.cheme.cmu.edu/blog/2013/05/05/Getting-keyword-options-in-org-files/)
+(defun org-kwds ()
+  "parse the buffer and return a cons list of (property . value)
+from lines like:
+#+PROPERTY: value"
+  (org-element-map (org-element-parse-buffer 'element) 'keyword
+                   (lambda (keyword) (cons (org-element-property :key keyword)
+                                           (org-element-property :value keyword)))))
+(defun org-kwd (KEYWORD)
+  "get the value of a KEYWORD in the form of #+KEYWORD: value"
+  (cdr (assoc KEYWORD (org-kwds))))
+
+;;*** make the output not pop-up
+(add-to-list 'display-buffer-alist
+  (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
+;;*** define the "run-f5" short cut
+(define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
+
 ;;** evil org
 (require 'evil-org)
 (setq org-M-RET-may-split-line nil)
-
 
 ;;;*** make tab key work as org-cycle in terminal
 (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
@@ -2158,4 +2250,10 @@ region, clear header."
     (message (concat "no such symbol exists with name: " var_string))
     )
   )
+
+
+
+
+
+
 
