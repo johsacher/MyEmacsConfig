@@ -450,6 +450,7 @@
 ;; org export --> has to run bibtex also
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
+(setq org-latex-prefer-user-labels t)
 ;;** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
 ;;   (wrote this for automatic syncing on compilation in first place
 ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
@@ -692,14 +693,16 @@ from lines like:
 ;; ( org-set-emph-re) 
 ;;** add some new labels
 (setq org-todo-keywords
-  '((sequence "TODO"
-      "CURRENT..."
-      "WAITING"
-      "QUESTION"
-      "ANSWERED"
-      "DEFERRED"
-      "CANCELLED"
-      "DONE")))
+      '((sequence
+         "DONE"
+         "CANCELLED"
+         "DEFERRED"
+         "ANSWERED"
+         "QUESTION"
+         "CURRENT..."
+         "WAITING"
+         "TODO"
+         )))
 
   (setq org-todo-keyword-faces
     '(("PROJ" :background "blue" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
@@ -746,8 +749,8 @@ from lines like:
 (evil-define-key 'insert org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
 (evil-define-key 'normal org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
 (evil-define-key 'normal org-mode-map (kbd "H") 'org-shiftleft)
-(evil-define-key 'normal org-mode-map (kbd "K") 'org-shiftup)
-(evil-define-key 'normal org-mode-map (kbd "J") 'org-shiftdown)
+(evil-define-key 'normal org-mode-map (kbd "C-K") 'org-shiftup)
+(evil-define-key 'normal org-mode-map (kbd "C-J") 'org-shiftdown) ;; leave "J" for joining lines
 
 ;;exception: M-h/j/k/l are reserved for window-management --> map to C-h/j/k/l
 (evil-define-key 'normal org-mode-map (kbd "C-l") 'org-metaright)

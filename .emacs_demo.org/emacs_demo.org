@@ -140,6 +140,8 @@
 **** make demo: write a python / c++ / witch "hello world"
 *** some goodies:
 **** clock in/out
+***** estimate effort
+***** current clocked activity automatically in mode-line 
 ** my own "org-mode-extension" for scheduling days/weeks with todos and appointments: planet-mode (on github) --> quick demo
 
 * conclusion 1:  the power of emacs: when you work on all text-files in emacs, you keep your customized/automized/efficient workflow in EVERY programming language / project
