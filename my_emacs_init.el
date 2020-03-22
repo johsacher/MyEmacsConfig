@@ -506,7 +506,8 @@
 
 
 ;;** org-ref (--> citation management & pdflatex export)
-(require 'org-ref)
+(use-package org-ref
+   :ensure t)
 ;; org export --> has to run bibtex also
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
