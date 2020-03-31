@@ -1,0 +1,88 @@
+* scenario(s) / plan
+** initial state (I):
+*** remote: file-version0
+*** laptop: file-version0
+*** mobile: file-version0
+
+** process 1: laptop save, is connected (process I->II [=II->III])
+*** processes
+**** laptop down-syncs the current file (file-version0)
+**** laptop manipulates and saves file-version1
+**** laptop up-syncs: changes to remote --> remote has file-version1
+***** git add file (=stage file)
+***** git commit
+***** git push
+*** end state (II):
+**** remote: file-version1
+**** laptop: file-version1
+**** mobile: file-version0
+
+** process 2: mobile save, is connected (process II->III)
+*** processes
+**** =down-sync= (necessary)
+**** manipulate and save file
+**** (up-sync) -> unnecessary
+*** end state (III):
+**** remote: file-version2
+**** laptop: file-version1
+**** mobile: file-version2
+
+
+** process 3: mobile save, is connected (process II->III)
+*** processes
+**** (down-sync)->unnecessary
+**** manipulate and save file
+**** (up-sync) -> unnecessary
+*** end state (III):
+**** remote: file-version2
+**** laptop: file-version1
+**** mobile: file-version2
+** process 3: mobile save, is connected (process II->III)
+*** processes
+**** (down-sync)->unnecessary
+**** manipulate and save file
+**** =up-sync= -> necessary
+*** end state (III):
+**** remote: file-version2
+**** laptop: file-version1
+**** mobile: file-version2
+
+** process 4: laptop save, is connected (process II->III)
+*** down-sync
+*** manipulate and save file
+*** up-sync 
+*** end state (III):
+**** remote: file-version2
+**** laptop: file-version3
+**** mobile: file-version2
+
+* fragen
+** ANSWERED =soll das in gsyn integriert sein???=
+*** ja! denn hier geht es um daten-"politik": gsyn ist dieser politik verbandelt, deshalb macht es sinn diesen "instant-sync" zustand für jedes projekt auch dort einzustellen
+*** jein! aber integration! keine abhängigkeit von gsyn!
+*** --> erst mal so entwickeln, als gäbe es gsyn nicht!
+*** doch nein! -> denn git-save-feature sollte gsyn keine probleme bereiten.
+** wo soll information dieser politik gespeichert sein...
+*** DISCARDED A user-entscheidung -> er hat 2 speicher-knöpfe
+**** nicht gewünscht.. (user overhead vermeiden, wir wollen google-docs-experience)
+*** DISCARDED B in den dateien als meta-parameter
+**** zu viel aufwand. man will gar nicht dateien einzeln steuern.
+*** DISCARDED C in Gitordner info als dot-datei platzieren
+*** WINNER D in emacs: like M-x git-save-mode
+
+
+
+* 
+* gedanken:
+** ziel dieses systems ist ja gerade eine "gedanken-lose" speicherung ohne ausloggen/einloggen
+** um hier das effizienteste zu tun, braucht man wissen, und das kann nur übers netz ausgetauscht werden.
+** kompromiss-prinzip besteht scheinbar:
+*** prinzip:
+**** lock-out/in system 
+***** maximale info mit maximalen aufwand
+***** niedrigster daten-transfer
+**** instant-sync-system 
+***** minimale info/ aufwand
+***** höchster daten-transfer
+*** cooler gedanke: wir sortieren die infos nach ihrem Aufwand!
+*** ach neeeh.. das war verkopft! diese sache ist ganz einfach: die infos die der user sich nicht merkt, muss sich das system teuer übers netz holen

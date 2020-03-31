@@ -5,6 +5,7 @@
 ;;** DONE insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
 ;;** DONE week view (8 windows, quit-week-view --> winner-undo/or better: remember windows arrangement and go back) + move forward week
 ;;** planet files --> show only top headings
+;;** leader-key bindings for planet-mode (minor mode) --> (currently with evil-leader/set-key-for-mode org-mode ... ), was only possible with major-mode
 ;;** font styling / appearence:
 ;;*** :LOGBOOK:.. and stuff --> grey ; style heading (*) ; style entry (**)
 ;;*** find way --> appearance only take effect for daily files
@@ -972,3 +973,64 @@ date)
   (interactive)
   (kill-whole-line)
   )
+
+
+;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
+
+;;** konzept:
+;;*** schnell taggen: work / tools / etc
+;;**** schneller zugriff auf wichtigste mit SPC-p-<key> 
+;;**** tag work --> SPC-p-w
+(evil-leader/set-key-for-mode 'org-mode "pw" 'planet-add-tag-work) 
+(defun planet-add-tag-work ()
+  (interactive)
+  (planet-add-tag "work")
+  )
+;;**** tag tools --> SPC-p-t
+(evil-leader/set-key-for-mode 'org-mode "pt" 'planet-add-tag-tools) 
+(defun planet-add-tag-tools ()
+  (interactive)
+  (planet-add-tag "tools")
+  )
+;;*** guter shortcut für clock in/out / effort
+;;**** clock in --> SPC-p-i
+(evil-leader/set-key-for-mode 'org-mode "pi" 'planet-clock-in) 
+;;**** clock out --> SPC-p-o
+(evil-leader/set-key-for-mode 'org-mode "po" 'planet-clock-out) 
+;;**** set effort --> SPC-p-e
+(evil-leader/set-key-for-mode 'org-mode "pe" 'org-set-effort) 
+
+(defun planet-clock-in ()
+  (interactive)
+  (org-clock-in)
+  (planet-save)
+  )
+
+(defun planet-clock-out ()
+  (interactive)
+  (org-clock-out)
+  (planet-save)
+  )
+
+;; default save behaviour in planet (possibly involving git up date)
+(defun planet-save ()
+  (interactive)
+  (save-buffer)
+  )
+
+
+(defun planet-add-tag (newtag)
+  (interactive)
+  ;;get current tags
+  (org-set-tags-to newtag)
+  ;; align all tags
+  (org-set-tags t t)
+)
+
+(defun planet-set-tag (newtag)
+  (interactive)
+  (org-set-tags-to newtag)
+  ;; align all tags
+  (org-set-tags t t)
+)
+

@@ -158,7 +158,7 @@
   (evil-leader/set-key "f" 'helm-find) 
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
-  (evil-leader/set-key "p" 'helm-projectile-find-file) 
+  ;; (evil-leader/set-key "p" 'helm-projectile-find-file) ;; -> "p" reserved for planet frequent commands
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "x" 'helm-M-x)
   (evil-leader/set-key "2" 'split-window-below) 
@@ -2321,3 +2321,10 @@ region, clear header."
 
 
 
+;;* git-save
+
+(defun git-save ()
+  (interactive)
+  ;;* update
+
+  )
