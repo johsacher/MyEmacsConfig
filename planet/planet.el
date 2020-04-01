@@ -1118,7 +1118,7 @@ date)
   (interactive)
   (setq command-string (concat "git pull "))
   (async-shell-command command-string)
-  (message (concat "git-pulled file: " buffer-file-name " (git pushed)." ))
+  (message (concat "git-pulled."))
   )
 
 
