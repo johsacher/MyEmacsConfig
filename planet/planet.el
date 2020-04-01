@@ -1093,7 +1093,6 @@ date)
         (setq planet-git-save-switch nil)
         )
     )
-
   (message "planet-git-save turned off.")
   )
 
