@@ -1080,6 +1080,7 @@ date)
   (interactive)
   (if planet-git-save-switch
       (planet-git-save-turn-off)
+      (planet-git-save-turn-on)
     )
   )
 
