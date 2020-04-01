@@ -1122,7 +1122,7 @@ date)
   (revert-buffer)
   )
 
-(defun planet-revert-all-planet-files ()
+(defun planet-revert-all-planet-buffers ()
 
 
   )
