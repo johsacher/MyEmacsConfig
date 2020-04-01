@@ -1060,10 +1060,10 @@ date)
        )
 
    (setq is-planet-file file-is-in-planet-dir)
-   (if is-planet-file
-       (message (concat "file IS a planet file ; " file-path))
-     (message (concat "file NOT a planet file ; " file-path))
-     )
+   ;; (if is-planet-file
+   ;;     (message (concat "file IS a planet file ; " file-path))
+   ;;   (message (concat "file NOT a planet file ; " file-path))
+   ;;   )
   is-planet-file)
 
 (defvar planet-git-save-switch nil)
