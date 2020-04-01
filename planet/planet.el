@@ -1125,6 +1125,7 @@ date)
 (defun planet-revert-all-planet-buffers ()
   (interactive)
   ;; for now:
+  (org-revert-all-org-buffers)
 
 
   ;; later:
