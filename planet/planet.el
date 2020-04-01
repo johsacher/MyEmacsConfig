@@ -1067,6 +1067,15 @@ date)
   is-planet-file)
 
 (defvar planet-git-save-switch nil)
+
+(defun planet-git-save-info ()
+  (interactive)
+  (if planet-git-save-switch
+       (message "planet-git-save is switched ON.")
+       (message "planet-git-save is switched OFF.")
+     )
+  )
+
 (defun planet-git-save-toggle ()
   (interactive)
   (if planet-git-save-switch
@@ -1085,7 +1094,8 @@ date)
 
 (defun planet-git-sync-up-file ()
   (interactive)
-  (setq command-string (concat "git add " buffer-file-name))
   (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
   (async-shell-command command-string)
+  (message (concat "file " buffer-file-name " git pushed." ))
   )
+
