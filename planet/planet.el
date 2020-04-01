@@ -1126,6 +1126,7 @@ date)
   (interactive)
   ;; for now:
   (org-revert-all-org-buffers)
+  )
 
 
   ;; later:
