@@ -1080,11 +1080,6 @@ date)
   (interactive)
   (if planet-git-save-switch
       (planet-git-save-turn-off)
-    (progn
-      (add-hook 'after-save-hook 'planet-git-sync-file)
-      (setq planet-git-save-switch t)
-      (message "planet-git-save turned on.")
-      )
     )
   )
 
@@ -1101,6 +1096,27 @@ date)
         )
     )
   )
+
+(defun planet-git-save-turn-off ()
+  (interactive)
+  (remove-hook 'after-save-hook 'planet-git-sync-file)
+  (setq planet-git-save-switch nil)
+  (message "planet-git-save turned off.")
+  (if (not planet-git-save-switch)
+      (progn
+        (remove-hook 'after-save-hook 'planet-git-sync-file)
+        (setq planet-git-save-switch nil)
+        (message "planet-git-save turned off.")
+        )
+    )
+  )
+
+    (progn
+      (add-hook 'after-save-hook 'planet-git-sync-file)
+      (setq planet-git-save-switch t)
+      (message "planet-git-save turned on.")
+      )
+
 
 (defun planet-git-sync-up-file ()
   (interactive)
