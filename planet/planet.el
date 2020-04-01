@@ -1123,7 +1123,7 @@ date)
   )
 
 (defun planet-revert-all-planet-buffers ()
-
+  (interactive)
 
   )
 
