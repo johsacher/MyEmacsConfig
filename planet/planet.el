@@ -1079,6 +1079,7 @@ date)
 (defun planet-git-save-toggle ()
   (interactive)
   (if planet-git-save-switch
+      (planet-git-save-turn-off)
     (progn
       (add-hook 'after-save-hook 'planet-git-sync-file)
       (setq planet-git-save-switch t)
