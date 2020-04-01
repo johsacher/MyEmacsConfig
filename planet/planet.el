@@ -55,7 +55,7 @@
 (provide 'planet)
 
 (defun planet-date-deep-copy (date1)
-(setq date2 (decode-time (apply 'encode-time date1)))
+  (setq date2 (decode-time (apply 'encode-time date1)))
   date2)
 
 (defun planet-add-one-day (date1)
@@ -295,8 +295,8 @@ last-date)
                         "DECEMBER")  ;; 12
   )
 
-(defvar planet-daily-dir "~/org/daily")
-(defvar planet-dir "~/org")
+(defvar planet-daily-dir (expand-file-name "~/org/daily"))
+(defvar planet-dir (expand-file-name "~/org"))
 
 (defun convert-dow-abbreviation (dow)
   (setq weekday-abbr (nth dow planet-dow-abbreviations))
@@ -1034,3 +1034,57 @@ date)
   (org-set-tags t t)
 )
 
+;;* turn on planet-mode for the "right org-files (planet files)"
+(add-hook 'org-mode-hook
+         (lambda ()
+           (planet-detect-if-planet-file-if-yes-turn-on-planet-mode)
+          ))
+;; add this to your org-mode-hook
+(defun planet-detect-if-planet-file-if-yes-turn-on-planet-mode ()
+  (if (planet-detect-if-planet-file)
+      (planet-mode)
+    )
+  )
+
+;; detect planet mode
+(defun planet-detect-if-planet-file ()
+  (interactive)
+  (setq is-planet-file nil)
+  ;; easiest: check if it s in ~/org
+   (setq file-path (file-name-directory buffer-file-name))
+   (setq file-path (expand-file-name file-path)) ;; for security, converts e.g. ~ to /home/<user-name>
+   (setq file-is-in-planet-dir nil)
+   (if (string-match (concat "^" planet-dir ".*") file-path)
+       (setq file-is-in-planet-dir t)
+       (setq file-is-in-planet-dir nil)
+       )
+
+   (setq is-planet-file file-is-in-planet-dir)
+   (if is-planet-file
+       (message (concat "file IS a planet file ; " file-path))
+     (message (concat "file NOT a planet file ; " file-path))
+     )
+  is-planet-file)
+
+(defvar planet-git-save-switch nil)
+(defun planet-git-save-toggle ()
+  (interactive)
+  (if planet-git-save-switch
+      (progn
+        (remove-hook 'after-save-hook 'planet-git-sync-file)
+        (setq planet-git-save-switch nil)
+        (message "planet-git-save turned off.")
+        )
+    (progn
+      (add-hook 'after-save-hook 'planet-git-sync-file)
+      (setq planet-git-save-switch t)
+      (message "planet-git-save turned on.")
+      )
+    )
+  )
+
+(defun planet-git-sync-file ()
+  (interactive)
+  (setq command-string (concat "git add " buffer-file-name))
+  (async-shell-command "git add -A" "*org_export_pdf_hook_process_output*")
+  )
