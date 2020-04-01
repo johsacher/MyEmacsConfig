@@ -1119,6 +1119,7 @@ date)
   (setq command-string (concat "git pull "))
   (async-shell-command command-string)
   (message (concat "git-pulled."))
+  (revert-buffer)
   )
 
 
