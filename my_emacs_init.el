@@ -2353,3 +2353,8 @@ region, clear header."
 ;;   ;;* update
 
 ;;   )
+
+;;* async process behaviour
+;;** turn off 'pop-up' of the *Async Shell Command* buffer
+(add-to-list 'display-buffer-alist
+  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))

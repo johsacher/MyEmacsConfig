@@ -68,11 +68,10 @@
 *** DISCARDED B in den dateien als meta-parameter
 **** zu viel aufwand. man will gar nicht dateien einzeln steuern.
 *** DISCARDED C in Gitordner info als dot-datei platzieren
-*** WINNER D in emacs: like M-x git-save-mode
+*** WINNER D in emacs: like M-x planet-git-save-mode
+**** option1: buffer-save-hook --> ( if in planet-mode --> perform git-save)
 
 
-
-* 
 * gedanken:
 ** ziel dieses systems ist ja gerade eine "gedanken-lose" speicherung ohne ausloggen/einloggen
 ** um hier das effizienteste zu tun, braucht man wissen, und das kann nur übers netz ausgetauscht werden.
