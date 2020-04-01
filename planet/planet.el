@@ -1114,7 +1114,7 @@ date)
   )
 
 
-(defun planet-git-sync-down-file ()
+(defun planet-git-sync-down-revert-file ()
   (interactive)
   (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
   (async-shell-command command-string)
