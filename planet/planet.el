@@ -1092,6 +1092,22 @@ date)
     )
   )
 
+(defun planet-git-save-turn-on ()
+  (interactive)
+  (if planet-git-save-switch
+      (progn
+        (remove-hook 'after-save-hook 'planet-git-sync-file)
+        (setq planet-git-save-switch nil)
+        (message "planet-git-save turned off.")
+        )
+    (progn
+      (add-hook 'after-save-hook 'planet-git-sync-file)
+      (setq planet-git-save-switch t)
+      (message "planet-git-save turned on.")
+      )
+    )
+  )
+
 (defun planet-git-sync-up-file ()
   (interactive)
   (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
