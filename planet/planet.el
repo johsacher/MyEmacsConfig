@@ -1089,7 +1089,7 @@ date)
   (setq planet-git-save-switch nil)
   (if planet-git-save-switch
       (progn
-        (remove-hook 'after-save-hook 'planet-git-sync-file)
+        (remove-hook 'after-save-hook 'planet-git-sync-up-file)
         (setq planet-git-save-switch nil)
         )
     )
