@@ -179,10 +179,6 @@
 
 ;;* planet-mode (my org extension)
 (load (concat my_load_path "planet/planet.el"))
-(add-hook 'org-mode-hook
-         (lambda ()
-           (planet-mode)
-          ))
           
 (add-hook 'planet-mode-hook
          (lambda ()
@@ -197,6 +193,22 @@
             (auto-complete-mode)
             (rainbow-delimiters-mode t)
             ))
+;;** debugging
+;;*** comments: two options in emacs: debug (old) ;  edebug -> better, interactive, "matlab-like", just a 'little overhead' --> need to perform 'instrumentalization' before every debugging...
+;;*** --> just hit 'SPC-/'
+;;*** more convenient short-cut for instrumentalize function: than "C-u C-M-x"!
+(evil-leader/set-key-for-mode 'emacs-lisp-mode "/" 'instrumentalize-fun) 
+(defun instrumentalize-fun ()
+  (interactive)
+  ;; (edebug-eval-defun t)
+  (eval-defun t) ;; argument can be any --> effect is to instrumentalize for edebug
+  )
+;;;***
+(evil-define-key 'normal edebug-mode-map (kbd "n") 'edebug-next-mode)
+(evil-define-key 'normal edebug-mode-map (kbd "F10") 'edebug-next-mode)
+
+(evil-define-key 'normal edebug-mode-map (kbd "q") 'top-level)
+(evil-define-key 'normal edebug-mode-map (kbd "F8") 'top-level)
 
 ;;;* bash (=shell-script-mode)
 (add-hook 'shell-script-mode-hook
@@ -1356,24 +1368,42 @@ from lines like:
     ;; (ido-mode t)
 
 
-;; *) HELM
+;;* helm
 (require 'helm)
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
 (global-set-key (kbd "C-x C-f") #'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(setq helm-full-frame t)
+
+
 ;; (setq helm-display-function 'helm-display-buffer-in-own-frame
 ;;         helm-display-buffer-reuse-frame nil
 ;;         helm-use-undecorated-frame-option nil)
 
-;; *) helm window --> formatting
-(setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
-;; file name column width
-(setq helm-buffer-max-length 70)
+;;** helm window
+;;*** option1 (full frame)
+;; (setq helm-full-frame t)
+;; (setq helm-autoresize-max-height 0)
+;; (setq helm-autoresize-min-height 20)
+;; (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
+;; (setq helm-buffer-max-length 70) ;; file name column width
 
+;;*** option2 (half frame, show only current buffer aside)
+;; (setq helm-split-window-in-side-p nil)
+;; (helm-autoresize-mode t)
+;; (setq helm-autoresize-max-height 50)
+;; (setq helm-autoresize-min-height 50)
+;; (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
+;; (setq helm-buffer-max-length 70) ;; file name column width
 
-;;; *) projectile
+;;*** option3 (half frame, show all buffers aside, compressed)
+(add-to-list 'display-buffer-alist
+             '("\\`\\*helm"
+               (display-buffer-in-side-window)
+               (window-height . 0.4)))
+(setq helm-display-function #'display-buffer)
+
+;;;* projectile
 (projectile-global-mode)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
@@ -2316,15 +2346,10 @@ region, clear header."
   )
 
 
-
-
-
-
-
 ;;* git-save
 
-(defun git-save ()
-  (interactive)
-  ;;* update
+;; (defun git-save ()
+;;   (interactive)
+;;   ;;* update
 
-  )
+;;   )
