@@ -1124,7 +1124,7 @@ date)
 
 (defun planet-revert-all-planet-buffers ()
   (interactive)
-  (if (bound-and-true-p planet-mode)
+  (if (bound-and-true-p planet-mode)   ;; https://stackoverflow.com/questions/10088168/how-to-check-whether-a-minor-mode-e-g-flymake-mode-is-on
 
 
   )
