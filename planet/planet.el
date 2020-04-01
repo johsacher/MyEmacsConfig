@@ -1110,7 +1110,6 @@ date)
   ;; (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
   ;; (async-shell-command command-string)
   (message (concat "git-saved file: " buffer-file-name " (git pushed)." ))
-  (message "helllooooooooo")
   )
 
 
