@@ -1107,8 +1107,8 @@ date)
 
 (defun planet-git-sync-up-file ()
   (interactive)
-  (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
-  (async-shell-command command-string)
+  ;; (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
+  ;; (async-shell-command command-string)
   (message (concat "file " buffer-file-name " git pushed." ))
   )
 
