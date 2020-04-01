@@ -1085,7 +1085,6 @@ date)
 
 (defun planet-git-save-turn-off ()
   (interactive)
-  (setq planet-git-save-switch nil)
   (if planet-git-save-switch
       (progn
         (remove-hook 'after-save-hook 'planet-git-sync-up-file)
