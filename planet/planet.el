@@ -1102,11 +1102,11 @@ date)
   (setq planet-git-save-switch nil)
   (if (not planet-git-save-switch)
       (progn
-        (add-hook 'after-save-hook 'planet-git-sync-file)
+        (add-hook 'after-save-hook 'planet-git-sync-up-file)
         (setq planet-git-save-switch t)
-        (message "planet-git-save turned on.")
         )
     )
+  (message "planet-git-save turned on.")
   )
 
 (defun planet-git-sync-up-file ()
@@ -1115,4 +1115,5 @@ date)
   (async-shell-command command-string)
   (message (concat "file " buffer-file-name " git pushed." ))
   )
+
 
