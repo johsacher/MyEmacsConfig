@@ -1124,7 +1124,8 @@ date)
 
 (defun planet-revert-all-planet-buffers ()
   (interactive)
-  (if 
+  (if (bound-and-true-p planet-mode)
+
 
   )
 
