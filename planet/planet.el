@@ -463,6 +463,8 @@ day)
 date)
 
 
+
+
 (defun planet-convert-filefullname-to-date (filefullname)
   (setq filebasename (planet-convert-filefullname-to-filebasename filefullname))
   (setq date (planet-convert-filebasename-to-date filebasename))
