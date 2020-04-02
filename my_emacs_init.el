@@ -796,8 +796,8 @@ from lines like:
          "DEFERRED"
          "ANSWERED"
          "QUESTION"
-         "CURRENT..."
          "CLOCKED IN..."
+         "CURRENT..."
          "WAITING"
          "TODO"
          )))
