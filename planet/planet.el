@@ -1131,21 +1131,18 @@ date)
 (defun planet-revert-all-planet-buffers ()
   (interactive)
   (message "syncing down planet-files - started.")
-  (shell-command (concat "sleep 10 ; cd " planet-dir "; git pull ") "*planet process: git pull*")
+  (shell-command (concat "cd " planet-dir "; git pull ") "*planet process: git pull*")
   ;; later:
 
   ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
-  (mapc
-   (lambda (b)
-     (save-excursion
-       (save-window-excursion
-         (when (and (with-current-buffer b (bound-and-true-p planet-mode))
-                    (with-current-buffer b buffer-file-name)) ;; if is file..
-           (switch-to-buffer b)
-           (revert-buffer t 'no-confirm)))
-       (buffer-list))))
-  ;; (if (bound-and-true-p planet-mode)   ;; https://stackoverflow.com/questions/10088168/how-to-check-whether-a-minor-mode-e-g-flymake-mode-is-on
-  ;;     (revert-buffer t t)
-  ;;   )
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (derived-mode-p 'org-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (revert-buffer t 'no-confirm)))
+      )
+    )
   )
 
