@@ -1116,9 +1116,10 @@ date)
   )
 
 
+
 (defun planet-git-sync-down-revert-file ()
   (interactive)
-  (message (concat "git pull started."))
+  (message (concat "git pull started..."))
   (shell-command "git pull")
   (message (concat "git-pulled."))
   (revert-buffer)
