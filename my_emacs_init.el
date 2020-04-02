@@ -180,10 +180,17 @@
 ;;* planet-mode (my org extension)
 (load (concat my_load_path "planet/planet.el"))
           
+;;** default initial view (levels)
 (add-hook 'planet-mode-hook
          (lambda ()
            ;; (outline-show-all)
            ))
+(defun org-show-3-levels ()
+  (interactive)
+  (org-content 3))
+(add-hook 'org-mode-hook
+  (lambda ()
+    (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
 
 ;;
 (planet-git-save-turn-on)
@@ -335,6 +342,7 @@
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 
 
+
 ;;** org bullets
 (require 'org-bullets)
 (add-hook 'org-mode-hook
@@ -366,7 +374,21 @@
              ))
 (require 'org-install)
 
-;; show distribution of clocked time per tag
+;;** clock in/out settings 
+;;*** change label "CURRENT..." / "", for clocked in headings
+(add-hook 'org-clock-in-hook
+         (lambda ()
+           (org-todo "CLOCKED IN...")
+          ))
+
+(add-hook 'org-clock-out-hook
+         (lambda ()
+           (org-todo "")
+          ))
+
+
+
+;;** show distribution of clocked time per tag
 (require 'org-table)
 (require 'org-clock)
 
@@ -775,6 +797,7 @@ from lines like:
          "ANSWERED"
          "QUESTION"
          "CURRENT..."
+         "CLOCKED IN..."
          "WAITING"
          "TODO"
          )))
@@ -785,6 +808,7 @@ from lines like:
       ("QUESTION" :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("CURRENT..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("CLOCKED IN..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("WAITING" :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DEFERRED" :background "green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DELEGATED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
@@ -2367,3 +2391,6 @@ region, clear header."
 (add-to-list 'display-buffer-alist
   (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 
+
+;;* stopwatch
+;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))

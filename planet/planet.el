@@ -1044,9 +1044,12 @@ date)
 ;; add this to your org-mode-hook
 (defun planet-detect-if-planet-file-if-yes-turn-on-planet-mode ()
   (if (planet-detect-if-planet-file)
-      (planet-mode)
+      (progn
+        (planet-mode)
+        )
     )
   )
+
 
 ;; detect planet mode
 (defun planet-detect-if-planet-file ()
@@ -1146,3 +1149,12 @@ date)
     )
   )
 (evil-leader/set-key-for-mode 'org-mode "pp" 'planet-revert-all-planet-buffers)
+
+
+;;* default appearance on open file
+;;** option1: show 3 levels
+(add-hook 'planet-mode-hook
+         (lambda ()
+           (org-content 3) ;; show 3 levels
+          ))
+
