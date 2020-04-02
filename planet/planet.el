@@ -1124,7 +1124,7 @@ date)
 
 (defun planet-revert-all-planet-buffers ()
   (interactive)
-  (message "syncing down planet-files...")
+  (message "syncing down planet-files - started")
   (async-shell-command (concat "cd " planet-dir "; git pull "))
   ;; for now:
   (org-revert-all-org-buffers)
