@@ -85,3 +85,4 @@
 ***** höchster daten-transfer
 *** cooler gedanke: wir sortieren die infos nach ihrem Aufwand!
 *** ach neeeh.. das war verkopft! diese sache ist ganz einfach: die infos die der user sich nicht merkt, muss sich das system teuer übers netz holen
+

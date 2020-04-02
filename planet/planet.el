@@ -1138,11 +1138,11 @@ date)
   (save-excursion
     (save-window-excursion
       (dolist (b (buffer-list))
-	(when (and (with-current-buffer b (derived-mode-p 'org-mode))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
 		   (with-current-buffer b buffer-file-name))
           (pop-to-buffer-same-window b)
           (revert-buffer t 'no-confirm)))
       )
     )
   )
-
+(evil-leader/set-key-for-mode 'org-mode "pp" 'planet-revert-all-planet-buffers)
