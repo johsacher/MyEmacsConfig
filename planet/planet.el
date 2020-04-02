@@ -1124,7 +1124,7 @@ date)
 
 (defun planet-revert-all-planet-buffers ()
   (interactive)
-  (async-shell-command (concat"git pull " ))
+  (async-shell-command (concat "git pull " ))
   ;; for now:
   (org-revert-all-org-buffers)
   ;; later:
