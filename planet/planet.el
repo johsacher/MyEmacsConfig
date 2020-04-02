@@ -1110,7 +1110,7 @@ date)
 
 (defun planet-git-sync-up-file ()
   (interactive)
-  (if planet-detect-if-planet-file
+  (if (planet-detect-if-planet-file)
   (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
   (async-shell-command command-string)
   (message (concat "git-saved file: " buffer-file-name " (git pushed)." ))
