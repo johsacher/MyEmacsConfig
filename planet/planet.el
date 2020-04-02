@@ -1137,11 +1137,13 @@ date)
   ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
   (mapc
    (lambda (b)
-     (when (and (with-current-buffer b (bound-and-true-p planet-mode))
-                (with-current-buffer b buffer-file-name)) ;; if is file..
-       (switch-to-buffer b)
-       (revert-buffer t 'no-confirm)))
-   (buffer-list))
+     (save-excursion
+       (save-window-excursion
+         (when (and (with-current-buffer b (bound-and-true-p planet-mode))
+                    (with-current-buffer b buffer-file-name)) ;; if is file..
+           (switch-to-buffer b)
+           (revert-buffer t 'no-confirm)))
+       (buffer-list))))
   ;; (if (bound-and-true-p planet-mode)   ;; https://stackoverflow.com/questions/10088168/how-to-check-whether-a-minor-mode-e-g-flymake-mode-is-on
   ;;     (revert-buffer t t)
   ;;   )
