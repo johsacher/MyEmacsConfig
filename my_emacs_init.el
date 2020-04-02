@@ -829,7 +829,7 @@ from lines like:
 
   (setq org-todo-keyword-faces
     '(("PROJ" :background "blue" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
-      ("TODO" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("TODO" :background "red1" :foreground "white" :weight bold :box (:line-width 2 :style released-button))
       ("QUESTION" :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("CURRENT..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
