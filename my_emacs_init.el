@@ -375,19 +375,42 @@
 (require 'org-install)
 
 ;;** clock in/out settings 
-;;*** change label "CURRENT..." / "", for clocked in headings
+;;*** change todo state "CLOCKED IN..." / "", for clocked in headings
+(defvar org-todo-state-on-clock-in-saved)
+(setq org-todo-state-on-clock-in-saved "")
 (add-hook 'org-clock-in-hook
          (lambda ()
+           ;; save old state (in global variable)
+           (setq org-todo-state-on-clock-in-saved (org-get-todo-state))
            (org-todo "CLOCKED IN...")
           ))
 
 (add-hook 'org-clock-out-hook
          (lambda ()
-           (org-todo "")
+           (org-set-todo-state-before-clocked)
+           (message "my org clock out:")
+           (message (concat "current todo state: " (org-get-todo-state))) 
+           (message (concat "old/new todo state:" org-todo-state-on-clock-in-saved))
           ))
 
+(defun org-set-todo-state-before-clocked ()
+  (interactive)
+  (org-todo org-todo-state-on-clock-in-saved)
+  )
 
+(defun org-get-todo-state ()
+  (interactive)
+  (setq components (org-heading-components))
+  ;; (message (nth 2 components))
+  (setq todo-state (nth 2 components))
+  todo-state)
 
+(defun org-print-todo-state ()
+  (interactive)
+  (setq components (org-heading-components))
+  (setq todo-state (nth 2 components))
+  (message (concat "current todo state: " todo-state))
+  )
 ;;** show distribution of clocked time per tag
 (require 'org-table)
 (require 'org-clock)
@@ -796,6 +819,8 @@ from lines like:
          "DEFERRED"
          "ANSWERED"
          "QUESTION"
+         "DISCARDED"
+         "PROGRESS..."
          "CLOCKED IN..."
          "CURRENT..."
          "WAITING"
@@ -809,7 +834,9 @@ from lines like:
       ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("CURRENT..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("CLOCKED IN..." :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("DISCARDED" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("WAITING" :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("PROGRESS..." :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DEFERRED" :background "green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DELEGATED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("MAYBE" :background "gray" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
