@@ -1126,9 +1126,6 @@ date)
   (interactive)
   ;; for now:
   (org-revert-all-org-buffers)
-  )
-
-
   ;; later:
   ;; (if (bound-and-true-p planet-mode)   ;; https://stackoverflow.com/questions/10088168/how-to-check-whether-a-minor-mode-e-g-flymake-mode-is-on
   ;;     (revert-buffer t t)

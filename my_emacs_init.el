@@ -185,6 +185,8 @@
            ;; (outline-show-all)
            ))
 
+;;
+(planet-git-save-turn-on)
 
 
 ;;;* elisp mode
@@ -2354,7 +2356,14 @@ region, clear header."
 
 ;;   )
 
+
+;;* async-await (needed to be able to wait for "external" shell commands)
+(use-package async-await
+  :ensure t
+  )
+
 ;;* async process behaviour
 ;;** turn off 'pop-up' of the *Async Shell Command* buffer
 (add-to-list 'display-buffer-alist
   (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+
