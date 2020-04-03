@@ -1116,7 +1116,7 @@ date)
   (if (planet-detect-if-planet-file)
       (progn
         (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
-        (message (concat "git-save process started (git pull)." ))
+        (message (concat "git-save process started (git add/commit/push)." ))
         (async-shell-command command-string)
         )
     )
