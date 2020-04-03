@@ -2,6 +2,8 @@
 ;; format of weekly files: <year>_<month>_<day>_week.org
 
 ;;* Todos
+;;** git-save --> detect if merge conflict --> pull first
+;;** clock in/out -> closer look --> multimachine -> no dependency on (global) lisp variables --> these would not be in sync in machines --> only depend on text-(org-)file content!
 ;;** DONE insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
 ;;** DONE week view (8 windows, quit-week-view --> winner-undo/or better: remember windows arrangement and go back) + move forward week
 ;;** planet files --> show only top headings
