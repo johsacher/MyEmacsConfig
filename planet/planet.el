@@ -2,6 +2,9 @@
 ;; format of weekly files: <year>_<month>_<day>_week.org
 
 ;;* Todos
+;;** better week-day headers --> use header-line
+;;*** color week-end / week-day / current-day
+;;** better modeline --> optimize modeline for planet-week-day-view 
 ;;** git-save --> detect if merge conflict --> pull first
 ;;** clock in/out -> closer look --> multimachine -> no dependency on (global) lisp variables --> these would not be in sync in machines --> only depend on text-(org-)file content!
 ;;** DONE insert/replace (=update) titles all files: MONDAY 16 DEC / 16-22 December
@@ -331,11 +334,28 @@ last-date)
 ;; (setq a 3)
 ;; (format "%02i" a)
 
+(defun planet-date-is-weekend (date)
+  (setq dow (planet-date-get-dow date))
+  (if (or (= dow 6) (= dow 0)) ;; (6=Sat, 0=Sun)
+      (setq return-value t)
+      (setq return-value nil))
+  return-value)
+
+(defun planet-date-is-workday (date)
+  (setq dow (planet-date-get-dow date))
+  (if (and (> dow 0) (< dow 6)) ;; (Mon-Fri = 1-5)
+      (setq return-value t)
+      (setq return-value nil))
+  return-value)
+
 (defun planet-current-buffer-is-day-file ()
   ;; get current buffer's file base
   (setq filebasename (file-name-sans-extension (buffer-name))) ;; todo --> (file-name-base ...)
-  (message filebasename)
-  (setq return_value (string-match "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...$" filebasename))
+  ;; (message filebasename)
+  ;;                                            3 dots in regex: ..." --> do make sure week-files get filtered out
+  (if (string-match "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...$" filebasename)
+      (setq return_value t) 
+      (setq return_value nil))
   return_value)
   ;; filebasename)
 
@@ -343,7 +363,9 @@ last-date)
   ;; get current buffer's file base
   (setq filebasename (file-name-sans-extension (buffer-name)))
   (message filebasename)
-  (setq return_value (string-match "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_week$" filebasename))
+  (if (string-match "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_week$" filebasename)
+      (setq return_value t) 
+      (setq return_value nil))
   return_value)
 
 (defun planet-next-day ()
@@ -402,6 +424,18 @@ last-date)
   (setq this-file-date (planet-convert-filebasename-to-date filebasename))
   (planet-go-week-file-for-date this-file-date)
   )
+
+(defun planet-date-is-today (date)
+  (setq date-today (planet-get-todays-date))
+  (setq month-today (planet-date-get-month date-today))
+  (setq day-today (planet-date-get-day date-today))
+
+  (setq month (planet-date-get-month date))
+  (setq day (planet-date-get-day date))
+  (if (and (= month month-today) (= day day-today))
+      (setq return-value t)
+      (setq return-value nil))
+    return-value)
 
 (defun planet-get-previous-monday-date-for-date (date1)
 ;; (setq date-iter date1) --> this creates problem, is just a shallow copy
@@ -1038,20 +1072,46 @@ date)
   (org-set-tags t t)
 )
 
+(defun planet-mode-hook-workaround ()
+  ;; put here everything for "start-up" of planet files/buffers
+  ;; this is a workaround, since out-of-the-box planet-mode-hook does not work
+  ;; this function is called on every open/revert/etc.
+  (interactive)
+  ;; (message "planet-mode start up script started...")
+  ;; settings day-files
+  (cond ( (planet-current-buffer-is-day-file)
+          (planet-day-file-start-up)
+          )
+        ;; settings week-files
+        ( (planet-current-buffer-is-week-file)
+          (planet-week-file-start-up)
+          )
+        (t
+         )
+        )
+  )
+
+(defun planet-day-file-start-up ()
+  ;;* header
+  (planet-daily-file-set-header-line) 
+  ;;* modeline (->remove)
+  (setq mode-line-format "")
+  )
+
+(defun planet-week-file-start-up ()
+  ;;* header
+  (planet-week-file-set-header-line) 
+  ;;* modeline (->remove)
+  (setq mode-line-format "")
+  )
+
 ;;* turn on planet-mode for the "right org-files (planet files)"
 (add-hook 'org-mode-hook
          (lambda ()
-           (planet-detect-if-planet-file-if-yes-turn-on-planet-mode)
-          ))
-;; add this to your org-mode-hook
-(defun planet-detect-if-planet-file-if-yes-turn-on-planet-mode ()
-  (if (planet-detect-if-planet-file)
-      (progn
-        (planet-mode)
-        )
-    )
-  )
-
+           (if (planet-detect-if-planet-file)
+               (progn
+                 (planet-mode)
+                 (planet-mode-hook-workaround)))))
 
 ;; detect planet mode
 (defun planet-detect-if-planet-file ()
@@ -1160,3 +1220,145 @@ date)
            (org-content 3) ;; show 3 levels
           ))
 
+
+;;* planet header-line
+(defvar planet-daily-file-header-line-weekend-color-foreground)
+(setq planet-daily-file-header-line-week-end-color-foreground "ivory")
+(defvar planet-daily-file-header-line-weekend-color-background)
+(setq planet-daily-file-header-line-week-end-color-background "DarkOrange2")
+
+(defvar planet-daily-file-header-line-workday-color-foreground)
+(setq planet-daily-file-header-line-workday-color-foreground "ivory")
+(defvar planet-daily-file-header-line-workday-color-background)
+(setq planet-daily-file-header-line-workday-color-background "DarkOrange2")
+
+(defvar planet-daily-file-header-line-currentday-color-foreground)
+(setq planet-daily-file-header-line-currentday-color-foreground "ivory")
+(defvar planet-daily-file-header-line-currentday-color-background)
+(setq planet-daily-file-header-line-currentday-color-background "DarkOrange2")
+
+(defun planet-daily-file-set-header-line ()
+  (interactive)
+  (setq filefullname buffer-file-name)
+  ;;* get date components
+  (setq date (planet-get-daily-file-date))
+  (setq dow (planet-date-get-dow date))
+  (setq dow-abbr (nth dow planet-dow-abbreviations))
+
+  (setq month (planet-date-get-month date))
+  (setq month-abbr (nth month planet-month-abbreviations-upcase))
+  (setq day (planet-date-get-day date))
+  (setq day-string (number-to-string day))
+
+  ;;* compose string
+  (setq title-string (concat dow-abbr " " day-string " " month-abbr))  
+
+  ;;* face appearance (fore/background color, bold, italic, etc.)
+  (cond ( (planet-date-is-workday date)
+          (setq background-color "#42ecf5")
+          (setq foreground-color "black")
+        )
+        ( (planet-date-is-weekend date)
+          (setq background-color "#42f5ad") ;; turquoise
+          (setq foreground-color "black")
+        )
+        )
+
+  ;;** special action --> special color today
+  (if (planet-date-is-today date)
+      (progn
+          (setq background-color "#f542f2") ;; purple for today 
+          (setq foreground-color "black")
+        )
+    )
+  ;; (face-remap-add-relative 'header-line '((:foreground foreground-color :background background-color) header-line))
+  (face-remap-add-relative 'header-line :foreground foreground-color)
+  (face-remap-add-relative 'header-line :background background-color)
+  (face-remap-add-relative 'header-line :weight 'bold)
+:weight 'bold
+  ;;* show header line
+  (setq header-line-format title-string)
+  )
+
+(defun planet-week-file-set-header-line ()
+  (interactive)
+  (setq filefullname buffer-file-name)
+  ;;* get date components
+  (setq date (planet-get-daily-file-date))
+  (setq dow (planet-date-get-dow date))
+  (setq dow-abbr (nth dow planet-dow-abbreviations))
+
+  (setq month (planet-date-get-month date))
+  (setq month-abbr (nth month planet-month-abbreviations-upcase))
+  (setq day (planet-date-get-day date))
+  (setq day-string (number-to-string day))
+
+  ;; get date 6+
+  (setq date-6-plus (planet-date-add-days date 6))
+  (setq dow-6-plus (planet-date-get-dow date-6-plus))
+  (setq dow-abbr-6-plus (nth dow-6-plus planet-dow-abbreviations))
+
+  (setq month-6-plus (planet-date-get-month date-6-plus))
+  (setq month-abbr-6-plus (nth month-6-plus planet-month-abbreviations-upcase))
+  (setq day-6-plus (planet-date-get-day date-6-plus))
+  (setq day-string-6-plus (number-to-string day-6-plus))
+
+  ;;* compose string
+  (setq title-string (concat "week " day-string " " month-abbr " - " day-string-6-plus " " month-abbr-6-plus))  
+
+  ;;* face appearance (fore/background color, bold, italic, etc.)
+  (setq background-color "#f5e342")
+  (setq foreground-color "black")
+  ;; (face-remap-add-relative 'header-line '((:foreground foreground-color :background background-color) header-line))
+  (face-remap-add-relative 'header-line :foreground foreground-color)
+  (face-remap-add-relative 'header-line :background background-color)
+  (face-remap-add-relative 'header-line :weight 'bold)
+  ;;* show header line
+  (setq header-line-format title-string)
+  )
+
+
+;;   (defun sl/make-header ()
+;;     ""
+;;     (let* ((sl/full-header (abbreviate-file-name buffer-file-name))
+;;            (sl/header (file-name-directory sl/full-header))
+;;            (sl/drop-str "[...]"))
+;;       (if (> (length sl/full-header)
+;;              (window-body-width))
+;;           (if (> (length sl/header)
+;;                  (window-body-width))
+;;               (progn
+;;                 (concat (with-face sl/drop-str
+;;                                    :background "blue"
+;;                                    :weight 'bold
+;;                                    )
+;;                         (with-face (substring sl/header
+;;                                               (+ (- (length sl/header)
+;;                                                     (window-body-width))
+;;                                                  (length sl/drop-str))
+;;                                               (length sl/header))
+;;                                    ;; :background "red"
+;;                                    :weight 'bold
+;;                                    )))
+;;             (concat (with-face sl/header
+;;                                ;; :background "red"
+;;                                :foreground "#8fb28f"
+;;                                :weight 'bold
+;;                                )))
+;;         (concat (with-face sl/header
+;;                            ;; :background "green"
+;;                            ;; :foreground "black"
+;;                            :weight 'bold
+;;                            :foreground "#8fb28f"
+;;                            )
+;;                 (with-face (file-name-nondirectory buffer-file-name)
+;;                            :weight 'bold
+;;                            ;; :background "red"
+;;                            )))))
+;;   (defun sl/display-header ()
+;;     (interactive)
+;;     (setq header-line-format
+;;           '("" ;; invocation-name
+;;             (:eval (if (buffer-file-name)
+;;                        (sl/make-header)
+;;                      "%b")))))
