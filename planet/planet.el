@@ -1269,7 +1269,7 @@ date)
   (if (planet-date-is-today date)
       (progn
           (setq background-color "#8a42f5") ;; violet for today 
-          (setq foreground-color "black")
+          (setq foreground-color "white")
         )
     )
   ;; (face-remap-add-relative 'header-line '((:foreground foreground-color :background background-color) header-line))
