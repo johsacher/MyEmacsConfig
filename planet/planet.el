@@ -891,31 +891,31 @@ date)
 
 
 ;;* insert titles to all dayly files
-(defun planet-all-daily-files-format-title ()
-  (interactive)
-  (planet-all-daily-files-delete-lines-until-first-org-heading)
-  (planet-all-daily-files-insert-title)
-  )
+;;(update --> redundant now --> solution now with buffer header-line)
+;; (defun planet-all-daily-files-format-title ()
+;;   (interactive)
+;;   (planet-all-daily-files-delete-lines-until-first-org-heading)
+;;   (planet-all-daily-files-insert-title)
+;;   )
 
-(defun planet-all-daily-files-insert-title ()
-    (setq daily-filefullnames (planet-get-all-daily-filefullnames))
-    (dolist (filefullname daily-filefullnames) 
-      ;; (setq count 0)
-      ;; (setq count (1+ count))
-      ;; (setq filefullname (nth count daily-filefullnames))
-      (planet-daily-file-insert-title filefullname)
-      )
-    )
-
-(defun planet-all-daily-files-delete-lines-until-first-org-heading ()
-    (setq daily-filefullnames (planet-get-all-daily-filefullnames))
-    (dolist (filefullname daily-filefullnames) 
-      ;; (setq count 0)
-      ;; (setq count (1+ count))
-      ;; (setq filefullname (nth count daily-filefullnames))
-      (planet-daily-file-delete-lines-until-first-org-heading filefullname)
-      )
-    )
+;; (defun planet-all-daily-files-insert-title ()
+;;     (setq daily-filefullnames (planet-get-all-daily-filefullnames))
+;;     (dolist (filefullname daily-filefullnames) 
+;;       ;; (setq count 0)
+;;       ;; (setq count (1+ count))
+;;       ;; (setq filefullname (nth count daily-filefullnames))
+;;       (planet-daily-file-insert-title filefullname)
+;;       )
+;;     )
+;; (defun planet-all-daily-files-delete-lines-until-first-org-heading ()
+;;     (setq daily-filefullnames (planet-get-all-daily-filefullnames))
+;;     (dolist (filefullname daily-filefullnames) 
+;;       ;; (setq count 0)
+;;       ;; (setq count (1+ count))
+;;       ;; (setq filefullname (nth count daily-filefullnames))
+;;       (planet-daily-file-delete-lines-until-first-org-heading filefullname)
+;;       )
+;;     )
 
 (defun planet-insert-string-as-first-line-to-file (file string)
   (with-temp-file file
@@ -976,35 +976,35 @@ date)
     )
   )
 
-(defun planet-daily-file-insert-title (fullfilename)
-  ;; (setq filefullname (planet-convert-filebasename-to-filefullname (planet-convert-date-to-filebasename (planet-date-add-days (planet-get-previous-monday-date-for-date (planet-get-todays-date)) 5))))
-  ;; get dow/day/month and format
-  (setq date (planet-convert-filefullname-to-date filefullname))
+;; (defun planet-daily-file-insert-title (fullfilename)
+;;   ;; (setq filefullname (planet-convert-filebasename-to-filefullname (planet-convert-date-to-filebasename (planet-date-add-days (planet-get-previous-monday-date-for-date (planet-get-todays-date)) 5))))
+;;   ;; get dow/day/month and format
+;;   (setq date (planet-convert-filefullname-to-date filefullname))
 
-  (setq dow (planet-date-get-dow date))
-  (setq dow-abbr (nth dow planet-dow-abbreviations))
+;;   (setq dow (planet-date-get-dow date))
+;;   (setq dow-abbr (nth dow planet-dow-abbreviations))
 
-  (setq month (planet-date-get-month date))
-  (setq month-abbr (nth month planet-month-abbreviations-upcase))
-  (setq day (planet-date-get-day date))
-  (setq day-string (number-to-string day))
+;;   (setq month (planet-date-get-month date))
+;;   (setq month-abbr (nth month planet-month-abbreviations-upcase))
+;;   (setq day (planet-date-get-day date))
+;;   (setq day-string (number-to-string day))
 
-  (setq title-string (concat "\*" dow-abbr " " day-string " " month-abbr"\*"))  
-  (setq horizontal-rule-string "-------------")  
+;;   (setq title-string (concat "\*" dow-abbr " " day-string " " month-abbr"\*"))  
+;;   (setq horizontal-rule-string "-------------")  
 
-  (with-temp-file filefullname
-    ;; this first line is necessary because "the way elisp/emacs works"...
-    ;; (we create a new 'silent' buffer, which is empty at the beginning, then we create content and put ALL that content to 'file' OVERWRITING it, so as a first thing we have to add all file contents to the temporary buffer)
-    (insert-file-contents filefullname)
-    ;; then we start actuall 'doing stuff'
-    (goto-char 1)
-    (newline)
-    (goto-char 1)
-    (insert title-string)
-    (newline)
-    (insert horizontal-rule-string)
-    )
-  )
+;;   (with-temp-file filefullname
+;;     ;; this first line is necessary because "the way elisp/emacs works"...
+;;     ;; (we create a new 'silent' buffer, which is empty at the beginning, then we create content and put ALL that content to 'file' OVERWRITING it, so as a first thing we have to add all file contents to the temporary buffer)
+;;     (insert-file-contents filefullname)
+;;     ;; then we start actuall 'doing stuff'
+;;     (goto-char 1)
+;;     (newline)
+;;     (goto-char 1)
+;;     (insert title-string)
+;;     (newline)
+;;     (insert horizontal-rule-string)
+;;     )
+;;   )
 
 
 (defun planet-delete-current-line ()
@@ -1260,7 +1260,7 @@ date)
           (setq foreground-color "black")
         )
         ( (planet-date-is-weekend date)
-          (setq background-color "#42f5ad") ;; turquoise
+          (setq background-color "#42f5aa") ;; turqoise
           (setq foreground-color "black")
         )
         )
@@ -1268,7 +1268,7 @@ date)
   ;;** special action --> special color today
   (if (planet-date-is-today date)
       (progn
-          (setq background-color "#f542f2") ;; purple for today 
+          (setq background-color "#8a42f5") ;; violet for today 
           (setq foreground-color "black")
         )
     )
