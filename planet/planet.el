@@ -348,6 +348,18 @@ last-date)
       (setq return-value nil))
   return-value)
 
+(defun planet-date-is-today (datee)
+  (setq date-today (planet-get-todays-date))
+  (setq month-today (planet-date-get-month date-today))
+  (setq day-today (planet-date-get-day date-today))
+
+  (setq month (planet-date-get-month datee))
+  (setq day (planet-date-get-day datee))
+  (if (and (= month month-today) (= day day-today))
+      (setq return-value t)
+      (setq return-value nil))
+    return-value)
+
 (defun planet-current-buffer-is-day-file ()
   ;; get current buffer's file base
   (setq filebasename (file-name-sans-extension (buffer-name))) ;; todo --> (file-name-base ...)
@@ -425,17 +437,6 @@ last-date)
   (planet-go-week-file-for-date this-file-date)
   )
 
-(defun planet-date-is-today (date)
-  (setq date-today (planet-get-todays-date))
-  (setq month-today (planet-date-get-month date-today))
-  (setq day-today (planet-date-get-day date-today))
-
-  (setq month (planet-date-get-month date))
-  (setq day (planet-date-get-day date))
-  (if (and (= month month-today) (= day day-today))
-      (setq return-value t)
-      (setq return-value nil))
-    return-value)
 
 (defun planet-get-previous-monday-date-for-date (date1)
 ;; (setq date-iter date1) --> this creates problem, is just a shallow copy
