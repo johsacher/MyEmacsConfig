@@ -1013,6 +1013,19 @@ date)
   (kill-whole-line)
   )
 
+;;* set categories (work/tools/etc.)
+(defun planet-set-category-work ()
+  (interactive)
+  (org-set-property "Category" "work")
+  )
+(evil-leader/set-key-for-mode 'org-mode "pw" 'planet-set-category-work) 
+
+(defun planet-set-category-tools ()
+  (interactive)
+  (org-set-property "Category" "tools")
+  )
+
+(evil-leader/set-key-for-mode 'org-mode "pt" 'planet-set-category-tools) 
 
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
 
@@ -1020,13 +1033,11 @@ date)
 ;;*** schnell taggen: work / tools / etc
 ;;**** schneller zugriff auf wichtigste mit SPC-p-<key> 
 ;;**** tag work --> SPC-p-w
-(evil-leader/set-key-for-mode 'org-mode "pw" 'planet-add-tag-work) 
 (defun planet-add-tag-work ()
   (interactive)
   (planet-add-tag "work")
   )
 ;;**** tag tools --> SPC-p-t
-(evil-leader/set-key-for-mode 'org-mode "pt" 'planet-add-tag-tools) 
 (defun planet-add-tag-tools ()
   (interactive)
   (planet-add-tag "tools")
@@ -1220,6 +1231,67 @@ date)
          (lambda ()
            (org-content 3) ;; show 3 levels
           ))
+
+(defun planet-level-1-all ()
+  (interactive)
+
+  ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (planet-level-1)
+          ))
+      )
+    )
+  )
+
+(defun planet-level-2-all ()
+  (interactive)
+  ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (planet-level-2)
+          ))
+      )
+    )
+  )
+
+(defun planet-level-3-all ()
+  (interactive)
+  ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (planet-level-3)
+          ))
+      )
+    )
+  )
+
+(defun planet-level-1 ()
+  (interactive)
+  (org-global-cycle 1)
+  )
+
+(defun planet-level-2 ()
+  (interactive)
+  (org-global-cycle 2)
+  )
+
+(defun planet-level-3 ()
+  (interactive)
+  (org-global-cycle 3)
+  )
 
 
 ;;* planet header-line
