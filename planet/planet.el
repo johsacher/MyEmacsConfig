@@ -2,6 +2,8 @@
 ;; format of weekly files: <year>_<month>_<day>_week.org
 
 ;;* Todos
+;;** go to today (weekview) SPC t, shortcuts view/rendering,level 1/2/3, all / single buffer
+;;** view option -> level 1, no bulletsi (more space in weekview), option linebreak/no line break
 ;;** better week-day headers --> use header-line
 ;;*** color week-end / week-day / current-day
 ;;** better modeline --> optimize modeline for planet-week-day-view 
@@ -14,7 +16,7 @@
 ;;** font styling / appearence:
 ;;*** :LOGBOOK:.. and stuff --> grey ; style heading (*) ; style entry (**)
 ;;*** find way --> appearance only take effect for daily files
-;;*** define appearance seperate for daily / weekly -> find way to recognize/define what type of org file it is (maybe over local variables, ooooor (even better) --> make file-name analysis as org-mode-hook -> determine type --> fire-up respective minor-mode --> do some learnings about minor-mode priorities (make sure the minor-mode does not get "corrupted/dominated" by other-minor mode)
+;;*** define appearance seperate for daily / weekly -> find way to regnize/define what type of org file it is (maybe over local variables, ooooor (even better) --> make file-name analysis as org-mode-hook -> determine type --> fire-up respective minor-mode --> do some learnings about minor-mode priorities (make sure the minor-mode does not get "corrupted/dominated" by other-minor mode)
 ;;** concept about categories/tags/properties -> work / privat / projects / task-clocking
 ;;** ("sync-save" --> lauch git sync up on save --> shortcut: also spc-s / toggle-sync-save on/off , but only for planet-mode) -> not necessary with gsyn checkout / checkin
 
