@@ -1248,6 +1248,10 @@ date)
     )
   )
 
+(evil-leader/set-key-for-mode 'org-mode "p1" 'planet-level-1-all)
+(evil-leader/set-key-for-mode 'org-mode "p2" 'planet-level-2-all)
+(evil-leader/set-key-for-mode 'org-mode "p3" 'planet-level-3-all)
+
 (defun planet-level-2-all ()
   (interactive)
   ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
