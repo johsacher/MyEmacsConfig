@@ -350,6 +350,7 @@
 (setq org-bullets-bullet-list
   '(;;; Large
     "◉"
+    ;;""
     "○"
     "•"
     "★"
