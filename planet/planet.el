@@ -2,6 +2,7 @@
 ;; format of weekly files: <year>_<month>_<day>_week.org
 
 ;;* Todos
+;;** week view 4X2
 ;;** go to today (weekview) SPC t, shortcuts view/rendering,level 1/2/3, all / single buffer
 ;;** view option -> level 1, no bulletsi (more space in weekview), option linebreak/no line break
 ;;** better week-day headers --> use header-line
