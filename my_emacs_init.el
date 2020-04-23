@@ -3,6 +3,9 @@
 ;;** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
 
+;;* debug on start-up
+(toggle-debug-on-error)
+
 ; overlay an arrow where the mark is
   (defvar mp-overlay-arrow-position)
   (make-variable-buffer-local 'mp-overlay-arrow-position)
@@ -179,6 +182,10 @@
 
 ;;* planet-mode (my org extension)
 (load (concat my_load_path "planet/planet.el"))
+
+;;** git save mode default 
+(planet-git-save-turn-on)
+
           
 ;;** default initial view (levels)
 (add-hook 'planet-mode-hook
@@ -193,7 +200,6 @@
     (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
 
 ;;
-(planet-git-save-turn-on)
 
 
 ;;;* elisp mode
