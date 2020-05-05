@@ -249,6 +249,23 @@
 (autoload 'pylint "pylint")
 (add-hook 'python-mode-hook 'pylint-add-menu-items)
 (add-hook 'python-mode-hook 'pylint-add-key-bindings)
+
+;;;** python debug key-bindings
+(defun python-set-break-point-current-line()
+  (interactive)
+  (end-of-line)
+  (newline)
+  (insert "pdb.set_trace()")
+  (move-beginning-of-line nil)
+  (setq beginofline (point))
+  (move-end-of-line nil)
+  (setq endofline (point))
+  (evil-indent beginofline endofline)
+  )
+;; SET BREAKPOINT <F12>
+(define-key python-mode-map (kbd "<f12>") 'python-set-break-point-current-line)
+
+
 ;;;* english-german-translator
 (defvar english-german-translator-buffer-name "*english-german-translator*")
 

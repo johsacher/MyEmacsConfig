@@ -1277,9 +1277,27 @@ date)
     )
   )
 
+(defun planet-level-0-all ()
+  (interactive)
+
+  ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (outline-show-all)
+          ))
+      )
+    )
+  )
+
 (evil-leader/set-key-for-mode 'org-mode "p1" 'planet-level-1-all)
 (evil-leader/set-key-for-mode 'org-mode "p2" 'planet-level-2-all)
 (evil-leader/set-key-for-mode 'org-mode "p3" 'planet-level-3-all)
+
+(evil-leader/set-key-for-mode 'org-mode "p0" 'planet-level-0-all)
 
 (defun planet-level-2-all ()
   (interactive)
