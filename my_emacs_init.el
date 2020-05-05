@@ -263,7 +263,9 @@
   (evil-indent beginofline endofline)
   )
 ;; SET BREAKPOINT <F12>
-(define-key python-mode-map (kbd "<f12>") 'python-set-break-point-current-line)
+(require 'python)
+(define-key python-mode-map
+  (kbd "<f12>") 'python-set-break-point-current-line)
 
 
 ;;;* english-german-translator
