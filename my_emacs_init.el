@@ -77,6 +77,7 @@
 (show-paren-mode t)
 
 ;;** rainbow delimiters
+(require 'rainbow-delimiters)
 (rainbow-delimiters-mode t)
 
 ;;; *)  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1270,13 +1271,20 @@ from lines like:
 ;;     (add-to-list 'tramp-default-proxies-alist
 ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 
-;;** dired short cut -> "go home"
+;;** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
 (defun dired-go-home ()
   (interactive)
-  (dired "~")
+  (dired (substitute-in-file-name "$HOME"))
   )
 
-(evil-leader/set-key "h" 'dired-go-home)
+(defun dired-go-work ()
+  (interactive)
+  (dired (substitute-in-file-name "$WORK"))
+  )
+
+(evil-leader/set-key "hh" 'dired-go-home)
+(evil-leader/set-key "hw" 'dired-go-work)
+(evil-leader/set-key "hb" 'helm-bookmarks)
 
 ;;    .) auto revert dired default
 (add-hook 'dired-mode-hook 'auto-revert-mode)
