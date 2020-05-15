@@ -161,7 +161,7 @@
   (evil-leader/set-key "s" 'save-buffer) 
   (evil-leader/set-key "f" 'helm-find) 
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
-  (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
+  (evil-leader/set-key "g" 'helm-swoop) ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
   ;; (evil-leader/set-key "p" 'helm-projectile-find-file) ;; -> "p" reserved for planet frequent commands
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "x" 'helm-M-x)
@@ -1253,6 +1253,8 @@ from lines like:
 ;;* helm-rg
 (require 'helm-rg)
 (setq helm-rg-default-extra-args '("--hidden"))
+;; only makes sence in dired buffers, for others-> helm-soop
+(evil-leader/set-key-for-mode 'dired-mode "g" 'helm-rg) ;
 ;; DIRED+ STUFF -> no longer officially supported MELPA (security reasons) --> outcommented
 ;;  (https://emacs.stackexchange.com/questions/38553/dired-missing-from-melpa)
 ;; ;;    .) reuse buffer,  don't open always new buffer when 
