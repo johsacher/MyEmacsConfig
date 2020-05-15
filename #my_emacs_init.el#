@@ -7,7 +7,11 @@
 (toggle-debug-on-error)
 
 ; overlay an arrow where the mark is
+<<<<<<< HEAD
   (defvar mp-overlay-arrow-position)
+=======
+  (defvar mp-overlay-arrow-position) ;; dummy comment
+>>>>>>> 33b47c426cdf2d4f7e1c742f09b92125886413d8
   (make-variable-buffer-local 'mp-overlay-arrow-position)
   (add-to-list 'overlay-arrow-variable-list  'mp-overlay-arrow-position)
 
@@ -77,6 +81,10 @@
 (show-paren-mode t)
 
 ;;** rainbow delimiters
+<<<<<<< HEAD
+=======
+(require 'rainbow-delimiters)
+>>>>>>> 33b47c426cdf2d4f7e1c742f09b92125886413d8
 (rainbow-delimiters-mode t)
 
 ;;; *)  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -160,7 +168,11 @@
   (evil-leader/set-key "s" 'save-buffer) 
   (evil-leader/set-key "f" 'helm-find) 
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
+<<<<<<< HEAD
   (evil-leader/set-key "g" 'helm-rg) ;  ack / ag / rg --> ag did not work , rg works (if installed)
+=======
+  (evil-leader/set-key "g" 'helm-swoop) ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
+>>>>>>> 33b47c426cdf2d4f7e1c742f09b92125886413d8
   ;; (evil-leader/set-key "p" 'helm-projectile-find-file) ;; -> "p" reserved for planet frequent commands
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "x" 'helm-M-x)
@@ -1252,6 +1264,11 @@ from lines like:
 ;;* helm-rg
 (require 'helm-rg)
 (setq helm-rg-default-extra-args '("--hidden"))
+<<<<<<< HEAD
+=======
+;; only makes sence in dired buffers, for others-> helm-soop
+(evil-leader/set-key-for-mode 'dired-mode "g" 'helm-rg) ;
+>>>>>>> 33b47c426cdf2d4f7e1c742f09b92125886413d8
 ;; DIRED+ STUFF -> no longer officially supported MELPA (security reasons) --> outcommented
 ;;  (https://emacs.stackexchange.com/questions/38553/dired-missing-from-melpa)
 ;; ;;    .) reuse buffer,  don't open always new buffer when 
@@ -1270,6 +1287,7 @@ from lines like:
 ;;     (add-to-list 'tramp-default-proxies-alist
 ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 
+<<<<<<< HEAD
 ;;** dired short cut -> "go home"
 (defun dired-go-home ()
   (interactive)
@@ -1277,6 +1295,22 @@ from lines like:
   )
 
 (evil-leader/set-key "hh" 'dired-go-home)
+=======
+;;** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
+(defun dired-go-home ()
+  (interactive)
+  (dired (substitute-in-file-name "$HOME"))
+  )
+
+(defun dired-go-work ()
+  (interactive)
+  (dired (substitute-in-file-name "$WORK"))
+  )
+
+(evil-leader/set-key "hh" 'dired-go-home)
+(evil-leader/set-key "hw" 'dired-go-work)
+(evil-leader/set-key "hb" 'helm-bookmarks)
+>>>>>>> 33b47c426cdf2d4f7e1c742f09b92125886413d8
 
 ;;    .) auto revert dired default
 (add-hook 'dired-mode-hook 'auto-revert-mode)
