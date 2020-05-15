@@ -1053,15 +1053,15 @@ from lines like:
 ;; (evil-define-key 'normal iresize-mode-map (kbd "l") 'enlarge-window-horizontally)
 ;; (vil-define-key 'normal iresize-mode-map (kbd "h") 'shrink-window-horizontally)
 
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "k") 'enlarge-window)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "j") 'shrink-window)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "l") 'enlarge-window-horizontally)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "h") 'shrink-window-horizontally)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "K") 'enlarge-window)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "J") 'shrink-window)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "L") 'enlarge-window-horizontally)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "H") 'shrink-window-horizontally)
 ;; fast (double) resize
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "K") 'enlarge-window-4)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "J") 'shrink-window-4)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "L") 'enlarge-window-horizontally-4)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "H") 'shrink-window-horizontally-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "k") 'enlarge-window-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "j") 'shrink-window-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "l") 'enlarge-window-horizontally-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "h") 'shrink-window-horizontally-4)
 
 (defun shrink-window-horizontally-2 ()
   (interactive)
