@@ -1058,10 +1058,10 @@ from lines like:
 (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "l") 'enlarge-window-horizontally)
 (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "h") 'shrink-window-horizontally)
 ;; fast (double) resize
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "K") 'enlarge-window-3)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "J") 'shrink-window-3)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "L") 'enlarge-window-horizontally-3)
-(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "H") 'shrink-window-horizontally-3)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "K") 'enlarge-window-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "J") 'shrink-window-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "L") 'enlarge-window-horizontally-4)
+(evil-define-minor-mode-key 'normal 'iresize-mode (kbd "H") 'shrink-window-horizontally-4)
 
 (defun shrink-window-horizontally-2 ()
   (interactive)
@@ -1097,6 +1097,22 @@ from lines like:
   (enlarge-window 3)
   )
 
+(defun shrink-window-horizontally-4 ()
+  (interactive)
+  (shrink-window-horizontally 4)
+  )
+(defun enlarge-window-horizontally-4 ()
+  (interactive)
+  (enlarge-window-horizontally 4)
+  )
+(defun shrink-window-4 ()
+  (interactive)
+  (shrink-window 4)
+  )
+(defun enlarge-window-4 ()
+  (interactive)
+  (enlarge-window 4)
+  )
 
 (provide 'iresize)
 
