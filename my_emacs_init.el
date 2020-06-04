@@ -35,7 +35,7 @@
 ;; todo: first check if xclip is installed in system
 ;;(require 'xclip)
 ;;(xclip-mode 1)
-
+(message system-name)
 ;;;; customization go to specific file (in cloud)
 (setq my_load_path (file-name-directory load-file-name)) ;; save custom file also to the same path
 (setq custom-file-name "custom.el")
@@ -54,6 +54,18 @@
 
 
 ;;;* GENERAL SETTINGS
+
+;; * detect machine name
+(defvar machine-name)  
+(cond
+  ((equal system-name "johannes-ThinkPad-L380-Yoga")
+   (setq machine-name "laptop")
+   )
+  (t
+   (setq machine-name "unknown")
+   )
+  )
+
 
 ;;** suppress "spamy" auto-revert messages
 (setq auto-revert-verbose nil)
@@ -2515,3 +2527,37 @@ region, clear header."
 ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
 
 
+;; * ssh clipboard
+(defvar ssh-clipboard-file)
+(setq ssh-clipboard-file "~/ssh_clipboard.txt")
+(defvar ssh-server-name)
+(setq ssh-server-name "blogin")
+
+(defun ssh-clipboard-copy () 
+  (interactive)
+  ;; ** copy current region -> into string
+  (setq current-region-string (buffer-substring (mark) (point)))
+  ;; ** write to file ~/ssh_clipboard.txt
+  (with-temp-file ssh-clipboard-file
+    ;; (insert-file-contents file)
+    ;; (not appending --> so outcommented)
+    (insert current-region-string)
+    )
+  ;; * send it so ssh server
+  (setq path1 ssh-clipboard-file)
+  (setq path2 (concat ssh-server-name ":/home/beijsach"))
+  (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+  (async-shell-command command-string)
+  (message (concat "region copied to " ssh-clipboard-file " and rsync'ed to ssh server (" ssh-server-name ")" ))
+  )
+
+(defun ssh-clipboard-paste ()
+  (interactive)
+  ;; * read content into string
+  (with-temp-buffer
+    (insert-file-contents ssh-clipboard-file)
+    (setq ssh-clipboard-content (buffer-string))
+    )
+  ;; * paste content
+  (insert ssh-clipboard-content)
+  )
