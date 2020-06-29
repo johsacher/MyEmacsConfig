@@ -69,3 +69,9 @@
 |                     | string-match <regex> <string>           | match string                      |
 |---------------------+-----------------------------------------+-----------------------------------|
 |                     |                                         |                                   |
+
+* miscellaneous elisp-philosophy or "why is lisp sometimes so weird and you don t do things like in other languages"
+** why the hack is their no equivalent to python's list.append(element)???
+*** --> it would not be efficient the way lisp is structered (progamm = data , blabla). so you prepend and then nreverse 
+*** "To avoid confusion, we usually store the result of nreverse back in the same variable which held the original list: (setq x (nreverse x))" (elisp manual)
+[[./screenshot_20200613_173628.png]]

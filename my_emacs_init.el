@@ -2528,10 +2528,14 @@ region, clear header."
 
 
 ;; * ssh clipboard
-(defvar ssh-clipboard-file)
-(setq ssh-clipboard-file "~/ssh_clipboard.txt")
-(defvar ssh-server-name)
-(setq ssh-server-name "blogin")
+(defvar ssh-clipboard-file "~/ssh_clipboard.txt")
+(defvar ssh-server-name "blogin")
+(defun ssh-clipboard-set-server-name ()
+  (interactive)
+  (setq new-ssh-server-name (read-file-name "Enter server name:"))
+  (setq ssh-server-name new-ssh-server-name)
+  (message "server name set to %s" new-ssh-server-name)
+  )
 
 (defun ssh-clipboard-copy () 
   (interactive)

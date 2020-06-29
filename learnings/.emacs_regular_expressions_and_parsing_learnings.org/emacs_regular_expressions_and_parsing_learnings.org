@@ -1,0 +1,27 @@
+* brain-storming
+** re-builder
+** rx
+** s-match-strings-all
+** match-string / string-match
+
+* questions
+** match buffer content vs string content -> do i have to learn different stuff for each? if yes, why?
+*** when I want to write a function to find key words in a file, my "normal" strategy would be:
+**** e.g. i want to find all host aliases in ~/.ssh/config, with lines like this "Host <alias-name>"
+**** write a little function that gets the keyword from a line and test it with a string
+**** later load all relevant lines of the file into list of strings, and apply litte-function on each.
+
+* main hint: 1. use rx to create regexp pattern 2. use s-match-strings-all / s-match-p to treat the match-data 
+(setq pattern (rx ...    ))
+(setq match-data (s-match-strings-all pattern <some input>))
+(setq group-1-match (nth1 (nth 0 match-data))
+* elisp rx macro -> very helpfull, the more maintainable way
+** https://github.com/typester/emacs/blob/master/lisp/emacs-lisp/rx.el
+** https://francismurillo.github.io/2017-03-30-Exploring-Emacs-rx-Macro/
+** 
+* parsing
+** https://tomassetti.me/guide-parsing-algorithms-terminology/
+** semantics vs grammar 
+*** semantics: "meaning of words"
+*** grammar: syntax of words
+*** e.g. "Hello Programming" is correct grammar, but false semantics

@@ -14,7 +14,6 @@
  (message (concat "copied path to clipboard: "  currentpath))
  )
 
-
 (defun change-dir-from-clipboard () 
   (interactive)
   (cond ( (equal major-mode 'dired-mode)
@@ -22,7 +21,7 @@
         )
 	( (equal major-mode 'term-mode)
 	  (term-send-raw-string (concat "cd " (current-kill 0))); "\n")
-          (message "hello")
+	  (term-send-raw-string "\n")
           )
 	(t
 	 (dired (current-kill 0)) ;; open new dired and go to path

@@ -142,7 +142,6 @@ date2)
       (setq date (planet-add-one-day date))
       (create-daily-hidden-org-file date)
       )
-    (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
     )
 
 (defun planet-create-week-org-files (&optional days)
@@ -207,18 +206,19 @@ daily-filebasenames)
 daily-filefullnames)
 
 (defun planet-get-last-daily-org-file-date ()
-    ;;** get list of files
-    (setq daily-files (planet-get-all-daily-files))
-    (setq last-daily-file-name (car (last daily-files)))
+    ;; * get list of files
+    (setq daily-filebasenames (planet-get-all-daily-filebasenames))
+    (setq last-daily-filebasename (car (last daily-filebasenames)))
 
-    ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
-    (when (string-match ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$" last-daily-file-name)
-      (setq year (string-to-number (substring last-daily-file-name 1 5)))
-      (setq month (string-to-number (substring last-daily-file-name 6 8)))
-      (setq day (string-to-number (substring last-daily-file-name 9 11)))
-      )
-    ;;** set last-date
-    (setq last-date (planet-create-date day month year))
+    ;; ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
+    ;; (when (string-match ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$" last-daily-file-name)
+    ;;   (setq year (string-to-number (substring last-daily-file-name 1 5)))
+    ;;   (setq month (string-to-number (substring last-daily-file-name 6 8)))
+    ;;   (setq day (string-to-number (substring last-daily-file-name 9 11)))
+    ;;   )
+
+    ;; * convert last filebase into date
+    (setq last-date (planet-convert-filebasename-to-date last-daily-filebasename))
   ;; last-date)
 last-date)
 ;; test: (planet-get-last-daily-org-file-date)
@@ -320,9 +320,8 @@ last-date)
     "
   (interactive)
   ;;* concat file name 
-  (setq filebasename (planet-convert-date-to-filebasename (date)))
+  (setq filebasename (planet-convert-date-to-filebasename date))
   (create-hidden-org-file-folder filebasename planet-daily-dir)
-  (setq file-full-name (concat  (file-name-as-directory planet-daily-dir) filename))
   )
 
 ;; (setq date-raw-2 (time-add date-raw date-raw))
