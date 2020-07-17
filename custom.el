@@ -12,7 +12,7 @@
     ("~/Dropbox/MyFiles/Privat/Behoerden/Arbeitslos2019/ExistenzGruendung/Businessplan/.businessplan.org/businessplan.org")))
  '(package-selected-packages
    (quote
-    (helm-swoop outshine async-await magit git-auto-commit-mode org-ref flycheck flymake-python-pyflakes pylint org-bullets ack evil-mc multiple-cursors rainbow-delimiters evil-textobj-line realgud matlab-mode pacmacs nyan-mode parrot evil-visualstar evil-collection helm-rg spacemacs-theme moe-theme monokai-theme solarized-theme zenburn-theme ag helm-ag smart-mode-line default-text-scale zoom key-chord latex-preview-pane pdf-tools org-download which-key org-evil openwith leuven-theme evil-org helm-projectile projectile rtags evil-numbers shackle helm comment-dwim-2 evil-leader xclip sudo-ext smart-mode-line-powerline-theme lorem-ipsum evil-nerd-commenter evil elpy ein dired-toggle-sudo dired-ranger dired-narrow color-theme-buffer-local anaconda-mode ace-window)))
+    (company-jedi jedi helm-swoop outshine async-await magit git-auto-commit-mode org-ref flycheck flymake-python-pyflakes pylint org-bullets ack evil-mc multiple-cursors rainbow-delimiters evil-textobj-line realgud matlab-mode pacmacs nyan-mode parrot evil-visualstar evil-collection helm-rg spacemacs-theme moe-theme monokai-theme solarized-theme zenburn-theme ag helm-ag smart-mode-line default-text-scale zoom key-chord latex-preview-pane pdf-tools org-download which-key org-evil openwith leuven-theme evil-org helm-projectile projectile rtags evil-numbers shackle helm comment-dwim-2 evil-leader xclip sudo-ext smart-mode-line-powerline-theme lorem-ipsum evil-nerd-commenter evil elpy ein dired-toggle-sudo dired-ranger dired-narrow color-theme-buffer-local anaconda-mode ace-window)))
  '(sml/mode-width
    (if
        (eq
