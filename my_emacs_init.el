@@ -4,7 +4,7 @@
 
 
 ;;* debug on start-up
-(toggle-debug-on-error)
+;; (toggle-debug-on-error)
 
 ; overlay an arrow where the mark is
   (defvar mp-overlay-arrow-position)
@@ -40,7 +40,7 @@
 (setq my_load_path (file-name-directory load-file-name)) ;; save custom file also to the same path
 (setq custom-file-name "custom.el")
 (setq custom-file (concat my_load_path custom-file-name)) ;; has to be name "custom-file" -> so emacs recognizes it and writes saved customization there (https://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Customizations.html)
-;; (load custom-file)
+(load custom-file)
 
 
 ;;; GENERAL STUFF ;;;;;;
