@@ -1,0 +1,61 @@
+* install on HLRN/Lise
+** prerequisites:
+*** download source files and unpack it.
+The location for building is your choice. I prefer to use one single directory for all my locally built programs, like "$HOME/myapps_make/", so I can see at a glance which software-packages I have built and installed.
+*** it is recommendable to work (as nearly always) in a screen session, to not loose your progress, in case the connection breaks 
+#+begin_src bash
+screen -S emacs_installation
+#+end_src
+*** gcc needs to be loaded in your environment. load it with:
+#+begin_src bash
+module load gcc/9.3.0 # best choose newest version available, it was 9.3.0 for me in 2020
+#+end_src
+*** other than that, keep the modules as minimal as possible. e.g. unload anaconda3, so emacs will depend on the system's python, and not on anaconda-distribution.
+#+begin_src bash
+# unload "non-standard" modules, e.g.
+module unload anaconda3
+#+end_src
+** configure with prefix for user local installation
+Do not forget to choose a prefix, since you do not have sudo rights and want to do a local installation for just one user (which is you).
+The best prefix choice, in my opinion is $HOME, since $HOME/bin, $HOME/lib, $HOME/share, etc. are also standard directories where other programs might look automatically for what they need (https://unix.stackexchange.com/questions/36871/where-should-a-local-executable-be-placed). If these directories do not exist yet, don't worry, they will be generated automatically during make install.
+*** start trying
+#+begin_src bash
+./configure --prefix=$HOME
+#+end_src
+*** you will notice that some libraries could not be found, but also suggested how to explicitly ignore them for compilation. these are usually packages, that you do not need anyway when emacs is in terminal mode, which is usually your choice, since you log onto the server via ssh.
+#+begin_src bash
+# output is e.g. : the following libraries wre not found: libgif/libungif gnutls
+# so you exclude them as suggested by adding options e.g. like this:
+./configure --prefix=$HOME --with-gif=no --with-gnutls=no
+#+end_src
+** make 
+but faster in parallel with e.g. 8 cores (-j8 option). The login nodes have 2X20 cores so that's acceptable. the build with -j8 took me only about a minute:
+#+begin_src bash
+make -j8
+#+end_src
+** make install
+#+begin_src bash
+make install
+#+end_src
+** check if emacs is installed
+#+begin_src bash
+emacs --version
+#+end_src
+If the version is the one of your installation, then the system's preinstalled emacs is still prioritized in your $PATH variable. In general it is a good idea to *prepend* $HOME/bin in your $PATH so it gets priority. So if you have not already done so, add this line to your ~/.bashrc startup file:
+#+begin_src bash
+export PATH=$HOME/bin:$PATH
+#+end_src
+Now after launching a new shell (login again or start new screen session), the emacs command should work from any location:
+#+begin_src bash
+emacs --version # --> should show your installed version now
+#+end_src
+** launch emacs and enjoy!
+You might have to set the terminal to 256 colors, to have have all text colors as expected, before launching emacs: 
+#+begin_src bash
+export TERM=xterm-256color
+#+end_src
+compress your .emacs.d-folder on your local machine and rsync it to the cluster so you have all your emacs-packages, since the cluster is not connected to the internet and can't download the packages automatically.
+And now you should can launch and enjoy emacs from shell:
+#+begin_src bash
+emacs  # and off you go, enjoy the power of emacs and may the force be with you :)!
+#+end_src

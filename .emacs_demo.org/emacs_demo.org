@@ -114,15 +114,34 @@
 ** make matlab-shell / dired-window / etc
 ** show a bit debugging experience (F5/F8/F12/F9)
 ** completion (company mode)
-* org-mode - emacs has a lot of great packages, but org-mode IS emacs's SILVERWARE 
+* org-mode - emacs has a lot of great packages, but org-mode IS emacs's SILVERWARE, THE KILLER-APP 
 ** what is org mode: "basically an outline tool. and a WHOLE LOT more!"
 *** quick demo outlining: headings, move headings, indent headings, add labels (TODO/DONE/etc.) - all super fast (not possible in word this fast...)
-** what's cool: data is PURE text files
+** "killer argument 1": it can replace nearly all apps related to documentation and data
+*** what are the powerfull applications?
+**** Word-Processor (MS Word, OpenOffice Writer)
+**** Calendar
+**** Task management
+**** Jypiter notebook - for any language (python, bash, c++, java, etc.)
+**** Excel (you have an integrated spreadsheet functionality)
+**** Publishing tool (export beautifully to Latex/HTML/others)
+**** Note-Taking (Evernote/OneNote etc.)
+*** to have all these functionalities *in one document*, can boost your workflow enourmously. 
+*** lets take a tour! 
+**** demo of all features in one document.
+** "killer argument 2": data is PURE text files
 *** something which no proprietary program wants, but it IS the best for the user
 *** you can version control it with git (super good advantage)
-*** full text search with tools that are actually good at that job --> e.g. ripgrep (linux-philosophy)
+*** lightning fast full text search. google and co. demonstrate: quick searching and finding information is one of most crucial aspects of our evermore information-driven world - and plain text search beats anything. further: there are superb (free) tools that absolutely excel at that job --> e.g. ripgrep (linux-philosophy -> combine tools from anywhere)
 *** you can read org files understandably even without emacs (!)
-** so what can you do with it / application cases:
+** "killer argument 3": it s free software.
+*** you can view/alter/extend the whole source code and adjust your workflow integration and user experience (short cuts) exactly to your needs - with practically no limits - writing code snippets of emacs' underlying interpreted language (lisp). 
+*** when you really use a whole range of applications of org-mode (killer argument 1), this comes in just invaluable.
+*** my personal opinion: in world where data is money and all proprietary companies (Google/Microsoft and the likes) really want to earn money with your data, I do not trust them. In org-mode your most sensible data (tasks, private/personal notes, agenda, etc.) is totally under you control. It s located where you want. 
+**** trust / data security
+**** avoid vendor-lock-in
+**** defend your attention space, don't get annoyed all the time (by buttons, notifications, etc.) to use tools and workflows, the companies want you to use, but you don't want. 
+** TODO [this section has to be distributed, some to killer arg. 1, some as extra addons at the end] so what can you do with it / application cases:
 *** shape thoughts
 *** take notes
 **** superfast for live-note-taking (here speed counts)
@@ -132,7 +151,7 @@
 *** organise meetings / scheduling
 *** cool goodies:
 **** read latex formulas / preview
-**** insert/preview images
+**** insert inline images
 **** these things made org-mode my MSWORD-substitution
 *** actually produce high quality publishable documents (!)
 **** export -> latex / html (like a charme...) --> some authors/bloggers (not programmers) edit their writings only in org-mode, even whole books (!)
@@ -174,6 +193,9 @@
 echo "hello"
 #+END_SRC
 
+#+RESULTS:
+: hello
+
 * misc
 ** Machinists make and modify their own tools. Good computer professionals do the same thing. (quelle?)
 ** (pers. opinion) keyboard orientstion is a feature, not a bug. mouse and menue are slow! Hands never leaving keyboard means /speed/.
@@ -192,3 +214,60 @@ echo "hello"
 ** of coarse emacs has historical baggage. it is >40 years old! the backend-language elisp is not asyncronous and should be changed to a more modern Lisp (clojure/scheme/common lisp/ etc.). so companies like Google/ Microsoft could easily create a better free community driven editor. well did they? vscode or google xi? it seems so. vscode is the best alternative currently to emacs, written in a modern extensible language, electron/javascript. but it really only seems so. because it s opensource image is faked. you ll depend on microsoft to maintain it, parts are proprietary, the extension store (!). because as a company they don t have as an objective to give free presents to the cimmunity. fter lurking users in pushing market share in no time (2-3 years from 0 to 50% !), they ll want sth from you: date/attention to sell sth etc, (defend your attention space). so:  they did not and probably won t ever provide a truely free software alternative to emacs, which brings us to another main advantage of emacs: good and big cimmunity has been around for 40 years, will be there in the next 40. what you invest in emacs now, you ll use all your life. will vscode be there in 40 years? probably not. it ll go when the next $NEWHOTNESS appears, super google editor or whatever.
 ** learning curve comparison:
 [[./screenshot_20200717_171507.png]]
+* github renders org-mode files, like markdown. so in github you can do all your docs in org. it shows: web integration is possible and would be very cool.
+
+* funny
+** post on emacs in browser: "emacs in browser, so you can use your emacs in browser while using your browser in emacs"
+https://news.ycombinator.com/item?id=21633149
+
+* what i did in python:
+#+begin_src python
+def trash_removers_report():
+    owd = os.getcwd()
+    os.chdir(default_trashpath)
+    os.chdir('trash_removers')
+    trash_remover_dirs = get_ordered_trash_remover_dir_list() 
+    owd_trash_removers = os.getcwd()
+    for trash_remover_dir in trash_remover_dirs:
+        os.chdir(owd_trash_removers)
+        os.chdir(trash_remover_dir)
+        file = open('trash_piece_id')
+        this_occupied_piece_id = int(file.readline())
+        file.close()
+        print(trash_remover_dir + ': ' + 'occupied trash_piece_id = ' +  str(this_occupied_piece_id))
+
+    os.chdir(owd)
+    return True
+#+end_src
+* GNU Public License (GPL) / free Software - success stories:
+** big ones:
+*** Linux, core of GNU/Linux-OS
+**** servers (30% of servers -> todo: check/source)
+**** embedded systems (automotive etc.) - Embedded Linux most common embedded solution (when you don t need a display or only minimal display, for more capable display functionality Android is most popular, e.g. smart phones)
+***** https://www.quora.com/What-is-the-most-widely-used-embedded-operating-system
+***** https://www.quora.com/What-is-the-most-widely-used-embedded-operating-system
+Embedded Linux is the head-and-shoulders most common embedded solution, owing to the free cost and ubiquity of Linux. The vast majority of embedded projects use Linux. There are certain industries, however, such as aerospace, automative, and defense, that rely heavily on VxWorks.
+*** components of GNU/Linux-OS:
+**** GCC (GNU Compiler Collection) - C/C++ and others
+**** GNU C library (glibc) - implentation of C/C++ standard library, key for interaction of Linux-Core with rest of OS and applications
+**** GNU Core Utilities (coreutils): reimplementations of basic UNIX tools: cat, ls, rm, chmod, cp, chgrp, mkdir, ln, mv, rmdir, touch, cat, head, sort, tail, wc, echo, nice, pwd, seq, sleep, ... 
+**** GNU Bash (defacto standard shell command language, originally UNIX, rewritten as free software)
+**** GNU Debugger (GDB)
+**** widely used on non-GNU OS's: Solaris, macOS, BSD variants (FreeBSD, OpenBSD, NetBSD, DragonFlyBSD)
+*** Emacs (of course ;-))
+*** git (!)
+*** OpenFOAM (!)
+*** MySQL
+** others:
+*** audacity (audio editor)
+*** F-Droid
+*** Sumatra PDF
+* BSD license
+** cmake
+** Anaconda (python distribution)
+** ctags
+** Django (web framework, python based)
+** google test
+** IPython (interactive command line user interface for python)
+** LAPACK
+** numpy
