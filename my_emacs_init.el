@@ -1,9 +1,18 @@
-;;*TODOs
-;;** better mode-line color inactive window light-grey (?), active --> black??
-;;** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
+;; * TODOs
+;; ** better mode-line color inactive window light-grey (?), active --> black??
+;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
+;; * general requirement: use-package and quelpa-use-package
+;; ** use-package
+(require 'use-package)
+;; ** quelpa-usapackage -> enables you to update source of package from github and recompile on the fly by adding ":quelpa" key-word to use-package:  "(use-package <package-name> :quelpa <other stuff>)
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://github.com/quelpa/quelpa-use-package.git"))
+(require 'quelpa-use-package)
 
-;;* debug on start-up
+;; * debug on start-up
 ;; (toggle-debug-on-error)
 
 ; overlay an arrow where the mark is
@@ -53,7 +62,7 @@
 ;;(add-to-list 'image-load-path my_load_path)
 
 
-;;;* GENERAL SETTINGS
+;;; * GENERAL SETTINGS
 
 ;; * detect machine name
 (defvar machine-name)  
@@ -67,32 +76,32 @@
   )
 
 
-;;** suppress "spamy" auto-revert messages
+;; ** suppress "spamy" auto-revert messages
 (setq auto-revert-verbose nil)
 
-;;** title (play around -> tribute to emacs)
+;; ** title (play around -> tribute to emacs)
 (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
 
-;** global line number mode on
+; ** global line number mode on
 (global-display-line-numbers-mode)
-;** scroll bar off
+; ** scroll bar off
 (if (display-graphic-p)
     (scroll-bar-mode -1) 
   )
-;;** tool bar off
+;; ** tool bar off
 (tool-bar-mode -1)
 
-;;** menu bar off
+;; ** menu bar off
 (menu-bar-mode -1)
 
-;;** highlight corresponding parenthesis
+;; ** highlight corresponding parenthesis
 (show-paren-mode t)
 
-;;** rainbow delimiters
+;; ** rainbow delimiters
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode t)
 
-;;; *)  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; * )  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;-----------------------------------------------------------
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -106,7 +115,7 @@
 (package-initialize) ;; You might already have this line
 
 
-;;;* evil - load/ general
+;;; * evil - load/ general
 ;; necessary for evil-collection (before load evil first time):
 (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
 (setq evil-want-keybinding nil)
@@ -138,7 +147,7 @@
 ;; (key-chord-define evil-visual-state-map "jj" 'evil-normal-state) # this has nasty effect, commented out
 (key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
 
-;;** search string under visual selection (commonly used also by vimmers) 
+;; ** search string under visual selection (commonly used also by vimmers) 
 (require 'evil-visualstar)
 
 ;; quick search replace
@@ -193,14 +202,14 @@
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 
-;;* planet-mode (my org extension)
+;; * planet-mode (my org extension)
 (load (concat my_load_path "planet/planet.el"))
 
-;;** git save mode default 
+;; ** git save mode default 
 (planet-git-save-turn-on)
 
           
-;;** default initial view (levels)
+;; ** default initial view (levels)
 (add-hook 'planet-mode-hook
          (lambda ()
            ;; (outline-show-all)
@@ -215,44 +224,44 @@
 ;;
 
 
-;;;* elisp mode
+;;; * elisp mode
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (auto-complete-mode)
             (rainbow-delimiters-mode t)
             ))
-;;** debugging
-;;*** comments: two options in emacs: debug (old) ;  edebug -> better, interactive, "matlab-like", just a 'little overhead' --> need to perform 'instrumentalization' before every debugging...
-;;*** --> just hit 'SPC-/'
-;;*** more convenient short-cut for instrumentalize function: than "C-u C-M-x"!
+;; ** debugging
+;; *** comments: two options in emacs: debug (old) ;  edebug -> better, interactive, "matlab-like", just a 'little overhead' --> need to perform 'instrumentalization' before every debugging...
+;; *** --> just hit 'SPC-/'
+;; *** more convenient short-cut for instrumentalize function: than "C-u C-M-x"!
 (evil-leader/set-key-for-mode 'emacs-lisp-mode "/" 'instrumentalize-fun) 
 (defun instrumentalize-fun ()
   (interactive)
   ;; (edebug-eval-defun t)
   (eval-defun t) ;; argument can be any --> effect is to instrumentalize for edebug
   )
-;;;***
+;;; *** 
 (evil-define-key 'normal edebug-mode-map (kbd "n") 'edebug-next-mode)
 (evil-define-key 'normal edebug-mode-map (kbd "F10") 'edebug-next-mode)
 
 (evil-define-key 'normal edebug-mode-map (kbd "q") 'top-level)
 (evil-define-key 'normal edebug-mode-map (kbd "F8") 'top-level)
 
-;;;* bash (=shell-script-mode)
+;;; * bash (=shell-script-mode)
 (add-hook 'shell-script-mode-hook
           (lambda ()
             (auto-complete-mode)
             (rainbow-delimiters-mode t)
             ))
 
-;;;* c++
+;;; * c++
 (add-hook 'c++-mode-hook
           (lambda ()
             (auto-complete-mode)
             (rainbow-delimiters-mode t)
             ))
 
-;;;* python
+;;; * python
 (add-hook 'python-mode-hook
           (lambda ()
             (auto-complete-mode)
@@ -263,7 +272,7 @@
 (add-hook 'python-mode-hook 'pylint-add-menu-items)
 (add-hook 'python-mode-hook 'pylint-add-key-bindings)
 
-;;;** python debug key-bindings
+;;; ** python debug key-bindings
 (defun python-set-break-point-current-line()
   (interactive)
   (end-of-line)
@@ -281,7 +290,7 @@
   (kbd "<f12>") 'python-set-break-point-current-line)
 
 
-;;;* english-german-translator
+;;; * english-german-translator
 (defvar english-german-translator-buffer-name "*english-german-translator*")
 
 
@@ -322,7 +331,7 @@
   ;; (english-german-translator-move-point-to-input-field)
   )
 
-;;;* ipython-calculator (my)
+;;; * ipython-calculator (my)
 ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
 (defvar ipython-calculator-buffer-name "*ipython-calculator*")
 
@@ -354,7 +363,7 @@
     (term-set-escape-char ?\C-x))
 
 
-  ;;* execute ipython
+  ;; * execute ipython
   (comint-send-string ipython-calculator-buffer-name "ipython\n")
   )
 
@@ -371,17 +380,17 @@
 
 (evil-leader/set-key "a" 'ipython-calculator) 
 
-;;;* org-mode
+;;; * org-mode
 
 ;; make sure we have the latest package of org
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
-;;** fix TAB -> org-cycle for android phone
+;; ** fix TAB -> org-cycle for android phone
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 
 
 
-;;** org bullets
+;; ** org bullets
 (require 'org-bullets)
 (add-hook 'org-mode-hook
           (lambda nil (org-bullets-mode 1)))
@@ -403,7 +412,7 @@
     )
   )
 
-;;** disable line-numbers
+;; ** disable line-numbers
  (add-hook 'org-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
 
@@ -413,8 +422,8 @@
              ))
 (require 'org-install)
 
-;;** clock in/out settings 
-;;*** change todo state "CLOCKED IN..." / "", for clocked in headings
+;; ** clock in/out settings 
+;; *** change todo state "CLOCKED IN..." / "", for clocked in headings
 (defvar org-todo-state-on-clock-in-saved)
 (setq org-todo-state-on-clock-in-saved "")
 (add-hook 'org-clock-in-hook
@@ -450,7 +459,7 @@
   (setq todo-state (nth 2 components))
   (message (concat "current todo state: " todo-state))
   )
-;;** show distribution of clocked time per tag
+;; ** show distribution of clocked time per tag
 (require 'org-table)
 (require 'org-clock)
 
@@ -500,10 +509,10 @@
 (provide 'clocktable-by-tag)
 
 
-;;** evaluate code snippets in org
-;;*** don t confirm every time
+;; ** evaluate code snippets in org
+;; *** don t confirm every time
 (setq org-confirm-babel-evaluate nil)
-;;*** add languages: C++/C
+;; *** add languages: C++/C
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
@@ -516,7 +525,7 @@
    ) 
  )
 
-;;*** add quick-templates (<s <TAB> / 
+;; *** add quick-templates (<s <TAB> / 
 ;; delete all that crap and do my own
 ;; add c++
 (setq org-structure-template-alist nil)
@@ -549,7 +558,7 @@
 ;; ?
 ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
-;;** org-mode toggle bold/italic
+;; ** org-mode toggle bold/italic
 (defun org-toggle-bold-region ()
   (interactive)
   (my-toggle-marker-around-region "*" "\*"  "*" "\*")
@@ -599,18 +608,18 @@
       )
   )
 
-;;** enable enumerations with a./b./c.
+;; ** enable enumerations with a./b./c.
 (setq org-list-allow-alphabetical t)
 
 
-;;** org-ref (--> citation management & pdflatex export)
+;; ** org-ref (--> citation management & pdflatex export)
 (use-package org-ref
    :ensure t)
 ;; org export --> has to run bibtex also
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
 (setq org-latex-prefer-user-labels t)
-;;** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
+;; ** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
 ;;   (wrote this for automatic syncing on compilation in first place
 ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
 
@@ -635,7 +644,7 @@
   (async-shell-command export_pdf_hook_final "*org_export_pdf_hook_process_output*")
   )
 
-;;*** use of 2 helper functions: org-kwds / org-kwd
+;; *** use of 2 helper functions: org-kwds / org-kwd
 ;; (from: http://kitchingroup.cheme.cmu.edu/blog/2013/05/05/Getting-keyword-options-in-org-files/)
 (defun org-kwds ()
   "parse the buffer and return a cons list of (property . value)
@@ -648,17 +657,17 @@ from lines like:
   "get the value of a KEYWORD in the form of #+KEYWORD: value"
   (cdr (assoc KEYWORD (org-kwds))))
 
-;;*** make the output not pop-up
+;; *** make the output not pop-up
 (add-to-list 'display-buffer-alist
   (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
-;;*** define the "run-f5" short cut
+;; *** define the "run-f5" short cut
 (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
 
-;;** evil org
+;; ** evil org
 (require 'evil-org)
 (setq org-M-RET-may-split-line nil)
 
-;;;*** make tab key work as org-cycle in terminal
+;;; *** make tab key work as org-cycle in terminal
 (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
 
 (add-hook 'org-mode-hook
@@ -692,12 +701,12 @@ from lines like:
 ;; (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are "mistreated/violated" by Dropbox)
 (defun create-hidden-org-file-folder (&optional filebasename path)
    (interactive)
-   ;;* determine filename
+   ;; * determine filename
    (if (not filebasename)
        (setq filebasename (read-string "Org-file-name (without .org-extension):"))
      )
 
-   ;;* path
+   ;; * path
    (if (not path) ;; default --> put to current path
         (setq path (get-current-path))
      )
@@ -708,10 +717,10 @@ from lines like:
          (make-directory new-directory-full-name)
           ;; create the org file within that folder
           (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
-          ;;* create file (2 options)
-          ;;** option1: with-temp-buffer
+          ;; * create file (2 options)
+          ;; ** option1: with-temp-buffer
           ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
-          ;;** option2: write-region
+          ;; ** option2: write-region
           (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
           ;; option2 safer, in case dayfile exists, content is not deleted
           )
@@ -817,20 +826,13 @@ from lines like:
    )
  currentpath)
 
-(defun dired-create-new-empty-file ()
-   (interactive)
-   ;; create the hidden (dotted) folder with same name of org file
-   (setq filename (read-string "file-name:"))
-   (setq file-full-name (concat  (dired-current-directory) "/" filename))
-   (with-temp-buffer (write-file file-full-name))
-)
 ;; make sure emacs visits the target of a link (otherwise currentpath is wrong -> problem with pasting images)
 (setq find-file-visit-truename t)
 
 (setq org-image-actual-width 300) ;; --> makes images more readable, for closer look, just open in image viewer
 
 
-;;** emphasis markers
+;; ** emphasis markers
 ;; (setq org-hide-emphasis-markers t)                            
 (setq org-emphasis-alist   
 (quote (("*" bold)
@@ -850,7 +852,7 @@ from lines like:
 (:strike-through t))
 )))
 ;; ( org-set-emph-re) 
-;;** add some new labels
+;; ** add some new labels
 (setq org-todo-keywords
       '((sequence
          "DONE"
@@ -858,6 +860,8 @@ from lines like:
          "DEFERRED"
          "ANSWERED"
          "QUESTION"
+         "DONEBEFORE"
+         "NEXTDAY"
          "DISCARDED"
          "PROGRESS..."
          "CLOCKED IN..."
@@ -877,6 +881,8 @@ from lines like:
       ("WAITING" :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("PROGRESS..." :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DEFERRED" :background "green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("DONEBEFORE" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("NEXTDAY" :background "pink" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DELEGATED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("MAYBE" :background "gray" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("APPT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
@@ -889,7 +895,7 @@ from lines like:
 ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
 (evil-leader/set-key "l" 'org-preview-latex-fragment) 
 
-;;** basic behaviour - new headings
+;; ** basic behaviour - new headings
 (defun myorg-new-heading-enter-insert-state ()
   (interactive)
   (org-insert-heading)
@@ -906,9 +912,9 @@ from lines like:
   (evil-insert-state)
   )
 
-;;** copy/paste - behavior
+;; ** copy/paste - behavior
 (evil-define-key 'insert org-mode-map (kbd "C-p") 'evil-paste-after)
-;;** basic navigation, consistent evil
+;; ** basic navigation, consistent evil
 (evil-define-key 'normal org-mode-map (kbd "L") 'org-shiftright)
 (evil-define-key 'normal org-mode-map (kbd "RET") 'myorg-new-heading-enter-insert-state)
 (evil-define-key 'insert org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
@@ -949,9 +955,34 @@ from lines like:
              '("^" (:foreground "red")
                ))
 
+;;; * outshine mode (org-mode outlining in code-files)
+;; TODOS:
+;; ** still having multiple comment fields leads to problems, e.g. "### ** heading", at the moment he needs "# ** header" to work fully
+;; ** still can t expand sublevels, when trailing white spaces
+;; ** better colors
+;;    i d like to keep regular code color, just add a little "sth", prepend and format the leading stars rather, or not at all. maybe just make code bold.
+;; 
+;; ** functions to format properly headings
+;; *** "***heading" -> "*** heading"
+ ;; " s/\(\*++\)\([^ *]\{1\}\)/; \1 \2/g")
+;; *** "%%*" --> "%% *"
 
-;;;* term / terminal / ansi-term
-;;** use my own term version: stickyterm (slightly modified ansi-term)
+(use-package outshine
+  :quelpa (outshine :fetcher github :repo "alphapapa/outshine"))
+
+(setq my-black "#1b1b1e")
+;; (custom-theme-set-faces
+;;  ;; you may have to get the color-theme-name right:
+;;  'zenburn ; will not work when you change theme -> "unknown color theme error"
+;;  `(outline-1 ((t (:height 1.25 :background "#268bd2"
+;;                           :foreground ,my-black :weight bold))))
+;;  `(outline-2 ((t (:height 1.15 :background "#2aa198"
+;;                           :foreground ,my-black :weight bold))))
+;;  `(outline-3 ((t (:height 1.05 :background "#b58900"
+;;                           :foreground ,my-black :weight bold)))))
+
+;;; * term / terminal / ansi-term
+;; ** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
@@ -966,13 +997,13 @@ from lines like:
  (add-hook 'term-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
 
-;;** short cut for term-paste
+;; ** short cut for term-paste
  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
  (evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
  (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
  (evil-define-key 'instert term-raw-map (kbd "C-p") 'term-paste)
 
-;;** switch only between (term char with emacs-state) and (term line with normal-state)
+;; ** switch only between (term char with emacs-state) and (term line with normal-state)
  (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
  (evil-define-key 'normal term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state) ;; this is just to not get undesired error messages when repeating
 
@@ -992,7 +1023,7 @@ from lines like:
   (term-char-mode)
   )
 
-;;** evil term
+;; ** evil term
  (evil-define-key 'normal term-raw-map (kbd "RET") 'term-send-raw)
  (evil-define-key 'normal term-raw-map (kbd "h") 'term-send-left)
  (evil-define-key 'normal term-raw-map (kbd "l") 'term-send-right)
@@ -1000,7 +1031,7 @@ from lines like:
  (evil-define-key 'normal term-raw-map (kbd "j") 'term-send-down)
  (evil-define-key 'normal term-raw-map (kbd "x") 'term-send-del)
 
-;;*** make initial state for term emacs-state
+;; *** make initial state for term emacs-state
 ;; this did not work:
  ;; (add-hook 'term-mode-hook
            ;; (lambda nil (evil-emacs-state)))
@@ -1187,7 +1218,7 @@ from lines like:
 
 
 
-;;;*) CHOOSE COLOR THEMES ;;;;;;;;;;;;;
+;;; * ) CHOOSE COLOR THEMES ;;;;;;;;;;;;;
 (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-loccal --> not working)
 
 (require 'color-theme)
@@ -1238,7 +1269,7 @@ from lines like:
 
 
 
-;;;* WINDOW / BUFFER NAVIGATION STUFF
+;;; * WINDOW / BUFFER NAVIGATION STUFF
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ** copy/paste path between buffers (terminal/dired)
 (load "copy-paste-paths.el")
@@ -1264,7 +1295,7 @@ from lines like:
 (setq dired-recursive-copies 'always)
 (setq dired-dwim-target t) ;; do what i mean --> automatic "inteligent" copy location etc.
 
-;;; *) quickly move buffer to another window
+;;; * ) quickly move buffer to another window
 (load "quickly-move-buffer-to-other-window.el")
 ;; copy current path key bindings
 (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
@@ -1281,9 +1312,9 @@ from lines like:
 (setq dired-dwim-target nil)
 
 
-;;;* dired
+;;; * dired
 
-;;** hide details by default
+;; ** hide details by default
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-hide-details-mode)
@@ -1291,7 +1322,7 @@ from lines like:
             (dired-sort-toggle-or-edit)))
 
 
-;;** dired omit files
+;; ** dired omit files
 (require 'dired-x)
   (defun dired-dotfiles-toggle ()
     "Show/hide dot-files"
@@ -1305,7 +1336,7 @@ from lines like:
 	    (dired-do-kill-lines))
 	(progn (revert-buffer) ; otherwise just revert to re-show
                (set (make-local-variable 'dired-dotfiles-show-p) t)))))
-;;** add option to list directories first
+;; ** add option to list directories first
 ;;(setq dired-listing-switches "-aBhl  --group-directories-first")
 
 ;; easy open with external applications
@@ -1313,12 +1344,21 @@ from lines like:
 (openwith-mode t)
 (setq openwith-associations '(("\\.pdf\\'" "okular" (file))))
 
-;; ;;; *) dired "options" (minor-modes)
+;; ;;; * ) dired "options" (minor-modes)
 ;; ;;;--------------------------------------------
 ;; ;;    .) open recent directories
 ;; (global-set-key (kbd "C-x C-d") 'dired-recent-dirs-ivy-bjm) ;; see definition recent_dirs.el
 
-;;* helm-rg
+;; ** create empty file ( = bash's touch)
+(defun dired-create-new-empty-file ()
+   (interactive)
+   ;; create the hidden (dotted) folder with same name of org file
+   (setq filename (read-string "file-name:"))
+   (setq file-full-name (concat  (dired-current-directory) "/" filename))
+   (with-temp-buffer (write-file file-full-name))
+)
+
+;; * helm-rg
 (require 'helm-rg)
 (setq helm-rg-default-extra-args '("--hidden"))
 ;; only makes sence in dired buffers, for others-> helm-soop
@@ -1341,7 +1381,7 @@ from lines like:
 ;;     (add-to-list 'tramp-default-proxies-alist
 ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 
-;;** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
+;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
 (defun dired-go-home ()
   (interactive)
   (dired (substitute-in-file-name "$HOME"))
@@ -1352,8 +1392,14 @@ from lines like:
   (dired (substitute-in-file-name "$WORK"))
   )
 
+(defun dired-go-fast ()
+  (interactive)
+  (dired (substitute-in-file-name "$FAST"))
+  )
+
 (evil-leader/set-key "hh" 'dired-go-home)
 (evil-leader/set-key "hw" 'dired-go-work)
+(evil-leader/set-key "hf" 'dired-go-fast) ;; for mathe-cluster
 (evil-leader/set-key "hb" 'helm-bookmarks)
 
 ;;    .) auto revert dired default
@@ -1411,7 +1457,7 @@ from lines like:
   (evil-define-key 'normal dired-mode-map "q" 'kill-this-buffer)
 
 
-;; *)  by hitting enter -> exit narrow-mode and enter file/dir
+;; * )  by hitting enter -> exit narrow-mode and enter file/dir
 ;; --------------------------------------------------------------------
 ;; ;;; (quick and dirty way)
 ;; ;; source: http://oremacs.com/2015/07/16/callback-quit/
@@ -1472,13 +1518,13 @@ from lines like:
 ;; ;; --> did work very badly / produced bugs
 ;; ;;   (require 'openwith)
 ;; ;;   (openwith-mode t)
-;; ;;;*) save desktop sessions
+;; ;;; * ) save desktop sessions
 ;; ;;    (require 'session)
 ;; ;;    (add-hook 'after-init-hook 'session-initialize)
 ;; ;;(desktop-save-mode 1)
 
 
-;;;*)  make possible for window to "stick" to its buffer
+;;; * )  make possible for window to "stick" to its buffer
 (define-minor-mode sticky-buffer-mode
   "Make the current window always display this buffer."
   nil " sticky" nil
@@ -1511,7 +1557,7 @@ from lines like:
 
 
 
-;;;*) copy current buffer path clipboard
+;;; * ) copy current buffer path clipboard
 (defun cp-fullpath-of-current-buffer ()
   "copy full path into clipboard"
   (interactive)
@@ -1520,12 +1566,12 @@ from lines like:
     (kill-new  filepath)
     (message (concat "copied current file path: " filepath   ))))
 
-;;;*) ido-mode
+;;; * ) ido-mode
 ;; (require 'ido)
     ;; (ido-mode t)
 
 
-;;* helm
+;; * helm
 (require 'helm)
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
@@ -1537,15 +1583,15 @@ from lines like:
 ;;         helm-display-buffer-reuse-frame nil
 ;;         helm-use-undecorated-frame-option nil)
 
-;;** helm window
-;;*** option1 (full frame)
+;; ** helm window
+;; *** option1 (full frame)
 ;; (setq helm-full-frame t)
 ;; (setq helm-autoresize-max-height 0)
 ;; (setq helm-autoresize-min-height 20)
 ;; (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
 ;; (setq helm-buffer-max-length 70) ;; file name column width
 
-;;*** option2 (half frame, show only current buffer aside)
+;; *** option2 (half frame, show only current buffer aside)
 ;; (setq helm-split-window-in-side-p nil)
 ;; (helm-autoresize-mode t)
 ;; (setq helm-autoresize-max-height 50)
@@ -1553,14 +1599,14 @@ from lines like:
 ;; (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
 ;; (setq helm-buffer-max-length 70) ;; file name column width
 
-;;*** option3 (half frame, show all buffers aside, compressed)
+;; *** option3 (half frame, show all buffers aside, compressed)
 (add-to-list 'display-buffer-alist
              '("\\`\\*helm"
                (display-buffer-in-side-window)
                (window-height . 0.4)))
 (setq helm-display-function #'display-buffer)
 
-;;;* projectile
+;;; * projectile
 (projectile-global-mode)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
@@ -1569,10 +1615,10 @@ from lines like:
 (setq helm-exit-idle-delay 0)
 
 
-;;;* matlab
+;;; * matlab
 
 
-;;;** Matlab matlab-emacs project;;
+;;; ** Matlab matlab-emacs project;;
 load-path
 (setq path_to_matlab_emacs (concat my_load_path "matlab-emacs-src")) ;; the init file folder contains also all manual packages
 (add-to-list 'load-path path_to_matlab_emacs)
@@ -1622,6 +1668,7 @@ load-path
     (if (string-equal (buffer-name) "*MATLAB*")
         (end-of-buffer)
     )
+    (matlab-shell-end-of-buffer) ;; scroll down always
 )
 
 (defun matlab-shell-end-of-buffer ()
@@ -1629,7 +1676,15 @@ load-path
     ; get region into string
     ;; (save-excursion
       ;; (set-buffer (get-buffer-create "*MATLAB*")) 
-      (switch-to-buffer "*MATLAB*")
+      (setq current-buffer (buffer-name))
+      (setq matlab-shell-window (get-buffer-window "*MATLAB*"))
+      (save-excursion
+        (set-buffer (get-buffer-create "*MATLAB*")) 
+        (setq end-point-matlab-shell (point-max)))
+      (set-window-point matlab-shell-window end-point-matlab-shell)
+      ;; (switch-to-buffer "*MATLAB*")
+      ;; (comint-send-input "")
+      ;; (switch-to-buffer current-buffer)
      ;; (end-of-buffer)
     ;; )
 )
@@ -1873,7 +1928,7 @@ load-path
 
 ;; END GENREAL STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;* recentf (recent files) 
+;;; * recentf (recent files) 
 (require 'recentf)
 ; Enable recentf mode
 (recentf-mode t)
@@ -1884,7 +1939,7 @@ load-path
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 
-;;;* latex (auctex) 
+;;; * latex (auctex) 
 ;; somehow auctex does not load with (require 'auctex) (i don t like that and think the guys should do loading consistent with standard like other packages, but whatever..)
 ;; but auctex-manual instructs like this
 (load "auctex.el" nil t t)
@@ -1892,30 +1947,30 @@ load-path
 ;;(load "preview-latex.el" nil t t)
 
 
-;;** hook latex with minor-outline-mode
+;; ** hook latex with minor-outline-mode
 (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
 
 (evil-define-minor-mode-key 'normal 'outline-minor-mode (kbd "TAB") 'org-cycle) ;; comment: org and outline go hand-in-hand, the org-function kind of "expand" the outline-functions, in pure outline-mode there is no toggling function
 
-;;** hook with TeX-fold-mode (the shit to hide figures/tables and stuff)
+;; ** hook with TeX-fold-mode (the shit to hide figures/tables and stuff)
 ;;   (does not conflict with outline-minor-mode, yeah)
 ;;   usefull functions:
 ;;                     go to figure/table and M-x TeX-fold-env 
 (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
 
 
-;;** F5 -> run pdflatex / F6 -> bibtex
+;; ** F5 -> run pdflatex / F6 -> bibtex
 (defun run-pdflatex-on-master-file ()
 "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 (interactive)
 ;;save buffer
 (save-buffer)
-;;*option1:
+;; * option1:
 (TeX-command "LaTeX" 'TeX-master-file nil)
-;;*option2: (discarded)
+;; * option2: (discarded)
 ;; (save-buffer)
 ;; (shell-command (format "pdflatex %s.tex" (TeX-master-file)))
-;;* show compile window, where pointer is always at end
+;; * show compile window, where pointer is always at end
 ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
 )
 
@@ -1929,7 +1984,7 @@ load-path
 )
 
 
-;;;** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
+;;; ** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
 (add-hook 'LaTeX-mode-hook '(lambda ()
                   (add-to-list 'TeX-expand-list
                        '("%u" Okular-make-url))))
@@ -1946,7 +2001,7 @@ load-path
 
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 
-;;;*** setup viewer (okular) with synref
+;;; *** setup viewer (okular) with synref
 ;;;    how to use:
 ;;     (https://tex.stackexchange.com/questions/161797/how-to-configure-emacs-and-auctex-to-perform-forward-and-inverse-search)
 ;;;              go from emacs to okular ("forward search"): --> hit C-c C-v --> voila, okular opens exactly the position
@@ -1956,13 +2011,13 @@ load-path
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 (setq TeX-source-correlate-mode t)
 
-;;** make more easy/natural to read
-;;*** break lines naturally
+;; ** make more easy/natural to read
+;; *** break lines naturally
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)  
-;;*** (did not work out) show prose in block text, more easy/natural to read (--> auto-fill-mode)
+;; *** (did not work out) show prose in block text, more easy/natural to read (--> auto-fill-mode)
 ;; (add-hook 'LaTeX-mode-hook 'auto-fill-mode)  
 
-;;;** reftex
+;;; ** reftex
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
 (setq reftex-plug-into-AUCTeX t)
 ;;
@@ -1970,7 +2025,7 @@ load-path
 
 (setq reftex-refstyle "\\autoref")
 
-;;;** aspell
+;;; ** aspell
 (setq-default ispell-program-name "aspell")
 ;(setq ispell-program-name "aspell") 
      ; could be ispell as well, depending on your preferences ;
@@ -1997,7 +2052,7 @@ This a menu element (FILE . FILE)."
   (setq menu-item-string (format "%s" (file-name-nondirectory file)))
   (recentf-make-menu-element menu-item-string file))
 
-;;** misc settings
+;; ** misc settings
      (setq TeX-parse-self t) ; Enable parse on load.
      (setq TeX-auto-save t) ; Enable parse on save.
      (setq TeX-save-query nil) ; Dont ask if to save every time, just save and run LaTeX
@@ -2007,7 +2062,7 @@ This a menu element (FILE . FILE)."
 	
 (setq-default TeX-master nil) ; Query for master file.
 
-;;;** my latex-editing functions
+;;; ** my latex-editing functions
 (defun include-input-toggle ()
 "This function toggles between include and input"
 (interactive)
@@ -2087,7 +2142,7 @@ This a menu element (FILE . FILE)."
 
 (global-set-key (kbd "<f9>") 'paste-image-latex)
 
-;;;*** Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
+;;; *** Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
 (defun insert-latex-environment-align ()
 (interactive)
 (LaTeX-environment-menu "align")
@@ -2149,8 +2204,7 @@ This a menu element (FILE . FILE)."
 )
 (global-set-key (kbd "C-S-t") 'insert-latex-environment-table)
 
-;;* misc
-
+;; * misc
 ;; quickly add relative path of some file
 (defun find-file-insert-relative-path ()
 (interactive)
@@ -2159,16 +2213,16 @@ This a menu element (FILE . FILE)."
 (insert rel-path)
 )
 
-;;;* c++
+;;; * c++
 
-;;** c++ -mode key bindings consistent (overwrite)
+;; ** c++ -mode key bindings consistent (overwrite)
 (define-key c++-mode-map "\M-k" 'windmove-up)
 (define-key c++-mode-map "\M-h" 'windmove-left)
 (define-key c++-mode-map "\M-l" 'windmove-right)
 (define-key c++-mode-map "\M-j" 'windmove-down)
 
 
-;;;* openfoam 
+;;; * openfoam 
 (defun openfoam-dired-tutorials ()
    (interactive)
    (dired "/opt/OpenFOAM-6/tutorials")
@@ -2249,7 +2303,7 @@ region, clear header."
      (shell-command-on-region start end "bash -l" ))) ;; If start is a string, then write-region writes or appends that string, rather than text from the buffer. end is ignored in this case. 
 )                                      ;;  bash with -l option --> login --> so it will read .bash_profile (--> includes bashrc) --> so the openfoam-environment sourcing functions are known
 
-;;;** shell workflow openfoam
+;;; ** shell workflow openfoam
 ;;; send to noninteractive shell (not "so" usefull, only for whole loops 
 (defun sh-execute-line-openfoam ()
 (interactive)
@@ -2369,14 +2423,14 @@ region, clear header."
 ;; 	    (delete-region sh-header-marker end)))
 ;;       (shell-command-on-region start end (concat sh-shell-file " -")))))
 
-;;** open-foam-workflow tipps 
+;; ** open-foam-workflow tipps 
 
-;;;* zoom frame on smaller monitor
-;;;    status: no working solution, but no priority
+;; * zoom frame on smaller monitor
+;;    status: no working solution, but no priority
 ;; (require 'zoom-frm)
 
 
-;;;* move buffers - key bindings
+;; * move buffers - key bindings
 (require 'windmove)
 (require 'framemove)
 (setq framemove-hook-into-windmove t)
@@ -2417,7 +2471,7 @@ region, clear header."
 ;;      term.el:912   (define-key term-raw-map term-escape-char term-raw-escape-map)
 ;;      just leads to a second map where a new command can be executed (e.g. M-x)
 
-;;* mode-line appearance
+;; * mode-line appearance
 ;; set mode line to show full path of current file
 ;; (setq-default mode-line-format
 ;;    (list '((buffer-file-name " %f"
@@ -2425,7 +2479,7 @@ region, clear header."
 ;;                dired-directory
 ;;                 (revert-buffer-function " %b"
 ;;                ("%b - Dir:  " default-directory))))))) 
-;;; *) set mode line appearance
+;;; * ) set mode line appearance
 ;;;    (has to come AFTER  color themes, don t ask why)
 ;; don t ask why exactly, but the following (in order (!)) resulted nice in combi with zenburn
 ;; i.e.  .) modest visual difference of current buffer's mode line
@@ -2437,12 +2491,12 @@ region, clear header."
 ;; (setq sml/no-confirm-load-theme t) ;; avoid being asked "wanna compile theme in elisp" (or so..) everytime
 
 
-;;* buffer/window navigation management
-;;** better short cuts for previous / next buffer
+;; * buffer/window navigation management
+;; ** better short cuts for previous / next buffer
 (global-set-key (kbd "M-'") 'previous-buffer)
 (global-set-key (kbd "M-\\") 'next-buffer)
 
-;;;* pdf-view
+;;; * pdf-view
 (require 'pdf-view)
  
  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
@@ -2458,7 +2512,7 @@ region, clear header."
  (provide 'init-pdfview)
 
 
-;;;* quickly print variable to scratch buffer
+;;; * quickly print variable to scratch buffer
 (defun print-var-to-scratch-buffer (var)
   (interactive)
   (with-current-buffer "*scratch*"
@@ -2503,27 +2557,27 @@ region, clear header."
   )
 
 
-;;* git-save
+;; * git-save
 
 ;; (defun git-save ()
 ;;   (interactive)
-;;   ;;* update
+;;   ;; * update
 
 ;;   )
 
 
-;;* async-await (needed to be able to wait for "external" shell commands)
+;; * async-await (needed to be able to wait for "external" shell commands)
 (use-package async-await
   :ensure t
   )
 
-;;* async process behaviour
-;;** turn off 'pop-up' of the *Async Shell Command* buffer
+;; * async process behaviour
+;; ** turn off 'pop-up' of the *Async Shell Command* buffer
 (add-to-list 'display-buffer-alist
   (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 
 
-;;* stopwatch
+;; * stopwatch
 ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
 
 

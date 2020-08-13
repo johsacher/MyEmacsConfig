@@ -131,7 +131,7 @@
 **** demo of all features in one document.
 ** "killer argument 2": data is PURE text files
 *** something which no proprietary program wants, but it IS the best for the user
-*** you can version control it with git (super good advantage)
+*** you can version control it with git (super good advantage), --> super fast incremental synchronization (often just a few lines in a text-file, images and others are separated, all images are saved again for each backup, in contrast to e.g. ms-word-files)
 *** lightning fast full text search. google and co. demonstrate: quick searching and finding information is one of most crucial aspects of our evermore information-driven world - and plain text search beats anything. further: there are superb (free) tools that absolutely excel at that job --> e.g. ripgrep (linux-philosophy -> combine tools from anywhere)
 *** you can read org files understandably even without emacs (!)
 ** "killer argument 3": it s free software.
@@ -163,6 +163,8 @@
 ***** current clocked activity automatically in mode-line 
 ** my own "org-mode-extension" for scheduling days/weeks with todos and appointments: planet-mode (on github) --> quick demo
 
+** other goodie: outshine-mode: navigate your code with org-mode behaviour (all your workflow available)
+*** code collapsing/expansion at your finger-tips, very usefull for long scripts/code. -> example: my configuration script / matlab blockMeshBuilder / etc.
 * conclusion 1:  the power of emacs: when you work on all text-files in emacs, you keep your customized/automized/efficient workflow in EVERY programming language / project
 * last but not least - Emacs and all this stuff is working also in a terminal mode - in ssh connections!
 ** very economic band width --> "e.g. working when you re in a hostel with shitty internet"
