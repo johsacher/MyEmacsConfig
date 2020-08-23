@@ -1165,6 +1165,10 @@ from lines like:
                 (and size (prefix-numeric-value size))
                 direction))
 
+(defun my-split-root-window-above (&optional size)
+  (interactive "P")
+  (my-split-root-window size 'above))
+
 (defun my-split-root-window-below (&optional size)
   (interactive "P")
   (my-split-root-window size 'below))
