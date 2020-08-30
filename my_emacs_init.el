@@ -1165,10 +1165,6 @@ from lines like:
                 (and size (prefix-numeric-value size))
                 direction))
 
-(defun my-split-root-window-above (&optional size)
-  (interactive "P")
-  (my-split-root-window size 'above))
-
 (defun my-split-root-window-below (&optional size)
   (interactive "P")
   (my-split-root-window size 'below))
@@ -2623,56 +2619,3 @@ region, clear header."
   ;; * paste content
   (insert ssh-clipboard-content)
   )
-
-
-;; * frequently used unicode characters
-;; ** docu/instruction -> how to get the code of a character
-;;    - copy the symbol (e.g. from browser) to an emacs buffer 
-;;    - type C-x = , -> it will give you the unicode number in decimal/octal/hex
-;;      e.g. for ↯ -> minibuffer: Char ↯ (8623, #o20657, #x21af, file, ... ) 
-;;                                         ^        ^       ^
-;;                                         |        |       |
-;;                                       decimal  octal   hexadecimal
-;;                                       (8623)   (20657   (21af)
-;;    - how to print it with elisp?
-;;      -- use hexadecimal value:  (insert "\u21af"), mind: always 4 chars, preceed with 0's e.g. for 'a' (61) --> (insert "\u0061")
-;;      -- use decimal value:
-;; ** background on unicode and UTF-8
-;;    - utf-8 DOES not (generally) have 8 bits
-;;    - it is a "variable-width character encoding" (wikipedia)
-;;    - that means, it uses either 1 byte (8 bits) , or 2 bytes (16 bits), or 3 bytes(24 bits), or 4 bytes. 
-;;      -- 1 byte : 0xxxxxxx                             -> all 128 ascii characters
-;;      -- 2 bytes: 110xxxxx 10xxxxxx                    -> latin, greek, arabic, hebrew, etc. 
-;;      -- 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx           -> chinese, japanese, etc.
-;;      -- 4 bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx  -> grinning cats, etc.
-;;    - a bit of "human-machine-confusion" -> read number/bytes "left to right" or "right to left" ???
-;;      -- first of all "right to left - thinking" can be misleading. it s coming from when we count from low to high numbers -> then we go right to left:  001, 002, 003, etc. or in binary: 001,010,011,100,101,etc.
-;;      -- however "counting-direction" does not have to be "read-direction", i think the read direction is from left to right. i.e. when reading 0xxxxxxx, we first read the "1st" bit. and it immediately tells us that we have an ASCII character.
-;;      -- so the most significant bits "IN ONE BYTE" are the first ones
-;;      -- one byte is counted "right to left" as we know it from decimal, i.e. 00000001 = 1, 00000010 = 2, etc.
-;;      -- however, when it comes to "READING MULTIPLE BYTES" the "SIGNIFICANCE HIERARCHY IS REVERSE (!!!)
-;;      -- i.e. the "1st byte" is the "LEAST SIGNIFICANT BYTE" (!!!)
-;;      -- fazit: this is great for UTF-8 reading efficiency -> we immediately know if we re dealing with ascii from the first bit (!)
-;;          BUT: the "REAL" binary number would be BYTE4 BYTE3 BYTE2 BYTE1 (!)
-;;          so: composing the real number of an UTF8-character, we d have to reverse order these bytes.
-;;    - so NOT ALL possible numbers of 4 bytes (= (2**8)**4 = 4,294,967,296 ) are used
-;;    - so the total number of characters is: 2**7 + 2**(5+6) + 2**(4+6+6) + 2**(3+6+6+6) = 2.16 Mio characters, this is sufficient for all currently valid registered unicode characters (=1.11 Mio)
-;;    - because only some "x's" are left free. but by this the leading bits of the bytes can be used to predetermine if we re dealing with ascii (1 byte), latin (2 bytes), asian (3 bytes), or extra stuff (4 bytes).
-;;    - it is backward compatible with ASCII (first 128 characters, i.e. first 7 bits) are equal to ascii. so EVERY ASCII test is VALID UTF-8-encoded unicode AS WELL(!).
-;;    - how to enter in emacs:
-;;    -- 1 byte or 2 byte unicode character --> use "\u<byte2><byte1> always type TWO (!) bytes, that means precede "00" when ascii.
-;;                                       (insert "\u <2nd byte as two hex> <1st byte as two hex> )
-;;                                       e.g. for 'a' (insert "\u0061")
-;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
-;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
-;; ** contradiction ↯
-a
-(defun insert-char-contradiction ()
-  (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000021af")
-  )
-
-
-
