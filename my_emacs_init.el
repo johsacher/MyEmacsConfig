@@ -1038,7 +1038,12 @@ from lines like:
 ;; this did work:
 (evil-set-initial-state 'term-mode 'emacs)
 
-;; +) tramp connection to hlrn (fast command)
+;; ** tramp connection to hlrn (fast command)
+;; *** still have problem that it hangs on "waiting for prompts from remote shell..." 
+;; -> could not solve it, tried like this
+;; (exec-path-from-shell-initialize)
+;; (setq exec-path-from-shell-check-startup-files nil)
+;; (setq exec-path-from-shell nil)
 (load "hlrn_tramp_connect.el")
 ;; --> includes hlrn_tramp_home / hlrn_tramp_work1 / hlrn_tramp_work2
 
@@ -2666,7 +2671,6 @@ region, clear header."
 ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
 ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
 ;; ** contradiction ↯
-a
 (defun insert-char-contradiction ()
   (interactive)
   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))

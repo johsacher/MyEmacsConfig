@@ -1,8 +1,22 @@
 (defun hlrn-home-tramp ()
   (interactive)
-  (find-file "/ssh:blogin:/home/b/beijsach")
+  (find-file "/ssh:blogin:/home/beijsach")
 )
 
+(defun hlrn-work-tramp ()
+  (interactive)
+  (find-file "/ssh:blogin:/scratch/usr/beijsach")
+)
+
+(defun hlrn-work-tramp-sshx ()
+  (interactive)
+  (find-file "/sshx:blogin:/scratch/usr/beijsach")
+)
+
+(defun hlrn-work-tramp-scp ()
+  (interactive)
+  (find-file "/scp:blogin:/scratch/usr/beijsach")
+)
 
 (defun hlrn-goettingen-home-tramp ()
   (interactive)
@@ -15,10 +29,6 @@
 )
 
 
-(defun hlrn-work1-tramp ()
-  (interactive)
-  (find-file "/ssh:blogin:/gfs1/work/beijsach")
-)
 		 
 (defun hlrn-work2-tramp ()
   (interactive)
