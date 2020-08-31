@@ -2,18 +2,26 @@
 ;; ** better mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
+;; * debug on start-up
+(setq debug-only-on-start-up t)
+(if debug-only-on-start-up
+  (setq debug-on-error t)
+  )
+
 ;; * general requirement: use-package and quelpa-use-package
 ;; ** use-package
 (require 'use-package)
 ;; ** quelpa-usapackage -> enables you to update source of package from github and recompile on the fly by adding ":quelpa" key-word to use-package:  "(use-package <package-name> :quelpa <other stuff>)
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
-
-;; * debug on start-up
-;; (toggle-debug-on-error)
+;; (setq myhost (getenv "MYHOST"))
+;; (cond 
+;;  ((equal myhost "phone") (message "on phone -> quelpa not set"))
+;;  (t (progn
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher git
+;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
+;; (require 'quelpa-use-package)
+;; )))
 
 ; overlay an arrow where the mark is
   (defvar mp-overlay-arrow-position)
@@ -966,9 +974,18 @@ from lines like:
 ;; *** "***heading" -> "*** heading"
  ;; " s/\(\*++\)\([^ *]\{1\}\)/; \1 \2/g")
 ;; *** "%%*" --> "%% *"
+;; (setq myhost (getenv "MYHOST"))
+;; (cond 
+;;  ((equal myhost "phone") (message "on phone -> quelpa not set"))
+;;  (t (progn
+;;       (message "no phone")
+;;       (use-package outshine
+;; 	:quelpa (outshine :fetcher github :repo "alphapapa/outshine"))
+;;       )))
 
-(use-package outshine
-  :quelpa (outshine :fetcher github :repo "alphapapa/outshine"))
+
+
+
 
 (setq my-black "#1b1b1e")
 ;; (custom-theme-set-faces
@@ -984,6 +1001,9 @@ from lines like:
 ;;; * term / terminal / ansi-term
 ;; ** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
+
+
+;;
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
 (evil-leader/set-key "7" 'stickyterm-noninteractive)
@@ -1022,7 +1042,6 @@ from lines like:
   (evil-emacs-state)
   (term-char-mode)
   )
-
 ;; ** evil term
  (evil-define-key 'normal term-raw-map (kbd "RET") 'term-send-raw)
  (evil-define-key 'normal term-raw-map (kbd "h") 'term-send-left)
@@ -1030,6 +1049,16 @@ from lines like:
  (evil-define-key 'normal term-raw-map (kbd "k") 'term-send-up)
  (evil-define-key 'normal term-raw-map (kbd "j") 'term-send-down)
  (evil-define-key 'normal term-raw-map (kbd "x") 'term-send-del)
+
+;; ** term color theme
+;; (how did I get it from customization? -> customized in menue, then copied from custem.el ("custom-set-faces ...") and formatted 
+(set-face-attribute 'term nil :background "black" :foreground "white")
+;; (set-face-attribute 'term-color-back nil :background "black" :foreground "white")
+;; (set-face-attribute 'term-bold nil :background "black")
+(set-face-attribute 'term-color-white nil :background "black" :foreground "white")
+(set-face-attribute 'term-color-blue nil :background "#5fafd7" :foreground "#5fafd7")
+(set-face-attribute 'term-color-green nil :background "#a1db00" :foreground "#a1db00")
+
 
 ;; *** make initial state for term emacs-state
 ;; this did not work:
@@ -1223,7 +1252,7 @@ from lines like:
 
 
 
-;;; * ) CHOOSE COLOR THEMES ;;;;;;;;;;;;;
+;;; * general COLOR THEMES ;;;;;;;;;;;;;
 (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-loccal --> not working)
 
 (require 'color-theme)
@@ -1239,7 +1268,13 @@ from lines like:
 (require 'color-theme-buffer-local)
 ;; use the following as templates
 
+;; ** personal (general) customization of faces (comments light green, etc.)
+(set-face-attribute 'font-lock-comment-face nil :foreground "light green")
+(set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
+(set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
 
+
+;; **
 (if color-theme-buffer-local-switch
     (add-hook 'text-mode-hook
               (lambda nil (color-theme-buffer-local 'color-theme-feng-shui (current-buffer))))
@@ -1555,7 +1590,8 @@ from lines like:
 ;;; .) this worked! :
 ;;       *  manipulated the ansi-term function in term.el
 ;;       * included a (sticky-buffer-mode) there
-;;       * deleted the term.elc file (not sure if this was necessary)
+;;       * dele
+;;       ted the term.elc file (not sure if this was necessary)
 ;;       * renamed to mod_term.el and put to my load path (on dropbox)
 ;;       * --> this effectively overwrites the usual term.el
 ;;       * --> available for all my emacs computers
@@ -1623,6 +1659,7 @@ from lines like:
 ;;; * matlab
 
 
+
 ;;; ** Matlab matlab-emacs project;;
 load-path
 (setq path_to_matlab_emacs (concat my_load_path "matlab-emacs-src")) ;; the init file folder contains also all manual packages
@@ -1645,6 +1682,9 @@ load-path
 
 (add-hook 'matlab-mode-hook
  	     (lambda nil (auto-fill-mode -1)))
+
+;; ** personal color theme manipulation
+(set-face-attribute 'matlab-unterminated-string-face t :foreground "dark blue" :underline t)
 
 
 ;; tweak matlab key map 
@@ -2526,14 +2566,14 @@ region, clear header."
     )
   )
 
-(defun dummy-fun (arg)
-  (interactive)
-  ;; ;; (message org-structure-template-alist)
-  ;; (setq name_str "org-structure-template-alist")
-  ;; (setq x (intern-soft name_str))
-  ;; (message (symbol-value x))
-  (message arg)
-  )
+;; (defun dummy-fun (arg)
+;;   (interactive)
+;;   ;; ;; (message org-structure-template-alist)
+;;   ;; (setq name_str "org-structure-template-alist")
+;;   ;; (setq x (intern-soft name_str))
+;;   ;; (message (symbol-value x))
+;;   (message arg)
+;;   )
 
 
 (debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
@@ -2673,3 +2713,28 @@ region, clear header."
   (insert "\U000021af")
   )
 
+
+
+;; * termux android
+(defun my-phone-number-to-clipboard ()
+  (interactive)
+  (setq my-phone-number "+4917657657978870")
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
+
+;; * auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+(set-face-attribute 'ac-selection-face t :background "deep sky blue" :foreground "black")
+
+(set-face-attribute 'popup-menu-selection-face t :inherit 'default :background "cyan" :foreground "black")
+(set-face-attribute 'popup-scroll-bar-foreground-face t :background "deep sky blue")
+
+
+
+
+;; * if debug on start-up (-> disable now debug for session)
+(if debug-only-on-start-up
+  (setq debug-on-error nil)
+  )
