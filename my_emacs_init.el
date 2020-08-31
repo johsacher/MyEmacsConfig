@@ -6,12 +6,16 @@
 ;; ** use-package
 (require 'use-package)
 ;; ** quelpa-usapackage -> enables you to update source of package from github and recompile on the fly by adding ":quelpa" key-word to use-package:  "(use-package <package-name> :quelpa <other stuff>)
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
-
+;; (setq myhost (getenv "MYHOST"))
+;; (cond 
+;;  ((equal myhost "phone") (message "on phone -> quelpa not set"))
+;;  (t (progn
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher git
+;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
+;; (require 'quelpa-use-package)
+;; )))
 ;; * debug on start-up
 ;; (toggle-debug-on-error)
 
@@ -966,9 +970,18 @@ from lines like:
 ;; *** "***heading" -> "*** heading"
  ;; " s/\(\*++\)\([^ *]\{1\}\)/; \1 \2/g")
 ;; *** "%%*" --> "%% *"
+;; (setq myhost (getenv "MYHOST"))
+;; (cond 
+;;  ((equal myhost "phone") (message "on phone -> quelpa not set"))
+;;  (t (progn
+;;       (message "no phone")
+;;       (use-package outshine
+;; 	:quelpa (outshine :fetcher github :repo "alphapapa/outshine"))
+;;       )))
 
-(use-package outshine
-  :quelpa (outshine :fetcher github :repo "alphapapa/outshine"))
+
+
+
 
 (setq my-black "#1b1b1e")
 ;; (custom-theme-set-faces
@@ -2015,396 +2028,273 @@ load-path
 (setq TeX-view-program-selection '((output-pdf "Okular")))
 (setq TeX-source-correlate-mode t)
 
-;; ** make more easy/natural to read
-;; *** break lines naturally
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)  
-;; *** (did not work out) show prose in block text, more easy/natural to read (--> auto-fill-mode)
-;; (add-hook 'LaTeX-mode-hook 'auto-fill-mode)  
+;; ;; ** make more easy/natural to read
+;; ;; *** break lines naturally
+;; (add-hook 'LaTeX-mode-hook 'visual-line-mode)  
+;; ;; *** (did not work out) show prose in block text, more easy/natural to read (--> auto-fill-mode)
+;; ;; (add-hook 'LaTeX-mode-hook 'auto-fill-mode)  
 
-;;; ** reftex
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
-(setq reftex-plug-into-AUCTeX t)
-;;
-(setq reftex-cite-format 'natbib)
+;; ;;; ** reftex
+;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+;; (setq reftex-plug-into-AUCTeX t)
+;; ;;
+;; (setq reftex-cite-format 'natbib)
 
-(setq reftex-refstyle "\\autoref")
+;; (setq reftex-refstyle "\\autoref")
 
-;;; ** aspell
-(setq-default ispell-program-name "aspell")
-;(setq ispell-program-name "aspell") 
-     ; could be ispell as well, depending on your preferences ;
-(setq ispell-dictionary "english") ;
-     ; this can obviously be set to any language your spell-checking program supports
+;; ;;; ** aspell
+;; (setq-default ispell-program-name "aspell")
+;; ;(setq ispell-program-name "aspell") 
+;;      ; could be ispell as well, depending on your preferences ;
+;; (setq ispell-dictionary "english") ;
+;;      ; this can obviously be set to any language your spell-checking program supports
 
-;; (add-hook 'LaTeX-mode-hook 'flyspell-mode) 
-;; (add-hook 'LaTeX-mode-hook 'flyspell-buffer)
-
-
-;;; flymake
-;(require 'flymake)
-;
-;(defun flymake-get-tex-args (file-name) (list "pdflatex" 
-;    (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
-;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+;; ;; (add-hook 'LaTeX-mode-hook 'flyspell-mode) 
+;; ;; (add-hook 'LaTeX-mode-hook 'flyspell-buffer)
 
 
-;;; My personal redefinition of menu-item appearance (before i could not see
-  ; the filenames since the path s were so long)
-(defsubst recentf-make-default-menu-element (file)
-  "Make a new default menu element with FILE.
-This a menu element (FILE . FILE)."
-  (setq menu-item-string (format "%s" (file-name-nondirectory file)))
-  (recentf-make-menu-element menu-item-string file))
+;; ;;; flymake
+;; ;(require 'flymake)
+;; ;
+;; ;(defun flymake-get-tex-args (file-name) (list "pdflatex" 
+;; ;    (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+;; ;(add-hook 'LaTeX-mode-hook 'flymake-mode)
 
-;; ** misc settings
-     (setq TeX-parse-self t) ; Enable parse on load.
-     (setq TeX-auto-save t) ; Enable parse on save.
-     (setq TeX-save-query nil) ; Dont ask if to save every time, just save and run LaTeX
 
-;;(require 'tex-mik)
-(setq TeX-PDF-mode t) ; pdf mode (for preview latex would need to be true, but preview latex currently not used)
+;; ;;; My personal redefinition of menu-item appearance (before i could not see
+;;   ; the filenames since the path s were so long)
+;; (defsubst recentf-make-default-menu-element (file)
+;;   "Make a new default menu element with FILE.
+;; This a menu element (FILE . FILE)."
+;;   (setq menu-item-string (format "%s" (file-name-nondirectory file)))
+;;   (recentf-make-menu-element menu-item-string file))
+
+;; ;; ** misc settings
+;;      (setq TeX-parse-self t) ; Enable parse on load.
+;;      (setq TeX-auto-save t) ; Enable parse on save.
+;;      (setq TeX-save-query nil) ; Dont ask if to save every time, just save and run LaTeX
+
+;; ;;(require 'tex-mik)
+;; (setq TeX-PDF-mode t) ; pdf mode (for preview latex would need to be true, but preview latex currently not used)
 	
-(setq-default TeX-master nil) ; Query for master file.
+;; (setq-default TeX-master nil) ; Query for master file.
 
-;;; ** my latex-editing functions
-(defun include-input-toggle ()
-"This function toggles between include and input"
-(interactive)
-      (let ((occured) 
-                      )
-         (save-excursion
-              (beginning-of-buffer)
-              (while (search-forward "\include{"  nil t)
-                     (replace-match "\input{" nil t)
-		     (setq occured t)
-              )
-              (if (eq occured nil)
-               (while (search-forward "\input{"  nil t)
-                     (replace-match "\include{" nil t)
-		     (setq occured t)
-                )		 
-              )		  
-         )
-      occured
-      )
-)
-(defun view-with-texworks ()
-"This function opens the main pdf file of the LaTeX-project with texworks."
-(interactive)
-(shell-command "texworks c:/Users/Joe/Documents/Beruf/PUC/'Trabajo de investigacion'/Studienarbeit/Alembic_Final_Report.pdf"))
-;; 
-
-
-
-(defun eps-convert-all-in-folder ()
-  (interactive)
-  (setq pnglist (directory-files (file-name-directory buffer-file-name) nil "\\.png"))
-  (dolist (pngfile pnglist)
-    (setq filename (file-name-sans-extension pngfile))
-    (shell-command (format "sam2p %s.png %s.eps" filename filename))
-    ;; sam2p image.png image.eps
-    )
-
-  (setq jpglist (directory-files (file-name-directory buffer-file-name) nil "\\.jpg"))
-  (dolist (jpgfile jpglist)
-    (setq filename (file-name-sans-extension jpgfile))
-    (shell-command (format "sam2p %s.jpg %s.eps" filename filename))
-    ;; sam2p image.jpg image.eps
-    )
-
-  (setq pdflist (directory-files (file-name-directory buffer-file-name) nil "\\.pdf"))
-  (dolist (pdffile pdflist)
-    (setq filename (file-name-sans-extension pdffile))
-    (if (not (string-match "eps-converted-to" filename)) ;;unless is conversion of latex's "pdftoeps"-package
-	(shell-command (format "sam2p %s.pdf %s.eps" filename filename))
-      ;; sam2p image.pdf image.eps
-      )
-    )
-)
-
-(defun eps-convert-file (file)  ;;requires installation and path-variable-entry for "nircmd" program
-  (interactive)
-  (shell-command (format "sam2p %s %s.eps" file (file-name-sans-extension file)))
-)
-
-(defun paste-image-latex ()
-(interactive)
-(setq label (read-string "Image label and file name: "))
-(shell-command (format "nircmd clipboard saveimage %s.png" label))
-(eps-convert-file (format "%s.png" label))
-(setq caption (read-string "Caption: "))
-(setq begin (point)) ;; save beginning
-(insert "\\" "begin{figure}[H]\n"
- 	"\\" "centering\n"
-	"\\" "includegraphics[keepaspectratio, height=150pt]{" label "}\n"
-	"\\" "caption{" caption "}\n"
-	"\\" "label{fig:" label "}\n"
-	"\\" "end{figure}\n" )
-(setq end (point)) ;; save end
-(preview-region begin end)
-)
-
-(global-set-key (kbd "<f9>") 'paste-image-latex)
-
-;;; *** Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
-(defun insert-latex-environment-align ()
-(interactive)
-(LaTeX-environment-menu "align")
-)
-(global-set-key (kbd "C-S-a") 'insert-latex-environment-align)
-
-(defun insert-latex-environment-equation ()
-(interactive)
-(LaTeX-environment-menu "equation")
-)
-(global-set-key (kbd "C-S-e") 'insert-latex-environment-equation)
-
-(defun insert-latex-environment-alignstar ()
-(interactive)
-(LaTeX-environment-menu "align*")
-)
-(global-set-key (kbd "C-c a") 'insert-latex-environment-alignstar)
-
-
-(defun insert-latex-environment-alignstar ()
-(interactive)
-(LaTeX-environment-menu "flalign*")
-)
-(global-set-key (kbd "C-c f") 'insert-latex-environment-alignstar)
-
-
-(defun insert-latex-environment-equationstar ()
-(interactive)
-(LaTeX-environment-menu "equation*")
-)
-(global-set-key (kbd "C-c e") 'insert-latex-environment-equationstar)
+;; ;;; ** my latex-editing functions
+;; (defun include-input-toggle ()
+;; "This function toggles between include and input"
+;; (interactive)
+;;       (let ((occured) 
+;;                       )
+;;          (save-excursion
+;;               (beginning-of-buffer)
+;;               (while (search-forward "\include{"  nil t)
+;;                      (replace-match "\input{" nil t)
+;; 		     (setq occured t)
+;;               )
+;;               (if (eq occured nil)
+;;                (while (search-forward "\input{"  nil t)
+;;                      (replace-match "\include{" nil t)
+;; 		     (setq occured t)
+;;                 )		 
+;;               )		  
+;;          )
+;;       occured
+;;       )
+;; )
+;; (defun view-with-texworks ()
+;; "This function opens the main pdf file of the LaTeX-project with texworks."
+;; (interactive)
+;; (shell-command "texworks c:/Users/Joe/Documents/Beruf/PUC/'Trabajo de investigacion'/Studienarbeit/Alembic_Final_Report.pdf"))
+;; ;; 
 
 
 
-(defun insert-latex-environment-figure ()
-(interactive)
-   (setq full-image-file-name (read-file-name "Select image file: "))
-   (setq bare-image-file-name (file-name-nondirectory (file-name-sans-extension full-image-file-name)))
-(setq image-file-name (file-name-nondirectory full-image-file-name))
-(setq image-rel-file-name (file-relative-name full-image-file-name default-directory)) 
-(eps-convert-file image-file-name);; convert to eps for preview
-;;(setq caption (read-string "Caption: "))
-(setq begin (point)) ;; save beginning
-(insert "\\" "begin{figure}[H]\n"
- 	"\\" "centering\n"
-	"\\" "includegraphics[keepaspectratio,height=150pt]{" image-rel-file-name "}\n"
-	"\\" "caption{ }\n"
-	"\\" "label{fig:" bare-image-file-name "}\n"
-	"\\" "end{figure}\n" )
-(setq end (point)) ;; save end
-(reftex-parse-all)  ;; parse reftex so that it can be referred to directly
-;(preview-region begin end)
-)
-(global-set-key (kbd "C-S-f") 'insert-latex-environment-figure)
+;; (defun eps-convert-all-in-folder ()
+;;   (interactive)
+;;   (setq pnglist (directory-files (file-name-directory buffer-file-name) nil "\\.png"))
+;;   (dolist (pngfile pnglist)
+;;     (setq filename (file-name-sans-extension pngfile))
+;;     (shell-command (format "sam2p %s.png %s.eps" filename filename))
+;;     ;; sam2p image.png image.eps
+;;     )
 
-(defun insert-latex-environment-table ()
-(interactive)
-(LaTeX-environment-menu "table")
-)
-(global-set-key (kbd "C-S-t") 'insert-latex-environment-table)
+;;   (setq jpglist (directory-files (file-name-directory buffer-file-name) nil "\\.jpg"))
+;;   (dolist (jpgfile jpglist)
+;;     (setq filename (file-name-sans-extension jpgfile))
+;;     (shell-command (format "sam2p %s.jpg %s.eps" filename filename))
+;;     ;; sam2p image.jpg image.eps
+;;     )
 
-;; * misc
-;; quickly add relative path of some file
-(defun find-file-insert-relative-path ()
-(interactive)
- (setq file-name (read-file-name "Select file: "))
-(setq rel-path (file-relative-name file-name))
-(insert rel-path)
-)
+;;   (setq pdflist (directory-files (file-name-directory buffer-file-name) nil "\\.pdf"))
+;;   (dolist (pdffile pdflist)
+;;     (setq filename (file-name-sans-extension pdffile))
+;;     (if (not (string-match "eps-converted-to" filename)) ;;unless is conversion of latex's "pdftoeps"-package
+;; 	(shell-command (format "sam2p %s.pdf %s.eps" filename filename))
+;;       ;; sam2p image.pdf image.eps
+;;       )
+;;     )
+;; )
 
-;;; * c++
+;; (defun eps-convert-file (file)  ;;requires installation and path-variable-entry for "nircmd" program
+;;   (interactive)
+;;   (shell-command (format "sam2p %s %s.eps" file (file-name-sans-extension file)))
+;; )
 
-;; ** c++ -mode key bindings consistent (overwrite)
-(define-key c++-mode-map "\M-k" 'windmove-up)
-(define-key c++-mode-map "\M-h" 'windmove-left)
-(define-key c++-mode-map "\M-l" 'windmove-right)
-(define-key c++-mode-map "\M-j" 'windmove-down)
+;; (defun paste-image-latex ()
+;; (interactive)
+;; (setq label (read-string "Image label and file name: "))
+;; (shell-command (format "nircmd clipboard saveimage %s.png" label))
+;; (eps-convert-file (format "%s.png" label))
+;; (setq caption (read-string "Caption: "))
+;; (setq begin (point)) ;; save beginning
+;; (insert "\\" "begin{figure}[H]\n"
+;;  	"\\" "centering\n"
+;; 	"\\" "includegraphics[keepaspectratio, height=150pt]{" label "}\n"
+;; 	"\\" "caption{" caption "}\n"
+;; 	"\\" "label{fig:" label "}\n"
+;; 	"\\" "end{figure}\n" )
+;; (setq end (point)) ;; save end
+;; (preview-region begin end)
+;; )
 
+;; (global-set-key (kbd "<f9>") 'paste-image-latex)
 
-;;; * openfoam 
-(defun openfoam-dired-tutorials ()
-   (interactive)
-   (dired "/opt/OpenFOAM-6/tutorials")
-)
-(defun openfoam-dired-applications ()
-   (interactive)
-   (dired "/opt/OpenFOAM-6/applications")
-)
-(defun openfoam-dired-src ()
-   (interactive)
-   (dired "/opt/OpenFOAM-6/src")
-)
+;; ;;; *** Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
+;; (defun insert-latex-environment-align ()
+;; (interactive)
+;; (LaTeX-environment-menu "align")
+;; )
+;; (global-set-key (kbd "C-S-a") 'insert-latex-environment-align)
 
-;;Grosses Fazit:
-; konnte nicht shell-environment (bash_profile oder bashrc) in emacs-shell-prozess ausfuehren
-; hab s nicht hinbekommen login-option mitauszufuehren
-; --> Umweg ueber Emacs-interactive *shell*, eigene funktionen kopieren zeilen dort rein und fuehren sie aus
-; der ganze andere kram wird nicht mehr gebraucht
+;; (defun insert-latex-environment-equation ()
+;; (interactive)
+;; (LaTeX-environment-menu "equation")
+;; )
+;; (global-set-key (kbd "C-S-e") 'insert-latex-environment-equation)
 
-
-; purpose: execute shell-script in emacs line by line with <f3>
-; or execute region in script with <f4>
-; with emacs invoked shell "knowing" the openfoam environment
-; change openfoam version specific environment by changing value of variable ofvers 
-; 
-; prerequesite: the value of ofvers has to be implemented in ./bashrc as a function that sources the openfoam-version-environment
-; e.g. of240() { source /opt/openfoam240/etc/bashrc ; }  
-; the alias-method does not work in executed scripts (effectively happening here) and is supposed to be outdated by shell-functions anyway, so better use function
-;
-; explanation of implementation:
-; the function sh-execute-region (defined in the sh-mode) has been modified, in order to not only execute region, but additionally source the openfoam-environment, see below.
-; 
-; what i learned as background:
-" sh-command-on-region          is implemented in sh-mode, uses shell-command-on-region, 
-                                with some extra stuff, did not understand this extra stuff
-                                but probably is usefull, so i decided to use/modify this function
-
-  shell-command-on-region       uses effectively call-process-region
-                                also has some additional stuff, i did not really understand,
-                                but prob. usefull, defined in lisp/simple.el
-
-  call-process-region          uses call-process, before creates some temporary file, where all the
-                                region is loaded and given as input to call-process
-
-  call-process                  is C-written elementary function, launching a shell-program, executing
-                                an input file
-
-  FAZIT: i only had a chance to add sth to the region, because luckily shell-command-on-region can interpret alternatively the first argument start in (start end) as a string, so end will be ignored.
-this way i could pack my string together (with concat) and pass it.
-so no need to modify the shell-command-on-region or write my own temporary file (write my own call-process-region, ooh my gosh...!)"
-
-(setq ofvers "of240")
-
-(defun sh-execute-region-openfoam (start end &optional flag)
-  "Pass optional header and region to a subshell for noninteractive execution.
-The working directory is that of the buffer, and only environment variables
-are already set which is why you can mark a header within the script.
-
-With a positive prefix ARG, instead of sending region, define header from
-beginning of buffer to point.  With a negative prefix ARG, instead of sending
-region, clear header."
-  (interactive "r\nP")
-  (if flag
-      (setq sh-header-marker (if (> (prefix-numeric-value flag) 0)
-				 (point-marker)))
-    (if sh-header-marker
-	(save-excursion
-	  (let (buffer-undo-list)
-	    (goto-char sh-header-marker)
-	    (append-to-buffer (current-buffer) start end)
-	    (shell-command-on-region (point-min)
-				     (setq end (+ sh-header-marker
-						  (- end start)))
-				     sh-shell-file)
-	    (delete-region sh-header-marker end)))
-     (setq regionstring (buffer-substring start end)) 
-     (setq start (concat ofvers "\n" regionstring) )
-     (shell-command-on-region start end "bash -l" ))) ;; If start is a string, then write-region writes or appends that string, rather than text from the buffer. end is ignored in this case. 
-)                                      ;;  bash with -l option --> login --> so it will read .bash_profile (--> includes bashrc) --> so the openfoam-environment sourcing functions are known
-
-;;; ** shell workflow openfoam
-;;; send to noninteractive shell (not "so" usefull, only for whole loops 
-(defun sh-execute-line-openfoam ()
-(interactive)
-(move-beginning-of-line nil)
-(setq beginofline (point))
-(move-end-of-line nil)
-(setq endofline (point))
-(sh-execute-region-openfoam beginofline endofline)
-)
-
-(defun sh-send-region-to-shell ()
-(interactive)
-(setq regionstring (buffer-substring (region-beginning) (region-end)))
-(setq sendstring (concat regionstring "\n"))
-;(message sendstring)
-(setq start sendstring)
-(append-to-buffer "*shell*" start end)
-)
+;; (defun insert-latex-environment-alignstar ()
+;; (interactive)
+;; (LaTeX-environment-menu "align*")
+;; )
+;; (global-set-key (kbd "C-c a") 'insert-latex-environment-alignstar)
 
 
-;; modified function from append-to-buffer
+;; (defun insert-latex-environment-alignstar ()
+;; (interactive)
+;; (LaTeX-environment-menu "flalign*")
+;; )
+;; (global-set-key (kbd "C-c f") 'insert-latex-environment-alignstar)
 
-(defun send-string-to-shell-buffer-and-execute (sendstring)
-  "execute region line by line in interactive shell (buffer *shell*)."
-  (interactive)
-    ; get region into string
-    (save-excursion
-      (set-buffer (get-buffer-create "*shell*")) 
-     (end-of-buffer)
-     (insert sendstring)
-     (comint-send-input) ;; execute
-     (end-of-buffer)
-    )
-)
 
-(defun send-scriptname-to-shell-buffer-and-execute ()
-  "execute region line by line in interactive shell (buffer *shell*)."
-  (interactive)
-  (save-buffer)
-    ; get script name (has to be done before save-excursion, since he then quits buffer)
-    (setq scriptname (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))
-    (save-excursion
-      (set-buffer (get-buffer-create "*shell*")) 
-     (end-of-buffer)
-     (insert (concat "./" scriptname))
-     (comint-send-input) ;; execute
-    )
-)
+;; (defun insert-latex-environment-equationstar ()
+;; (interactive)
+;; (LaTeX-environment-menu "equation*")
+;; )
+;; (global-set-key (kbd "C-c e") 'insert-latex-environment-equationstar)
 
-(defun send-current-line-to-shell-buffer-and-execute ()
-(interactive)
-(move-beginning-of-line nil)
-(setq beginofline (point))
-(move-end-of-line nil)
-(setq endofline (point))
-(setq currentlinestring (buffer-substring beginofline endofline))
 
-(send-string-to-shell-buffer-and-execute currentlinestring)
-)
 
-(defun send-current-region-line-by-line-to-shell-buffer-and-execute ()
-(interactive)
-   (save-excursion
-     ; get line numbers of region beginning/end
-     (setq beginning_line_number (line-number-at-pos (region-beginning)))
-     (setq ending_line_number (line-number-at-pos (region-end)))
-  
-    (setq current_line_number beginning_line_number)
-    (goto-line beginning_line_number)
-    ;(message (format "%i" current_line_number) )
-      (while (< current_line_number ending_line_number)
-          (setq current_line_number (line-number-at-pos (point)))
-          (message (format "%i" current_line_number) )
-          (forward-line)
-          (send-current-line-to-shell-buffer-and-execute)
-      )
-    )
-)
+;; (defun insert-latex-environment-figure ()
+;; (interactive)
+;;    (setq full-image-file-name (read-file-name "Select image file: "))
+;;    (setq bare-image-file-name (file-name-nondirectory (file-name-sans-extension full-image-file-name)))
+;; (setq image-file-name (file-name-nondirectory full-image-file-name))
+;; (setq image-rel-file-name (file-relative-name full-image-file-name default-directory)) 
+;; (eps-convert-file image-file-name);; convert to eps for preview
+;; ;;(setq caption (read-string "Caption: "))
+;; (setq begin (point)) ;; save beginning
+;; (insert "\\" "begin{figure}[H]\n"
+;;  	"\\" "centering\n"
+;; 	"\\" "includegraphics[keepaspectratio,height=150pt]{" image-rel-file-name "}\n"
+;; 	"\\" "caption{ }\n"
+;; 	"\\" "label{fig:" bare-image-file-name "}\n"
+;; 	"\\" "end{figure}\n" )
+;; (setq end (point)) ;; save end
+;; (reftex-parse-all)  ;; parse reftex so that it can be referred to directly
+;; ;(preview-region begin end)
+;; )
+;; (global-set-key (kbd "C-S-f") 'insert-latex-environment-figure)
 
-(defun send-current-line-or-region-line-by-line-to-shell-buffer-and-execute ()
-(interactive)
-   (if (use-region-p)
-     (send-current-region-line-by-line-to-shell-buffer-and-execute)
-     (send-current-line-to-shell-buffer-and-execute)
-   )
-)
+;; (defun insert-latex-environment-table ()
+;; (interactive)
+;; (LaTeX-environment-menu "table")
+;; )
+;; (global-set-key (kbd "C-S-t") 'insert-latex-environment-table)
 
-(defun openfoam-shell-keys ()
-  (local-set-key (kbd "<f4>") 'send-current-line-or-region-line-by-line-to-shell-buffer-and-execute)
-  (local-set-key (kbd "<f5>") 'send-scriptname-to-shell-buffer-and-execute)  
-)
+;; ;; * misc
+;; ;; quickly add relative path of some file
+;; (defun find-file-insert-relative-path ()
+;; (interactive)
+;;  (setq file-name (read-file-name "Select file: "))
+;; (setq rel-path (file-relative-name file-name))
+;; (insert rel-path)
+;; )
 
-(add-hook 'sh-mode-hook 'openfoam-shell-keys)
+;; ;;; * c++
 
-;; original function (  http://repo.or.cz/w/emacs.git/blob/HEAD:/lisp/progmodes/sh-script.el )
-;; (defun sh-execute-region (start end &optional flag)
-;;   "Pass optional header and region to  subshell for noninteractive execution.
+;; ;; ** c++ -mode key bindings consistent (overwrite)
+;; (define-key c++-mode-map "\M-k" 'windmove-up)
+;; (define-key c++-mode-map "\M-h" 'windmove-left)
+;; (define-key c++-mode-map "\M-l" 'windmove-right)
+;; (define-key c++-mode-map "\M-j" 'windmove-down)
+
+
+;; ;;; * openfoam 
+;; (defun openfoam-dired-tutorials ()
+;;    (interactive)
+;;    (dired "/opt/OpenFOAM-6/tutorials")
+;; )
+;; (defun openfoam-dired-applications ()
+;;    (interactive)
+;;    (dired "/opt/OpenFOAM-6/applications")
+;; )
+;; (defun openfoam-dired-src ()
+;;    (interactive)
+;;    (dired "/opt/OpenFOAM-6/src")
+;; )
+
+;; ;;Grosses Fazit:
+;; ; konnte nicht shell-environment (bash_profile oder bashrc) in emacs-shell-prozess ausfuehren
+;; ; hab s nicht hinbekommen login-option mitauszufuehren
+;; ; --> Umweg ueber Emacs-interactive *shell*, eigene funktionen kopieren zeilen dort rein und fuehren sie aus
+;; ; der ganze andere kram wird nicht mehr gebraucht
+
+
+;; ; purpose: execute shell-script in emacs line by line with <f3>
+;; ; or execute region in script with <f4>
+;; ; with emacs invoked shell "knowing" the openfoam environment
+;; ; change openfoam version specific environment by changing value of variable ofvers 
+;; ; 
+;; ; prerequesite: the value of ofvers has to be implemented in ./bashrc as a function that sources the openfoam-version-environment
+;; ; e.g. of240() { source /opt/openfoam240/etc/bashrc ; }  
+;; ; the alias-method does not work in executed scripts (effectively happening here) and is supposed to be outdated by shell-functions anyway, so better use function
+;; ;
+;; ; explanation of implementation:
+;; ; the function sh-execute-region (defined in the sh-mode) has been modified, in order to not only execute region, but additionally source the openfoam-environment, see below.
+;; ; 
+;; ; what i learned as background:
+;; " sh-command-on-region          is implemented in sh-mode, uses shell-command-on-region, 
+;;                                 with some extra stuff, did not understand this extra stuff
+;;                                 but probably is usefull, so i decided to use/modify this function
+
+;;   shell-command-on-region       uses effectively call-process-region
+;;                                 also has some additional stuff, i did not really understand,
+;;                                 but prob. usefull, defined in lisp/simple.el
+
+;;   call-process-region          uses call-process, before creates some temporary file, where all the
+;;                                 region is loaded and given as input to call-process
+
+;;   call-process                  is C-written elementary function, launching a shell-program, executing
+;;                                 an input file
+
+;;   FAZIT: i only had a chance to add sth to the region, because luckily shell-command-on-region can interpret alternatively the first argument start in (start end) as a string, so end will be ignored.
+;; this way i could pack my string together (with concat) and pass it.
+;; so no need to modify the shell-command-on-region or write my own temporary file (write my own call-process-region, ooh my gosh...!)"
+
+;; (setq ofvers "of240")
+
+;; (defun sh-execute-region-openfoam (start end &optional flag)
+;;   "Pass optional header and region to a subshell for noninteractive execution.
 ;; The working directory is that of the buffer, and only environment variables
 ;; are already set which is why you can mark a header within the script.
 
@@ -2425,254 +2315,385 @@ region, clear header."
 ;; 						  (- end start)))
 ;; 				     sh-shell-file)
 ;; 	    (delete-region sh-header-marker end)))
-;;       (shell-command-on-region start end (concat sh-shell-file " -")))))
+;;      (setq regionstring (buffer-substring start end)) 
+;;      (setq start (concat ofvers "\n" regionstring) )
+;;      (shell-command-on-region start end "bash -l" ))) ;; If start is a string, then write-region writes or appends that string, rather than text from the buffer. end is ignored in this case. 
+;; )                                      ;;  bash with -l option --> login --> so it will read .bash_profile (--> includes bashrc) --> so the openfoam-environment sourcing functions are known
 
-;; ** open-foam-workflow tipps 
+;; ;;; ** shell workflow openfoam
+;; ;;; send to noninteractive shell (not "so" usefull, only for whole loops 
+;; (defun sh-execute-line-openfoam ()
+;; (interactive)
+;; (move-beginning-of-line nil)
+;; (setq beginofline (point))
+;; (move-end-of-line nil)
+;; (setq endofline (point))
+;; (sh-execute-region-openfoam beginofline endofline)
+;; )
 
-;; * zoom frame on smaller monitor
-;;    status: no working solution, but no priority
-;; (require 'zoom-frm)
-
-
-;; * move buffers - key bindings
-(require 'windmove)
-(require 'framemove)
-(setq framemove-hook-into-windmove t)
-(global-set-key (kbd "<C-up>")     'windmove-up)
-(global-set-key (kbd "<C-down>")   'windmove-down)
-(global-set-key (kbd "<C-left>")   'windmove-left)
-(global-set-key (kbd "<C-right>")  'windmove-right)
-
-(global-set-key (kbd "M-k")     'windmove-up)
-(global-set-key (kbd "M-j")   'windmove-down)
-(global-set-key (kbd "M-h")   'windmove-left)
-(global-set-key (kbd "M-l")  'windmove-right)
-
-;; tweak in term-mode, so these also work in term-windows:
- (define-key term-raw-map "\M-k" 'windmove-up)
- (define-key term-raw-map "\M-h" 'windmove-left)
- (define-key term-raw-map "\M-l" 'windmove-right)
- (define-key term-raw-map "\M-j" 'windmove-down)
-
-;; tweek for org-mode, other
-(define-key org-mode-map "\M-k" 'windmove-up)
-(define-key org-mode-map "\M-h" 'windmove-left)
-(define-key org-mode-map "\M-l" 'windmove-right)
-(define-key org-mode-map "\M-j" 'windmove-down)
-
-;; evil-like other bindings, that I like
-;; hmm.. maybe not yet, might by usefull for other stuff (-> outcommented)
-;; (define-key org-mode-map "L" 'org-shiftright)
-;; (define-key org-mode-map "H" 'org-shiftleft)
-;; (define-key org-mode-map "L" 'org-shiftdown)
-;; (define-key org-mode-map "K" 'org-shiftup)
-;;    - syntax for key with slash "\M-.." --> see explanation in lisp docu:
-;;         https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Char-Syntax.html#Basic-Char-Syntax
-;;    - the most important thing in term-char-mode is actually the term-raw-map
-;;      --> here basically in a for loop for every key, e.g. a (97) is defined that, just this string shall be sent to the shell-process
-;;    - this means that exceptions from this are very easy, just add/alter key in term-raw-map
-;;    - the exception for the escape key is implemented in just this way actually:
-;;      term.el:912   (define-key term-raw-map term-escape-char term-raw-escape-map)
-;;      just leads to a second map where a new command can be executed (e.g. M-x)
-
-;; * mode-line appearance
-;; set mode line to show full path of current file
-;; (setq-default mode-line-format
-;;    (list '((buffer-file-name " %f"
-;;               (dired-directory
-;;                dired-directory
-;;                 (revert-buffer-function " %b"
-;;                ("%b - Dir:  " default-directory))))))) 
-;;; * ) set mode line appearance
-;;;    (has to come AFTER  color themes, don t ask why)
-;; don t ask why exactly, but the following (in order (!)) resulted nice in combi with zenburn
-;; i.e.  .) modest visual difference of current buffer's mode line
-;;       .) decent layout  
-;;       .) harmonic colors with zenburn 
-;; (require 'powerline)
-;; (require 'smart-mode-line)
-;; (sml/setup)
-;; (setq sml/no-confirm-load-theme t) ;; avoid being asked "wanna compile theme in elisp" (or so..) everytime
+;; (defun sh-send-region-to-shell ()
+;; (interactive)
+;; (setq regionstring (buffer-substring (region-beginning) (region-end)))
+;; (setq sendstring (concat regionstring "\n"))
+;; ;(message sendstring)
+;; (setq start sendstring)
+;; (append-to-buffer "*shell*" start end)
+;; )
 
 
-;; * buffer/window navigation management
-;; ** better short cuts for previous / next buffer
-(global-set-key (kbd "M-'") 'previous-buffer)
-(global-set-key (kbd "M-\\") 'next-buffer)
+;; ;; modified function from append-to-buffer
 
-;;; * pdf-view
-(require 'pdf-view)
- 
- (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
- 
- (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
-                                  ,(face-attribute 'default :background)))
- 
- (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
- 
- (add-hook 'pdf-view-mode-hook (lambda ()
-                                 (pdf-view-midnight-minor-mode)))
- 
- (provide 'init-pdfview)
-
-
-;;; * quickly print variable to scratch buffer
-(defun print-var-to-scratch-buffer (var)
-  (interactive)
-  (with-current-buffer "*scratch*"
-    (end-of-buffer)
-    (insert (concat "\n\n" (prin1-to-string var)))
-    )
-  )
-
-(defun dummy-fun (arg)
-  (interactive)
-  ;; ;; (message org-structure-template-alist)
-  ;; (setq name_str "org-structure-template-alist")
-  ;; (setq x (intern-soft name_str))
-  ;; (message (symbol-value x))
-  (message arg)
-  )
-
-
-(debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
-(cancel-debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
-(defun print-value-of-var-under-selection-to-scratch-buffer ()
-  (interactive)
-  ;; read the selection AS VARIABLE into var
-  ;; (setq var (make-symbol "org-structure-template-alist"))
-  (setq var_string (buffer-substring (region-beginning) (region-end)))
-  (setq var (intern-soft var_string))
-  ;; (print-var-to-scratch-buffer var)
-  (setq symbolvalue (symbol-value var))
-  (if (setq var (intern-soft var_string))
-      (with-current-buffer "*scratch*"
-        (end-of-buffer)
-        ;; function "symbol-value" was necessary, otherwise not working (??? but ok)
-        ;; (insert var) ;;--> not working even though it works when using the variable (symbol), e.g. x, directly like this (insert x))
-        (insert (concat "\n\n value of variable '" var_string "':\n"))
-        (insert (prin1-to-string symbolvalue))
-       ;; (eval var_string)
-        ;; https://stackoverflow.com/questions/4651274/convert-symbol-to-a-string-in-elisp
-        )
-    ;; else
-    (message (concat "no such symbol exists with name: " var_string))
-    )
-  )
-
-
-;; * git-save
-
-;; (defun git-save ()
+;; (defun send-string-to-shell-buffer-and-execute (sendstring)
+;;   "execute region line by line in interactive shell (buffer *shell*)."
 ;;   (interactive)
-;;   ;; * update
+;;     ; get region into string
+;;     (save-excursion
+;;       (set-buffer (get-buffer-create "*shell*")) 
+;;      (end-of-buffer)
+;;      (insert sendstring)
+;;      (comint-send-input) ;; execute
+;;      (end-of-buffer)
+;;     )
+;; )
 
+;; (defun send-scriptname-to-shell-buffer-and-execute ()
+;;   "execute region line by line in interactive shell (buffer *shell*)."
+;;   (interactive)
+;;   (save-buffer)
+;;     ; get script name (has to be done before save-excursion, since he then quits buffer)
+;;     (setq scriptname (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))
+;;     (save-excursion
+;;       (set-buffer (get-buffer-create "*shell*")) 
+;;      (end-of-buffer)
+;;      (insert (concat "./" scriptname))
+;;      (comint-send-input) ;; execute
+;;     )
+;; )
+
+;; (defun send-current-line-to-shell-buffer-and-execute ()
+;; (interactive)
+;; (move-beginning-of-line nil)
+;; (setq beginofline (point))
+;; (move-end-of-line nil)
+;; (setq endofline (point))
+;; (setq currentlinestring (buffer-substring beginofline endofline))
+
+;; (send-string-to-shell-buffer-and-execute currentlinestring)
+;; )
+
+;; (defun send-current-region-line-by-line-to-shell-buffer-and-execute ()
+;; (interactive)
+;;    (save-excursion
+;;      ; get line numbers of region beginning/end
+;;      (setq beginning_line_number (line-number-at-pos (region-beginning)))
+;;      (setq ending_line_number (line-number-at-pos (region-end)))
+  
+;;     (setq current_line_number beginning_line_number)
+;;     (goto-line beginning_line_number)
+;;     ;(message (format "%i" current_line_number) )
+;;       (while (< current_line_number ending_line_number)
+;;           (setq current_line_number (line-number-at-pos (point)))
+;;           (message (format "%i" current_line_number) )
+;;           (forward-line)
+;;           (send-current-line-to-shell-buffer-and-execute)
+;;       )
+;;     )
+;; )
+
+;; (defun send-current-line-or-region-line-by-line-to-shell-buffer-and-execute ()
+;; (interactive)
+;;    (if (use-region-p)
+;;      (send-current-region-line-by-line-to-shell-buffer-and-execute)
+;;      (send-current-line-to-shell-buffer-and-execute)
+;;    )
+;; )
+
+;; (defun openfoam-shell-keys ()
+;;   (local-set-key (kbd "<f4>") 'send-current-line-or-region-line-by-line-to-shell-buffer-and-execute)
+;;   (local-set-key (kbd "<f5>") 'send-scriptname-to-shell-buffer-and-execute)  
+;; )
+
+;; (add-hook 'sh-mode-hook 'openfoam-shell-keys)
+
+;; ;; original function (  http://repo.or.cz/w/emacs.git/blob/HEAD:/lisp/progmodes/sh-script.el )
+;; ;; (defun sh-execute-region (start end &optional flag)
+;; ;;   "Pass optional header and region to  subshell for noninteractive execution.
+;; ;; The working directory is that of the buffer, and only environment variables
+;; ;; are already set which is why you can mark a header within the script.
+
+;; ;; With a positive prefix ARG, instead of sending region, define header from
+;; ;; beginning of buffer to point.  With a negative prefix ARG, instead of sending
+;; ;; region, clear header."
+;; ;;   (interactive "r\nP")
+;; ;;   (if flag
+;; ;;       (setq sh-header-marker (if (> (prefix-numeric-value flag) 0)
+;; ;; 				 (point-marker)))
+;; ;;     (if sh-header-marker
+;; ;; 	(save-excursion
+;; ;; 	  (let (buffer-undo-list)
+;; ;; 	    (goto-char sh-header-marker)
+;; ;; 	    (append-to-buffer (current-buffer) start end)
+;; ;; 	    (shell-command-on-region (point-min)
+;; ;; 				     (setq end (+ sh-header-marker
+;; ;; 						  (- end start)))
+;; ;; 				     sh-shell-file)
+;; ;; 	    (delete-region sh-header-marker end)))
+;; ;;       (shell-command-on-region start end (concat sh-shell-file " -")))))
+
+;; ;; ** open-foam-workflow tipps 
+
+;; ;; * zoom frame on smaller monitor
+;; ;;    status: no working solution, but no priority
+;; ;; (require 'zoom-frm)
+
+
+;; ;; * move buffers - key bindings
+;; (require 'windmove)
+;; (require 'framemove)
+;; (setq framemove-hook-into-windmove t)
+;; (global-set-key (kbd "<C-up>")     'windmove-up)
+;; (global-set-key (kbd "<C-down>")   'windmove-down)
+;; (global-set-key (kbd "<C-left>")   'windmove-left)
+;; (global-set-key (kbd "<C-right>")  'windmove-right)
+
+;; (global-set-key (kbd "M-k")     'windmove-up)
+;; (global-set-key (kbd "M-j")   'windmove-down)
+;; (global-set-key (kbd "M-h")   'windmove-left)
+;; (global-set-key (kbd "M-l")  'windmove-right)
+
+;; ;; tweak in term-mode, so these also work in term-windows:
+;;  (define-key term-raw-map "\M-k" 'windmove-up)
+;;  (define-key term-raw-map "\M-h" 'windmove-left)
+;;  (define-key term-raw-map "\M-l" 'windmove-right)
+;;  (define-key term-raw-map "\M-j" 'windmove-down)
+
+;; ;; tweek for org-mode, other
+;; (define-key org-mode-map "\M-k" 'windmove-up)
+;; (define-key org-mode-map "\M-h" 'windmove-left)
+;; (define-key org-mode-map "\M-l" 'windmove-right)
+;; (define-key org-mode-map "\M-j" 'windmove-down)
+
+;; ;; evil-like other bindings, that I like
+;; ;; hmm.. maybe not yet, might by usefull for other stuff (-> outcommented)
+;; ;; (define-key org-mode-map "L" 'org-shiftright)
+;; ;; (define-key org-mode-map "H" 'org-shiftleft)
+;; ;; (define-key org-mode-map "L" 'org-shiftdown)
+;; ;; (define-key org-mode-map "K" 'org-shiftup)
+;; ;;    - syntax for key with slash "\M-.." --> see explanation in lisp docu:
+;; ;;         https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Char-Syntax.html#Basic-Char-Syntax
+;; ;;    - the most important thing in term-char-mode is actually the term-raw-map
+;; ;;      --> here basically in a for loop for every key, e.g. a (97) is defined that, just this string shall be sent to the shell-process
+;; ;;    - this means that exceptions from this are very easy, just add/alter key in term-raw-map
+;; ;;    - the exception for the escape key is implemented in just this way actually:
+;; ;;      term.el:912   (define-key term-raw-map term-escape-char term-raw-escape-map)
+;; ;;      just leads to a second map where a new command can be executed (e.g. M-x)
+
+;; ;; * mode-line appearance
+;; ;; set mode line to show full path of current file
+;; ;; (setq-default mode-line-format
+;; ;;    (list '((buffer-file-name " %f"
+;; ;;               (dired-directory
+;; ;;                dired-directory
+;; ;;                 (revert-buffer-function " %b"
+;; ;;                ("%b - Dir:  " default-directory))))))) 
+;; ;;; * ) set mode line appearance
+;; ;;;    (has to come AFTER  color themes, don t ask why)
+;; ;; don t ask why exactly, but the following (in order (!)) resulted nice in combi with zenburn
+;; ;; i.e.  .) modest visual difference of current buffer's mode line
+;; ;;       .) decent layout  
+;; ;;       .) harmonic colors with zenburn 
+;; ;; (require 'powerline)
+;; ;; (require 'smart-mode-line)
+;; ;; (sml/setup)
+;; ;; (setq sml/no-confirm-load-theme t) ;; avoid being asked "wanna compile theme in elisp" (or so..) everytime
+
+
+;; ;; * buffer/window navigation management
+;; ;; ** better short cuts for previous / next buffer
+;; (global-set-key (kbd "M-'") 'previous-buffer)
+;; (global-set-key (kbd "M-\\") 'next-buffer)
+
+;; ;;; * pdf-view
+;; (require 'pdf-view)
+ 
+;;  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
+ 
+;;  (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
+;;                                   ,(face-attribute 'default :background)))
+ 
+;;  (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
+ 
+;;  (add-hook 'pdf-view-mode-hook (lambda ()
+;;                                  (pdf-view-midnight-minor-mode)))
+ 
+;;  (provide 'init-pdfview)
+
+
+;; ;;; * quickly print variable to scratch buffer
+;; (defun print-var-to-scratch-buffer (var)
+;;   (interactive)
+;;   (with-current-buffer "*scratch*"
+;;     (end-of-buffer)
+;;     (insert (concat "\n\n" (prin1-to-string var)))
+;;     )
+;;   )
+
+;; (defun dummy-fun (arg)
+;;   (interactive)
+;;   ;; ;; (message org-structure-template-alist)
+;;   ;; (setq name_str "org-structure-template-alist")
+;;   ;; (setq x (intern-soft name_str))
+;;   ;; (message (symbol-value x))
+;;   (message arg)
 ;;   )
 
 
-;; * async-await (needed to be able to wait for "external" shell commands)
-(use-package async-await
-  :ensure t
-  )
-
-;; * async process behaviour
-;; ** turn off 'pop-up' of the *Async Shell Command* buffer
-(add-to-list 'display-buffer-alist
-  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
-
-
-;; * stopwatch
-;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
-
-
-;; * ssh clipboard
-(defvar ssh-clipboard-file "~/ssh_clipboard.txt")
-(defvar ssh-server-name "blogin")
-(defun ssh-clipboard-set-server-name ()
-  (interactive)
-  (setq new-ssh-server-name (read-file-name "Enter server name:"))
-  (setq ssh-server-name new-ssh-server-name)
-  (message "server name set to %s" new-ssh-server-name)
-  )
-
-(defun ssh-clipboard-copy () 
-  (interactive)
-  ;; ** copy current region -> into string
-  (setq current-region-string (buffer-substring (mark) (point)))
-  ;; ** write to file ~/ssh_clipboard.txt
-  (with-temp-file ssh-clipboard-file
-    ;; (insert-file-contents file)
-    ;; (not appending --> so outcommented)
-    (insert current-region-string)
-    )
-  ;; * send it so ssh server
-  (setq path1 ssh-clipboard-file)
-  (setq path2 (concat ssh-server-name ":/home/beijsach"))
-  (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
-  (async-shell-command command-string)
-  (message (concat "region copied to " ssh-clipboard-file " and rsync'ed to ssh server (" ssh-server-name ")" ))
-  )
-
-(defun ssh-clipboard-paste ()
-  (interactive)
-  ;; * read content into string
-  (with-temp-buffer
-    (insert-file-contents ssh-clipboard-file)
-    (setq ssh-clipboard-content (buffer-string))
-    )
-  ;; * paste content
-  (insert ssh-clipboard-content)
-  )
+;; (debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
+;; (cancel-debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
+;; (defun print-value-of-var-under-selection-to-scratch-buffer ()
+;;   (interactive)
+;;   ;; read the selection AS VARIABLE into var
+;;   ;; (setq var (make-symbol "org-structure-template-alist"))
+;;   (setq var_string (buffer-substring (region-beginning) (region-end)))
+;;   (setq var (intern-soft var_string))
+;;   ;; (print-var-to-scratch-buffer var)
+;;   (setq symbolvalue (symbol-value var))
+;;   (if (setq var (intern-soft var_string))
+;;       (with-current-buffer "*scratch*"
+;;         (end-of-buffer)
+;;         ;; function "symbol-value" was necessary, otherwise not working (??? but ok)
+;;         ;; (insert var) ;;--> not working even though it works when using the variable (symbol), e.g. x, directly like this (insert x))
+;;         (insert (concat "\n\n value of variable '" var_string "':\n"))
+;;         (insert (prin1-to-string symbolvalue))
+;;        ;; (eval var_string)
+;;         ;; https://stackoverflow.com/questions/4651274/convert-symbol-to-a-string-in-elisp
+;;         )
+;;     ;; else
+;;     (message (concat "no such symbol exists with name: " var_string))
+;;     )
+;;   )
 
 
-;; * frequently used unicode characters
-;; ** docu/instruction -> how to get the code of a character
-;;    - copy the symbol (e.g. from browser) to an emacs buffer 
-;;    - type C-x = , -> it will give you the unicode number in decimal/octal/hex
-;;      e.g. for ↯ -> minibuffer: Char ↯ (8623, #o20657, #x21af, file, ... ) 
-;;                                         ^        ^       ^
-;;                                         |        |       |
-;;                                       decimal  octal   hexadecimal
-;;                                       (8623)   (20657   (21af)
-;;    - how to print it with elisp?
-;;      -- use hexadecimal value:  (insert "\u21af"), mind: always 4 chars, preceed with 0's e.g. for 'a' (61) --> (insert "\u0061")
-;;      -- use decimal value:
-;; ** background on unicode and UTF-8
-;;    - utf-8 DOES not (generally) have 8 bits
-;;    - it is a "variable-width character encoding" (wikipedia)
-;;    - that means, it uses either 1 byte (8 bits) , or 2 bytes (16 bits), or 3 bytes(24 bits), or 4 bytes. 
-;;      -- 1 byte : 0xxxxxxx                             -> all 128 ascii characters
-;;      -- 2 bytes: 110xxxxx 10xxxxxx                    -> latin, greek, arabic, hebrew, etc. 
-;;      -- 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx           -> chinese, japanese, etc.
-;;      -- 4 bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx  -> grinning cats, etc.
-;;    - a bit of "human-machine-confusion" -> read number/bytes "left to right" or "right to left" ???
-;;      -- first of all "right to left - thinking" can be misleading. it s coming from when we count from low to high numbers -> then we go right to left:  001, 002, 003, etc. or in binary: 001,010,011,100,101,etc.
-;;      -- however "counting-direction" does not have to be "read-direction", i think the read direction is from left to right. i.e. when reading 0xxxxxxx, we first read the "1st" bit. and it immediately tells us that we have an ASCII character.
-;;      -- so the most significant bits "IN ONE BYTE" are the first ones
-;;      -- one byte is counted "right to left" as we know it from decimal, i.e. 00000001 = 1, 00000010 = 2, etc.
-;;      -- however, when it comes to "READING MULTIPLE BYTES" the "SIGNIFICANCE HIERARCHY IS REVERSE (!!!)
-;;      -- i.e. the "1st byte" is the "LEAST SIGNIFICANT BYTE" (!!!)
-;;      -- fazit: this is great for UTF-8 reading efficiency -> we immediately know if we re dealing with ascii from the first bit (!)
-;;          BUT: the "REAL" binary number would be BYTE4 BYTE3 BYTE2 BYTE1 (!)
-;;          so: composing the real number of an UTF8-character, we d have to reverse order these bytes.
-;;    - so NOT ALL possible numbers of 4 bytes (= (2**8)**4 = 4,294,967,296 ) are used
-;;    - so the total number of characters is: 2**7 + 2**(5+6) + 2**(4+6+6) + 2**(3+6+6+6) = 2.16 Mio characters, this is sufficient for all currently valid registered unicode characters (=1.11 Mio)
-;;    - because only some "x's" are left free. but by this the leading bits of the bytes can be used to predetermine if we re dealing with ascii (1 byte), latin (2 bytes), asian (3 bytes), or extra stuff (4 bytes).
-;;    - it is backward compatible with ASCII (first 128 characters, i.e. first 7 bits) are equal to ascii. so EVERY ASCII test is VALID UTF-8-encoded unicode AS WELL(!).
-;;    - how to enter in emacs:
-;;    -- 1 byte or 2 byte unicode character --> use "\u<byte2><byte1> always type TWO (!) bytes, that means precede "00" when ascii.
-;;                                       (insert "\u <2nd byte as two hex> <1st byte as two hex> )
-;;                                       e.g. for 'a' (insert "\u0061")
-;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
-;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
-;; ** contradiction ↯
-a
-(defun insert-char-contradiction ()
-  (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000021af")
-  )
+;; ;; * git-save
+
+;; ;; (defun git-save ()
+;; ;;   (interactive)
+;; ;;   ;; * update
+
+;; ;;   )
 
 
+;; ;; * async-await (needed to be able to wait for "external" shell commands)
+;; (use-package async-await
+;;   :ensure t
+;;   )
+
+;; ;; * async process behaviour
+;; ;; ** turn off 'pop-up' of the *Async Shell Command* buffer
+;; (add-to-list 'display-buffer-alist
+;;   (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+
+
+;; ;; * stopwatch
+;; ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
+
+
+;; ;; * ssh clipboard
+;; (defvar ssh-clipboard-file "~/ssh_clipboard.txt")
+;; (defvar ssh-server-name "blogin")
+;; (defun ssh-clipboard-set-server-name ()
+;;   (interactive)
+;;   (setq new-ssh-server-name (read-file-name "Enter server name:"))
+;;   (setq ssh-server-name new-ssh-server-name)
+;;   (message "server name set to %s" new-ssh-server-name)
+;;   )
+
+;; (defun ssh-clipboard-copy () 
+;;   (interactive)
+;;   ;; ** copy current region -> into string
+;;   (setq current-region-string (buffer-substring (mark) (point)))
+;;   ;; ** write to file ~/ssh_clipboard.txt
+;;   (with-temp-file ssh-clipboard-file
+;;     ;; (insert-file-contents file)
+;;     ;; (not appending --> so outcommented)
+;;     (insert current-region-string)
+;;     )
+;;   ;; * send it so ssh server
+;;   (setq path1 ssh-clipboard-file)
+;;   (setq path2 (concat ssh-server-name ":/home/beijsach"))
+;;   (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+;;   (async-shell-command command-string)
+;;   (message (concat "region copied to " ssh-clipboard-file " and rsync'ed to ssh server (" ssh-server-name ")" ))
+;;   )
+
+;; (defun ssh-clipboard-paste ()
+;;   (interactive)
+;;   ;; * read content into string
+;;   (with-temp-buffer
+;;     (insert-file-contents ssh-clipboard-file)
+;;     (setq ssh-clipboard-content (buffer-string))
+;;     )
+;;   ;; * paste content
+;;   (insert ssh-clipboard-content)
+;;   )
+
+
+;; ;; * frequently used unicode characters
+;; ;; ** docu/instruction -> how to get the code of a character
+;; ;;    - copy the symbol (e.g. from browser) to an emacs buffer 
+;; ;;    - type C-x = , -> it will give you the unicode number in decimal/octal/hex
+;; ;;      e.g. for ↯ -> minibuffer: Char ↯ (8623, #o20657, #x21af, file, ... ) 
+;; ;;                                         ^        ^       ^
+;; ;;                                         |        |       |
+;; ;;                                       decimal  octal   hexadecimal
+;; ;;                                       (8623)   (20657   (21af)
+;; ;;    - how to print it with elisp?
+;; ;;      -- use hexadecimal value:  (insert "\u21af"), mind: always 4 chars, preceed with 0's e.g. for 'a' (61) --> (insert "\u0061")
+;; ;;      -- use decimal value:
+;; ;; ** background on unicode and UTF-8
+;; ;;    - utf-8 DOES not (generally) have 8 bits
+;; ;;    - it is a "variable-width character encoding" (wikipedia)
+;; ;;    - that means, it uses either 1 byte (8 bits) , or 2 bytes (16 bits), or 3 bytes(24 bits), or 4 bytes. 
+;; ;;      -- 1 byte : 0xxxxxxx                             -> all 128 ascii characters
+;; ;;      -- 2 bytes: 110xxxxx 10xxxxxx                    -> latin, greek, arabic, hebrew, etc. 
+;; ;;      -- 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx           -> chinese, japanese, etc.
+;; ;;      -- 4 bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx  -> grinning cats, etc.
+;; ;;    - a bit of "human-machine-confusion" -> read number/bytes "left to right" or "right to left" ???
+;; ;;      -- first of all "right to left - thinking" can be misleading. it s coming from when we count from low to high numbers -> then we go right to left:  001, 002, 003, etc. or in binary: 001,010,011,100,101,etc.
+;; ;;      -- however "counting-direction" does not have to be "read-direction", i think the read direction is from left to right. i.e. when reading 0xxxxxxx, we first read the "1st" bit. and it immediately tells us that we have an ASCII character.
+;; ;;      -- so the most significant bits "IN ONE BYTE" are the first ones
+;; ;;      -- one byte is counted "right to left" as we know it from decimal, i.e. 00000001 = 1, 00000010 = 2, etc.
+;; ;;      -- however, when it comes to "READING MULTIPLE BYTES" the "SIGNIFICANCE HIERARCHY IS REVERSE (!!!)
+;; ;;      -- i.e. the "1st byte" is the "LEAST SIGNIFICANT BYTE" (!!!)
+;; ;;      -- fazit: this is great for UTF-8 reading efficiency -> we immediately know if we re dealing with ascii from the first bit (!)
+;; ;;          BUT: the "REAL" binary number would be BYTE4 BYTE3 BYTE2 BYTE1 (!)
+;; ;;          so: composing the real number of an UTF8-character, we d have to reverse order these bytes.
+;; ;;    - so NOT ALL possible numbers of 4 bytes (= (2**8)**4 = 4,294,967,296 ) are used
+;; ;;    - so the total number of characters is: 2**7 + 2**(5+6) + 2**(4+6+6) + 2**(3+6+6+6) = 2.16 Mio characters, this is sufficient for all currently valid registered unicode characters (=1.11 Mio)
+;; ;;    - because only some "x's" are left free. but by this the leading bits of the bytes can be used to predetermine if we re dealing with ascii (1 byte), latin (2 bytes), asian (3 bytes), or extra stuff (4 bytes).
+;; ;;    - it is backward compatible with ASCII (first 128 characters, i.e. first 7 bits) are equal to ascii. so EVERY ASCII test is VALID UTF-8-encoded unicode AS WELL(!).
+;; ;;    - how to enter in emacs:
+;; ;;    -- 1 byte or 2 byte unicode character --> use "\u<byte2><byte1> always type TWO (!) bytes, that means precede "00" when ascii.
+;; ;;                                       (insert "\u <2nd byte as two hex> <1st byte as two hex> )
+;; ;;                                       e.g. for 'a' (insert "\u0061")
+;; ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
+;; ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
+;; ;; ** contradiction ↯
+;; a
+;; (defun insert-char-contradiction ()
+;;   (interactive)
+;;   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+;;   ;; (insert "\u21af")
+;;   (insert "\U000021af")
+;;   )
+
+
+
+;; ;; * termux android
+;; (defun my-phone-number-to-clipboard ()
+;;   (interactive)
+;;   (setq my-phone-number "+4917657657978870")
+;;   (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+;;   (async-shell-command command-string)
+;;   )
 
