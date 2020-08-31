@@ -358,6 +358,7 @@
   (set-buffer term-ansi-buffer-name)
   (term-mode)
   (term-char-mode)
+  (python-calculator-mode)
 
   ;; Historical baggage.  A call to term-set-escape-char used to not
   ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
@@ -366,8 +367,7 @@
   ;; either.   (Bug#12842)
   (let (term-escape-char)
     ;; I wanna have find-file on C-x C-f -mm
-    ;; your mileage may definitely vary, maybe it's better to put this in your
-    ;; .emacs ...
+    ;; your mileage may definitely vary, maybe it's better to put this in your .emacs ...
     (term-set-escape-char ?\C-x))
 
 
@@ -387,6 +387,18 @@
   )
 
 (evil-leader/set-key "a" 'ipython-calculator) 
+
+(defvar python-calculator-mode-map
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "M-p") 'term-send-up)
+    m))
+
+(define-minor-mode python-calculator-mode
+  :initial-value nil
+  :lighter " py-calc"
+  :keymap python-calculator-mode-map
+  :group 'python-calculator
+  :global nil)
 
 ;;; * org-mode
 

@@ -62,6 +62,7 @@
   (require 'xclip)
   (xclip-mode 1)
   )
+
 (defun set-localhost-nr ()
   (interactive)
   (setq localhost-integer-nr (read-string "enter localhost nr (integer without digit, e.g. 10):"))
