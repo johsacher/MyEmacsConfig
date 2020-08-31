@@ -1106,10 +1106,12 @@ date)
   )
 
 (defun planet-day-file-start-up ()
-  ;;* header
+  ;; * header
   (planet-daily-file-set-header-line) 
-  ;;* modeline (->remove)
+  ;; * modeline (->remove)
   (setq mode-line-format "")
+  ;; * default initial visibility ("overwrites" org-mode's initial visibility)
+  (outline-show-all)
   )
 
 (defun planet-week-file-start-up ()
@@ -1202,18 +1204,34 @@ date)
 
 (defun planet-git-sync-up-file ()
   (interactive)
-  (if (and (planet-detect-if-planet-file) (planet-last-git-save-long-enough-ago))
-      (progn
-        ;; (planet-update-last-git-save-time)
-        ;; (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
-        ;; (message (concat "git-save process started (git add/commit/push)." ))
-        (shell-command  "git -A -C ~/org add")
-        (shell-command "git commit -m '.' -C ~/org")
-        (shell-command "git -C ~/org push" )
-        )
-      (message "file saved. but not synced (last git-save not long enough ago)." )
-      )
-  )
+  (if (planet-detect-if-planet-file) 
+       (if  (planet-last-git-save-long-enough-ago)
+           (progn
+             ;; (planet-update-last-git-save-time)
+             ;; (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
+             ;; (message (concat "git-save process started (git add/commit/push)." ))
+
+             ;; * commit this files changes (so they are safe! not overridden by pull)
+             (setq command-string "git -C ~/org add -A")
+             (message (concat "executing: " command-string))
+             (shell-command command-string)
+             (setq command-string "git  -C ~/org commit -m '.'")
+             (message (concat "executing: " command-string))
+             ;; * pull (so make sure)
+             (shell-command command-string)
+             (setq command-string "git -C ~/org pull")
+             (message (concat "executing: " command-string))
+             ;; (planet-revert-all-planet-buffers-except-current)
+             (shell-command command-string)
+             (setq command-string "git -C ~/org push")
+             (message (concat "executing: " command-string))
+             (shell-command command-string)
+             ;; update other planet buffers (may pull brought sth new)
+             ;; (it is placed "some seconds" AFTER "git pull", because: technical detail: apparently not all files instantly updated when (shell-command "git pull") finishes.
+             (planet-revert-all-planet-buffers)
+             )
+       (message "file saved. but not synced (last git-save not long enough ago)." ))))
+
 
 
 (defun planet-git-sync-down-revert-file ()
@@ -1223,14 +1241,15 @@ date)
   (message (concat "git-pulled."))
   (revert-buffer)
   )
-
 (defun planet-revert-all-planet-buffers ()
   (interactive)
-  (message "syncing down planet-files - started.")
-  (shell-command (concat "cd " planet-dir "; git pull ") "*planet process: git pull*")
+  ;; (message "syncing down planet-files - started.")
+  ;; (shell-command (concat "cd " planet-dir "; git pull ") "*planet process: git pull*")
   ;; later:
 
   ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+
+  ;; (todo "little cosmetics: this function still issues message of last reverted buffer filebase-name, don t know why)
   (save-excursion
     (save-window-excursion
       (dolist (b (buffer-list))
@@ -1241,8 +1260,30 @@ date)
       )
     )
   )
-(evil-leader/set-key-for-mode 'org-mode "pp" 'planet-revert-all-planet-buffers)
 
+(defun planet-revert-all-planet-buffers-except-current ()
+  (interactive)
+  ;; (message "syncing down planet-files - started.")
+  ;; (shell-command (concat "cd " planet-dir "; git pull ") "*planet process: git pull*")
+  ;; later:
+
+  ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+
+  ;; (todo "little cosmetics: this function still issues message of last reverted buffer filebase-name, don t know why)
+  (setq current-buffer-original (current-buffer))
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (delq current-buffer-original (buffer-list)))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name)
+                   (with-current-buffer b (buffer-file-name))
+                   )
+          (pop-to-buffer-same-window b)
+          (revert-buffer t 'no-confirm)))
+      )
+    )
+  )
+(evil-leader/set-key-for-mode 'org-mode "pp" 'planet-revert-all-planet-buffers)
 ;;*** git save critical last time
 
 (defvar planet-last-git-save-time)
