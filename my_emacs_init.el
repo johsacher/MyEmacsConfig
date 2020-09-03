@@ -2750,3 +2750,97 @@ region, clear header."
 (if debug-only-on-start-up
   (setq debug-on-error nil)
   )
+
+;; * image viewing (imagemagick)
+
+;; ** evil key bindings
+(evil-define-key 'normal image-mode-map (kbd "n") 'image-next-file)
+(evil-define-key 'normal image-mode-map (kbd "p") 'image-previous-file)
+(evil-define-key 'normal image-mode-map (kbd "r") 'image-rotate)
+(evil-define-key 'normal image-mode-map (kbd "+") 'image-increase-size)
+(evil-define-key 'normal image-mode-map (kbd "=") 'image-increase-size)
+(evil-define-key 'normal image-mode-map (kbd "-") 'image-decrease-size)
+(evil-define-key 'normal image-mode-map (kbd "s") 'image-save)
+
+(evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
+;; o               image-save
+
+;; +               image-increase-size
+;;   (that binding is currently shadowed by another mode)
+;; -               image-decrease-size
+;;   (that binding is currently shadowed by another mode)
+
+;; r               image-rotate
+
+;; n               image-next-file
+;;   (that binding is currently shadowed by another mode)
+;; o               image-save
+;;   (that binding is currently shadowed by another mode)
+;; p               image-previous-file
+
+;; C-c             Prefix Command
+;; RET             image-toggle-animation
+;;   (that binding is currently shadowed by another mode)
+;; SPC             image-scroll-up
+;;   (that binding is currently shadowed by another mode)
+;; +               image-increase-size
+;;   (that binding is currently shadowed by another mode)
+;; -               image-decrease-size
+;;   (that binding is currently shadowed by another mode)
+;; 0               digit-argument
+;;   (that binding is currently shadowed by another mode)
+;; <               beginning-of-buffer
+;;   (that binding is currently shadowed by another mode)
+;; >               end-of-buffer
+;;   (that binding is currently shadowed by another mode)
+;; ?               describe-mode
+;;   (that binding is currently shadowed by another mode)
+;; F               image-goto-frame
+;;   (that binding is currently shadowed by another mode)
+;; a               Prefix Command
+;;   (that binding is currently shadowed by another mode)
+;; b               image-previous-frame
+;;   (that binding is currently shadowed by another mode)
+;; f               image-next-frame
+;;   (that binding is currently shadowed by another mode)
+;; g               revert-buffer
+;;   (that binding is currently shadowed by another mode)
+;; h               describe-mode
+;;   (that binding is currently shadowed by another mode)
+;; k               image-kill-buffer
+;;   (that binding is currently shadowed by another mode)
+;; n               image-next-file
+;;   (that binding is currently shadowed by another mode)
+;; o               image-save
+;;   (that binding is currently shadowed by another mode)
+;; p               image-previous-file
+;;   (that binding is currently shadowed by another mode)
+;; q               quit-window
+;;   (that binding is currently shadowed by another mode)
+;; r               image-rotate
+;;   (that binding is currently shadowed by another mode)
+;; DEL             image-scroll-down
+;;   (that binding is currently shadowed by another mode)
+;; S-SPC           image-scroll-down
+;; <remap>         Prefix Command
+
+;; <remap> <backward-char>         image-backward-hscroll
+;; <remap> <beginning-of-buffer>   image-bob
+;; <remap> <end-of-buffer>         image-eob
+;; <remap> <forward-char>          image-forward-hscroll
+;; <remap> <left-char>             image-backward-hscroll
+;; <remap> <move-beginning-of-line>
+;;                                 image-bol
+;; <remap> <move-end-of-line>      image-eol
+;; <remap> <next-line>             image-next-line
+;; <remap> <previous-line>         image-previous-line
+;; <remap> <right-char>            image-forward-hscroll
+;; <remap> <scroll-down>           image-scroll-down
+;; <remap> <scroll-down-command>   image-scroll-down
+;; <remap> <scroll-left>           image-scroll-left
+;; <remap> <scroll-right>          image-scroll-right
+;; <remap> <scroll-up>             image-scroll-up
+;; <remap> <scroll-up-command>     image-scroll-up
+
+;; C-c C-c         image-toggle-display
+;; C-c C-x         image-toggle-hex-display

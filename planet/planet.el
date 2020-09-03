@@ -1247,7 +1247,9 @@ date)
              (setq command-string "git -C ~/org push")
              (message (concat "executing: " command-string))
              (async-shell-command command-string)
-             ;; update other planet buffers (may pull brought sth new)
+             ;; * update last gite-save-time
+             (planet-update-last-git-save-time)
+             ;; * update other planet buffers (may pull brought sth new)
              ;; (it is placed "some seconds" AFTER "git pull", because: technical detail: apparently not all files instantly updated when (shell-command "git pull") finishes.
              (sleep-for 0.5)
              (planet-revert-all-planet-buffers)
@@ -1312,7 +1314,7 @@ date)
 (setq planet-last-git-save-time (planet-get-todays-date))
 
 (defvar planet-last-git-save-minimum-number-of-seconds-ago)
-(setq planet-last-git-save-minimum-number-of-seconds-ago 10)
+(setq planet-last-git-save-minimum-number-of-seconds-ago 15)
 
 (defun planet-update-last-git-save-time ()
   (setq planet-last-git-save-time (planet-get-todays-date))
@@ -1322,7 +1324,7 @@ date)
   ;; get current time
   (setq current-time (planet-get-todays-date))
   (setq current-time-encoded (apply 'encode-time current-time))
-(setq planet-last-git-save-time-encoded (apply 'encode-time planet-last-git-save-time))
+  (setq planet-last-git-save-time-encoded (apply 'encode-time planet-last-git-save-time))
   ;; difference in seconds
   (setq time-diff-seconds (float-time (time-subtract current-time-encoded planet-last-git-save-time-encoded)))
   (if (> time-diff-seconds  planet-last-git-save-minimum-number-of-seconds-ago) 
@@ -1330,7 +1332,6 @@ date)
       (setq result nil)
       )
   result)
-
 ;;* default appearance on open file
 ;;** option1: show 3 levels
 (add-hook 'planet-mode-hook
