@@ -2674,13 +2674,13 @@ region, clear header."
          ;; (message "ssh-clipboard-copy: i m on myhost=local")
          ;; * send it so ssh server
          (setq path1 ssh-clipboard-file)
-         (setq path2 (concat "'" ssh-server-name ":~/" "'"))) ;; quote to make ~ convert to (correct) home only on server
+         (setq path2 (concat "'" ssh-server-name ":~/" "'")) ;; quote to make ~ convert to (correct) home only on server
 
          (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
          (async-shell-command command-string)
          (message (concat "rsync'ed to ssh server (" ssh-server-name ")" )))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
 
 (defun ssh-clipboard-paste ()
   (interactive)
@@ -2707,6 +2707,10 @@ region, clear header."
     (setq ssh-clipboard-content (buffer-string)))
   ;; * paste content
   (insert ssh-clipboard-content))
+
+;; ** ssh-clipboard key bindings
+(evil-leader/set-key "y" 'ssh-clipboard-copy)
+(evil-leader/set-key "p" 'ssh-clipboard-paste)
 
 ;; * frequently used unicode characters
 ;; ** docu/instruction -> how to get the code of a character
