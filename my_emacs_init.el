@@ -8,6 +8,15 @@
   (setq debug-on-error t)
   )
 
+;; * get machine, we re on
+(setq myhost (getenv "MYHOST"))
+;; ** you can also set it later interactively with this fun:
+(defun set-myhost ()
+  (interactive)
+  (setq new-myhost-name (read-file-name "Enter server name:"))
+  (setq myhost new-myhost-name)
+  (message "MYHOST set to %s" new-myhost-name)
+  )
 ;; * general requirement: use-package and quelpa-use-package
 ;; ** use-package
 (require 'use-package)
@@ -2652,19 +2661,24 @@ region, clear header."
   (interactive)
   ;; ** copy current region -> into string
   (setq current-region-string (buffer-substring (mark) (point)))
-  ;; ** write to file ~/ssh_clipboard.txt
   (with-temp-file ssh-clipboard-file
     ;; (insert-file-contents file)
     ;; (not appending --> so outcommented)
-    (insert current-region-string)
-    )
-  ;; * send it so ssh server
-  (setq path1 ssh-clipboard-file)
-  (setq path2 (concat ssh-server-name ":/home/beijsach"))
-  (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
-  (async-shell-command command-string)
-  (message (concat "region copied to " ssh-clipboard-file " and rsync'ed to ssh server (" ssh-server-name ")" ))
-  )
+    (insert current-region-string))
+  (message (concat "region copied to " ssh-clipboard-file "." ))
+  (cond ((or (equal myhost "mathe") (equal myhost "hlrn"))
+         ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
+         )
+        ((equal myhost "local")
+         ;; (message "ssh-clipboard-copy: i m on myhost=local")
+         ;; * send it so ssh server
+         (setq path1 ssh-clipboard-file)
+         (setq path2 (concat ssh-server-name ":/home/beijsach"))
+         (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+         (async-shell-command command-string)
+         (message (concat "rsync'ed to ssh server (" ssh-server-name ")" )))
+        (t
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
 
 (defun ssh-clipboard-paste ()
   (interactive)
