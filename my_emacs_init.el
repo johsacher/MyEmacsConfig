@@ -13,7 +13,7 @@
 ;; ** you can also set it later interactively with this fun:
 (defun set-myhost ()
   (interactive)
-  (setq new-myhost-name (read-file-name "Enter server name:"))
+  (setq new-myhost-name (read-string "Enter server name (e.g. local/hlrn/mathe):"))
   (setq myhost new-myhost-name)
   (message "MYHOST set to %s" new-myhost-name)
   )
@@ -2646,13 +2646,14 @@ region, clear header."
 ;; * stopwatch
 ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
 
-
+(setq str (read-string "enter string:"))
 ;; * ssh clipboard
 (defvar ssh-clipboard-file "~/ssh_clipboard.txt")
-(defvar ssh-server-name "blogin")
+(defvar ssh-server-name)
+
 (defun ssh-clipboard-set-server-name ()
   (interactive)
-  (setq new-ssh-server-name (read-file-name "Enter server name:"))
+  (setq new-ssh-server-name (read-string "enter server name alias (aliases defined in your ~/.ssh/config file, e.g. blogin/mathe):"))
   (setq ssh-server-name new-ssh-server-name)
   (message "server name set to %s" new-ssh-server-name)
   )
@@ -2673,23 +2674,39 @@ region, clear header."
          ;; (message "ssh-clipboard-copy: i m on myhost=local")
          ;; * send it so ssh server
          (setq path1 ssh-clipboard-file)
-         (setq path2 (concat ssh-server-name ":/home/beijsach"))
+         (setq path2 (concat "'" ssh-server-name ":~/" "'"))) ;; quote to make ~ convert to (correct) home only on server
+
          (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
          (async-shell-command command-string)
          (message (concat "rsync'ed to ssh server (" ssh-server-name ")" )))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))
 
 (defun ssh-clipboard-paste ()
   (interactive)
+  ;; if on local machine -> rsync ssh-clipboard from server first
+  (cond
+        ((or (equal myhost "mathe") (equal myhost "hlrn"))
+         ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
+         )
+
+        ((equal myhost "local")
+         ;; (message "ssh-clipboard-copy: i m on myhost=local")
+         ;; * send it so ssh server
+         (setq path1 (concat "'" ssh-server-name ":~/ssh_clipboard.txt" "'")) ;; quote to make ~ convert to (correct) home only on server
+         (setq path2 "~/")
+         (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+         (shell-command command-string)
+         (message (concat "rsync'ed from ssh server (" ssh-server-name ")" )))
+        (t
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))
+
   ;; * read content into string
   (with-temp-buffer
     (insert-file-contents ssh-clipboard-file)
-    (setq ssh-clipboard-content (buffer-string))
-    )
+    (setq ssh-clipboard-content (buffer-string)))
   ;; * paste content
-  (insert ssh-clipboard-content)
-  )
+  (insert ssh-clipboard-content))
 
 ;; * frequently used unicode characters
 ;; ** docu/instruction -> how to get the code of a character
