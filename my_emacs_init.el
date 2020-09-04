@@ -2658,15 +2658,14 @@ region, clear header."
   (message "server name set to %s" new-ssh-server-name)
   )
 
-(defun ssh-clipboard-copy () 
+(defun ssh-clipboard-copy-string (str1) 
   (interactive)
   ;; ** copy current region -> into string
-  (setq current-region-string (buffer-substring (mark) (point)))
   (with-temp-file ssh-clipboard-file
     ;; (insert-file-contents file)
     ;; (not appending --> so outcommented)
-    (insert current-region-string))
-  (message (concat "region copied to " ssh-clipboard-file "." ))
+    (insert str1)
+    ;; "region copied to " ssh-clipboard-file "." ))
   (cond ((or (equal myhost "mathe") (equal myhost "hlrn"))
          ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
          )
@@ -2680,7 +2679,18 @@ region, clear header."
          (async-shell-command command-string)
          (message (concat "rsync'ed to ssh server (" ssh-server-name ")" )))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))))
+
+
+
+
+(defun ssh-clipboard-copy () 
+  (interactive)
+  ;; ** copy current region -> into string
+  (setq current-region-string (buffer-substring (mark) (point)))
+  (ssh-clipboard-copy-string current-region-string)
+  (message (concat "region copied to " ssh-clipboard-file "." )))
+         
 
 (defun ssh-clipboard-paste ()
   (interactive)
@@ -2708,10 +2718,18 @@ region, clear header."
   ;; * paste content
   (insert ssh-clipboard-content))
 
+(defun ssh-clipboard-copy-path ()
+  (interactive)
+ (setq currentpath (copy-current-path))
+ (ssh-clipboard-copy-string currentpath)
+ (message (concat "copied path to ssh-clipboard: "  currentpath))
+ )
 ;; ** ssh-clipboard key bindings
 (evil-leader/set-key "y" 'ssh-clipboard-copy)
+(evil-leader/set-key "Y" 'ssh-clipboard-copy-path)
 (evil-leader/set-key "p" 'ssh-clipboard-paste)
 
+;; (global-set-key (kbd "<f1>") 'copy-current-path)
 ;; * frequently used unicode characters
 ;; ** docu/instruction -> how to get the code of a character
 ;;    - copy the symbol (e.g. from browser) to an emacs buffer 

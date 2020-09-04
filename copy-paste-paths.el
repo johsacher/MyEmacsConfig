@@ -14,6 +14,7 @@
  (message (concat "copied path to clipboard: "  currentpath))
  )
 
+
 (defun change-dir-from-clipboard () 
   (interactive)
   (cond ( (equal major-mode 'dired-mode)
