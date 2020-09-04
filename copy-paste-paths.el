@@ -12,7 +12,7 @@
    )
  (kill-new currentpath)
  (message (concat "copied path to clipboard: "  currentpath))
- )
+ currentpath)
 
 
 (defun change-dir-from-clipboard () 

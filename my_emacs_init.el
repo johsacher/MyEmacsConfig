@@ -2723,11 +2723,11 @@ region, clear header."
  (setq currentpath (copy-current-path))
  (ssh-clipboard-copy-string currentpath)
  (message (concat "copied path to ssh-clipboard: "  currentpath))
- )
+ currentpath)
 ;; ** ssh-clipboard key bindings
 (evil-leader/set-key "y" 'ssh-clipboard-copy)
 (evil-leader/set-key "Y" 'ssh-clipboard-copy-path)
-(evil-leader/set-key "p" 'ssh-clipboard-paste)
+(evil-leader/set-key "P" 'ssh-clipboard-paste)
 
 ;; (global-set-key (kbd "<f1>") 'copy-current-path)
 ;; * frequently used unicode characters
