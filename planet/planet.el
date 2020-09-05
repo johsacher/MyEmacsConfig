@@ -428,6 +428,7 @@ last-date)
 ;;test: (planet-open-today)
 ;;test: (planet-open-today)
 (evil-leader/set-key "pt" 'planet-today)
+(evil-leader/set-key "t" 'planet-today)
 (evil-leader/set-key "py" 'planet-this-week)
 
 

@@ -2678,9 +2678,9 @@ region, clear header."
            (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
            ;; (async-shell-command command-string)
            (shell-command command-string)
-           (message (concat "rsync'ed to ssh server (" this-ssh-server-name ")" )))
+           (message (concat "rsync'ed to ssh server (" this-ssh-server-name ")" ))))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))))
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))))
 
 
 
