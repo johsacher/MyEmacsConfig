@@ -1348,7 +1348,7 @@ from lines like:
 
 ;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
 (evil-leader/set-key "y" 'copy-current-path) ;; analogouns to y = vim yank
-(evil-leader/set-key "p" 'copy-current-path) ;; analogouns to p = vim yank
+(evil-leader/set-key "p" 'change-dir-from-clipboard) ;; analogouns to p = vim yank
 
 ;; copy current filename (e.g. execute in matlab command window)
 (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
@@ -1494,9 +1494,9 @@ from lines like:
 
 ;; ;;; dired ranger key's - nicely copy/paste files/dirs
 (require 'dired-ranger)
- (define-key dired-mode-map (kbd "W") 'dired-ranger-copy)
+ (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
  (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
- (define-key dired-mode-map (kbd "Y") 'dired-ranger-paste)
+ (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
 
 
 ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
