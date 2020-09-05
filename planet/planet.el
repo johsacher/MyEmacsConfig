@@ -427,9 +427,9 @@ last-date)
 
 ;;test: (planet-open-today)
 ;;test: (planet-open-today)
-(evil-leader/set-key "pt" 'planet-today)
+(evil-leader/set-key "ot" 'planet-today)
 (evil-leader/set-key "t" 'planet-today)
-(evil-leader/set-key "py" 'planet-this-week)
+(evil-leader/set-key "oy" 'planet-this-week)
 
 
 
@@ -1021,14 +1021,14 @@ date)
   (interactive)
   (org-set-property "Category" "work")
   )
-(evil-leader/set-key-for-mode 'org-mode "pw" 'planet-set-category-work) 
+(evil-leader/set-key-for-mode 'org-mode "ow" 'planet-set-category-work) 
 
 (defun planet-set-category-tools ()
   (interactive)
   (org-set-property "Category" "tools")
   )
 
-(evil-leader/set-key-for-mode 'org-mode "pt" 'planet-set-category-tools) 
+(evil-leader/set-key-for-mode 'org-mode "ot" 'planet-set-category-tools) 
 
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
 
@@ -1047,11 +1047,11 @@ date)
   )
 ;;*** guter shortcut für clock in/out / effort
 ;;**** clock in --> SPC-p-i
-(evil-leader/set-key-for-mode 'org-mode "pi" 'planet-clock-in) 
+(evil-leader/set-key-for-mode 'org-mode "oi" 'planet-clock-in) 
 ;;**** clock out --> SPC-p-o
-(evil-leader/set-key-for-mode 'org-mode "po" 'planet-clock-out) 
+(evil-leader/set-key-for-mode 'org-mode "oo" 'planet-clock-out) 
 ;;**** set effort --> SPC-p-e
-(evil-leader/set-key-for-mode 'org-mode "pe" 'org-set-effort) 
+(evil-leader/set-key-for-mode 'org-mode "oe" 'org-set-effort) 
 
 (defun planet-clock-in ()
   (interactive)
@@ -1308,7 +1308,7 @@ date)
       )
     )
   )
-(evil-leader/set-key-for-mode 'org-mode "pp" 'planet-revert-all-planet-buffers)
+(evil-leader/set-key-for-mode 'org-mode "oe" 'planet-revert-all-planet-buffers)
 ;;*** git save critical last time
 
 (defvar planet-last-git-save-time)
@@ -1377,10 +1377,10 @@ date)
 (evil-leader/set-key-for-mode 'org-mode "o3" 'planet-level-3-all)
 (evil-leader/set-key-for-mode 'org-mode "o0" 'planet-level-0-all)
 
-(evil-leader/set-key-for-mode 'org-mode "p1" 'planet-level-1)
-(evil-leader/set-key-for-mode 'org-mode "p2" 'planet-level-2)
-(evil-leader/set-key-for-mode 'org-mode "p3" 'planet-level-3)
-(evil-leader/set-key-for-mode 'org-mode "p0" 'planet-level-0)
+(evil-leader/set-key-for-mode 'org-mode "l1" 'planet-level-1)
+(evil-leader/set-key-for-mode 'org-mode "l2" 'planet-level-2)
+(evil-leader/set-key-for-mode 'org-mode "l3" 'planet-level-3)
+(evil-leader/set-key-for-mode 'org-mode "l0" 'planet-level-0)
 
 (defun planet-level-2-all ()
   (interactive)
