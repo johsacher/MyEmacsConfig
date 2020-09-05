@@ -1195,6 +1195,7 @@ date)
 (defun planet-git-pull ()
   (interactive)
   (setq command-string-pull "git -C ~/org pull")
+  (message (concat "executing: " command-string-pull))
   (shell-command command-string-pull)
   (planet-revert-all-planet-buffers))
 
