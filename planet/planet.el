@@ -1194,14 +1194,12 @@ date)
   )
 (defun planet-git-pull ()
   (interactive)
-  (if (and (planet-detect-if-planet-file) (planet-last-git-save-long-enough-ago))
-      (progn
-	(setq command-string-pull "git pull -C ~/org"
-        (shell-command command-string-pull)
-        )
-      )
-  )
-  )
+  (setq command-string-pull "git -C ~/org pull")
+  (shell-command command-string-pull)
+  (planet-revert-all-planet-buffers))
+
+(evil-leader/set-key-for-mode 'org-mode "op" 'planet-git-pull) 
+
 ;; ** set buffer-local exception from git-save (even when globally turned on)
 ;; to achieve for a buffer either:
 ;;   (1)  (make-local-variable 'planet-buffer-local-git-save-turned-off)
@@ -1308,7 +1306,7 @@ date)
       )
     )
   )
-(evil-leader/set-key-for-mode 'org-mode "pp" 'planet-revert-all-planet-buffers)
+(evil-leader/set-key-for-mode 'org-mode "oe" 'planet-revert-all-planet-buffers)
 ;;*** git save critical last time
 
 (defvar planet-last-git-save-time)
