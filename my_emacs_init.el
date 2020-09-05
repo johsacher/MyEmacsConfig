@@ -2631,7 +2631,6 @@ region, clear header."
 
 ;;   )
 
-
 ;; * async-await (needed to be able to wait for "external" shell commands)
 (use-package async-await
   :ensure t
@@ -2646,10 +2645,10 @@ region, clear header."
 ;; * stopwatch
 ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
 
-(setq str (read-string "enter string:"))
 ;; * ssh clipboard
 (defvar ssh-clipboard-file "~/ssh_clipboard.txt")
 (defvar ssh-server-name)
+(defvar ssh-server-names '("mathe" "blogin"))
 
 (defun ssh-clipboard-set-server-name ()
   (interactive)
@@ -2673,13 +2672,15 @@ region, clear header."
          ;; (message "ssh-clipboard-copy: i m on myhost=local")
          ;; * send it so ssh server
          (setq path1 ssh-clipboard-file)
-         (setq path2 (concat "'" ssh-server-name ":~/" "'")) ;; quote to make ~ convert to (correct) home only on server
+         (dolist (this-ssh-server-name ssh-server-names)
+           (setq path2 (concat "'" this-ssh-server-name ":~/" "'")) ;; quote to make ~ convert to (correct) home only on server
 
-         (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
-         (async-shell-command command-string)
-         (message (concat "rsync'ed to ssh server (" ssh-server-name ")" )))
+           (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+           ;; (async-shell-command command-string)
+           (shell-command command-string)
+           (message (concat "rsync'ed to ssh server (" this-ssh-server-name ")" )))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))))
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))))
 
 
 

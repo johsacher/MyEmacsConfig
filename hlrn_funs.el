@@ -10,7 +10,6 @@
                         (list 25 26 27 28) ;; blogin7
                         (list 29 30 31 32) ;; blogin8
                         ))
-
 (defun hlrn-remove-screen-session-get-session-id-from-remove-id (remove-id)
   (interactive)
   (setq result nil)
@@ -27,6 +26,8 @@
     )
   result)
 
+
+asdfasfd
 (hlrn-remove-screen-session-get-session-id-from-remove-id 33)
 
 (defun hlrn-remove-screen-session-open (index)
