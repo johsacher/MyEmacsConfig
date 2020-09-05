@@ -200,7 +200,7 @@
   (evil-leader/set-key "f" 'helm-find) 
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "g" 'helm-swoop) ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
-  ;; (evil-leader/set-key "p" 'helm-projectile-find-file) ;; -> "p" reserved for planet frequent commands
+  ;; (evil-leader/set-key "p" 'helm-projectile-find-file) ;; -> "p" ssh-clipboard-paste, defined there
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
   (evil-leader/set-key "x" 'helm-M-x)
   (evil-leader/set-key "2" 'split-window-below) 
@@ -398,7 +398,7 @@
 (evil-leader/set-key "a" 'ipython-calculator) 
 
 (defvar python-calculator-mode-map
-  (let ((m (make-sparse-keymap)))
+  (let ((m (make-sparse-keymap))) ;; i think this achieves a "local key binding" for the buffer
     (define-key m (kbd "M-p") 'term-send-up)
     m))
 
@@ -919,10 +919,9 @@ from lines like:
       ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
       ("CANCELLED" :background "lime green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
 
-
 ;; evil org-mode
 ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
-(evil-leader/set-key "l" 'org-preview-latex-fragment) 
+;; (evil-leader/set-key "l" 'org-preview-latex-fragment) 
 
 ;; ** basic behaviour - new headings
 (defun myorg-new-heading-enter-insert-state ()
@@ -1037,6 +1036,10 @@ from lines like:
 
  (add-hook 'term-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
+;; ** Alt-p --> map to arrow-up always 
+;; ( reason: ipython, I could n t achieve ipython remapping of "Alt-p"= "up", so I achieved it with this kind of workaround: the terminal-emulator / ipython "does not see" Alt-p coming, emacs will translate it to "up" before. so i get the desired behaviour and don t have to tediously use arrow keys)
+;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
+ (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
 
 ;; ** short cut for term-paste
  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
@@ -1343,6 +1346,10 @@ from lines like:
 (global-set-key (kbd "<f2>") 'change-dir-from-clipboard)
 (define-key dired-mode-map (kbd "<f2>") 'change-dir-from-clipboard)
 
+;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
+(evil-leader/set-key "y" 'copy-current-path) ;; analogouns to y = vim yank
+(evil-leader/set-key "p" 'change-dir-from-clipboard) ;; analogouns to p = vim yank
+
 ;; copy current filename (e.g. execute in matlab command window)
 (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
 
@@ -1487,9 +1494,9 @@ from lines like:
 
 ;; ;;; dired ranger key's - nicely copy/paste files/dirs
 (require 'dired-ranger)
- (define-key dired-mode-map (kbd "W") 'dired-ranger-copy)
+ (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
  (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
- (define-key dired-mode-map (kbd "Y") 'dired-ranger-paste)
+ (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
 
 
 ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
@@ -2663,7 +2670,7 @@ region, clear header."
   (with-temp-file ssh-clipboard-file
     ;; (insert-file-contents file)
     ;; (not appending --> so outcommented)
-    (insert str1)
+    (insert str1))
     ;; "region copied to " ssh-clipboard-file "." ))
   (cond ((or (equal myhost "mathe") (equal myhost "hlrn"))
          ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
@@ -2672,16 +2679,36 @@ region, clear header."
          ;; (message "ssh-clipboard-copy: i m on myhost=local")
          ;; * send it so ssh server
          (setq path1 ssh-clipboard-file)
+         (message "sending (via rsync) ssh_clipboard.txt to all servers.")
          (dolist (this-ssh-server-name ssh-server-names)
-           (setq path2 (concat "'" this-ssh-server-name ":~/" "'")) ;; quote to make ~ convert to (correct) home only on server
+           (message (concat "sending ssh_clipboard.txt to server '" this-ssh-server-name "'..."))
 
            (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+           (message (concat "executing command: '" command-string "' ..."))
+           ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
+           ;; ** shell-command (problem: no asynchronous)
+           ;; (setq path2 (concat this-ssh-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
+           ;; (shell-command (concat "echo command will show like this in shell: " command-string))
+           ;; (shell-command command-string)
+           ;; ** async-shell-command (problem: complains about output-buffer, annoying)
            ;; (async-shell-command command-string)
-           (shell-command command-string)
+           ;; ** start-process (problem: complains about output-buffer, annoying)
+           ;; (async-shell-command command-string nil nil)
+           ;; (setq output-buffer "foo")
+           ;; ;;                                                     "arg-components start here", no need for spaces
+           ;; ;;                                                        |
+           ;; ;;                                                        V
+           ;; (setq thisproc (start-process "process_name_dummy" output-buffer "rsync" "--progress" "-va" "-I" path1 path2))
+           ;; 
+           ;; ** start-process-shell-command (this worked!)
+           (setq path2 (concat this-ssh-server-name ":'~'/")) 
+           (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+           ;; (setq output-buffer nil)
+           (setq output-buffer "*ssh-clipboard-shell-ouptput*")
+           (start-process-shell-command "process_name_dummy" output-buffer command-string)
            (message (concat "rsync'ed to ssh server (" this-ssh-server-name ")" ))))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))))
-
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
 
 
 
@@ -2726,15 +2753,14 @@ region, clear header."
  (message (concat "copied path to ssh-clipboard: "  currentpath))
  currentpath)
 ;; ** ssh-clipboard key bindings
-(evil-leader/set-key "y" 'ssh-clipboard-copy)
-(evil-leader/set-key "Y" 'ssh-clipboard-copy-path)
-(evil-leader/set-key "P" 'ssh-clipboard-paste)
+(evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
+(evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
 
 ;; (global-set-key (kbd "<f1>") 'copy-current-path)
 ;; * frequently used unicode characters
 ;; ** docu/instruction -> how to get the code of a character
 ;;    - copy the symbol (e.g. from browser) to an emacs buffer 
-;;    - type C-x = , -> it will give you the unicode number in decimal/octal/hex
+;;    - type 'C-x =' (M-x what-cursor-position, or also M-x describe-char) , -> it will give you the unicode number in decimal/octal/hex
 ;;      e.g. for ↯ -> minibuffer: Char ↯ (8623, #o20657, #x21af, file, ... ) 
 ;;                                         ^        ^       ^
 ;;                                         |        |       |
@@ -2742,7 +2768,7 @@ region, clear header."
 ;;                                       (8623)   (20657   (21af)
 ;;    - how to print it with elisp?
 ;;      -- use hexadecimal value:  (insert "\u21af"), mind: always 4 chars, preceed with 0's e.g. for 'a' (61) --> (insert "\u0061")
-;;      -- use decimal value:
+;;      -- use decimal value: don t know...
 ;; ** background on unicode and UTF-8
 ;;    - utf-8 DOES not (generally) have 8 bits
 ;;    - it is a "variable-width character encoding" (wikipedia)
