@@ -219,10 +219,17 @@
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 
+;; * drag-stuff (evilized)
+;; ( this is already a bit "tweaking" of evil mode )
+(define-key evil-normal-state-map (kbd "C-j") 'drag-stuff-down)
+(define-key evil-normal-state-map (kbd "C-k") 'drag-stuff-up)
+(define-key evil-normal-state-map (kbd "C-h") 'drag-stuff-left)
+(define-key evil-normal-state-map (kbd "C-l") 'drag-stuff-right)
+
 ;; * planet-mode (my org extension)
 (load (concat my_load_path "planet/planet.el"))
 
-;; ** git save mode default 
+;; ** save git mode default 
 (planet-git-save-turn-on)
 
           
@@ -1040,6 +1047,7 @@ from lines like:
 ;; ( reason: ipython, I could n t achieve ipython remapping of "Alt-p"= "up", so I achieved it with this kind of workaround: the terminal-emulator / ipython "does not see" Alt-p coming, emacs will translate it to "up" before. so i get the desired behaviour and don t have to tediously use arrow keys)
 ;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
  (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
+ (evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
 
 ;; ** short cut for term-paste
  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
@@ -2683,12 +2691,12 @@ region, clear header."
          (dolist (this-ssh-server-name ssh-server-names)
            (message (concat "sending ssh_clipboard.txt to server '" this-ssh-server-name "'..."))
 
-           (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
-           (message (concat "executing command: '" command-string "' ..."))
            ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
            ;; ** shell-command (problem: no asynchronous)
            ;; (setq path2 (concat this-ssh-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
            ;; (shell-command (concat "echo command will show like this in shell: " command-string))
+           ;; (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+           ;; (message (concat "executing command: '" command-string "' ..."))
            ;; (shell-command command-string)
            ;; ** async-shell-command (problem: complains about output-buffer, annoying)
            ;; (async-shell-command command-string)
