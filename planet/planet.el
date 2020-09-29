@@ -1027,6 +1027,12 @@ date)
   (interactive)
   (org-set-property "Category" "tools")
   )
+(evil-leader/set-key-for-mode 'org-mode "op" 'planet-set-category-private) 
+
+(defun planet-set-category-private ()
+  (interactive)
+  (org-set-property "Category" "private")
+  )
 
 (evil-leader/set-key-for-mode 'org-mode "ot" 'planet-set-category-tools) 
 

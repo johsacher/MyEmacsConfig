@@ -219,10 +219,17 @@
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 
+;; * drag-stuff (evilized)
+;; ( this is already a bit "tweaking" of evil mode )
+(define-key evil-normal-state-map (kbd "C-j") 'drag-stuff-down)
+(define-key evil-normal-state-map (kbd "C-k") 'drag-stuff-up)
+(define-key evil-normal-state-map (kbd "C-h") 'drag-stuff-left)
+(define-key evil-normal-state-map (kbd "C-l") 'drag-stuff-right)
+
 ;; * planet-mode (my org extension)
 (load (concat my_load_path "planet/planet.el"))
 
-;; ** git save mode default 
+;; ** save git mode default 
 (planet-git-save-turn-on)
 
           
@@ -488,6 +495,7 @@
   (setq todo-state (nth 2 components))
   (message (concat "current todo state: " todo-state))
   )
+
 ;; ** show distribution of clocked time per tag
 (require 'org-table)
 (require 'org-clock)
@@ -537,6 +545,9 @@
 
 (provide 'clocktable-by-tag)
 
+;; ** links in org-mode
+;; *** copy url to clipboard and stuff
+;; --> best way -> just M-x org-toggle-link-display , and copy url with evil "yi]"
 
 ;; ** evaluate code snippets in org
 ;; *** don t confirm every time
@@ -637,21 +648,153 @@
       )
   )
 
-;; ** enable enumerations with a./b./c.
+;; ** org latex export (settings and tweaks)
+
+;; *** make plainlists below level always unnumbered
+;; the "blunt way" redefine function (better later-> use advice or sth)
+(defun org-latex-headline (headline contents info)
+  "Transcode a HEADLINE element from Org to LaTeX.
+CONTENTS holds the contents of the headline.  INFO is a plist
+holding contextual information."
+  (unless (org-element-property :footnote-section-p headline)
+    (let* ((class (plist-get info :latex-class))
+	   (level (org-export-get-relative-level headline info))
+	   (numberedp (org-export-numbered-headline-p headline info))
+	   (class-sectioning (assoc class (plist-get info :latex-classes)))
+	   ;; Section formatting will set two placeholders: one for
+	   ;; the title and the other for the contents.
+	   (section-fmt
+	    (let ((sec (if (functionp (nth 2 class-sectioning))
+			   (funcall (nth 2 class-sectioning) level numberedp)
+			 (nth (1+ level) class-sectioning))))
+	      (cond
+	       ;; No section available for that LEVEL.
+	       ((not sec) nil)
+	       ;; Section format directly returned by a function.  Add
+	       ;; placeholder for contents.
+	       ((stringp sec) (concat sec "\n%s"))
+	       ;; (numbered-section . unnumbered-section)
+	       ((not (consp (cdr sec)))
+		(concat (funcall (if numberedp #'car #'cdr) sec) "\n%s"))
+	       ;; (numbered-open numbered-close)
+	       ((= (length sec) 2)
+		(when numberedp (concat (car sec) "\n%s" (nth 1 sec))))
+	       ;; (num-in num-out no-num-in no-num-out)
+	       ((= (length sec) 4)
+		(if numberedp (concat (car sec) "\n%s" (nth 1 sec))
+		  (concat (nth 2 sec) "\n%s" (nth 3 sec)))))))
+	   ;; Create a temporary export back-end that hard-codes
+	   ;; "\underline" within "\section" and alike.
+	   (section-back-end
+	    (org-export-create-backend
+	     :parent 'latex
+	     :transcoders
+	     '((underline . (lambda (o c i) (format "\\underline{%s}" c))))))
+	   (text
+	    (org-export-data-with-backend
+	     (org-element-property :title headline) section-back-end info))
+	   (todo
+	    (and (plist-get info :with-todo-keywords)
+		 (let ((todo (org-element-property :todo-keyword headline)))
+		   (and todo (org-export-data todo info)))))
+	   (todo-type (and todo (org-element-property :todo-type headline)))
+	   (tags (and (plist-get info :with-tags)
+		      (org-export-get-tags headline info)))
+	   (priority (and (plist-get info :with-priority)
+			  (org-element-property :priority headline)))
+	   ;; Create the headline text along with a no-tag version.
+	   ;; The latter is required to remove tags from toc.
+	   (full-text (funcall (plist-get info :latex-format-headline-function)
+			       todo todo-type priority text tags info))
+	   ;; Associate \label to the headline for internal links.
+	   (headline-label (org-latex--label headline info t t))
+	   (pre-blanks
+	    (make-string (org-element-property :pre-blank headline) ?\n)))
+      (if (or (not section-fmt) (org-export-low-level-p headline info))
+	  ;; This is a deep sub-tree: export it as a list item.  Also
+	  ;; export as items headlines for which no section format has
+	  ;; been found.
+	  (let ((low-level-body
+		 (concat
+		  ;; If headline is the first sibling, start a list.
+		  (when (org-export-first-sibling-p headline info)
+		    ;; (format "\\begin{%s}\n" (if numberedp 'enumerate 'itemize))) <===== CHANGED
+		    (format "\\begin{%s}\n" 'itemize))
+		  ;; Itemize headline
+		  "\\item"
+		  (and full-text
+		       (string-match-p "\\`[ \t]*\\[" full-text)
+		       "\\relax")
+		  " " full-text "\n"
+		  headline-label
+		  pre-blanks
+		  contents)))
+	    ;; If headline is not the last sibling simply return
+	    ;; LOW-LEVEL-BODY.  Otherwise, also close the list, before
+	    ;; any blank line.
+	    (if (not (org-export-last-sibling-p headline info)) low-level-body
+	      (replace-regexp-in-string
+	       "[ \t\n]*\\'"
+	       ;; (format "\n\\\\end{%s}" (if numberedp 'enumerate 'itemize)) <====== CHANGED
+	       (format "\n\\\\end{%s}" 'itemize)
+	       low-level-body)))
+	;; This is a standard headline.  Export it as a section.  Add
+	;; an alternative heading when possible, and when this is not
+	;; identical to the usual heading.
+	(let ((opt-title
+	       (funcall (plist-get info :latex-format-headline-function)
+			todo todo-type priority
+			(org-export-data-with-backend
+			 (org-export-get-alt-title headline info)
+			 section-back-end info)
+			(and (eq (plist-get info :with-tags) t) tags)
+			info))
+	      ;; Maybe end local TOC (see `org-latex-keyword').
+	      (contents
+	       (concat
+		contents
+		(let ((case-fold-search t)
+		      (section
+		       (let ((first (car (org-element-contents headline))))
+			 (and (eq (org-element-type first) 'section) first))))
+		  (org-element-map section 'keyword
+		    (lambda (k)
+		      (and (equal (org-element-property :key k) "TOC")
+			   (let ((v (org-element-property :value k)))
+			     (and (string-match-p "\\<headlines\\>" v)
+				  (string-match-p "\\<local\\>" v)
+				  (format "\\stopcontents[level-%d]" level)))))
+		    info t)))))
+	  (if (and opt-title
+		   (not (equal opt-title full-text))
+		   (string-match "\\`\\\\\\(.+?\\){" section-fmt))
+	      (format (replace-match "\\1[%s]" nil nil section-fmt 1)
+		      ;; Replace square brackets with parenthesis
+		      ;; since square brackets are not supported in
+		      ;; optional arguments.
+		      (replace-regexp-in-string
+		       "\\[" "(" (replace-regexp-in-string "\\]" ")" opt-title))
+		      full-text
+		      (concat headline-label pre-blanks contents))
+	    ;; Impossible to add an alternative heading.  Fallback to
+	    ;; regular sectioning format string.
+	    (format section-fmt full-text
+		    (concat headline-label pre-blanks contents))))))))
+
+;; *** (? check) enable enumerations with a./b./c.
 (setq org-list-allow-alphabetical t)
 
-
-;; ** org-ref (--> citation management & pdflatex export)
+;; *** org-ref (--> citation management & pdflatex export)
 (use-package org-ref
    :ensure t)
-;; org export --> has to run bibtex also
+;; *** org export --> has to run bibtex also
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
 (setq org-latex-prefer-user-labels t)
-;; ** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
+
+;; *** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
 ;;   (wrote this for automatic syncing on compilation in first place
 ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
-
 (defun org-export-latex-pdf-with-hook ()
   (interactive)
   ;; export to pdf
@@ -673,7 +816,7 @@
   (async-shell-command export_pdf_hook_final "*org_export_pdf_hook_process_output*")
   )
 
-;; *** use of 2 helper functions: org-kwds / org-kwd
+;; **** use of 2 helper functions: org-kwds / org-kwd
 ;; (from: http://kitchingroup.cheme.cmu.edu/blog/2013/05/05/Getting-keyword-options-in-org-files/)
 (defun org-kwds ()
   "parse the buffer and return a cons list of (property . value)
@@ -686,17 +829,17 @@ from lines like:
   "get the value of a KEYWORD in the form of #+KEYWORD: value"
   (cdr (assoc KEYWORD (org-kwds))))
 
-;; *** make the output not pop-up
+;; **** make the output not pop-up
 (add-to-list 'display-buffer-alist
   (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
-;; *** define the "run-f5" short cut
+;; **** define the "run-f5" short cut
 (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
 
 ;; ** evil org
 (require 'evil-org)
 (setq org-M-RET-may-split-line nil)
 
-;;; *** make tab key work as org-cycle in terminal
+;;; ** make tab key work as org-cycle in terminal
 (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
 
 (add-hook 'org-mode-hook
@@ -705,7 +848,7 @@ from lines like:
             (visual-line-mode)))
 
 
-;; org-mode paste image from clipboard
+;; ** paste image from clipboard in org-mode
 (defun org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
   (interactive)
   (setq filename
@@ -758,6 +901,7 @@ from lines like:
        )
 )
 
+;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
 (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
    (interactive)
    (setq orgdotfolder (file-name-nondirectory orgdotfolder-full))
@@ -771,7 +915,6 @@ from lines like:
        )
      )
    )
-
 
 (defun create-symlinks-for-all-hidden-org-file-folders (&optional path)
    (interactive)
@@ -855,11 +998,33 @@ from lines like:
    )
  currentpath)
 
-;; make sure emacs visits the target of a link (otherwise currentpath is wrong -> problem with pasting images)
+;; ** default LATEX_HEADER
+;; (not code, just doc here)
+
+;; #+title: <title>
+;; #
+;; # options:
+;; #+options: num:t
+;; #+options: toc:t
+;; #+options: H:2
+;; #
+;; # itemize all bullets
+;; #+LATEX_HEADER: \renewcommand{\labelitemi}{$\bullet$}
+;; #+LATEX_HEADER: \renewcommand{\labelitemii}{$\bullet$}
+;; #+LATEX_HEADER: \renewcommand{\labelitemiii}{$\bullet$}
+;; #+LATEX_HEADER: \renewcommand{\labelitemiv}{$\bullet$}
+
+;; ** make sure emacs visits the target of a link (otherwise currentpath is wrong -> problem with pasting images)
 (setq find-file-visit-truename t)
 
+;; org-mode inline images appearance
 (setq org-image-actual-width 300) ;; --> makes images more readable, for closer look, just open in image viewer
 
+;; ** org mode startup appearance
+;; *** org mode pretty entities (arrows and stuff)
+(setq org-pretty-entities t)
+;; *** show inline images 
+(setq org-startup-with-inline-images t)
 
 ;; ** emphasis markers
 ;; (setq org-hide-emphasis-markers t)                            
@@ -881,6 +1046,7 @@ from lines like:
 (:strike-through t))
 )))
 ;; ( org-set-emph-re) 
+
 ;; ** add some new labels
 (setq org-todo-keywords
       '((sequence
@@ -1040,6 +1206,7 @@ from lines like:
 ;; ( reason: ipython, I could n t achieve ipython remapping of "Alt-p"= "up", so I achieved it with this kind of workaround: the terminal-emulator / ipython "does not see" Alt-p coming, emacs will translate it to "up" before. so i get the desired behaviour and don t have to tediously use arrow keys)
 ;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
  (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
+ (evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
 
 ;; ** short cut for term-paste
  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
@@ -1407,10 +1574,7 @@ from lines like:
 ;; ** add option to list directories first
 ;;(setq dired-listing-switches "-aBhl  --group-directories-first")
 
-;; easy open with external applications
-(require 'openwith)
-(openwith-mode t)
-(setq openwith-associations '(("\\.pdf\\'" "okular" (file))))
+;; ** open in dired with external applications --> see '* open with external applications' (below)
 
 ;; ;;; * ) dired "options" (minor-modes)
 ;; ;;;--------------------------------------------
@@ -1580,19 +1744,21 @@ from lines like:
 ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; * open with external applications (in dired/ org-mode links / etc.)
+(require 'openwith)
+(openwith-mode t)
+(setq openwith-associations '(
+                              ("\\.xoj\\'" "xournal" (file))
+                              ("\\.pdf\\'" "okular" (file))
+                              ))
+
+;;; * save desktop sessions
+;;    (require 'session)
+;;    (add-hook 'after-init-hook 'session-initialize)
+;;(desktop-save-mode 1)
 
 
-;; ;; open external application
-;; ;; --> did work very badly / produced bugs
-;; ;;   (require 'openwith)
-;; ;;   (openwith-mode t)
-;; ;;; * ) save desktop sessions
-;; ;;    (require 'session)
-;; ;;    (add-hook 'after-init-hook 'session-initialize)
-;; ;;(desktop-save-mode 1)
-
-
-;;; * )  make possible for window to "stick" to its buffer
+;; * sticky buffers (make possible for window to "stick" to its buffer)
 (define-minor-mode sticky-buffer-mode
   "Make the current window always display this buffer."
   nil " sticky" nil
@@ -2683,12 +2849,12 @@ region, clear header."
          (dolist (this-ssh-server-name ssh-server-names)
            (message (concat "sending ssh_clipboard.txt to server '" this-ssh-server-name "'..."))
 
-           (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
-           (message (concat "executing command: '" command-string "' ..."))
            ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
            ;; ** shell-command (problem: no asynchronous)
            ;; (setq path2 (concat this-ssh-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
            ;; (shell-command (concat "echo command will show like this in shell: " command-string))
+           ;; (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+           ;; (message (concat "executing command: '" command-string "' ..."))
            ;; (shell-command command-string)
            ;; ** async-shell-command (problem: complains about output-buffer, annoying)
            ;; (async-shell-command command-string)
@@ -2832,6 +2998,10 @@ region, clear header."
   )
 
 ;; * image viewing (imagemagick)
+;; ** no line numbers
+(add-hook 'image-mode-hook
+          (lambda ()
+            (display-line-numbers-mode -1)))
 
 ;; ** evil key bindings
 (evil-define-key 'normal image-mode-map (kbd "n") 'image-next-file)
@@ -2924,3 +3094,8 @@ region, clear header."
 
 ;; C-c C-c         image-toggle-display
 ;; C-c C-x         image-toggle-hex-display
+
+
+;; * sound
+;; ** disable annoying bell sound
+(setq ring-bell-function 'ignore)
