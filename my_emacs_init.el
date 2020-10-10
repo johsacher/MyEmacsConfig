@@ -1,3 +1,4 @@
+
 ;; * TODOs
 ;; ** better mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
@@ -424,7 +425,8 @@
 ;; ** fix TAB -> org-cycle for android phone
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 
-
+;; ** redisplay inline images comfy key
+(evil-leader/set-key "or" 'org-redisplay-inline-images)
 
 ;; ** org bullets
 (require 'org-bullets)
@@ -613,9 +615,10 @@
   (interactive)
   (my-toggle-marker-around-region "/" "\/" "/" "\/")
   )
-(evil-leader/set-key "ob" 'org-toggle-bold-region)
-(evil-leader/set-key "oi" 'org-toggle-italic-region)
-(evil-leader/set-key "or" 'org-toggle-red-region)
+;; todo: rethink these, already reserverd for other stuff
+;; (evil-leader/set-key "ob" 'org-toggle-bold-region)
+;; (evil-leader/set-key "oi" 'org-toggle-italic-region)
+;; (evil-leader/set-key "or" 'org-toggle-red-region)
 
 (defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
   (setq begin (region-beginning))
@@ -1022,7 +1025,8 @@ from lines like:
 
 ;; ** org mode startup appearance
 ;; *** org mode pretty entities (arrows and stuff)
-(setq org-pretty-entities t)
+;; (setq org-pretty-entities t)
+(setq org-pretty-entities nil)
 ;; *** show inline images 
 (setq org-startup-with-inline-images t)
 
@@ -1813,7 +1817,9 @@ from lines like:
 (global-set-key (kbd "C-x C-f") #'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
-
+;; ** helm describe modes
+(require 'helm-describe-modes)
+(global-set-key [remap describe-mode] #'helm-describe-modes)
 ;; (setq helm-display-function 'helm-display-buffer-in-own-frame
 ;;         helm-display-buffer-reuse-frame nil
 ;;         helm-use-undecorated-frame-option nil)
@@ -1953,6 +1959,12 @@ load-path
   (interactive)
   (setq this-buffer-filename-base (file-name-base (buffer-file-name)))
   (send-string-to-matlab-shell-buffer-and-execute this-buffer-filename-base)
+)
+
+(defun save-and-send-scriptname-to-matlab-shell-buffer-and-execute ()
+  (interactive)
+  (save-buffer)
+  (send-scriptname-to-matlab-shell-buffer-and-execute)
 )
 
 
@@ -2130,13 +2142,13 @@ load-path
 ;; DEBUG CONTINUE <F6> (todo--> could be united with F5, detect if in debug process)
 (define-key matlab-mode-map (kbd "<f6>") 'matlab-dbcont)
 ;; RUN script <F5>
-(define-key matlab-mode-map (kbd "<f5>") 'send-scriptname-to-matlab-shell-buffer-and-execute)  
+(define-key matlab-mode-map (kbd "<f5>") 'save-and-send-scriptname-to-matlab-shell-buffer-and-execute)  
 
 ;; (define-key matlab-mode-map (kbd "<f9>") 'send-current-line-or-region-line-by-line-to-matlab-shell-buffer-and-execute)
 ;; DEBUG QUIT <F8>
 (define-key matlab-mode-map (kbd "<f8>") 'matlab-dbquit)
 ;; CLEAR BREAK POINTS current file
-(define-key matlab-mode-map (kbd "<f7>") 'matlab-dbclear-current-file)
+(define-key matlab-mode-map (kbd "<f7>") 'matlab-dbclear-all)
 ;; EVALUATE/RUN SELECTION <F9>
 (define-key matlab-mode-map (kbd "<f9>") 'send-current-region-to-matlab-shell-buffer-and-execute)
 ;; EVALUATE/RUN SELECTION <F9>
@@ -2971,6 +2983,12 @@ region, clear header."
   (insert "\U000021af")
   )
 
+
+;; (insert "\U0000270E")✎
+;; (insert "\U0000270f")✏
+;; (insert "\U00002710")✐
+;; (insert "\U00002711")✑
+;; (insert "\U00002712")✒
 
 
 ;; * termux android

@@ -1580,3 +1580,6 @@ date)
                        (sl/make-header)
                      "%b")))))
 
+;; mucke
+(defun mucke-open-track ()
+  )
