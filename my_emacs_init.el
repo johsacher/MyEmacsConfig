@@ -2981,6 +2981,16 @@ region, clear header."
   (async-shell-command command-string)
   )
 
+(defun latest-camera-pic-copy-to-currentdir ()
+  (interactive)
+  (setq my-phone-number "+4917657657978870")
+  ;; get current dir
+  ;; get cam pics dir
+  ;; get file name latest
+  ;; command copy
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
 ;; * auto-complete
 (require 'auto-complete-config)
 (ac-config-default)
