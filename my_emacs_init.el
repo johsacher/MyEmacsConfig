@@ -866,6 +866,7 @@ from lines like:
   (org-display-inline-images)
   )
 
+
 (evil-leader/set-key "n" 'planet-open-quick-notes) 
 ;; paste image from clipboard
 (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
@@ -2999,15 +3000,57 @@ region, clear header."
   (async-shell-command command-string)
   )
 
+
+(defun latest-camera-pic-get-file-name ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera")
+  ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
+  ;; get file name latest
+  (setq all-files (directory-files camera-pics-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
+  latest-pic-file)
+
+(defun latest-camera-pic-get-file-fullname ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera")
+  ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
+  ;; get file name latest
+  (setq all-files (directory-files camera-pics-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
+  latest-pic-file-fullname)
+
 (defun latest-camera-pic-copy-to-currentdir ()
   (interactive)
-  (setq my-phone-number "+4917657657978870")
   ;; get current dir
+  (setq current-path (get-current-path))
   ;; get cam pics dir
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera")
+  ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
   ;; get file name latest
-  ;; command copy
-  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
-  (async-shell-command command-string)
+  (setq all-files (directory-files camera-pics-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
+  (message latest-pic-file-fullname)
+  ;; copy
+  (copy-file latest-pic-file-fullname current-path t)
+  )
+
+(defun org-insert-latest-camera-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
+  (interactive)
+  ;; copy to current dir
+  (latest-camera-pic-copy-to-currentdir)
+  ;; make reference in org-file
+  (setq filename (latest-camera-pic-get-file-name))
+  (insert (concat "[[file:" filename "]]"))
+  ;; (org-redisplay-inline-images)
   )
 ;; * auto-complete
 (require 'auto-complete-config)
