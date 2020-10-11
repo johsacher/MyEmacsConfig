@@ -17,21 +17,21 @@ module unload anaconda3
 #+end_src
 ** configure with prefix for user local installation
 Do not forget to choose a prefix, since you do not have sudo rights and want to do a local installation for just one user (which is you).
-The best prefix choice, in my opinion is $HOME, since $HOME/bin, $HOME/lib, $HOME/share, etc. are also standard directories where other programs might look automatically for what they need (https://unix.stackexchange.com/questions/36871/where-should-a-local-executable-be-placed). If these directories do not exist yet, don't worry, they will be generated automatically during make install.
-*** start trying
+The best prefix choice, in my opinion, is $HOME, this will put everything (on install) into $HOME/bin, $HOME/lib, $HOME/share, etc. which are also standard directories where other programs might look automatically for what they need. (https://unix.stackexchange.com/questions/36871/where-should-a-local-executable-be-placed). If these directories do not exist yet, don't worry, they will be generated automatically during /texttt{make install}.
+*** /texttt{cd} to the downloaded emacs-source directory and start trying
 #+begin_src bash
 ./configure --prefix=$HOME
 #+end_src
 *** you will notice that some libraries could not be found, but also suggested how to explicitly ignore them for compilation. these are usually packages, that you do not need anyway when emacs is in terminal mode, which is usually your choice, since you log onto the server via ssh.
 #+begin_src bash
-# output is e.g. : the following libraries wre not found: libgif/libungif gnutls
+# output is e.g. : the following libraries were not found: libgif/libungif gnutls
 # so you exclude them as suggested by adding options e.g. like this:
 ./configure --prefix=$HOME --with-gif=no --with-gnutls=no
 #+end_src
-** make 
+** build (\texttt{make}) 
 but faster in parallel with e.g. 8 cores (-j8 option). The login nodes have 2X20 cores so that's acceptable. the build with -j8 took me only about a minute:
 #+begin_src bash
-make -j8
+make -j8 # took me less than a minute
 #+end_src
 ** make install
 #+begin_src bash
