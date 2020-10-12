@@ -1,0 +1,74 @@
+#+title: Soljanka nach Moskauer DDR-Art
+#+author: Johannes Sacher
+
+#+options: num:nil
+#+options: toc:t
+#+options: H:1
+#
+# itemize all bullets
+#+LATEX_HEADER: \renewcommand{\labelitemi}{$\bullet$}
+#+LATEX_HEADER: \renewcommand{\labelitemii}{$\bullet$}
+#+LATEX_HEADER: \renewcommand{\labelitemiii}{$\bullet$}
+#+LATEX_HEADER: \renewcommand{\labelitemiv}{$\bullet$}
+
+* sud (kleiner topf):
+[[file:20201010_131123.jpg]]
+** suppenfleisch 500 g, pfefferkörner 15, gewürzkörner 15, 2 lorbeerblätter, suppengrün, zwiebeli 1 geschält und halbiert
+** wasser kalt auffüllen, sachen reintun, und kochen
+** solange bis das fleisch weich ist
+* hauptsuppe (großer topf):
+[[file:20201010_131840.jpg]]
+** kartoffel in würfel schneiden 5 große
+** möhren klein schneiden in scheiben, 5 stück
+** 2 paprika klein schneiden
+** saure gurke, kapern, oliven
+[[file:20201010_132045.jpg]]
+[[file:20201010_132110.jpg]]
+*** kann man auch direkt rein schmeißen, aber hier extra schale
+** rote bohnen kidney 2 dosen
+[[file:20201010_132150.jpg]]
+*** waschen im sieb
+*** und reintun
+** rote bete ein glas in streifen (muss streifen sein, sonst schmeckt s nicht)
+[[file:20201010_132409.jpg]]
+** tomaten 2 dosen, pizza tomaten im tomatensaft
+[[file:20201010_132511.jpg]]
+[[file:20201010_132621.jpg]]
+** pfeffer, bisschen
+** salz bisschen, 3 gute finge priesen
+* jetzt pfanne
+[[file:20201010_133236.jpg]]
+** knacker in scheiben dann würfel
+[[file:20201010_133447.jpg]]
+** zwiebel in würfel, in pfanne
+[[file:20201010_133844.jpg]]
+* suppenfleisch abgießen
+[[file:20201010_134242.jpg]]
+[[file:20201010_134334.jpg]]
+** extra fleisch
+** rest abgießen
+[[file:20201010_134414.jpg]]
+** rest wird weggeschmissen
+** flüssigkeit kommt eigentlich in die hauptsuppe
+[[file:20201010_134546.jpg]]
+*** aber weil vegetarisch, warten wir
+** fleisch klein machen
+[[file:20201010_134625.jpg]]
+[[file:20201010_134749.jpg]]
+[[file:20201010_134957.jpg]]
+** zwiebeln noch nicht glasig genug
+[[file:20201010_135110.jpg]]
+** dann wenn sehr glasig, fast bisschen braun, rein in hauptsuppe
+[[file:20201010_135344.jpg]]
+* teilen vegetarisch
+[[file:20201010_135615.jpg]]
+** fleiach rein
+[[file:20201010_135634.jpg]]
+** tomatenmark, beide dosen
+[[file:20201010_135701.jpg]]
+*** auch in vegetarischen topf
+[[file:20201010_135758.jpg]]
+** soße kommt rein in haupttopf (nicht-vegetarisch)
+[[file:20201010_135949.jpg]]
+** knoblauch presse (oder klein schneiden)
+[[file:20201010_140900.jpg]]

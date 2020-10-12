@@ -3006,7 +3006,7 @@ region, clear header."
   ;; get current dir
   (setq current-path (get-current-path))
   ;; get cam pics dir
-  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera")
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
   ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
   ;; get file name latest
   (setq all-files (directory-files camera-pics-dir))
@@ -3019,7 +3019,7 @@ region, clear header."
   ;; get current dir
   (setq current-path (get-current-path))
   ;; get cam pics dir
-  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera")
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
   ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
   ;; get file name latest
   (setq all-files (directory-files camera-pics-dir))
@@ -3032,7 +3032,7 @@ region, clear header."
   ;; get current dir
   (setq current-path (get-current-path))
   ;; get cam pics dir
-  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera")
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
   ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
   ;; get file name latest
   (setq all-files (directory-files camera-pics-dir))
@@ -3049,6 +3049,8 @@ region, clear header."
   (latest-camera-pic-copy-to-currentdir)
   ;; make reference in org-file
   (setq filename (latest-camera-pic-get-file-name))
+  (end-of-line)
+  (newline)
   (insert (concat "[[file:" filename "]]"))
   ;; (org-redisplay-inline-images)
   )
