@@ -1021,20 +1021,20 @@ date)
   (interactive)
   (org-set-property "Category" "work")
   )
-(evil-leader/set-key-for-mode 'org-mode "ow" 'planet-set-category-work) 
+(evil-leader/set-key-for-mode 'org-mode "ocw" 'planet-set-category-work) 
 
 (defun planet-set-category-tools ()
   (interactive)
   (org-set-property "Category" "tools")
   )
-(evil-leader/set-key-for-mode 'org-mode "op" 'planet-set-category-private) 
+(evil-leader/set-key-for-mode 'org-mode "oct" 'planet-set-category-tools) 
 
 (defun planet-set-category-private ()
   (interactive)
   (org-set-property "Category" "private")
   )
+(evil-leader/set-key-for-mode 'org-mode "ocp" 'planet-set-category-private) 
 
-(evil-leader/set-key-for-mode 'org-mode "ot" 'planet-set-category-tools) 
 
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
 
@@ -1205,7 +1205,7 @@ date)
   (shell-command command-string-pull)
   (planet-revert-all-planet-buffers))
 
-(evil-leader/set-key-for-mode 'org-mode "op" 'planet-git-pull) 
+(evil-leader/set-key-for-mode 'org-mode "or" 'planet-git-pull) 
 
 ;; ** set buffer-local exception from git-save (even when globally turned on)
 ;; to achieve for a buffer either:
@@ -1313,7 +1313,7 @@ date)
       )
     )
   )
-(evil-leader/set-key-for-mode 'org-mode "oe" 'planet-revert-all-planet-buffers)
+;; (evil-leader/set-key-for-mode 'org-mode "not-needed-at-the-moment" 'planet-revert-all-planet-buffers)
 ;;*** git save critical last time
 
 (defvar planet-last-git-save-time)

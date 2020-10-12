@@ -1003,6 +1003,9 @@ from lines like:
  currentpath)
 
 ;; ** default LATEX_HEADER
+
+;; *** allow bindings to work "#BIND+ ..."
+(setq org-export-allow-bind-keywords t)
 ;; (not code, just doc here)
 
 ;; #+title: <title>
@@ -1017,6 +1020,14 @@ from lines like:
 ;; #+LATEX_HEADER: \renewcommand{\labelitemii}{$\bullet$}
 ;; #+LATEX_HEADER: \renewcommand{\labelitemiii}{$\bullet$}
 ;; #+LATEX_HEADER: \renewcommand{\labelitemiv}{$\bullet$}
+
+;; #+BIND: org-latex-image-default-width ".98\\linewidth"
+;; or
+;; #+BIND: org-latex-image-default-width "9cm"
+
+;; # other export language (mind "for technical reasons" has to be first english than ngerman, otherwise english, whyever.. latex-"bug")
+;; #+LATEX_HEADER: \usepackage[english, ngerman]{babel}
+
 
 ;; ** make sure emacs visits the target of a link (otherwise currentpath is wrong -> problem with pasting images)
 (setq find-file-visit-truename t)
