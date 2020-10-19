@@ -11,6 +11,13 @@
 
 ;; * get machine, we re on
 (setq myhost (getenv "MYHOST"))
+;; -> put into .bashrc of machine:
+;; export MYHOST=local
+;; or
+;; export MYHOST=hlrn
+;; or
+;; export MYHOST=mathe
+
 ;; ** you can also set it later interactively with this fun:
 (defun set-myhost ()
   (interactive)
@@ -196,7 +203,8 @@
   (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
 
   (evil-leader/set-key "c" 'comment-dwim-2) ;
-  (evil-leader/set-key "k" 'kill-this-buffer)
+  (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
+  (evil-leader/set-key "k" 'kill-this-buffer-no-prompt)
   (evil-leader/set-key "s" 'save-buffer) 
   (evil-leader/set-key "f" 'helm-find) 
   (evil-leader/set-key "d" 'dired-go-current-buffer) 
@@ -427,6 +435,9 @@
 
 ;; ** redisplay inline images comfy key
 (evil-leader/set-key "or" 'org-redisplay-inline-images)
+
+;; ** always redisplay inline images after ctrl-c-ctrl-c
+(advice-add 'org-ctrl-c-ctrl-c :after 'org-redisplay-inline-images)
 
 ;; ** org bullets
 (require 'org-bullets)
@@ -2174,6 +2185,7 @@ load-path
           (lambda ()
             (define-key matlab-shell-mode-map (kbd "<f10>") 'matlab-dbstep)
             (define-key matlab-shell-mode-map (kbd "<f8>") 'matlab-dbquit)
+            (define-key matlab-shell-mode-map (kbd "<f7>") 'matlab-dbclear-all)
             (define-key matlab-shell-mode-map (kbd "<f6>") 'matlab-dbcont)
             ;; set Alt-p for "go up" --> my own 'convenient convention' for all types of command shells
             (define-key matlab-shell-mode-map (kbd "M-p") 'matlab-shell-previous-matching-input-from-input)
