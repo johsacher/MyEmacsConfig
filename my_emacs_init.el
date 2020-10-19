@@ -17,6 +17,8 @@
 ;; export MYHOST=hlrn
 ;; or
 ;; export MYHOST=mathe
+;; or
+;; export MYHOST=phone
 
 ;; ** you can also set it later interactively with this fun:
 (defun set-myhost ()
@@ -1665,24 +1667,6 @@ new-org-file-full-name)
   (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
   
 (evil-leader/set-key "hm" 'dired-go-mucke)
-(defun mucke-new-song-folder ()
-  "creates song folder/file in default mucke folder (currently ~/org/mucke), and opens it in INSERT mode"
-  (interactive)
-  (setq owd default-directory)
-  ;; make folder in mucke
-  (cd (concat (substitute-in-file-name "$HOME") "/org/mucke"))
-  (setq artist-song-name (read-string "Enter Artist_SongNamr (e.g. 'MichaelJackson_BillieJean'):"))
-  (make-directory artist-song-name)
-  ;; make hidden org folder
-  (cd artist-song-name)
-  (message default-directory)
-  (setq song-file (create-hidden-org-file-folder artist-song-name))
-  ;; (cd owd)
-  ;; visit song-file so you can directly edit
-  (find-file song-file)
-  ;; paste android clipboard
-  (android-paste-clipboard)
-  )
 
 
 ;;    .) auto revert dired default
@@ -3231,6 +3215,27 @@ region, clear header."
 ;; C-c C-c         image-toggle-display
 ;; C-c C-x         image-toggle-hex-display
 
+
+;; * mucke
+(defun mucke-new-song-folder ()
+  "creates song folder/file in default mucke folder (currently ~/org/mucke), and opens it in INSERT mode"
+  (interactive)
+  (setq owd default-directory)
+  ;; make folder in mucke
+  (cd (concat (substitute-in-file-name "$HOME") "/org/mucke"))
+  (setq artist-song-name (read-string "Enter Artist_SongNamr (e.g. 'MichaelJackson_BillieJean'):"))
+  (make-directory artist-song-name)
+  ;; make hidden org folder
+  (cd artist-song-name)
+  (message default-directory)
+  (setq song-file (create-hidden-org-file-folder artist-song-name))
+  ;; (cd owd)
+  ;; visit song-file so you can directly edit
+  (find-file song-file)
+  ;; paste android clipboard
+  (if (equal myhost "phone")
+  (android-paste-clipboard))
+  )
 
 ;; * sound
 ;; ** disable annoying bell sound
