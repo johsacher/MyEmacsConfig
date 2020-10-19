@@ -902,8 +902,9 @@ from lines like:
           )
        ;; else
         (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
+        ;; return full file name of org file 
        )
-)
+new-org-file-full-name)
 
 ;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
 (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
@@ -1648,7 +1649,30 @@ from lines like:
 (evil-leader/set-key "hh" 'dired-go-home)
 (evil-leader/set-key "hw" 'dired-go-work)
 (evil-leader/set-key "hf" 'dired-go-fast) ;; for mathe-cluster
-(evil-leader/set-key "hb" 'helm-bookmarks)
+(defun dired-go-mucke ()
+  (interactive)
+  (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
+  
+(evil-leader/set-key "hm" 'dired-go-mucke)
+(defun mucke-new-song-folder ()
+  "creates song folder/file in default mucke folder (currently ~/org/mucke), and opens it in INSERT mode"
+  (interactive)
+  (setq owd default-directory)
+  ;; make folder in mucke
+  (cd (concat (substitute-in-file-name "$HOME") "/org/mucke"))
+  (setq artist-song-name (read-string "Enter Artist_SongNamr (e.g. 'MichaelJackson_BillieJean'):"))
+  (make-directory artist-song-name)
+  ;; make hidden org folder
+  (cd artist-song-name)
+  (message default-directory)
+  (setq song-file (create-hidden-org-file-folder artist-song-name))
+  ;; (cd owd)
+  ;; visit song-file so you can directly edit
+  (find-file song-file)
+  ;; paste android clipboard
+  (android-paste-clipboard)
+  )
+
 
 ;;    .) auto revert dired default
 (add-hook 'dired-mode-hook 'auto-revert-mode)
@@ -3004,6 +3028,16 @@ region, clear header."
 
 
 ;; * termux android
+
+;; ** paste from android-clipboard
+(defun android-paste-clipboard () 
+  (interactive)
+  (setq output (shell-command-to-string "termux-clipboard-get"))
+  (setq clipboard-string output) ;; in case no error occured, could be checked before
+  (insert clipboard-string)
+)
+
+;; ** put frequent things to clipboard
 (defun my-phone-number-to-clipboard ()
   (interactive)
   (setq my-phone-number "+4917657657978870")
@@ -3011,6 +3045,12 @@ region, clear header."
   (async-shell-command command-string)
   )
 
+(defun my-address-to-clipboard ()
+  (interactive)
+  (setq my-address "Fanningerstr. 52 10635 Berlin")
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
 
 (defun latest-camera-pic-get-file-name ()
   (interactive)
