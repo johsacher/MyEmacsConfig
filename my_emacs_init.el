@@ -9,24 +9,65 @@
   (setq debug-on-error t)
   )
 
+;; * machine distinction mechanism (server-/local-machines)
 ;; * get machine, we re on
 (setq myhost (getenv "MYHOST"))
 ;; -> put into .bashrc of machine:
-;; export MYHOST=local
+;; export MYHOST=laptop
 ;; or
 ;; export MYHOST=hlrn
 ;; or
 ;; export MYHOST=mathe
 ;; or
 ;; export MYHOST=phone
-
 ;; ** you can also set it later interactively with this fun:
 (defun set-myhost ()
   (interactive)
-  (setq new-myhost-name (read-string "Enter server name (e.g. local/hlrn/mathe):"))
+  (setq new-myhost-name (read-string "Enter server name (e.g. laptop/hlrn/mathe/phone):"))
   (setq myhost new-myhost-name)
   (message "MYHOST set to %s" new-myhost-name)
   )
+
+(defun show-myhost ()
+  (interactive)
+  (message "MYHOST is %s" myhost)
+  )
+
+;; * define local / server machines
+(defvar my-server-machine-names '("mathe" "hlrn" "emmy"))
+(defvar my-local-machine-names '("laptop" "phone"))
+
+;; * current-server
+(defvar my-current-server-name "hlrn") ;; the server i m currently working on
+
+(defun set-my-current-server-name ()
+  (interactive)
+  (setq new-ssh-server-name (read-string "enter server name alias (aliases defined in your ~/.ssh/config file, e.g. blogin/mathe):"))
+  (setq ssh-server-name new-ssh-server-name)
+  (message "server name set to %s" new-ssh-server-name)
+  )
+
+
+(defun myhost-is-local ()
+  (interactive)
+  (setq result nil)
+  (cond
+   ((member myhost my-local-machine-names)
+    (setq result t))
+   ( t (setq result nil)))
+  result)
+;; test : (myhost-is-local)
+
+(defun myhost-is-server ()
+  (interactive)
+  (setq result nil)
+  (cond
+   ((member myhost my-server-machine-names)
+    (setq result t))
+   ( t (setq result nil)))
+  result)
+;; test : (myhost-is-server)
+
 ;; * general requirement: use-package and quelpa-use-package
 ;; ** use-package
 (require 'use-package)
@@ -2863,16 +2904,8 @@ region, clear header."
 ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
 
 ;; * ssh clipboard
+;; ** user settings
 (defvar ssh-clipboard-file "~/ssh_clipboard.txt")
-(defvar ssh-server-name)
-(defvar ssh-server-names '("mathe" "blogin"))
-
-(defun ssh-clipboard-set-server-name ()
-  (interactive)
-  (setq new-ssh-server-name (read-string "enter server name alias (aliases defined in your ~/.ssh/config file, e.g. blogin/mathe):"))
-  (setq ssh-server-name new-ssh-server-name)
-  (message "server name set to %s" new-ssh-server-name)
-  )
 
 (defun ssh-clipboard-copy-string (str1) 
   (interactive)
@@ -2882,15 +2915,15 @@ region, clear header."
     ;; (not appending --> so outcommented)
     (insert str1))
     ;; "region copied to " ssh-clipboard-file "." ))
-  (cond ((or (equal myhost "mathe") (equal myhost "hlrn"))
+  (cond ((myhost-is-server)
          ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
          )
-        ((equal myhost "local")
+        ((myhost-is-local)
          ;; (message "ssh-clipboard-copy: i m on myhost=local")
          ;; * send it so ssh server
          (setq path1 ssh-clipboard-file)
          (message "sending (via rsync) ssh_clipboard.txt to all servers.")
-         (dolist (this-ssh-server-name ssh-server-names)
+         (dolist (this-server-name my-server-machine-names)
            (message (concat "sending ssh_clipboard.txt to server '" this-ssh-server-name "'..."))
 
            ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
@@ -2911,12 +2944,12 @@ region, clear header."
            ;; (setq thisproc (start-process "process_name_dummy" output-buffer "rsync" "--progress" "-va" "-I" path1 path2))
            ;; 
            ;; ** start-process-shell-command (this worked!)
-           (setq path2 (concat this-ssh-server-name ":'~'/")) 
+           (setq path2 (concat this-server-name ":'~'/")) 
            (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
            ;; (setq output-buffer nil)
            (setq output-buffer "*ssh-clipboard-shell-ouptput*")
            (start-process-shell-command "process_name_dummy" output-buffer command-string)
-           (message (concat "rsync'ed to ssh server (" this-ssh-server-name ")" ))))
+           (message (concat "rsync'ed to ssh server (" this-server-name ")" ))))
         (t
          (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
 
@@ -2934,20 +2967,20 @@ region, clear header."
   (interactive)
   ;; if on local machine -> rsync ssh-clipboard from server first
   (cond
-        ((or (equal myhost "mathe") (equal myhost "hlrn"))
+        ((myhost-is-server)
          ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
          )
 
-        ((equal myhost "local")
+        ((myhost-is-local)
          ;; (message "ssh-clipboard-copy: i m on myhost=local")
          ;; * send it so ssh server
-         (setq path1 (concat "'" ssh-server-name ":~/ssh_clipboard.txt" "'")) ;; quote to make ~ convert to (correct) home only on server
+         (setq path1 (concat "'" my-current-server-name ":~/ssh_clipboard.txt" "'")) ;; quote to make ~ convert to (correct) home only on server
          (setq path2 "~/")
          (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
          (shell-command command-string)
-         (message (concat "rsync'ed from ssh server (" ssh-server-name ")" )))
+         (message (concat "rsync'ed from ssh server (" my-current-server-name ")" )))
         (t
-         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'")))
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/laptop/phone/etc.'")))
 
   ;; * read content into string
   (with-temp-buffer
@@ -2965,8 +2998,9 @@ region, clear header."
 ;; ** ssh-clipboard key bindings
 (evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
 (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
-
 ;; (global-set-key (kbd "<f1>") 'copy-current-path)
+
+
 ;; * frequently used unicode characters
 ;; ** docu/instruction -> how to get the code of a character
 ;;    - copy the symbol (e.g. from browser) to an emacs buffer 
