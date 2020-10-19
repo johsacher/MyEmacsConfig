@@ -1708,6 +1708,7 @@ new-org-file-full-name)
   (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
   
 (evil-leader/set-key "hm" 'dired-go-mucke)
+(evil-leader/set-key "hb" 'helm-bookmarks)
 
 
 ;;    .) auto revert dired default
