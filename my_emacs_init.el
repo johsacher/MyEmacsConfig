@@ -3075,6 +3075,13 @@ region, clear header."
   (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
   (async-shell-command command-string)
   )
+(defvar my-email-address "johannes.sacher@googlemail.com")
+(defun copy-to-clipboard-my-email ()
+  (interactive)
+  (setq my-phone-number my-email-address)
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
 
 (defun my-address-to-clipboard ()
   (interactive)
