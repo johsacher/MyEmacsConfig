@@ -1077,7 +1077,7 @@ new-org-file-full-name)
 ;; #+LATEX_HEADER: \renewcommand{\labelitemiv}{$\bullet$}
 
 ;; #+BIND: org-latex-image-default-width ".98\\linewidth"
-;; or
+;; # or
 ;; #+BIND: org-latex-image-default-width "9cm"
 
 ;; # other export language (mind "for technical reasons" has to be first english than ngerman, otherwise english, whyever.. latex-"bug")
@@ -1097,25 +1097,26 @@ new-org-file-full-name)
 ;; *** show inline images 
 (setq org-startup-with-inline-images t)
 
-;; ** emphasis markers
+;; ** emphasis markers -> outcommented -> decided to not mess around with that, since this belongs to org-mode convention!
+;; --> need another solution to highlight important text with background (red/green/etc.) -> todo
 ;; (setq org-hide-emphasis-markers t)                            
-(setq org-emphasis-alist   
-(quote (("*" bold)
-("/" italic)
-("_" underline)
-("=" (:foreground "white" :background "red"))
-("|" (:foreground "white" :background "green"))
-("!" (:foreground "white" :background "green"))
-("&" (:foreground "white" :background "green"))
-("\\" (:foreground "white" :background "green"))
-("°" (:foreground "white" :background "green"))
-(">" (:foreground "white" :background "green"))
-("?" (:foreground "white" :background "green"))
-("€" (:foreground "white" :background "green"))
-("~" org-verbatim verbatim)
-("+"
-(:strike-through t))
-)))
+;; (setq org-emphasis-alist   
+;; (quote (("*" bold)
+;; ("/" italic)
+;; ("_" underline)
+;; ("=" (:foreground "white" :background "red"))
+;; ("|" (:foreground "white" :background "green"))
+;; ("!" (:foreground "white" :background "green"))
+;; ("&" (:foreground "white" :background "green"))
+;; ("\\" (:foreground "white" :background "green"))
+;; ("°" (:foreground "white" :background "green"))
+;; (">" (:foreground "white" :background "green"))
+;; ("?" (:foreground "white" :background "green"))
+;; ("€" (:foreground "white" :background "green"))
+;; ("~" org-verbatim verbatim)
+;; ("+"
+;; (:strike-through t))
+;; )))
 ;; ( org-set-emph-re) 
 
 ;; ** add some new labels
@@ -1128,6 +1129,7 @@ new-org-file-full-name)
          "QUESTION"
          "DONEBEFORE"
          "NEXTDAY"
+         "BESTCHOICE"
          "DISCARDED"
          "PROGRESS..."
          "CLOCKED IN..."
@@ -1153,6 +1155,7 @@ new-org-file-full-name)
       ("MAYBE" :background "gray" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("APPT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
       ("DONE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
+      ("BESTCHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
       ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
       ("CANCELLED" :background "lime green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
 
@@ -3004,24 +3007,34 @@ region, clear header."
 
 ;; * frequently used unicode characters
 ;; ** docu/instruction -> how to get the code of a character
-;;    - copy the symbol (e.g. from browser) to an emacs buffer 
-;;    - type 'C-x =' (M-x what-cursor-position, or also M-x describe-char) , -> it will give you the unicode number in decimal/octal/hex
-;;      e.g. for ↯ -> minibuffer: Char ↯ (8623, #o20657, #x21af, file, ... ) 
-;;                                         ^        ^       ^
-;;                                         |        |       |
-;;                                       decimal  octal   hexadecimal
-;;                                       (8623)   (20657   (21af)
+;;    - copy the symbol (e.g. from browser) to an emacs buffer ;;    - type 'C-x =' (M-x what-cursor-position, or also M-x describe-char) , -> it will give you the unicode number in decimal/octal/hex
+;;    - copy hex-code form minibuffer (e.g. for ↯ -> minibuffer: Char ↯ (8623, #o20657, #x21af, file, ... ) 
+;;                                                                         ^        ^       ^
+;;                                                                         |        |       |
+;;                                                                       decimal  octal   hexadecimal
+;;                                                                       (8623)   (20657   (21af)
+;;                                                                                          ^^^^
+;;                                                                                          ||||__ hex1
+;;                                                                                          |||___ hex2
+;;                                                                                          ||____ hex3
+;;                                                                                          |_____ hex4
+;;                                                                                        -> hex5/6/7/8 are "empty" or 0  --> full UTF-8 (4 bytes, 8 hex) number is 000021af  
+;;
+;;    - take the hex number (e.g. #x21af for "↯"), "fill up" with 0's until hex8 and prefix with "\U" -> "\U<hex8>...<hex2><hex1>, e.g. \U000021af"
+;;    - (above works for *all* utf-8 symbols. but if you have an ascii, i.e. only two hex, i.e. 1 byte, e.g. #x61 for "a", you can also use "small" prefix "\u"  and only "fill up" 0's till hex4: "\u<hex4><hex3><hex2><hex1>", e.g. "\u0061")
 ;;    - how to print it with elisp?
 ;;      -- use hexadecimal value:  (insert "\u21af"), mind: always 4 chars, preceed with 0's e.g. for 'a' (61) --> (insert "\u0061")
 ;;      -- use decimal value: don t know...
 ;; ** background on unicode and UTF-8
 ;;    - utf-8 DOES not (generally) have 8 bits
 ;;    - it is a "variable-width character encoding" (wikipedia)
-;;    - that means, it uses either 1 byte (8 bits) , or 2 bytes (16 bits), or 3 bytes(24 bits), or 4 bytes. 
+;;    - that means, it uses either 1 byte ( = 8 bits = *256 values* = *two hex* (16*16)) , or 2 bytes (16 bits), or 3 bytes(24 bits), or 4 bytes (32 bits). 
 ;;      -- 1 byte : 0xxxxxxx                             -> all 128 ascii characters
 ;;      -- 2 bytes: 110xxxxx 10xxxxxx                    -> latin, greek, arabic, hebrew, etc. 
 ;;      -- 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx           -> chinese, japanese, etc.
 ;;      -- 4 bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx  -> grinning cats, etc.
+;;      -- the binary number                  : <byte4> <byte3> <byte2> <byte1>
+;;      -- but the UTF-8 format (*reverse!*)  : <byte1> <byte2> <byte3> <byte4> (*reverse!*)
 ;;    - a bit of "human-machine-confusion" -> read number/bytes "left to right" or "right to left" ???
 ;;      -- first of all "right to left - thinking" can be misleading. it s coming from when we count from low to high numbers -> then we go right to left:  001, 002, 003, etc. or in binary: 001,010,011,100,101,etc.
 ;;      -- however "counting-direction" does not have to be "read-direction", i think the read direction is from left to right. i.e. when reading 0xxxxxxx, we first read the "1st" bit. and it immediately tells us that we have an ASCII character.
@@ -3029,7 +3042,7 @@ region, clear header."
 ;;      -- one byte is counted "right to left" as we know it from decimal, i.e. 00000001 = 1, 00000010 = 2, etc.
 ;;      -- however, when it comes to "READING MULTIPLE BYTES" the "SIGNIFICANCE HIERARCHY IS REVERSE (!!!)
 ;;      -- i.e. the "1st byte" is the "LEAST SIGNIFICANT BYTE" (!!!)
-;;      -- fazit: this is great for UTF-8 reading efficiency -> we immediately know if we re dealing with ascii from the first bit (!)
+;;      -- fazit: this is great for UTF-8 reading efficiency -> we immediately know if we re dealing with ascii from the first bit of the *first byte* (!)
 ;;          BUT: the "REAL" binary number would be BYTE4 BYTE3 BYTE2 BYTE1 (!)
 ;;          so: composing the real number of an UTF8-character, we d have to reverse order these bytes.
 ;;    - so NOT ALL possible numbers of 4 bytes (= (2**8)**4 = 4,294,967,296 ) are used
@@ -3044,10 +3057,19 @@ region, clear header."
 ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
 ;; ** contradiction ↯
 (defun insert-char-contradiction ()
+  ;; inserts a contradiction-symbol ↯
   (interactive)
   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
   ;; (insert "\u21af")
   (insert "\U000021af")
+  )
+
+(defun insert-char-pencil ()
+  ;; inserts a pencil-symbol ✎
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U0000270e")
   )
 
 
