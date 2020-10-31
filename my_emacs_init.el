@@ -173,6 +173,13 @@
 ;-----------------------------------------------------------
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; * gsyn dependency
+(defun gsyn-is-setup ()
+  (interactive)
+  (setq command-string "gsyn_dummy_message_call_other_non_exported")
+  (async-shell-command command-string)
+  )
+
 ;;;+) MELPA packages - make them available (some very good additional package list)
 (require 'package) ;; You might already have this line
 (add-to-list 'package-archives
