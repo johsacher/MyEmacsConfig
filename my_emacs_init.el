@@ -3119,6 +3119,31 @@ region, clear header."
   (async-shell-command command-string)
   )
 
+(defun android-go-to-camera-directory ()
+  (interactive)
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
+  (dired camera-pics-dir)
+  )
+
+(defun android-go-to-screenshots-directory ()
+  (interactive)
+  (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
+  (dired screenshots-dir)
+  )
+
+(defun latest-screenshot-pic-get-file-name ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
+  ;; get file name latest
+  (setq all-files (directory-files screenshots-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat screenshots-dir latest-pic-file))
+  (message (concat "latest screenshot file:" latest-pic-file-fullname)
+  latest-pic-file)
+
 (defun latest-camera-pic-get-file-name ()
   (interactive)
   ;; get current dir
@@ -3172,6 +3197,19 @@ region, clear header."
   (insert (concat "[[file:" filename "]]"))
   ;; (org-redisplay-inline-images)
   )
+
+(defun org-insert-latest-screenshot-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
+  (interactive)
+  ;; copy to current dir
+  (latest-camera-pic-copy-to-currentdir)
+  ;; make reference in org-file
+  (setq filename (latest-screenshot-pic-get-file-name))
+  (end-of-line)
+  (newline)
+  (insert (concat "[[file:" filename "]]"))
+  ;; (org-redisplay-inline-images)
+  )
+
 ;; * auto-complete
 (require 'auto-complete-config)
 (ac-config-default)
