@@ -3006,6 +3006,7 @@ region, clear header."
  (ssh-clipboard-copy-string currentpath)
  (message (concat "copied path to ssh-clipboard: "  currentpath))
  currentpath)
+
 ;; ** ssh-clipboard key bindings
 (evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
 (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
@@ -3141,7 +3142,7 @@ region, clear header."
   (setq all-files (directory-files screenshots-dir))
   (setq latest-pic-file (car (last all-files)))
   (setq latest-pic-file-fullname (concat screenshots-dir latest-pic-file))
-  (message (concat "latest screenshot file:" latest-pic-file-fullname)
+  (message (concat "latest screenshot file:" latest-pic-file-fullname))
   latest-pic-file)
 
 (defun latest-camera-pic-get-file-name ()
