@@ -672,6 +672,10 @@
   (my-toggle-marker-around-region "=" "="  "=" "=")
   )
 
+(defun org-toggle-underlined-region ()
+  (interactive)
+  (my-toggle-marker-around-region "_" "_"  "_" "_")
+  )
 (defun org-toggle-italic-region ()
   (interactive)
   (my-toggle-marker-around-region "/" "\/" "/" "\/")
