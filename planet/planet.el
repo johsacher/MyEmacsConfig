@@ -1204,8 +1204,15 @@ date)
   (message (concat "executing: " command-string-pull))
   (shell-command command-string-pull)
   (planet-revert-all-planet-buffers))
-
 (evil-leader/set-key-for-mode 'org-mode "or" 'planet-git-pull) 
+
+(defun planet-gsyn ()
+  (interactive)
+  (setq command-string-pull "gsyn ~/org")
+  (message (concat "executing: " command-string-pull))
+  (shell-command command-string-pull))
+
+(evil-leader/set-key-for-mode 'org-mode "og" 'planet-gsyn) 
 
 ;; ** set buffer-local exception from git-save (even when globally turned on)
 ;; to achieve for a buffer either:
