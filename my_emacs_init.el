@@ -179,6 +179,23 @@
   (setq command-string "gsyn_dummy_message_call_other_non_exported")
   (async-shell-command command-string)
   )
+(defun gsyn-find-main-git-directory-of-current-file ()
+  (setq command-string "git rev-parse --show-toplevel")
+  (setq output (shell-command-to-string command-string))
+  ;; output e.g. :
+  ;; "/home/johannes/MyEmacsConfig
+  ;; "
+  ;;--> quit "new line" from output -> only path -> e.g. "/home/johannes/MyEmacsConfig"
+  (setq current-git-top-level-absolute-path (replace-regexp-in-string "\n$" "" output))
+  current-git-top-level-absolute-path)
+(defun gsyn ()
+  (interactive)
+  (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
+  (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
+  (message (concat "executing: " command-string " ..."))
+  (async-shell-command command-string))
+
+(evil-leader/set-key ":" 'gsyn)
 
 ;;;+) MELPA packages - make them available (some very good additional package list)
 (require 'package) ;; You might already have this line
