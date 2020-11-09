@@ -192,7 +192,7 @@
   (interactive)
   (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
   (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
-  (message (concat "executing: " command-string " ..."))
+  (message (concat "git-synchronization launched ... (executed: " command-string ")"))
   (async-shell-command command-string))
 
 (evil-leader/set-key ":" 'gsyn)
@@ -3249,6 +3249,18 @@ region, clear header."
   )
 
 ;; * image viewing (imagemagick)
+;; ** image-set-size (not built-in (!) --> 100% 200% etc)
+(defun image-set-size ()
+  (interactive)
+  ;; (setq new_scale (read-number "resizing -> enter new scale: "))
+  ;; (let* ((image (image--get-imagemagick-and-warn))
+  ;;        (new-image (image--image-without-parameters image))
+  ;;        (scale (image--current-scaling image new-image)))
+  ;;   (setcdr image (cdr new-image))
+  ;;   (plist-put (cdr image) :scale new_scale)))
+  (image-transform-set-scale)
+  )
+
 ;; ** no line numbers
 (add-hook 'image-mode-hook
           (lambda ()

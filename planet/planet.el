@@ -1247,19 +1247,19 @@ date)
         ((not (planet-last-git-save-long-enough-ago))
          (message "file saved. (but not synced, since last git-save not long enough ago.)"))
         (t
-           (cond (gsyn-dependency-active
-                  (progn
+           (cond (gsyn-dependency-active ;; when using gsyn-package -> only one single async-command -> no "freezing" necessary
                     ;; * gsyn 
-                    (setq command-string "gsyn ~/org")
-                    (message (concat "executing: " command-string))
-                    (async-shell-command command-string)
+                    ;; var1:
+                    ;; (setq command-string "gsyn ~/org")
+                    ;; (message (concat "executing: " command-string))
+                    ;; (async-shell-command command-string)
+                    ;; var2:
+                    (gsyn) ;; -> gsyn automatically looks for root-git-directory and syncronizes that (add/commit/pull/push)
                     ;; maybe not even doing that (revert all planet files)... (still not sure?)
                     ;; (planet-revert-all-planet-buffers)
                     ;; (planet-level-0)
-                    )
-                    (planet-update-last-git-save-time)
-                  )
-                 ((not gsyn-dependency-active))
+                    (planet-update-last-git-save-time))
+                 ((not gsyn-dependency-active)) ;; when not using gsyn-package -> multiple consecutive commands -> not all async-commands -> "freezing" necessary, more pleasant workflow when gsyn-dependency-active = t
                   (progn
                     ;; (planet-update-last-git-save-time)
                     ;; (setq command-string (concat "git add " buffer-file-name " && git commit -m '.' && git push"))
@@ -1289,7 +1289,6 @@ date)
                     (planet-level-0)
                     (message "file saved. (and synced, since git-save turned on.)"))
              ))))
-
 
 (defun planet-git-sync-down-revert-file ()
   (interactive)
