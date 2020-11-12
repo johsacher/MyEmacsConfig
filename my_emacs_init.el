@@ -3383,3 +3383,10 @@ region, clear header."
 ;; * sound
 ;; ** disable annoying bell sound
 (setq ring-bell-function 'ignore)
+
+
+;; * expand-region
+(require 'expand-region)
+
+;; ** expand-region -> evil-mode shortcut -> visual mode map: "v" -> expand region / instead of exit visual mode
+(define-key evil-visual-state-map (kbd "v") 'er/expand-region)
