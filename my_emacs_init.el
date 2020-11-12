@@ -702,6 +702,11 @@
 ;; (evil-leader/set-key "oi" 'org-toggle-italic-region)
 ;; (evil-leader/set-key "or" 'org-toggle-red-region)
 
+(defun region-to-string ()
+  (interactive)
+  (setq region-string (buffer-substring (mark) (point)))
+  ;; (message (concat region-string))
+  region-string)
 (defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
   (setq begin (region-beginning))
   (setq end (region-end))
@@ -3120,6 +3125,12 @@ region, clear header."
 )
 
 ;; ** put frequent things to clipboard
+(defun android-copy-to-clipboard ()
+  (interactive)
+  (setq region-string (region-to-string))
+  (setq command-string (concat "termux-clipboard-set '" region-string "'"))
+  (async-shell-command command-string)
+  )
 (defun my-phone-number-to-clipboard ()
   (interactive)
   (setq my-phone-number "+4917657657978870")
