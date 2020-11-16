@@ -169,45 +169,8 @@
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode t)
 
-;;; * )  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;-----------------------------------------------------------
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; * gsyn dependency
-(defun gsyn-is-setup ()
-  (interactive)
-  (setq command-string "gsyn_dummy_message_call_other_non_exported")
-  (async-shell-command command-string)
-  )
-(defun gsyn-find-main-git-directory-of-current-file ()
-  (setq command-string "git rev-parse --show-toplevel")
-  (setq output (shell-command-to-string command-string))
-  ;; output e.g. :
-  ;; "/home/johannes/MyEmacsConfig
-  ;; "
-  ;;--> quit "new line" from output -> only path -> e.g. "/home/johannes/MyEmacsConfig"
-  (setq current-git-top-level-absolute-path (replace-regexp-in-string "\n$" "" output))
-  current-git-top-level-absolute-path)
-(defun gsyn ()
-  (interactive)
-  (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
-  (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
-  (message (concat "git-synchronization launched ... (executed: " command-string ")"))
-  (async-shell-command command-string))
-
-(evil-leader/set-key ":" 'gsyn)
-
-;;;+) MELPA packages - make them available (some very good additional package list)
-(require 'package) ;; You might already have this line
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize) ;; You might already have this line
-
-
-;;; * evil - load/ general
+;;; * evil - load/ general (comes first -> basis for other packages/definitions)
 ;; necessary for evil-collection (before load evil first time):
 (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
 (setq evil-want-keybinding nil)
@@ -322,6 +285,46 @@
     (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
 
 ;;
+
+
+;;; * )  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;-----------------------------------------------------------
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; * gsyn dependency
+(defun gsyn-is-setup ()
+  (interactive)
+  (setq command-string "gsyn_dummy_message_call_other_non_exported")
+  (async-shell-command command-string)
+  )
+(defun gsyn-find-main-git-directory-of-current-file ()
+  (setq command-string "git rev-parse --show-toplevel")
+  (setq output (shell-command-to-string command-string))
+  ;; output e.g. :
+  ;; "/home/johannes/MyEmacsConfig
+  ;; "
+  ;;--> quit "new line" from output -> only path -> e.g. "/home/johannes/MyEmacsConfig"
+  (setq current-git-top-level-absolute-path (replace-regexp-in-string "\n$" "" output))
+  current-git-top-level-absolute-path)
+(defun gsyn ()
+  (interactive)
+  (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
+  (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
+  (message (concat "git-synchronization launched ... (executed: " command-string ")"))
+  (async-shell-command command-string))
+
+(evil-leader/set-key ":" 'gsyn)
+
+;;;+) MELPA packages - make them available (some very good additional package list)
+(require 'package) ;; You might already have this line
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize) ;; You might already have this line
+
+
 
 
 ;;; * elisp mode
@@ -1500,6 +1503,10 @@ new-org-file-full-name)
 (defun my-split-root-window-below (&optional size)
   (interactive "P")
   (my-split-root-window size 'below))
+
+(defun my-split-root-window-above (&optional size)
+  (interactive "P")
+  (my-split-root-window size 'above))
 
 (defun my-split-root-window-right (&optional size)
   (interactive "P")
