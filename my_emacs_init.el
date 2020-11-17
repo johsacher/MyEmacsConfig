@@ -3133,7 +3133,7 @@ region, clear header."
   )
 (defun my-phone-number-to-clipboard ()
   (interactive)
-  (setq my-phone-number "+4917657657978870")
+  (setq my-phone-number "+4917657978870")
   (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
   (async-shell-command command-string)
   )
