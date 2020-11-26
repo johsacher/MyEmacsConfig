@@ -3426,5 +3426,13 @@ buffer is not visiting a file."
 ;; * draft-horse-term
 (defun draft-horse-term ()
   (interactive)
-
+  (setq draft-horse-term-buffer-name "*draft-horse-term*")
+  (switch-to-buffer draft-horse-term-buffer-name)
+  (term-mode)
+  (term-char-mode)
+  (let (term-escape-char)
+    ;; I wanna have find-file on C-x C-f -mm
+    ;; your mileage may definitely vary, maybe it's better to put this in your
+    ;; .emacs ...
+    (term-set-escape-char ?\C-x))
   )
