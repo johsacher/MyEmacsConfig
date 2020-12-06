@@ -467,8 +467,10 @@
 
 
   ;; * execute ipython
-  (comint-send-string ipython-calculator-buffer-name "ipython\n")
-  )
+  (cond ((equal myhost "phone")
+         (comint-send-string ipython-calculator-buffer-name "python\n"))
+        (t
+         (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
 
 
 (defun ipython-calculator ()
@@ -1867,10 +1869,13 @@ new-org-file-full-name)
 ;; * open with external applications (in dired/ org-mode links / etc.)
 (require 'openwith)
 (openwith-mode t)
-(setq openwith-associations '(
+(cond ((equal myhost "phone")
+       (setq openwith-associations '(
+                                     ("\\.jpg\\'" "termux-open" (file)))))
+      ((equal myhost "laptop")
+       (setq openwith-associations '(
                               ("\\.xoj\\'" "xournal" (file))
-                              ("\\.pdf\\'" "okular" (file))
-                              ))
+                              ("\\.pdf\\'" "okular" (file))))))
 
 ;;; * save desktop sessions
 ;;    (require 'session)
