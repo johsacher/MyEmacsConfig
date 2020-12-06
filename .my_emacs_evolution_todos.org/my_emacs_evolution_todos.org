@@ -1,0 +1,27 @@
+* clocking/effort tasks/subtasks
+** planet-clock-in-current-main-task --> nicht zeilen wechseln müssen, automatisch haupt-task
+** sub-clocks / sub-efforts
+*** vorplanung eines tages-arbeitspakets --> untergliederung des aufwands
+*** --> während des "abarbeitens" -> visuelles feedback, wie man on track ist in unteraufgaben
+*** -> sorgt dafür sich "nicht in einer unteraufgabe zu verlieren" auf kosten des einhaltens der gesamt aufgabe
+*** QUESTION --> hier noch erst mal abstrakte konzeptionierung von beliebiger hierarchie-tiefe? oder nur 2 hierarchie stufen fix? -> frage des umsetzungs-aufwands und des nutzens -> sind beliebige hierarchiestufe überhaupt im sinne des erfinders?
+**** hmmm warum eigentlich nicht beliebige -> mehr flexibilität
+**** TODO -> aber ein sauberes *eigenes* konzept nötig erst mal nötig
+**** TODO (nach dem prinzip "erst /interne Stimuli/, dann /externe Stimuli/") ->  erst eigenes konzept, dann pakete angucken und konzept erweitern und umsetzen (gute begrifflichkeiten in [[HenderEtAl2001_brainstorming_vs_nonbrainstorming_techniques_in_gss_environment.pdf][henderEtAl2001]]) 
+***** 1. Schritt: interne Stimuli aka "brainstorming"
+***** 2. Schritt: externe Stimuli aka "jetzt erst den publikums-joker :D" bzw. hier: -> "gibt s schon emacs-packages auf denen man aufbauen kann?"
+****** 2a konzept erweitern/anpassen
+****** 2b konzept umsetzen
+****** evtl. zurückitererieren zur konzept-erweiterung/anpassung (2a <--> 2b)
+**** technical terms in [[HenderEtAl2001_brainstorming_vs_nonbrainstorming_techniques_in_gss_environment.pdf][henderEtAl2001]]:
+***** external vs internal
+****** internal stimuli
+******* e.g. brainstorming
+****** external stimuli
+***** unrelated vs related (/stimulus relatedness/)
+****** /unrelated/ (--> more creativity / new ideas)
+******* /free association/
+******* /forced relationships/
+****** /related/
+*** "untergliederung" des efforts -> 
+[[./screenshot_20201127_153726.png]]
