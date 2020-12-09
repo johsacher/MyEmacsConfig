@@ -1884,8 +1884,10 @@ new-org-file-full-name)
 (openwith-mode t)
 (cond ((equal myhost "phone")
        (setq openwith-associations '(
-                                     ("\\.jpg\\'" "termux-open" (file)))))
-      ((equal myhost "laptop")
+                                     ("\\.jpg\\'" "termux-open" (file))))
+       (setq openwith-associations '(
+                                     ("\\.pdf\\'" "termux-open" (file)))))
+      ((eql myhost "laptop")
        (setq openwith-associations '(
                               ("\\.xoj\\'" "xournal" (file))
                               ("\\.pdf\\'" "okular" (file))))))
