@@ -1195,7 +1195,7 @@ new-org-file-full-name)
       ("DONE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
       ("BESTCHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
       ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
-      ("CANCELLED" :background "lime green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
+      ("CANCELLED" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
 
 ;; evil org-mode
 ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
@@ -1730,10 +1730,10 @@ new-org-file-full-name)
 ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 
 ;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
+(defvar home-dir (substitute-in-file-name "$HOME"))
 (defun dired-go-home ()
   (interactive)
-  (dired (substitute-in-file-name "$HOME"))
-  )
+  (dired home-dir))
 
 (defun dired-go-work ()
   (interactive)
@@ -1745,9 +1745,21 @@ new-org-file-full-name)
   (dired (substitute-in-file-name "$FAST"))
   )
 
+(defvar downloads-dir)
+(cond
+ ((equal myhost "phone")
+  (setq downloads-dir "/storage/emulated/0/Download/"))
+ ((equal myhost "laptop")
+  (setq downloads-dir (concat home-dir "/Downloads"))))
+
+(defun dired-go-downloads ()
+  (interactive)
+  (dired downloads-dir))
+
 (evil-leader/set-key "hh" 'dired-go-home)
 (evil-leader/set-key "hw" 'dired-go-work)
 (evil-leader/set-key "hf" 'dired-go-fast) ;; for mathe-cluster
+(evil-leader/set-key "hd" 'dired-go-downloads)
 (defun dired-go-mucke ()
   (interactive)
   (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
