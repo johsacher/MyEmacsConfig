@@ -1660,6 +1660,8 @@ new-org-file-full-name)
 (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
 (require 'dired)
 (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move) 
+(evil-leader/set-key "[" 'get-this-buffer-to-move)
+(evil-leader/set-key "]" 'switch-to-buffer-to-move)
 
 (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
 (define-key dired-mode-map (kbd "<f4>") 'switch-to-buffer-to-move) 
