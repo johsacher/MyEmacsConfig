@@ -1332,11 +1332,6 @@ new-org-file-full-name)
  (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
  (evil-define-key 'insert term-raw-map (kbd "C-p") 'term-paste)
 
-;; ** short cut for term-paste
- (evil-define-key 'normal term-raw-map (kbd "P") 'ssh-clipboard-term-paste)
- (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
- (evil-define-key 'emacs term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
- (evil-define-key 'insert term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
 
 
 ;; ** switch only between (term char with emacs-state) and (term line with normal-state)
@@ -3102,19 +3097,45 @@ region, clear header."
 (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
 ;; (global-set-key (kbd "<f1>") 'copy-current-path)
 
+(setq Y "1")
+(let ((Y "2")) (message Y) (message Y) (message Y))
+
 ;; ** ssh-clipboard copy path
+(defun dummy ()
+  (interactive)
+  (message (dired-get-filename))
+  )
 (defun ssh-clipboard-copy-path ()
   (interactive)
- (setq currentpath (copy-current-path))
- ;; in dired mode -> add filename under curser to the path -> it s just more of common use 
- (cond
-     ((equal major-mode 'dired-mode)
-        (setq filename (dired-copy-file-as-kill))
-        (setq currentpath (concat currentpath "/" filename)))
-     (t ));; so far no other use cases ssh-clipboard usually performed in dired mode
- (ssh-clipboard-copy-string currentpath)
- (message (concat "copied path to ssh-clipboard: "  currentpath))
- currentpath)
+    ;; in dired mode -> add filename under curser to the path -> it s just more of common use 
+    (cond
+        ((equal major-mode 'dired-mode)
+            ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
+            ;; (dired-copy-file-as-kill)
+            ;; (setq filename (current-kill 0))
+            ;; (setq currentpath (concat currentpath "/" filename))
+            ;; (setq fullfilename (dired-file-name-at-point))
+            (setq fullfilename (dired-get-filename))
+            (setq currentpath fullfilename))
+        (t
+         (setq ((currentpath (copy-current-path))))
+         ))
+    (message (concat "copied path to ssh-clipboard: "  currentpath)))
+
+ (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
+
+;; ** short cut(s) for ssh-clipboard-copy-path / ssh-clipboard-paste-path
+;; *** term-mode
+ (evil-define-key 'normal term-raw-map (kbd "P") 'ssh-clipboard-term-paste)
+ (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+
+;; *** dired-mode
+ (evil-define-key 'normal dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+
 
 
 ;; * frequently used unicode characters
