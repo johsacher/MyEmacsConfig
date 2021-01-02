@@ -3180,8 +3180,10 @@ region, clear header."
 ;;
 ;; e) change-path in clipboard
 ;;                         files        ... "leader + p"
-;;                         term         ... "ctrl   + p"
-;; IMPLEMENTED
+;;                         term         ... "ctrl   + alt + p"
+ (evil-define-key 'normal term-raw-map (kbd "C-M-p") 'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs term-raw-map (kbd "C-M-p") 'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert term-raw-map (kbd "C-M-p") 'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
 ;;
 ;; *** ssh-clipboard
 ;; a) ssh-copy region   ->
