@@ -2994,11 +2994,11 @@ region, clear header."
          (setq path1 ssh-clipboard-file)
          (message "sending (via rsync) ssh_clipboard.txt to all servers.")
          (dolist (this-server-name my-server-machine-names)
-           (message (concat "sending ssh_clipboard.txt to server '" this-ssh-server-name "'..."))
+           (message (concat "sending ssh_clipboard.txt to server '" this-server-name "'..."))
 
            ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
            ;; ** shell-command (problem: no asynchronous)
-           ;; (setq path2 (concat this-ssh-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
+           ;; (setq path2 (concat this-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
            ;; (shell-command (concat "echo command will show like this in shell: " command-string))
            ;; (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
            ;; (message (concat "executing command: '" command-string "' ..."))
@@ -3022,8 +3022,6 @@ region, clear header."
            (message (concat "rsync'ed to ssh server (" this-server-name ")" ))))
         (t
          (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
-
-
 
 (defun ssh-clipboard-copy () 
   (interactive)
@@ -3097,17 +3095,15 @@ region, clear header."
 (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
 ;; (global-set-key (kbd "<f1>") 'copy-current-path)
 
-(setq Y "1")
-(let ((Y "2")) (message Y) (message Y) (message Y))
-
 ;; ** ssh-clipboard copy path
-(defun dummy ()
-  (interactive)
-  (message (dired-get-filename))
-  )
 (defun ssh-clipboard-copy-path ()
   (interactive)
-    ;; in dired mode -> add filename under curser to the path -> it s just more of common use 
+  (setq currentpath (copy-current-path))
+  (ssh-clipboard-copy-string currentpath)
+  (message (concat "copied path to ssh-clipboard: "  currentpath)))
+
+(defun get-fullfilename ()
+  (interactive)
     (cond
         ((equal major-mode 'dired-mode)
             ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
@@ -3117,24 +3113,108 @@ region, clear header."
             ;; (setq fullfilename (dired-file-name-at-point))
             (setq fullfilename (dired-get-filename))
             (setq currentpath fullfilename))
-        (t
-         (setq ((currentpath (copy-current-path))))
-         ))
-    (message (concat "copied path to ssh-clipboard: "  currentpath)))
+        (t 
+         (setq fullfilename (buffer-file-name)))))
 
- (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
+(defun ssh-clipboard-copy-fullfilename ()
+  (interactive)
+  (setq fullfilename (get-fullfilename))
+  (ssh-clipboard-copy-string fullfilename)
+  (message (concat "copied fullfilename to ssh-clipboard: "  fullfilename)))
 
-;; ** short cut(s) for ssh-clipboard-copy-path / ssh-clipboard-paste-path
-;; *** term-mode
+(defun copy-fullfilename ()
+  (interactive)
+  (setq fullfilename (get-fullfilename))
+  (kill-new fullfilename)
+  (message (concat "copied fullfilename to clipboard: "  fullfilename)))
+
+;;  (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
+
+;; ** short cuts-concept for copy/paste  region/path/fullfilename
+;; *** normal clipboard
+;; a) copy region       ->
+;;                         files        ... "y" (copy)
+;; b) copy path         ->
+;;                         files        ... "leader + y" (copy)
+;; c) copy fullfilename ->
+;;                         dired/others ... "leader + u"
+;; d) paste             ->
+;;                         files        ... "p"
+;;                         term         ... "ctrl + p"
+;; e) change-path in clipboard
+;;                         files        ... "leader + p"
+;;                         term         ... "ctrl   + p"
+;;
+;; *** ssh-clipboard
+;; a) ssh-copy region   ->
+;;                         files        ... "leader + Y" 
+;;                         (term        ... "CTRL + Y") <-- no use case
+;; b) ssh-copy path     ->
+;;                         (dired/others ... "leader + ?" ) <-- no use case
+;;                         (term         ... "CTRL + ?") <-- no use case 
+;; c) ssh-copy filefullname  ->
+;;                         dired/others ... "leader + U" 
+;;                         (term         ...  "CTRL + U") <-- no use case
+;; d) ssh-paste           ->
+;;                         files        ... "leader + P" 
+;;                         term         ...  CTRL + P" 
+;; e) (change-path in clipboard) <-- no use case 
+
+;; ** short cuts-implementation for copy/paste  region/path/fullfilename
+;; *** normal clipboard
+;; a) copy region       ->
+;;                         files        ... "y" (copy)
+;; IMPLEMENTED
+;;
+;; b) copy path         ->
+;;                         files        ... "leader + y" (copy)
+;; IMPLEMENTED
+;;
+;; c) copy fullfilename ->
+;;                         dired/others ... "leader + u"
+   (evil-leader/set-key "u" 'copy-fullfilename)
+;; d) paste             ->
+;;                         files        ... "p"
+;;                         term         ... "ctrl + p"
+;; IMPLEMENTED
+;;
+;; e) change-path in clipboard
+;;                         files        ... "leader + p"
+;;                         term         ... "ctrl   + p"
+;; IMPLEMENTED
+;;
+;; *** ssh-clipboard
+;; a) ssh-copy region   ->
+;;                         files        ... "leader + Y" 
+;;                         (term        ... "CTRL + Y") <-- no use case
+;; IMPLEMENTED
+;;
+;; b) (ssh-copy path)  <-- no use case
+;;                         (also shortcut difficult to find: leader+Y/ctrl+Y/leader+y taken)
+;;                         (dired/others ... "leader + ?" ) <-- no use case 
+;;                         (term         ... "CTRL + ?") <-- no use case 
+;;
+;; c) ssh-copy filefullname  ->
+;;                         dired/others ... "leader + U" 
+;;                         (term         ...  "CTRL + U") <-- no use case
+   (evil-leader/set-key "U" 'ssh-clipboard-copy-fullfilename)
+;;
+;; d) ssh-paste           ->
+;;                         files        ... "leader + P" 
+;;                         term         ...  CTRL + P" 
+;; IMPLEMENTED
+;;
+;; e) (change-path in clipboard) <-- no use case 
+;;
+;; **** term-mode
  (evil-define-key 'normal term-raw-map (kbd "P") 'ssh-clipboard-term-paste)
  (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
  (evil-define-key 'emacs term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
  (evil-define-key 'insert term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
-
-;; *** dired-mode
- (evil-define-key 'normal dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
- (evil-define-key 'emacs dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
- (evil-define-key 'insert dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+;; **** dired-mode
+ (evil-define-key 'normal dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
 
 
 
