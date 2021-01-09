@@ -28,6 +28,9 @@
 #                                |                                  |
 #                                |                                  |
 #                                +----------------------------------+
+** emacs is a fully and freely programmable user-interphase with your operating system.
+*** thus, it is *not* and therefore cannot be a substitution of an operating system. it is rather a substitution of the graphical UI part of the OS. the GUI can be considered as part of the OS, but strictly seen, it is the outmost layer and thus does not primarily define the OS. in linux this truth is much more evident, since popular linux-distros allow for a free interchangable GUI-program (gnome/kde/unity/etc.). in windows and iOS this degree of freedom is abscent, thus confusing the users into the idea, that the GUI and it s look and feel would be the essential part of the OS or even the OS itself. 
+*** as it is running "in its own box" (a lisp machine) it is highly portable, giving you consistent UI experience over mutliple OS's on multiple computers and phones. since it s the UI fitted for you, it allows you for a maximaly efficient workflow on all your machines without being a customer-lockin-victim.
 * Why emacs?  
 ** is is just mental illness?
 ** no.
