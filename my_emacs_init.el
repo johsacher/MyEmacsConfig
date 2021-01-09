@@ -685,6 +685,10 @@
 ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
 ;; ** org-mode toggle bold/italic
+(defun org-toggle-quote-region ()
+  (interactive)
+  (my-toggle-marker-around-region "\"" "\""  "\"" "\"")
+  )
 (defun org-toggle-bold-region ()
   (interactive)
   (my-toggle-marker-around-region "*" "\*"  "*" "\*")
@@ -1321,11 +1325,14 @@ new-org-file-full-name)
  (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
  (evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
 
+
 ;; ** short cut for term-paste
  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
  (evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
  (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
- (evil-define-key 'instert term-raw-map (kbd "C-p") 'term-paste)
+ (evil-define-key 'insert term-raw-map (kbd "C-p") 'term-paste)
+
+
 
 ;; ** switch only between (term char with emacs-state) and (term line with normal-state)
  (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
@@ -1653,6 +1660,8 @@ new-org-file-full-name)
 (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
 (require 'dired)
 (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move) 
+(evil-leader/set-key "[" 'get-this-buffer-to-move)
+(evil-leader/set-key "]" 'switch-to-buffer-to-move)
 
 (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
 (define-key dired-mode-map (kbd "<f4>") 'switch-to-buffer-to-move) 
@@ -2987,11 +2996,11 @@ region, clear header."
          (setq path1 ssh-clipboard-file)
          (message "sending (via rsync) ssh_clipboard.txt to all servers.")
          (dolist (this-server-name my-server-machine-names)
-           (message (concat "sending ssh_clipboard.txt to server '" this-ssh-server-name "'..."))
+           (message (concat "sending ssh_clipboard.txt to server '" this-server-name "'..."))
 
            ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
            ;; ** shell-command (problem: no asynchronous)
-           ;; (setq path2 (concat this-ssh-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
+           ;; (setq path2 (concat this-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
            ;; (shell-command (concat "echo command will show like this in shell: " command-string))
            ;; (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
            ;; (message (concat "executing command: '" command-string "' ..."))
@@ -3015,8 +3024,6 @@ region, clear header."
            (message (concat "rsync'ed to ssh server (" this-server-name ")" ))))
         (t
          (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
-
-
 
 (defun ssh-clipboard-copy () 
   (interactive)
@@ -3052,17 +3059,167 @@ region, clear header."
   ;; * paste content
   (insert ssh-clipboard-content))
 
-(defun ssh-clipboard-copy-path ()
+(defun ssh-clipboard-term-paste ()
   (interactive)
- (setq currentpath (copy-current-path))
- (ssh-clipboard-copy-string currentpath)
- (message (concat "copied path to ssh-clipboard: "  currentpath))
- currentpath)
+  (ssh-clipboard-update-ssh-clipboard-file)
+  (setq ssh-clipboard-string (ssh-clipboard-file-content-to-string))
+  (term-send-raw-string ssh-clipboard-string))
+
+(defun ssh-clipboard-file-content-to-string ()
+  (interactive)
+  ;; * read content into string
+  (with-temp-buffer
+    (insert-file-contents ssh-clipboard-file)
+    (setq ssh-clipboard-content (buffer-string))))
+
+(defun ssh-clipboard-update-ssh-clipboard-file ()
+  (interactive)
+  ;; if on local machine -> rsync ssh-clipboard from server first
+  (cond
+        ((myhost-is-server)
+         ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
+         )
+
+        ((myhost-is-local)
+         ;; (message "ssh-clipboard-copy: i m on myhost=local")
+         ;; * send it so ssh server
+         (setq path1 (concat "'" my-current-server-name ":~/ssh_clipboard.txt" "'")) ;; quote to make ~ convert to (correct) home only on server
+         (setq path2 "~/")
+         (setq command-string (concat "rsync --progress -va -I " path1 " " path2 ))
+         (shell-command command-string)
+         (message (concat "rsync'ed from ssh server (" my-current-server-name ")" )))
+        (t
+         (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/laptop/phone/etc.'"))))
+
 
 ;; ** ssh-clipboard key bindings
 (evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
 (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
 ;; (global-set-key (kbd "<f1>") 'copy-current-path)
+
+;; ** ssh-clipboard copy path
+(defun ssh-clipboard-copy-path ()
+  (interactive)
+  (setq currentpath (copy-current-path))
+  (ssh-clipboard-copy-string currentpath)
+  (message (concat "copied path to ssh-clipboard: "  currentpath)))
+
+(defun get-fullfilename ()
+  (interactive)
+    (cond
+        ((equal major-mode 'dired-mode)
+            ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
+            ;; (dired-copy-file-as-kill)
+            ;; (setq filename (current-kill 0))
+            ;; (setq currentpath (concat currentpath "/" filename))
+            ;; (setq fullfilename (dired-file-name-at-point))
+            (setq fullfilename (dired-get-filename))
+            (setq currentpath fullfilename))
+        (t 
+         (setq fullfilename (buffer-file-name)))))
+
+(defun ssh-clipboard-copy-fullfilename ()
+  (interactive)
+  (setq fullfilename (get-fullfilename))
+  (ssh-clipboard-copy-string fullfilename)
+  (message (concat "copied fullfilename to ssh-clipboard: "  fullfilename)))
+
+(defun copy-fullfilename ()
+  (interactive)
+  (setq fullfilename (get-fullfilename))
+  (kill-new fullfilename)
+  (message (concat "copied fullfilename to clipboard: "  fullfilename)))
+
+;;  (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
+
+;; ** short cuts-concept for copy/paste  region/path/fullfilename
+;; *** normal clipboard
+;; a) copy region       ->
+;;                         files        ... "y" (copy)
+;; b) copy path         ->
+;;                         files        ... "leader + y" (copy)
+;; c) copy fullfilename ->
+;;                         dired/others ... "leader + u"
+;; d) paste             ->
+;;                         files        ... "p"
+;;                         term         ... "ctrl + p"
+;; e) change-path in clipboard
+;;                         files        ... "leader + p"
+;;                         term         ... "ctrl   + p"
+;;
+;; *** ssh-clipboard
+;; a) ssh-copy region   ->
+;;                         files        ... "leader + Y" 
+;;                         (term        ... "CTRL + Y") <-- no use case
+;; b) ssh-copy path     ->
+;;                         (dired/others ... "leader + ?" ) <-- no use case
+;;                         (term         ... "CTRL + ?") <-- no use case 
+;; c) ssh-copy filefullname  ->
+;;                         dired/others ... "leader + U" 
+;;                         (term         ...  "CTRL + U") <-- no use case
+;; d) ssh-paste           ->
+;;                         files        ... "leader + P" 
+;;                         term         ...  CTRL + P" 
+;; e) (change-path in clipboard) <-- no use case 
+
+;; ** short cuts-implementation for copy/paste  region/path/fullfilename
+;; *** normal clipboard
+;; a) copy region       ->
+;;                         files        ... "y" (copy)
+;; IMPLEMENTED
+;;
+;; b) copy path         ->
+;;                         files        ... "leader + y" (copy)
+;; IMPLEMENTED
+;;
+;; c) copy fullfilename ->
+;;                         dired/others ... "leader + u"
+   (evil-leader/set-key "u" 'copy-fullfilename)
+;; d) paste             ->
+;;                         files        ... "p"
+;;                         term         ... "ctrl + p"
+;; IMPLEMENTED
+;;
+;; e) change-path in clipboard
+;;                         files        ... "leader + p"
+;;                         term         ... "ctrl   + alt + p"
+ (evil-define-key 'normal term-raw-map (kbd "C-M-p") 'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs term-raw-map (kbd "C-M-p") 'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert term-raw-map (kbd "C-M-p") 'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+;;
+;; *** ssh-clipboard
+;; a) ssh-copy region   ->
+;;                         files        ... "leader + Y" 
+;;                         (term        ... "CTRL + Y") <-- no use case
+;; IMPLEMENTED
+;;
+;; b) (ssh-copy path)  <-- no use case
+;;                         (also shortcut difficult to find: leader+Y/ctrl+Y/leader+y taken)
+;;                         (dired/others ... "leader + ?" ) <-- no use case 
+;;                         (term         ... "CTRL + ?") <-- no use case 
+;;
+;; c) ssh-copy filefullname  ->
+;;                         dired/others ... "leader + U" 
+;;                         (term         ...  "CTRL + U") <-- no use case
+   (evil-leader/set-key "U" 'ssh-clipboard-copy-fullfilename)
+;;
+;; d) ssh-paste           ->
+;;                         files        ... "leader + P" 
+;;                         term         ...  CTRL + P" 
+;; IMPLEMENTED
+;;
+;; e) (change-path in clipboard) <-- no use case 
+;;
+;; **** term-mode
+ (evil-define-key 'normal term-raw-map (kbd "P") 'ssh-clipboard-term-paste)
+ (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+;; **** dired-mode
+ (evil-define-key 'normal dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+
 
 
 ;; * frequently used unicode characters
@@ -3311,6 +3468,7 @@ region, clear header."
 (evil-define-key 'normal image-mode-map (kbd "=") 'image-increase-size)
 (evil-define-key 'normal image-mode-map (kbd "-") 'image-decrease-size)
 (evil-define-key 'normal image-mode-map (kbd "s") 'image-save)
+(evil-define-key 'normal image-mode-map (kbd "w") 'image-transform-fit-to-width)
 
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 ;; o               image-save
