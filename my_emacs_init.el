@@ -661,6 +661,7 @@
 (add-to-list 'org-structure-template-alist '("C" "#+begin_src C\n?\n#+end_src")) ;; C
 (add-to-list 'org-structure-template-alist '("p" "#+begin_src python\n?\n#+end_src")) ;; python
 (add-to-list 'org-structure-template-alist '("b" "#+begin_src bash\n?\n#+end_src")) ;; bash
+(add-to-list 'org-structure-template-alist '("m" "#+begin_src math\n?\n#+end_src")) ;; math (aka matlab)
 ;; default content of org-structure-template-alist:
 ;; (
 ;; ("s" "#+BEGIN_SRC ?
@@ -693,11 +694,16 @@
   (interactive)
   (my-toggle-marker-around-region "*" "\*"  "*" "\*")
   )
+(defun org-toggle-code-region ()
+  (interactive)
+  (my-toggle-marker-around-region "~" "\~"  "~" "\~")
+  )
 
 (defun org-toggle-red-region ()
   (interactive)
   (my-toggle-marker-around-region "=" "="  "=" "=")
   )
+
 
 (defun org-toggle-underlined-region ()
   (interactive)
@@ -708,9 +714,10 @@
   (my-toggle-marker-around-region "/" "\/" "/" "\/")
   )
 ;; todo: rethink these, already reserverd for other stuff
-;; (evil-leader/set-key "ob" 'org-toggle-bold-region)
-;; (evil-leader/set-key "oi" 'org-toggle-italic-region)
-;; (evil-leader/set-key "or" 'org-toggle-red-region)
+(evil-leader/set-key-for-mode 'org-mode  "jb" 'org-toggle-bold-region)
+(evil-leader/set-key-for-mode 'org-mode  "ji" 'org-toggle-italic-region)
+(evil-leader/set-key-for-mode 'org-mode  "jc" 'org-toggle-code-region)
+(evil-leader/set-key-for-mode 'org-mode "jr" 'org-toggle-red-region)
 
 (defun region-to-string ()
   (interactive)
@@ -963,8 +970,7 @@ from lines like:
   (org-display-inline-images)
   )
 
-
-(evil-leader/set-key "n" 'planet-open-quick-notes) 
+(evil-leader/set-key "ln" 'planet-open-quick-notes) 
 ;; paste image from clipboard
 (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
 
@@ -1711,10 +1717,20 @@ new-org-file-full-name)
 (defun dired-create-new-empty-file ()
    (interactive)
    ;; create the hidden (dotted) folder with same name of org file
-   (setq filename (read-string "file-name:"))
+   (setq filename (read-string "file-name: "))
+   (setq file-full-name (concat  (dired-current-directory) "/" filename))
+   (with-temp-buffer (write-file file-full-name)))
+
+(defun dired-create-new-empty-file-and-visit ()
+   (interactive)
+   ;; create the hidden (dotted) folder with same name of org file
+   (setq filename (read-string "file-name: "))
    (setq file-full-name (concat  (dired-current-directory) "/" filename))
    (with-temp-buffer (write-file file-full-name))
-)
+   (find-file file-full-name))
+
+(evil-leader/set-key "nn" 'dired-create-new-empty-file)
+(evil-leader/set-key "nv" 'dired-create-new-empty-file-and-visit)
 
 ;; * helm-rg
 (require 'helm-rg)
