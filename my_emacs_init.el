@@ -1893,8 +1893,8 @@ new-org-file-full-name)
 (openwith-mode t)
 (cond ((equal myhost "phone")
        (setq openwith-associations '(
-                                     ("\\.jpg\\'" "termux-open" (file)))
-                                     ("\\.pdf\\'" "termux-open" (file))))
+                                     ("\\.jpg\\'" "termux-open" (file))
+                                     ("\\.pdf\\'" "termux-open" (file)))))
       ((eql myhost "laptop")
        (setq openwith-associations '(
                               ("\\.xoj\\'" "xournal" (file))
