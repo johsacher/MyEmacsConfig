@@ -428,8 +428,8 @@ last-date)
 ;;test: (planet-open-today)
 ;;test: (planet-open-today)
 (evil-leader/set-key "ot" 'planet-today)
-(evil-leader/set-key "t" 'planet-today)
-(evil-leader/set-key "oy" 'planet-this-week)
+;; (evil-leader/set-key "t" 'planet-today)
+(evil-leader/set-key "ow" 'planet-this-week)
 
 
 
@@ -1035,6 +1035,17 @@ date)
   )
 (evil-leader/set-key-for-mode 'org-mode "ocp" 'planet-set-category-private) 
 
+(defun planet-set-category-knowledge ()
+  (interactive)
+  (org-set-property "Category" "knowledge")
+  )
+(evil-leader/set-key-for-mode 'org-mode "ock" 'planet-set-category-knowledge) 
+
+(defun planet-set-category-sustainment ()
+  (interactive)
+  (org-set-property "Category" "sustainment")
+  )
+(evil-leader/set-key-for-mode 'org-mode "ocs" 'planet-set-category-sustainment) 
 
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
 

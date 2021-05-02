@@ -3,6 +3,14 @@
 ;; ** better mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
+;; * debugger-mode I (evil settings after evil)
+;; (set at start so comfortable debugging of init file in case it a biggy)
+(add-hook 'debugger-mode-hook
+          (lambda ()
+            (visual-line-mode)))
+
+
+
 ;; * debug on start-up
 (setq debug-only-on-start-up t)
 (if debug-only-on-start-up
@@ -224,6 +232,8 @@
   (evil-goto-mark ?\]))
 ;; ( -> mapped to evil leader v)
 
+;;
+
 ;; evil leader
 (use-package evil-leader
   :ensure t
@@ -249,7 +259,7 @@
   (evil-leader/set-key "b" 'helm-mini)  ; recent files (better than recentf-open-files and/or helm-buffers-list)
   (evil-leader/set-key "r" 'quick-evil-search-replace)  ; quick way to replace expression in region
   (evil-leader/set-key "v" 'evil-select-pasted)  ; quick way to replace expression in region
-  (evil-leader/set-key "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))) ; quick way to replace expression in region
+  (evil-leader/set-key "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))) 
   (evil-leader/set-key "'" 'iresize-mode)
 )                 
 
@@ -257,6 +267,8 @@
 (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
 (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
+;; * debugger-mode II (evil settings)
+(add-to-list 'evil-normal-state-modes 'debugger-mode)
 
 ;; * drag-stuff (evilized)
 ;; ( this is already a bit "tweaking" of evil mode )
@@ -661,6 +673,7 @@
 (add-to-list 'org-structure-template-alist '("C" "#+begin_src C\n?\n#+end_src")) ;; C
 (add-to-list 'org-structure-template-alist '("p" "#+begin_src python\n?\n#+end_src")) ;; python
 (add-to-list 'org-structure-template-alist '("b" "#+begin_src bash\n?\n#+end_src")) ;; bash
+(add-to-list 'org-structure-template-alist '("m" "#+begin_src math\n?\n#+end_src")) ;; math (aka matlab)
 ;; default content of org-structure-template-alist:
 ;; (
 ;; ("s" "#+BEGIN_SRC ?
@@ -693,11 +706,16 @@
   (interactive)
   (my-toggle-marker-around-region "*" "\*"  "*" "\*")
   )
+(defun org-toggle-code-region ()
+  (interactive)
+  (my-toggle-marker-around-region "~" "\~"  "~" "\~")
+  )
 
 (defun org-toggle-red-region ()
   (interactive)
   (my-toggle-marker-around-region "=" "="  "=" "=")
   )
+
 
 (defun org-toggle-underlined-region ()
   (interactive)
@@ -708,9 +726,10 @@
   (my-toggle-marker-around-region "/" "\/" "/" "\/")
   )
 ;; todo: rethink these, already reserverd for other stuff
-;; (evil-leader/set-key "ob" 'org-toggle-bold-region)
-;; (evil-leader/set-key "oi" 'org-toggle-italic-region)
-;; (evil-leader/set-key "or" 'org-toggle-red-region)
+(evil-leader/set-key-for-mode 'org-mode  "jb" 'org-toggle-bold-region)
+(evil-leader/set-key-for-mode 'org-mode  "ji" 'org-toggle-italic-region)
+(evil-leader/set-key-for-mode 'org-mode  "jc" 'org-toggle-code-region)
+(evil-leader/set-key-for-mode 'org-mode "jr" 'org-toggle-red-region)
 
 (defun region-to-string ()
   (interactive)
@@ -963,8 +982,7 @@ from lines like:
   (org-display-inline-images)
   )
 
-
-(evil-leader/set-key "n" 'planet-open-quick-notes) 
+(evil-leader/set-key "ln" 'planet-open-quick-notes) 
 ;; paste image from clipboard
 (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
 
@@ -1711,10 +1729,20 @@ new-org-file-full-name)
 (defun dired-create-new-empty-file ()
    (interactive)
    ;; create the hidden (dotted) folder with same name of org file
-   (setq filename (read-string "file-name:"))
+   (setq filename (read-string "file-name: "))
+   (setq file-full-name (concat  (dired-current-directory) "/" filename))
+   (with-temp-buffer (write-file file-full-name)))
+
+(defun dired-create-new-empty-file-and-visit ()
+   (interactive)
+   ;; create the hidden (dotted) folder with same name of org file
+   (setq filename (read-string "file-name: "))
    (setq file-full-name (concat  (dired-current-directory) "/" filename))
    (with-temp-buffer (write-file file-full-name))
-)
+   (find-file file-full-name))
+
+(evil-leader/set-key "nn" 'dired-create-new-empty-file)
+(evil-leader/set-key "nv" 'dired-create-new-empty-file-and-visit)
 
 ;; * helm-rg
 (require 'helm-rg)
@@ -3613,3 +3641,31 @@ buffer is not visiting a file."
     ;; .emacs ...
     (term-set-escape-char ?\C-x))
   )
+
+;; * move position to number in clipboard
+;; * aliases for unintuitively named functions
+(defun move-curser-to-buffer-position-in-clipboard ()
+;; just an alias for goto-char
+  (interactive)
+  (setq POSITION (string-to-number (current-kill 0)))
+  (goto-char POSITION)
+  )
+(defun move-curser-to-buffer-position-alias (POSITION)
+;; just an alias for goto-char
+  (interactive "nType position (integer):")
+  (goto-char POSITION)
+  )
+
+;; * short-cuts (universal concept) for REPL/ debug / etc.
+;; ** send to REPL current fun. def. (i.e. evaluate current function in elisp)
+(evil-leader/set-key "tf" 'eval-defun) 
+;; send to REPL current line (removing leading white spaces)
+;; send to REPL current region
+;; send to REPL var under point
+
+
+
+
+
+
+
