@@ -273,6 +273,7 @@
 ;; * drag-stuff (evilized)
 ;; ( this is already a bit "tweaking" of evil mode )
 (define-key evil-normal-state-map (kbd "C-j") 'drag-stuff-down)
+(define-key evil-normal-state-map (kbd "gr") 'repeat)
 (define-key evil-normal-state-map (kbd "C-k") 'drag-stuff-up)
 (define-key evil-normal-state-map (kbd "C-h") 'drag-stuff-left)
 (define-key evil-normal-state-map (kbd "C-l") 'drag-stuff-right)
@@ -1915,18 +1916,23 @@ new-org-file-full-name)
 
 ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; * open with external applications (in dired/ org-mode links / etc.)
 (require 'openwith)
 (openwith-mode t)
-(cond ((equal myhost "phone")
-       (setq openwith-associations '(
-                                     ("\\.jpg\\'" "termux-open" (file))
-                                     ("\\.pdf\\'" "termux-open" (file)))))
-      ((eql myhost "laptop")
-       (setq openwith-associations '(
-                              ("\\.xoj\\'" "xournal" (file))
-                              ("\\.pdf\\'" "okular" (file))))))
+;; (cond ((equal myhost "phone")
+;;        (setq openwith-associations '(
+;; <<<<<<< HEAD
+;;                                      ("\\.jpg\\'" "termux-open" (file))
+;;                                      ("\\.pdf\\'" "termux-open" (file)))))
+;;       ((eql myhost "laptop")
+;; =======
+;;                                      ("\\.jpg\\'" "termux-open" (file)))
+;;                                      ("\\.pdf\\'" "termux-open" (file))))
+;;       ((equal myhost "laptop")
+;; >>>>>>> 93b3d96c964b6251ad52744cde0457de9e3b5217
+;;        (setq openwith-associations '(
+;;                               ("\\.xoj\\'" "xournal" (file))
+;;                               ("\\.pdf\\'" "okular" (file))))))
 
 ;;; * save desktop sessions
 ;;    (require 'session)
@@ -2637,6 +2643,80 @@ This a menu element (FILE . FILE)."
 (insert rel-path)
 )
 
+;; * convert latex to org (region -> headings to org-headers)
+(defun convert-latex-to-org-headings ()
+  (interactive)
+  ;; function converts latex headers to org headers ( '\section{...}' --> '* ...' ; '\subsection{...}' --> '** ...' , etc.)
+  ;; * current region to string
+  ;; (setq region_string (buffer-substring (mark) (point)))
+  ;; * search-replace headers
+  ;; ** level 1
+  (let
+      ((region_string "\\section{hello}"))
+      (setq region_string "\\section{hello}")
+
+  ;; (message region_string) % elisp prints the "preceding backslash" so appears as double \\ but it actually isnt -> see:
+  ;; (insert region_string) # --> inserts "\section{hello}"
+  ;; var1 -> using replace-regexp-in-string
+  ;; *** replace leading "\section{"
+  ;; (setq region-string-converted (replace-regexp-in-string
+   ;; "[ \t\n]*\\\\section{" ;; think like this: this is actually just "\\" -> ONE escaped backslash
+   ;; "* " region_string))
+  ;; *** remove trailing }
+  ;; (setq region-string-converted (replace-regexp-in-string
+   ;; "}" 
+   ;; "" region-string-converted))
+
+  ;; var2 -> using groups -> so get the parts in one \section{<heading>} = '\section{' + <heading> +'}'
+    (replace-first-enclosing-pair-in-string region_string "\\section{" "}" "*" "")
+    (replace-all-enclosing-pairs-in-string region_string "\\section{" "}" "*" "")
+  ;; ** level 2
+  ;; ** level 3
+  ;; * put search-replaced string to clipboard, ready for pasting
+  )
+  )
+
+
+(defun replace-first-enclosing-pair-in-string (in-string old-begin old-end new-begin new-end)
+       (let (
+             ;; (in-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}.")
+             ;; (old-begin "begin{exp1}")
+             ;; (old-end "end{exp1}")
+             ;; (new-begin "begin{exp2}")
+             ;; (new-end "end{exp2}")
+             )
+         ;; 1. with groups we can "dissect" the "<old-begin> <between> <old-end>" construct
+         (setq regexp (concat "\\(" old-begin "\\)\\(.*?\\)\\( " old-end "\\)."))
+         (when (string-match regexp in-string) 
+             ;; (important note: the "?" makes the .* non-greedy! needed here
+           (setq the-whole-thing   (match-string 0 in-string))
+           (setq the-begin-thing   (match-string 1 in-string))
+           (setq the-between-thing (match-string 2 in-string))
+           (setq the-end-thing     (match-string 3 in-string))
+           ;; 2. now we can design "the-new-whole-thing"
+           (setq the-new-whole-thing (concat new-begin the-between-thing new-end))
+           ;; 3. and replace the old by the new whole thing in the total string
+           (setq result (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing in-string))
+         result)
+       ))
+
+(defun replace-all-enclosing-pairs-in-string (in-string old-begin old-end new-begin new-end)
+       (let ((converted-string in-string))
+         ;; (setq in-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}.")
+         ;; (setq converted-string in-string)
+         (setq continue t)
+         (while continue
+           (setq this-result (replace-first-enclosing-pair-in-string converted-string old-begin old-end new-begin new-end))
+           (if this-result
+                (setq converted-string this-result)
+                (setq continue nil)))
+         converted-string))
+
+;; test:
+;; (setq in-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}.")
+;; (replace-first-enclosing-pair-in-string in-string "begin{exp1}" "end{exp1}" "begin{exp2}" "end{exp2}")
+;; (replace-all-enclosing-pairs-in-string in-string "begin{exp1}" "end{exp1}" "begin{exp2}" "end{exp2}")
+
 ;;; * c++
 
 ;; ** c++ -mode key bindings consistent (overwrite)
@@ -3198,7 +3278,11 @@ region, clear header."
 ;;
 ;; b) copy path         ->
 ;;                         files        ... "leader + y" (copy)
+;;                         term         ... "ctrl   + alt + p"
 ;; IMPLEMENTED
+ (evil-define-key 'normal term-raw-map (kbd "C-M-y") 'copy-current-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'emacs term-raw-map (kbd "C-M-y") 'copy-current-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+ (evil-define-key 'insert term-raw-map (kbd "C-M-y") 'copy-current-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
 ;;
 ;; c) copy fullfilename ->
 ;;                         dired/others ... "leader + u"
@@ -3642,6 +3726,7 @@ buffer is not visiting a file."
     (term-set-escape-char ?\C-x))
   )
 
+;; <<<<<<< HEAD
 ;; * move position to number in clipboard
 ;; * aliases for unintuitively named functions
 (defun move-curser-to-buffer-position-in-clipboard ()
@@ -3669,3 +3754,34 @@ buffer is not visiting a file."
 
 
 
+;; =======
+
+;; ;; * tutorials
+;; ;; ** match groups
+;; (let
+;;   ((this-string "The quick brown fox jumped quickly."))
+;;   (string-match "quick" this-string)
+;;   (string-match "\\(qu\\)\\(ick\\)" this-string)
+;;   ;; (match-string 0 "The quick brown fox jumped quickly.")
+;;   ;; (match-string 1 "The quick brown fox jumped quickly.")
+;;   (match-string 1 this-string))
+
+;; ;; ** repace (sub)string in string
+;; (let ((this-string "foo.buzz"))
+;; (replace-regexp-in-string (regexp-quote ".") "bar" this-string)) ;; => foobarbuzz
+
+;; ;; ** replace "pair around something"
+;; (let ((this-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}."))
+;;   ;; 1. with groups we can "dissect" the "<begin> <between> <end>" construct
+;;   (string-match "\\(begin{exp1}\\)\\(.*?\\)\\(end{exp1}\\)." this-string) 
+;;   ;; (important note: the "?" makes the .* non-greedy! needed here
+;;   (setq the-whole-thing   (match-string 0 this-string))
+;;   (setq the-begin-thing   (match-string 1 this-string))
+;;   (setq the-between-thing (match-string 2 this-string))
+;;   (setq the-end-thing     (match-string 3 this-string))
+;;   ;; 2. now we can design "the-new-whole-thing"
+;;   (setq the-new-whole-thing (concat "begin{exp2}" the-between-thing "end{exp2}"))
+;;   ;; ;; 3. and replace the old by the new whole thing in the total string
+;;   (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing this-string)
+;;   )
+;; >>>>>>> 93b3d96c964b6251ad52744cde0457de9e3b5217
