@@ -332,6 +332,8 @@
 ;;;+) MELPA packages - make them available (some very good additional package list)
 (require 'package) ;; You might already have this line
 (add-to-list 'package-archives
+             '("org" . "https://orgmode.org/elpa/"))
+(add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
@@ -516,6 +518,7 @@
 ;; make sure we have the latest package of org
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
+(setq org-ellipsis " ▾")
 ;; ** fix TAB -> org-cycle for android phone
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 
