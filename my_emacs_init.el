@@ -332,8 +332,6 @@
 ;;;+) MELPA packages - make them available (some very good additional package list)
 (require 'package) ;; You might already have this line
 (add-to-list 'package-archives
-             '("org" . "https://orgmode.org/elpa/"))
-(add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
