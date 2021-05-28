@@ -515,6 +515,28 @@
 
 ;; make sure we have the latest package of org
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+;; org ellipsis
+;; right arrows
+;; “↝” “⇉” “⇝” “⇢” “⇨” “⇰” “➔” “➙” “➛” “➜” “➝” “➞”
+
+;; “➟” “➠” “➡” “➥” “➦” “➧” “➨”
+
+;; “➩” “➪” “➮” “➯” “➱” “➲”
+
+;; “➳” “➵” “➸” “➺” “➻” “➼” “➽”
+
+;; arrow heads
+;; “➢” “➣” “➤” “≪”, “≫”, “«”, “»”
+
+;; other arrows
+;; “↞” “↠” “↟” “↡” “↺” “↻”
+
+;; lightening
+;; “⚡”
+
+;; other symbols
+;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
+
 
 (setq org-ellipsis " ▾")
 ;; ** fix TAB -> org-cycle for android phone
@@ -527,6 +549,26 @@
 (advice-add 'org-ctrl-c-ctrl-c :after 'org-redisplay-inline-images)
 
 ;; ** org bullets
+;; hexagrams
+;; “✡” “⎈” “✽” “✲” “✱” “✻” “✼” “✽” “✾” “✿” “❀” “❁” “❂” “❃” “❄” “❅” “❆” “❇”
+
+;; circles
+;; “○” “☉” “◎” “◉” “○” “◌” “◎” “●” “◦” “◯” “⚪” “⚫” “⚬” “❍” “￮” “⊙” “⊚” “⊛” “∙” “∘”
+
+;; special circles
+;; “◐” “◑” “◒” “◓” “◴” “◵” “◶” “◷” “⚆” “⚇” “⚈” “⚉” “♁” “⊖” “⊗” “⊘”
+
+;; crosses
+;; “✙” “♱” “♰” “☥” “✞” “✟” “✝” “†” “✠” “✚” “✜” “✛” “✢” “✣” “✤” “✥”
+
+;; poker sybmols
+;; “♠” “♣” “♥” “♦” “♤” “♧” “♡” “♢”
+
+;; yinyang
+;; “☯” “☰” “☱” “☲” “☳” “☴” “☵” “☶” “☷”
+
+;; special symbols
+;; “☀” “♼” “☼” “☾” “☽” “☣” “§” “¶” “‡” “※” “✕” “△” “◇” “▶” “◀” “◈”
 (require 'org-bullets)
 (add-hook 'org-mode-hook
           (lambda nil (org-bullets-mode 1)))
@@ -1920,20 +1962,14 @@ new-org-file-full-name)
 ;; * open with external applications (in dired/ org-mode links / etc.)
 (require 'openwith)
 (openwith-mode t)
-;; (cond ((equal myhost "phone")
-;;        (setq openwith-associations '(
-;; <<<<<<< HEAD
-;;                                      ("\\.jpg\\'" "termux-open" (file))
-;;                                      ("\\.pdf\\'" "termux-open" (file)))))
-;;       ((eql myhost "laptop")
-;; =======
-;;                                      ("\\.jpg\\'" "termux-open" (file)))
-;;                                      ("\\.pdf\\'" "termux-open" (file))))
-;;       ((equal myhost "laptop")
-;; >>>>>>> 93b3d96c964b6251ad52744cde0457de9e3b5217
-;;        (setq openwith-associations '(
-;;                               ("\\.xoj\\'" "xournal" (file))
-;;                               ("\\.pdf\\'" "okular" (file))))))
+(cond ((equal myhost "phone")
+       (setq openwith-associations '(
+                                     ("\\.jpg\\'" "termux-open" (file))
+                                     ("\\.pdf\\'" "termux-open" (file)))))
+      ((equal myhost "laptop")
+       (setq openwith-associations '(
+                              ("\\.xoj\\'" "xournal" (file))
+                              ("\\.pdf\\'" "okular" (file))))))
 
 ;;; * save desktop sessions
 ;;    (require 'session)
