@@ -97,7 +97,7 @@
   (add-to-list 'overlay-arrow-variable-list  'mp-overlay-arrow-position)
 
  (defun mp-mark-hook ()
-    ;; (make-local-variable 'mp-overlay-arrow-position)
+        ;; (make-local-variable 'mp-overlay-arrow-position)
     (unless (or (minibufferp (current-buffer)) (not (mark)))
       (set
        'mp-overlay-arrow-position
@@ -177,6 +177,58 @@
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode t)
 
+;; ** general COLOR THEMES ;;;;;;;;;;;;;
+(color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-loccal --> not working)
+
+(require 'color-theme)
+(setq color-theme-is-global nil)
+;; (color-theme-aalto-light)
+;;(load-theme 'leuven)
+(add-to-list 'custom-theme-load-path "emacs-leuven-theme")
+(load-theme 'zenburn t)
+
+;; instruction:
+;; add mode hook with color theme
+;; Tipp: find out mode name of a buffer with e.g.: (buffer-local-value 'major-mode (get-buffer "*ansi-term*"))
+(require 'color-theme-buffer-local)
+;; use the following as templates
+
+;; ** personal (general) customization of faces (comments light green, etc.)
+(set-face-attribute 'font-lock-comment-face nil :foreground "light green")
+(set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
+(set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
+
+
+;; **
+(if color-theme-buffer-local-switch
+    (add-hook 'text-mode-hook
+              (lambda nil (color-theme-buffer-local 'color-theme-feng-shui (current-buffer))))
+  )
+;; (add-hook 'after-change-major-mode-hook  --> not working as default color --> produced mess in ansi-term
+;;      (lambda nil (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))))
+
+
+;; strange arrow up/down error --> outcommented
+(if color-theme-buffer-local-switch
+    (add-hook 'c++-mode-hook
+      (lambda nil (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))))
+)
+
+(if color-theme-buffer-local-switch
+(add-hook 'dired-mode-hook
+          (lambda nil (color-theme-buffer-local 'color-theme-classic (current-buffer))))
+)
+
+(if color-theme-buffer-local-switch
+(add-hook 'dired-mode-hook
+   (lambda nil (color-theme-buffer-local 'color-theme-charcoal-black (current-buffer))))
+)
+
+(defun mydefault-buffer-local-theme () ;; 
+   (interactive)
+(color-theme-buffer-local 'color-theme-aalto-light (current-buffer))
+)
+;; (global-unset-key (kbd "<f10>") 'mydefault-buffer-local-theme) ;; work around because default color was strange in cygwin-emacs-nw --> just press f10 when color is strange
 
 ;;; * evil - load/ general (comes first -> basis for other packages/definitions)
 ;; necessary for evil-collection (before load evil first time):
@@ -539,6 +591,8 @@
 
 
 (setq org-ellipsis " ▾")
+;; (setq org-ellipsis "▾")
+;; (setq org-ellipsis " ⤵")
 ;; ** fix TAB -> org-cycle for android phone
 (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
 
@@ -590,6 +644,31 @@
     )
   )
 
+;; ** pretty symbols
+(setq-default prettify-symbols-alist '(
+ ("#+BEGIN_SRC" . "†")
+ ("#+END_SRC" . "†")
+ ("#+begin_src" . "†")
+ ("#+end_src" . "†")
+ (">=" . "≥")
+ ("=>" . "⇨")
+ ("->" . "➔")
+ ("-->" . "➔")
+ )) 
+
+;; ** pretty tags (todo future) http://blog.lujun9972.win/emacs-document/blog/2020/02/19/beautify-org-mode/index.html 
+;; (use-package org-pretty-tags
+;;  :demand t
+;;  :config
+;;  (setq org-pretty-tags-surrogate-strings
+;;  (quote
+;;  (("TOPIC" . "☆")
+;;  ("PROJEKT" . "💡")
+;;  ("SERVICE" . "✍")
+;;  ("Blog" . "✍")
+;;  ("music" . "♬")
+;;  ("security" . "🔥"))))
+;;  (org-pretty-tags-global-mode))
 ;; ** disable line-numbers
  (add-hook 'org-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
@@ -1267,6 +1346,18 @@ new-org-file-full-name)
 ;; evil org-mode
 ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
 ;; (evil-leader/set-key "l" 'org-preview-latex-fragment) 
+;; ** appearance/fonts/colors
+;; *** keyword/properties/codeblock stuff -> unobtrusive
+(set-face-attribute 'org-special-keyword nil :foreground "#5f5f5f")
+(set-face-attribute 'org-block-begin-line nil :foreground "#5f5f5f")
+(set-face-attribute 'org-meta-line nil :foreground "#5f5f5f")
+(set-face-attribute 'org-level-1 nil :foreground "#DCDCCC")
+(set-face-attribute 'org-level-2 nil :foreground "#DCDCCC")
+(set-face-attribute 'org-level-3 nil :foreground "#DCDCCC")
+(set-face-attribute 'org-level-4 nil :foreground "#DCDCCC")
+(set-face-attribute 'org-link nil :foreground "#5fffff")
+
+
 
 ;; ** basic behaviour - new headings
 (defun myorg-new-heading-enter-insert-state ()
@@ -1628,61 +1719,6 @@ new-org-file-full-name)
 ;;(setq uniquify-buffer-name-style 'forward) ;;forward accomplishes this
 
 
-
-;;; * general COLOR THEMES ;;;;;;;;;;;;;
-(color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-loccal --> not working)
-
-(require 'color-theme)
-(setq color-theme-is-global nil)
-;; (color-theme-aalto-light)
-;;(load-theme 'leuven)
-(add-to-list 'custom-theme-load-path "emacs-leuven-theme")
-(load-theme 'zenburn t)
-
-;; instruction:
-;; add mode hook with color theme
-;; Tipp: find out mode name of a buffer with e.g.: (buffer-local-value 'major-mode (get-buffer "*ansi-term*"))
-(require 'color-theme-buffer-local)
-;; use the following as templates
-
-;; ** personal (general) customization of faces (comments light green, etc.)
-(set-face-attribute 'font-lock-comment-face nil :foreground "light green")
-(set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
-(set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
-
-
-;; **
-(if color-theme-buffer-local-switch
-    (add-hook 'text-mode-hook
-              (lambda nil (color-theme-buffer-local 'color-theme-feng-shui (current-buffer))))
-  )
-;; (add-hook 'after-change-major-mode-hook  --> not working as default color --> produced mess in ansi-term
-;;      (lambda nil (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))))
-
-
-;; strange arrow up/down error --> outcommented
-(if color-theme-buffer-local-switch
-    (add-hook 'c++-mode-hook
-      (lambda nil (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))))
-)
-
-(if color-theme-buffer-local-switch
-(add-hook 'dired-mode-hook
-          (lambda nil (color-theme-buffer-local 'color-theme-classic (current-buffer))))
-)
-
-(if color-theme-buffer-local-switch
-(add-hook 'dired-mode-hook
-   (lambda nil (color-theme-buffer-local 'color-theme-charcoal-black (current-buffer))))
-)
-
-(defun mydefault-buffer-local-theme () ;; 
-   (interactive)
-(color-theme-buffer-local 'color-theme-aalto-light (current-buffer))
-)
-;; (global-unset-key (kbd "<f10>") 'mydefault-buffer-local-theme) ;; work around because default color was strange in cygwin-emacs-nw --> just press f10 when color is strange
-
-;;; END CHOOSE COLOR THEMES ;;;;;
 
 
 
