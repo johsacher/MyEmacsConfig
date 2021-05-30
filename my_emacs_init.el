@@ -1037,6 +1037,8 @@ holding contextual information."
 ;; *** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
 ;;   (wrote this for automatic syncing on compilation in first place
 ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
+;;   or for autocompression with gs:
+;; #+export_pdf_hook: gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -sOutputFile=outout.pdf {} 
 (defun org-export-latex-pdf-with-hook ()
   (interactive)
   ;; export to pdf
