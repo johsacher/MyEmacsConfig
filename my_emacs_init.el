@@ -1038,7 +1038,7 @@ holding contextual information."
 ;;   (wrote this for automatic syncing on compilation in first place
 ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
 ;;   or for autocompression with gs:
-;; #+export_pdf_hook: gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -sOutputFile=outout.pdf {} 
+;; #+export_pdf_hook: gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -sOutputFile=output.pdf {} && mv -f output.pdf {} 
 (defun org-export-latex-pdf-with-hook ()
   (interactive)
   ;; export to pdf
@@ -1719,7 +1719,16 @@ new-org-file-full-name)
     ;;        (getenv "USER")))
 ;;(require 'uniquify) ;; give buffer name part of path --> distinguish files with same names
 ;;(setq uniquify-buffer-name-style 'forward) ;;forward accomplishes this
-
+(require 'doom-modeline)
+(doom-modeline-mode  1)
+(setq doom-modeline-modal-icon t)
+;; (use-package doom-modeline
+;;    :ensure   t
+;;    :init  (doom-modeline-mode  1 ))
+;; quick and dirty own custom -> circle (also in terminal mode)
+(setq evil-normal-state-tag "●")
+(setq evil-insert-state-tag "●")
+(setq evil-visual-state-tag "●")
 
 
 
