@@ -1734,6 +1734,10 @@ new-org-file-full-name)
 (setq evil-insert-state-tag "●")
 (setq evil-visual-state-tag "●")
 
+(setq mode-line-inactive
+(set-face-attribute 'mode-line-inactive nil :background "#444444")
+(set-face-attribute 'mode-line-inactive nil :foreground "#626262")
+
 ;; ** settings from doom-modeline homepage:
 ;; ;; How tall the mode-line should be. It's only respected in GUI.
 ;; ;; If the actual char height is larger, it respects the actual height.
