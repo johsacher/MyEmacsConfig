@@ -4033,4 +4033,3 @@ buffer is not visiting a file."
 ;;   ;; ;; 3. and replace the old by the new whole thing in the total string
 ;;   (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing this-string)
 ;;   )
-;; >>>>>>> 93b3d96c964b6251ad52744cde0457de9e3b5217
