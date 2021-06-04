@@ -1,4 +1,3 @@
-
 ;; * TODOs
 ;; ** better mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
@@ -198,7 +197,6 @@
 (set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
 (set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
 
-
 ;; **
 (if color-theme-buffer-local-switch
     (add-hook 'text-mode-hook
@@ -262,6 +260,9 @@
 ;; (key-chord-define evil-visual-state-map "jj" 'evil-normal-state) # this has nasty effect, commented out
 (key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
 
+;; ** 
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 ;; ** search string under visual selection (commonly used also by vimmers) 
 (require 'evil-visualstar)
 
@@ -392,7 +393,6 @@
 
 
 
-
 ;;; * elisp mode
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
@@ -505,7 +505,6 @@
 (defvar ipython-calculator-buffer-name "*ipython-calculator*")
 
 (defun ipython-calculator-init ()
-  (interactive)
   "Start a terminal-emulator in a new buffer and run ipython."
   (interactive)
   (setq program "/bin/bash")
@@ -589,8 +588,9 @@
 ;; other symbols
 ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 
-
 (setq org-ellipsis " ▾")
+;; (setq org-ellipsis " ▼")
+(set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
 ;; (setq org-ellipsis "▾")
 ;; (setq org-ellipsis " ⤵")
 ;; ** fix TAB -> org-cycle for android phone
@@ -797,6 +797,7 @@
 (add-to-list 'org-structure-template-alist '("p" "#+begin_src python\n?\n#+end_src")) ;; python
 (add-to-list 'org-structure-template-alist '("b" "#+begin_src bash\n?\n#+end_src")) ;; bash
 (add-to-list 'org-structure-template-alist '("m" "#+begin_src math\n?\n#+end_src")) ;; math (aka matlab)
+(add-to-list 'org-structure-template-alist '("l" "#+begin_src latex\n?\n#+end_src")) ;; latex
 ;; default content of org-structure-template-alist:
 ;; (
 ;; ("s" "#+BEGIN_SRC ?
@@ -1496,6 +1497,13 @@ new-org-file-full-name)
 (evil-leader/set-key-for-mode 'term-mode "j" 'term-line-mode)
 ;; (evil-leader/set-key-for-mode 'term-mode "k" 'term-char-mode) 
 (evil-leader/set-key-for-mode 'term-mode "k" 'term-switch-char-mode-emacs-state) 
+;; *** previous/next buffer key binding, set also for term's
+(evil-define-key 'emacs term-raw-map (kbd "M-'") 'previous-buffer)
+(evil-define-key 'emacs term-raw-map (kbd "M-\\") 'next-buffer)
+(evil-define-key 'normal term-raw-map (kbd "M-'") 'previous-buffer)
+(evil-define-key 'normal term-raw-map (kbd "M-\\") 'next-buffer)
+(evil-define-key 'visual term-raw-map (kbd "M-'") 'previous-buffer)
+(evil-define-key 'visual term-raw-map (kbd "M-\\") 'next-buffer)
 
 (defun term-switch-line-mode-normal-state()
   (interactive)
@@ -1704,8 +1712,13 @@ new-org-file-full-name)
 
 
 
-;;;;;;;;;;;;;;;;;;;  adjust status bar appearance (mode line)
-;;;;;;;;;
+;; * mode line
+;; ** todos
+;; *** eliminate infos (or move to tabbar)
+;; **** major mode string -> eliminate 
+;; **** git branch -> eliminate
+;; **** effort/clocking -> move to tabbar
+
     ;; (setq mode-line-format
     ;;       (list
     ;;        ;; value of `mode-name'
@@ -1721,18 +1734,40 @@ new-org-file-full-name)
 ;;(setq uniquify-buffer-name-style 'forward) ;;forward accomplishes this
 (require 'doom-modeline)
 (doom-modeline-mode  1)
+;; (setq doom-modeline-icon nil)
+(setq doom-modeline-icon t)
+ 
 (setq doom-modeline-modal-icon t)
+;; (setq all-the-icons-scale-factor 1.2) ; (default)
+;; (setq all-the-icons-scale-factor 0.9) ; (nice try to be sleakier, but e.g. emacs-icon does not react)
 ;; (use-package doom-modeline
 ;;    :ensure   t
 ;;    :init  (doom-modeline-mode  1 ))
 ;; quick and dirty own custom -> circle (also in terminal mode)
 
+;; *** don t show UTF-8/bla
 (setq doom-modeline-buffer-encoding nil)
 ;; (setq doom-modeline-buffer-encoding t)
 
+(when (not (display-graphic-p))
 (setq evil-normal-state-tag "●")
 (setq evil-insert-state-tag "●")
 (setq evil-visual-state-tag "●")
+(setq evil-motion-state-tag "●")
+(setq evil-emacs-state-tag "●"))
+
+;; my colors for normal/visual/etc evil states
+;; more obtrusive:
+;; (set-face-attribute 'doom-modeline-evil-normal-state nil :foreground "lawn green")
+;; (set-face-attribute 'doom-modeline-evil-visual-state nil :foreground "dark orange")
+;; (set-face-attribute 'doom-modeline-evil-insert-state nil :foreground "dodger blue")
+
+;; less obtrusive:
+(set-face-attribute 'doom-modeline-evil-normal-state nil :foreground "green yellow")
+;; (set-face-attribute 'doom-modeline-evil-normal-state nil :foreground "lime green")
+(set-face-attribute 'doom-modeline-evil-visual-state nil :foreground "gold")
+(set-face-attribute 'doom-modeline-evil-insert-state nil :foreground "turquoise1")
+
 
 (set-face-attribute 'mode-line-inactive nil :background "#444444")
 (set-face-attribute 'mode-line-inactive nil :foreground "#626262")
@@ -1741,6 +1776,7 @@ new-org-file-full-name)
 ;; ;; How tall the mode-line should be. It's only respected in GUI.
 ;; ;; If the actual char height is larger, it respects the actual height.
 ;; (setq doom-modeline-height 25)
+(setq doom-modeline-height 0) ;; -> always minimal height
 
 ;; ;; How wide the mode-line bar should be. It's only respected in GUI.
 ;; (setq doom-modeline-bar-width 4)
@@ -2287,9 +2323,6 @@ new-org-file-full-name)
 
 
 ;;; * matlab
-
-
-
 ;;; ** Matlab matlab-emacs project;;
 load-path
 (setq path_to_matlab_emacs (concat my_load_path "matlab-emacs-src")) ;; the init file folder contains also all manual packages
@@ -2665,7 +2698,19 @@ load-path
 (TeX-command "BibTeX" 'TeX-master-file nil)
 )
 
+;; ** other handy short-cuts with leader-key
+(evil-leader/set-key-for-mode 'LaTeX-mode "lv" 'TeX-view)
+;; ** color short-cuts
+;; todo: sth still wrong -> hello ->  \red{h}ello ↯↯↯
+;; (defun latex-toggle-red-region ()
+;;   (interactive)
+;;   (my-toggle-marker-around-region "\\red{" "\\red{"  "}" "}")
+;;   )
 
+;; (evil-leader/set-key-for-mode 'latex-mode  "jb" 'org-toggle-bold-region)
+;; (evil-leader/set-key-for-mode 'latex-mode  "ji" 'org-toggle-italic-region)
+;; (evil-leader/set-key-for-mode 'latex-mode  "jc" 'org-toggle-code-region)
+;; (evil-leader/set-key-for-mode 'LaTeX-mode "j" 'latex-toggle-red-region)
 ;;; ** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
 (add-hook 'LaTeX-mode-hook '(lambda ()
                   (add-to-list 'TeX-expand-list
@@ -2896,17 +2941,15 @@ This a menu element (FILE . FILE)."
 )
 
 ;; * convert latex to org (region -> headings to org-headers)
-(defun convert-latex-to-org-headings ()
+(defun convert-latex-to-org-region-to-clipboard ()
   (interactive)
   ;; function converts latex headers to org headers ( '\section{...}' --> '* ...' ; '\subsection{...}' --> '** ...' , etc.)
   ;; * current region to string
-  ;; (setq region_string (buffer-substring (mark) (point)))
+  (setq region_string (buffer-substring (mark) (point)))
+  ;; (setq region_string "\\section{hello}")
+  (let ()
   ;; * search-replace headers
   ;; ** level 1
-  (let
-      ((region_string "\\section{hello}"))
-      (setq region_string "\\section{hello}")
-
   ;; (message region_string) % elisp prints the "preceding backslash" so appears as double \\ but it actually isnt -> see:
   ;; (insert region_string) # --> inserts "\section{hello}"
   ;; var1 -> using replace-regexp-in-string
@@ -2920,13 +2963,23 @@ This a menu element (FILE . FILE)."
    ;; "" region-string-converted))
 
   ;; var2 -> using groups -> so get the parts in one \section{<heading>} = '\section{' + <heading> +'}'
-    (replace-first-enclosing-pair-in-string region_string "\\section{" "}" "*" "")
-    (replace-all-enclosing-pairs-in-string region_string "\\section{" "}" "*" "")
+    ;; (replace-first-enclosing-pair-in-string region_string "\\\\section{" "}" "* " "")
+    (setq converted-string (replace-all-enclosing-pairs-in-string region_string "\\\\section{" "}" "* " ""))
   ;; ** level 2
+    (setq converted-string (replace-all-enclosing-pairs-in-string converted-string "\\\\subsection{" "}" "** " ""))
   ;; ** level 3
-  ;; * put search-replaced string to clipboard, ready for pasting
+    (setq converted-string (replace-all-enclosing-pairs-in-string converted-string "\\\\subsubsection{" "}" "*** " ""))
+  ;; * put converted string to clipboard, ready for pasting
+    (kill-new  converted-string)
+    )
   )
-  )
+
+;; test:
+;; \section{hello1}
+;; \section{hello2}
+;; ===>
+;; * hello1
+;; * hello2
 
 
 (defun replace-first-enclosing-pair-in-string (in-string old-begin old-end new-begin new-end)
@@ -2938,7 +2991,18 @@ This a menu element (FILE . FILE)."
              ;; (new-end "end{exp2}")
              )
          ;; 1. with groups we can "dissect" the "<old-begin> <between> <old-end>" construct
-         (setq regexp (concat "\\(" old-begin "\\)\\(.*?\\)\\( " old-end "\\)."))
+         ;;    regexp-groups:         begin           between           end
+         ;;                      _______^______        __^_         _____^_____    
+         ;;                     /              \      /    \       /           \   
+         (setq regexp (concat "\\(" old-begin "\\)" "\\(.*?\\)" "\\(" old-end "\\)"))
+
+         ;; debug..
+         ;; (setq old-begin "\\section{")
+         ;; (setq old-end "}")
+         ;; (setq in-string "\\section{hello}")
+         ;; (setq regexp (regexp-quote "\\section{hello}"))
+         ;; (string-match regexp in-string)
+         ;;; .. end debug
          (when (string-match regexp in-string) 
              ;; (important note: the "?" makes the .* non-greedy! needed here
            (setq the-whole-thing   (match-string 0 in-string))
@@ -3965,12 +4029,25 @@ buffer is not visiting a file."
 
 
 ;; * draft-horse-term
-(defun draft-horse-term ()
+(defvar draft-horse-term-buffer-name "*draft-horse-term*")
+(defun draft-horse-term-init ()
+  "Start a terminal-emulator in a new buffer (non sticky and call it  '*draft-horse-term*')"
   (interactive)
-  (setq draft-horse-term-buffer-name "*draft-horse-term*")
-  (switch-to-buffer draft-horse-term-buffer-name)
+  (setq program "/bin/bash")
+  (setq term-ansi-buffer-name (concat draft-horse-term-buffer-name))
+  (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
+
+  (switch-to-buffer term-ansi-buffer-name)
+  
+  (set-buffer term-ansi-buffer-name)
   (term-mode)
   (term-char-mode)
+
+  ;; Historical baggage.  A call to term-set-escape-char used to not
+  ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
+  ;; ended up with both C-x and C-c as escape chars.  Who knows what
+  ;; the original intention was, but people could have become used to
+  ;; either.   (Bug#12842)
   (let (term-escape-char)
     ;; I wanna have find-file on C-x C-f -mm
     ;; your mileage may definitely vary, maybe it's better to put this in your
@@ -3978,7 +4055,47 @@ buffer is not visiting a file."
     (term-set-escape-char ?\C-x))
   )
 
-;; <<<<<<< HEAD
+(defun draft-horse-term ()
+  (interactive)
+  ;; initiate if not already exists
+  (if (not (get-buffer draft-horse-term-buffer-name))
+      (draft-horse-term-init)
+      )
+  ;; switch to that buffer
+  (switch-to-buffer draft-horse-term-buffer-name)
+  )
+
+(evil-leader/set-key "z" 'draft-horse-term) 
+
+
+;; * tutorials
+;; ;; ** match groups
+;; (let
+;;   ((this-string "The quick brown fox jumped quickly."))
+;;   (string-match "quick" this-string)
+;;   (string-match "\\(qu\\)\\(ick\\)" this-string)
+;;   ;; (match-string 0 "The quick brown fox jumped quickly.")
+;;   ;; (match-string 1 "The quick brown fox jumped quickly.")
+;;   (match-string 1 this-string))
+
+;; ;; ** repace (sub)string in string
+;; (let ((this-string "foo.buzz"))
+;; (replace-regexp-in-string (regexp-quote ".") "bar" this-string)) ;; => foobarbuzz
+
+;; ;; ** replace "pair around something"
+;; (let ((this-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}."))
+;;   ;; 1. with groups we can "dissect" the "<begin> <between> <end>" construct
+;;   (string-match "\\(begin{exp1}\\)\\(.*?\\)\\(end{exp1}\\)." this-string) 
+;;   ;; (important note: the "?" makes the .* non-greedy! needed here
+;;   (setq the-whole-thing   (match-string 0 this-string))
+;;   (setq the-begin-thing   (match-string 1 this-string))
+;;   (setq the-between-thing (match-string 2 this-string))
+;;   (setq the-end-thing     (match-string 3 this-string))
+;;   ;; 2. now we can design "the-new-whole-thing"
+;;   (setq the-new-whole-thing (concat "begin{exp2}" the-between-thing "end{exp2}"))
+;;   ;; ;; 3. and replace the old by the new whole thing in the total string
+;;   (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing this-string)
+
 ;; * move position to number in clipboard
 ;; * aliases for unintuitively named functions
 (defun move-curser-to-buffer-position-in-clipboard ()
