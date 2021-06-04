@@ -428,7 +428,7 @@ last-date)
 ;;test: (planet-open-today)
 ;;test: (planet-open-today)
 (evil-leader/set-key "ot" 'planet-today)
-(evil-leader/set-key "t" 'planet-today)
+;; (evil-leader/set-key "t" 'planet-today)
 (evil-leader/set-key "ow" 'planet-this-week)
 
 
@@ -1127,7 +1127,8 @@ date)
   ;; * header
   (planet-daily-file-set-header-line) 
   ;; * modeline (->remove)
-  (setq mode-line-format "")
+  ;; (setq mode-line-format "")
+  (setq mode-line-format nil)
   ;; * default initial visibility ("overwrites" org-mode's initial visibility)
   (planet-level-2)
   )
@@ -1136,7 +1137,8 @@ date)
   ;;* header
   (planet-week-file-set-header-line) 
   ;;* modeline (->remove)
-  (setq mode-line-format "")
+  (setq mode-line-format nil)
+  ;; (setq mode-line-format "")
   )
 
 ;;* turn on planet-mode for the "right org-files (planet files)"

@@ -276,3 +276,5 @@ Embedded Linux is the head-and-shoulders most common embedded solution, owing to
 ** IPython (interactive command line user interface for python)
 ** LAPACK
 ** numpy
+* fun tale: ricing cars -> comes from japanese car modding -> ricing linux popular term on forum r/unixporn,seems racist, is not, Race Inspired Car Enhancements
+[[file:Screenshot_20210429-121005_DuckDuckGo.jpg]]
