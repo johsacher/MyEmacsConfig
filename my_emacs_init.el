@@ -124,7 +124,9 @@
 (setq my_load_path (file-name-directory load-file-name)) ;; save custom file also to the same path
 (setq custom-file-name "custom.el")
 (setq custom-file (concat my_load_path custom-file-name)) ;; has to be name "custom-file" -> so emacs recognizes it and writes saved customization there (https://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Customizations.html)
-(load custom-file)
+
+;; do NOT load it (i don t want that custom shit)
+;; (load custom-file)
 
 
 ;;; GENERAL STUFF ;;;;;;
@@ -587,7 +589,7 @@
 
 ;; other symbols
 ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
-
+(require 'org)
 (setq org-ellipsis " ▾")
 ;; (setq org-ellipsis " ▼")
 (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
@@ -1422,14 +1424,50 @@ new-org-file-full-name)
              '("^" (:foreground "red")
                ))
 
-;;; * outshine mode (org-mode outlining in code-files)
-;; TODOS:
-;; ** still having multiple comment fields leads to problems, e.g. "### ** heading", at the moment he needs "# ** header" to work fully
-;; ** still can t expand sublevels, when trailing white spaces
-;; ** better colors
+;; * outshine mode (org-mode outlining in code-files)
+;; ** INFO -> this is all the stuff that works (https://orgmode.org/worg/org-tutorials/org-outside-org.html):
+;; C-c 	PrefixCommand
+;; <M-down> 	outline-next-visible-heading
+;; <M-left> 	outline-hide-more
+;; <M-right> 	outline-show-more
+;; <M-up> 	outline-previous-visible-heading
+;; <tab> 	outshine-cycle-subtree
+;; <backtab> 	outshine-cycle-buffer
+;; C-c C-a 	show-all
+;; C-c C-b 	outline-backward-same-level
+;; C-c C-c 	hide-entry
+;; C-c C-d 	hide-subtree
+;; C-c C-e 	show-entry
+;; C-c C-f 	outline-forward-same-level
+;; C-c TAB 	show-children
+;; C-c C-k 	show-branches
+;; C-c C-l 	hide-leaves
+;; C-c RET 	outline-insert-heading
+;; C-c C-n 	outline-next-visible-heading
+;; C-c C-o 	outline-hide-other
+;; C-c C-p 	outline-previous-visible-heading
+;; C-c C-q 	outline-hide-sublevels
+;; C-c C-s 	show-subtree
+;; C-c C-t 	hide-body
+;; C-c C-u 	outline-up-heading
+;; C-c C-v 	outline-move-subtree-down
+;; C-c C-^ 	outline-move-subtree-up
+;; C-c ' 	outorg-edit-as-org
+;; C-c @ 	outline-mark-subtree
+;; C-c I 	outline-previous-visible-heading
+;; C-c J 	outline-hide-more
+;; C-c K 	outline-next-visible-heading
+;; C-c L 	outline-show-more
+;; C-c C-< 	outline-promote
+;; C-c C-> 	outline-demote
+
+;; ** TODOS
+;; *** cycling bug -> children only first
+;; *** allow preceding whitespaces / allow variable nr of comment-chars (not by default), e.g. "### ** heading", at the moment he needs "# ** header" to work fully
+;; *** make heading of comment -> SPC-8
+;; *** better colors
 ;;    i d like to keep regular code color, just add a little "sth", prepend and format the leading stars rather, or not at all. maybe just make code bold.
-;; 
-;; ** functions to format properly headings
+;; *** functions to format properly headings
 ;; *** "***heading" -> "*** heading"
  ;; " s/\(\*++\)\([^ *]\{1\}\)/; \1 \2/g")
 ;; *** "%%*" --> "%% *"
@@ -1443,46 +1481,35 @@ new-org-file-full-name)
 ;;       )))
 
 
+;; *** bindings (-> same as my org-mode workflow)
+;; **** demote/promote C-h/C-l
+(evil-define-key 'normal outshine-mode-map (kbd "C-h") 'outline-promote)
+(evil-define-key 'normal outshine-mode-map (kbd "C-l") 'outline-demote)
 
-
-
-(setq my-black "#1b1b1e")
-;; (custom-theme-set-faces
-;;  ;; you may have to get the color-theme-name right:
-;;  'zenburn ; will not work when you change theme -> "unknown color theme error"
-;;  `(outline-1 ((t (:height 1.25 :background "#268bd2"
-;;                           :foreground ,my-black :weight bold))))
-;;  `(outline-2 ((t (:height 1.15 :background "#2aa198"
-;;                           :foreground ,my-black :weight bold))))
-;;  `(outline-3 ((t (:height 1.05 :background "#b58900"
-;;                           :foreground ,my-black :weight bold)))))
-
-;;; * term / terminal / ansi-term
+;; * term / terminal / ansi-term
 ;; ** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
 
-
-;;
- (load "stickyterm.el")
- (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
+(load "stickyterm.el")
+(global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
 (evil-leader/set-key "7" 'stickyterm-noninteractive)
 
 (require 'term)
 ;; (if color-theme-buffer-local-switch
- (add-hook 'term-mode-hook
+(add-hook 'term-mode-hook
            (lambda nil (color-theme-buffer-local 'color-theme-dark-laptop (current-buffer))))
  ;; )
 
- (add-hook 'term-mode-hook
+(add-hook 'term-mode-hook
            (lambda nil (display-line-numbers-mode -1)))
-;; ** Alt-p --> map to arrow-up always 
+;; *** Alt-p --> map to arrow-up always 
 ;; ( reason: ipython, I could n t achieve ipython remapping of "Alt-p"= "up", so I achieved it with this kind of workaround: the terminal-emulator / ipython "does not see" Alt-p coming, emacs will translate it to "up" before. so i get the desired behaviour and don t have to tediously use arrow keys)
 ;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
  (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
  (evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
 
 
-;; ** short cut for term-paste
+;; *** short cut for term-paste
  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
  (evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
  (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
@@ -1490,14 +1517,14 @@ new-org-file-full-name)
 
 
 
-;; ** switch only between (term char with emacs-state) and (term line with normal-state)
+;; *** switch only between (term char with emacs-state) and (term line with normal-state)
  (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
  (evil-define-key 'normal term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state) ;; this is just to not get undesired error messages when repeating
 
 (evil-leader/set-key-for-mode 'term-mode "j" 'term-line-mode)
 ;; (evil-leader/set-key-for-mode 'term-mode "k" 'term-char-mode) 
 (evil-leader/set-key-for-mode 'term-mode "k" 'term-switch-char-mode-emacs-state) 
-;; *** previous/next buffer key binding, set also for term's
+;; **** previous/next buffer key binding, set also for term's
 (evil-define-key 'emacs term-raw-map (kbd "M-'") 'previous-buffer)
 (evil-define-key 'emacs term-raw-map (kbd "M-\\") 'next-buffer)
 (evil-define-key 'normal term-raw-map (kbd "M-'") 'previous-buffer)
@@ -1516,7 +1543,7 @@ new-org-file-full-name)
   (evil-emacs-state)
   (term-char-mode)
   )
-;; ** evil term
+;; *** evil term
  (evil-define-key 'normal term-raw-map (kbd "RET") 'term-send-raw)
  (evil-define-key 'normal term-raw-map (kbd "h") 'term-send-left)
  (evil-define-key 'normal term-raw-map (kbd "l") 'term-send-right)
@@ -1524,7 +1551,7 @@ new-org-file-full-name)
  (evil-define-key 'normal term-raw-map (kbd "j") 'term-send-down)
  (evil-define-key 'normal term-raw-map (kbd "x") 'term-send-del)
 
-;; ** term color theme
+;; *** term color theme
 ;; (how did I get it from customization? -> customized in menue, then copied from custem.el ("custom-set-faces ...") and formatted 
 (set-face-attribute 'term nil :background "black" :foreground "white")
 ;; (set-face-attribute 'term-color-back nil :background "black" :foreground "white")
@@ -1534,15 +1561,15 @@ new-org-file-full-name)
 (set-face-attribute 'term-color-green nil :background "#a1db00" :foreground "#a1db00")
 
 
-;; *** make initial state for term emacs-state
+;; **** make initial state for term emacs-state
 ;; this did not work:
  ;; (add-hook 'term-mode-hook
            ;; (lambda nil (evil-emacs-state)))
 ;; this did work:
 (evil-set-initial-state 'term-mode 'emacs)
 
-;; ** tramp connection to hlrn (fast command)
-;; *** still have problem that it hangs on "waiting for prompts from remote shell..." 
+;; *** tramp connection to hlrn (fast command)
+;; **** still have problem that it hangs on "waiting for prompts from remote shell..." 
 ;; -> could not solve it, tried like this
 ;; (exec-path-from-shell-initialize)
 ;; (setq exec-path-from-shell-check-startup-files nil)
@@ -2156,7 +2183,7 @@ new-org-file-full-name)
   (evil-define-key 'normal dired-mode-map "q" 'kill-this-buffer)
 
 
-;; * )  by hitting enter -> exit narrow-mode and enter file/dir
+;; ** )  by hitting enter -> exit narrow-mode and enter file/dir
 ;; --------------------------------------------------------------------
 ;; ;;; (quick and dirty way)
 ;; ;; source: http://oremacs.com/2015/07/16/callback-quit/
@@ -3250,7 +3277,7 @@ region, clear header."
 ;; (require 'zoom-frm)
 
 
-;; * move buffers - key bindings
+;; *** move buffers - key bindings
 (require 'windmove)
 (require 'framemove)
 (setq framemove-hook-into-windmove t)
@@ -3332,7 +3359,7 @@ region, clear header."
  (provide 'init-pdfview)
 
 
-;;; * quickly print variable to scratch buffer
+;; * quickly print variable to scratch buffer
 (defun print-var-to-scratch-buffer (var)
   (interactive)
   (with-current-buffer "*scratch*"

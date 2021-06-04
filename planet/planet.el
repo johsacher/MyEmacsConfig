@@ -1475,7 +1475,6 @@ date)
   (org-global-cycle 3)
   )
 
-
 ;;* planet header-line
 (defvar planet-daily-file-header-line-weekend-color-foreground)
 (setq planet-daily-file-header-line-week-end-color-foreground "ivory")
