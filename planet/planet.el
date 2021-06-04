@@ -1622,3 +1622,45 @@ date)
 ;; mucke
 (defun mucke-open-track ()
   )
+
+;; * planet-birthdays
+(defvar planet-birthdays-file "birthdays.org")
+;; (defun planet-birthdays-update-future-events ()
+;;   "Adds birthday events for all birthday items in birthday-file for all days in future (until limit of existing daily files). if exists, it checks and possibly updates."
+;;   (interactive)
+;;   ;; * assemble list of all birthdays from birthday-file
+;;   (setq entries-props nil)
+;;   (org-map-entries (lambda ()
+;;       (setq this-entry-props (org-entry-properties))
+;;       (push this-entry-props entries-props)
+;;       ))
+;;   ;;  (message entries-props)
+;;   ;; (("CATEGORY" . "birthdays")
+;;   ;;  ("BIRTHDAY" . "30.05.1969") ("NICKNAME" . "repke") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "jens-uwe repke"))
+;;   ;; (("CATEGORY" . "birthdays") ("BIRTHDAY" . "13.01.1988") ("NICKNAME" . "robert w") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "robert wilhelm")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "28.11.1998") ("NICKNAME" . "inga") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "inga strelnikova")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "31.05.1987") ("NICKNAME" . "carlos") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "carlos caceres")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "25.01.1987") ("NICKNAME" . "andrea s") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "andrea schermann")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "17.04.1986") ("NICKNAME" . "anja l") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "anja lemoine")))
+;;   ;; * loop all future planet daily files -> update/delete birthday entries if necessary
+;;   ;; ** get all daily file names
+;;   (setq daily-filefullnames (planet-get-all-daily-filefullnames))
+;;   ;; ** filter future only
+;;   (setq daily-filefullnames-future ())
+;;   (dolist this-daily-filefullname daily-filefullnames-future
+;;           ;; * visit file
+;;           ;; * 
+;;           ))
+
+;; (defun dummy ()
+;;   (interactive)
+;;   (message (org-entry-get (point) "nickname")))
+
+;; (
+;; (--filter (< 3 it) '(1 2 3 4 5 6))
+
+
+
+
+
+
+
+
+
+
