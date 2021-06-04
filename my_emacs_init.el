@@ -197,7 +197,6 @@
 (set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
 (set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
 
-
 ;; **
 (if color-theme-buffer-local-switch
     (add-hook 'text-mode-hook
@@ -261,6 +260,9 @@
 ;; (key-chord-define evil-visual-state-map "jj" 'evil-normal-state) # this has nasty effect, commented out
 (key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
 
+;; ** 
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 ;; ** search string under visual selection (commonly used also by vimmers) 
 (require 'evil-visualstar)
 
@@ -388,7 +390,6 @@
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize) ;; You might already have this line
-
 
 
 
@@ -587,8 +588,9 @@
 ;; other symbols
 ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 
-
 (setq org-ellipsis " ▾")
+;; (setq org-ellipsis " ▼")
+(set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
 ;; (setq org-ellipsis "▾")
 ;; (setq org-ellipsis " ⤵")
 ;; ** fix TAB -> org-cycle for android phone
@@ -2322,9 +2324,6 @@ new-org-file-full-name)
 
 
 ;;; * matlab
-
-
-
 ;;; ** Matlab matlab-emacs project;;
 load-path
 (setq path_to_matlab_emacs (concat my_load_path "matlab-emacs-src")) ;; the init file folder contains also all manual packages
