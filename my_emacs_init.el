@@ -382,7 +382,6 @@
   (async-shell-command command-string))
 
 (evil-leader/set-key ":" 'gsyn)
-(evil-leader/set-key ";" 'gsyn)
 
 ;;;+) MELPA packages - make them available (some very good additional package list)
 (require 'package) ;; You might already have this line
@@ -1425,6 +1424,8 @@ new-org-file-full-name)
                ))
 
 ;; * outshine mode (org-mode outlining in code-files)
+(require 'org)
+(require 'outshine)
 ;; ** INFO -> this is all the stuff that works (https://orgmode.org/worg/org-tutorials/org-outside-org.html):
 ;; C-c 	PrefixCommand
 ;; <M-down> 	outline-next-visible-heading
@@ -1481,11 +1482,49 @@ new-org-file-full-name)
 ;;       )))
 
 
-;; *** bindings (-> same as my org-mode workflow)
-;; **** demote/promote C-h/C-l
+;; ** bindings (-> same as my org-mode workflow)
+;; *** demote/promote C-h/C-l
+(require 'org)
 (evil-define-key 'normal outshine-mode-map (kbd "C-h") 'outline-promote)
 (evil-define-key 'normal outshine-mode-map (kbd "C-l") 'outline-demote)
+;; *** levels 1/2/3 -> SPC l 1/2/3
+(evil-leader/set-key "l0" 'outline-show-all)
+(evil-leader/set-key "l1" (lambda () (interactive) (outshine-cycle-buffer 1)))
+(evil-leader/set-key "l2" (lambda () (interactive) (outshine-cycle-buffer 2)))
+(evil-leader/set-key "l3" (lambda () (interactive) (outshine-cycle-buffer 3)))
 
+;; ** appearance
+;; *** style headings
+(set-face-attribute 'outshine-level-1 nil :foreground "color-141" :weight 'bold)
+(set-face-attribute 'outshine-level-2 nil :foreground "color-105" :weight 'bold)
+(set-face-attribute 'outshine-level-3 nil :foreground "color-147" :weight 'bold)
+;; color-176
+
+ ;; color-160
+ ;; color-161
+ ;; color-162
+ ;; color-163
+ ;; color-164
+ ;; color-165
+ ;; color-166
+ ;; color-167
+ ;; color-168
+ ;; color-169
+ ;; color-170
+ ;; color-171
+ ;; color-172
+ ;; color-173
+ ;; color-174
+ ;; color-175
+ ;; color-176
+ ;; color-177
+
+
+
+
+
+;; (set-face-attribute 'outshine-level-4 nil :weight 'bold)
+;; (set-face-attribute 'outshine-level-5 nil :weight 'bold)
 ;; * term / terminal / ansi-term
 ;; ** use my own term version: stickyterm (slightly modified ansi-term)
 (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
@@ -3022,6 +3061,7 @@ This a menu element (FILE . FILE)."
          ;;                      _______^______        __^_         _____^_____    
          ;;                     /              \      /    \       /           \   
          (setq regexp (concat "\\(" old-begin "\\)" "\\(.*?\\)" "\\(" old-end "\\)"))
+	 ;; side-note: "Note that ‘\\’ is needed in Lisp syntax to include a ‘\’ in the string, which is needed to deny the first star its special meaning in regexp syntax. See Regexp Backslash.)" https://www.gnu.org/software/emacs/manual/html_node/emacs/Options-for-Comments.html)
 
          ;; debug..
          ;; (setq old-begin "\\section{")
@@ -4174,6 +4214,7 @@ buffer is not visiting a file."
 ;;   (setq the-whole-thing   (match-string 0 this-string))
 ;;   (setq the-begin-thing   (match-string 1 this-string))
 ;;   (setq the-between-thing (match-string 2 this-string))
+
 ;;   (setq the-end-thing     (match-string 3 this-string))
 ;;   ;; 2. now we can design "the-new-whole-thing"
 ;;   (setq the-new-whole-thing (concat "begin{exp2}" the-between-thing "end{exp2}"))
