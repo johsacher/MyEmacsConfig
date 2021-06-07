@@ -1,6 +1,7 @@
 
 function outshine_test(x)
-
+% (setq outline-regexp (concat " *" comment-start comment-start "* " "\\**"))
+% (setq outline-regexp (concat " *" comment-start " " "\\**"))
 % * step 1
 x=x+3;
 % * loop
@@ -15,7 +16,9 @@ for i=1:length(x)
     % ** that 
     z(i)=y(i)-1;
 end
-% * step 2
+    % good
+    % ** 
+%T * step 2
 % ** plot y over x
 plot(x,y)
 % ** plot z over x
@@ -25,3 +28,11 @@ plot(x,z)
 disp('hello')
 
 end
+
+
+
+% (setq outline-regexp " *%% [*]\\{1,8\\} ")
+% Local Variables:
+% outline-regexp: " *%% [*]\\{1,8\\} "
+% dummy: "hello"
+% End:

@@ -1,8 +1,8 @@
-;; * TODOs
-;; ** better mode-line color inactive window light-grey (?), active --> black??
+ ;; * TODOs
+ ;; ** better mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
-;; * debugger-mode I (evil settings after evil)
+ ;; * debugger-mode I (evil settings after evil)
 ;; (set at start so comfortable debugging of init file in case it a biggy)
 (add-hook 'debugger-mode-hook
           (lambda ()
@@ -10,7 +10,7 @@
 
 
 
-;; * debug on start-up
+ ;; * debug on start-up
 (setq debug-only-on-start-up t)
 (if debug-only-on-start-up
   (setq debug-on-error t)
@@ -195,7 +195,9 @@
 ;; use the following as templates
 
 ;; ** personal (general) customization of faces (comments light green, etc.)
-(set-face-attribute 'font-lock-comment-face nil :foreground "light green")
+;; (set-face-attribute 'font-lock-comment-face nil :foreground "light green")
+(set-face-attribute 'font-lock-comment-face nil :foreground "green yellow")
+;; (set-face-attribute 'font-lock-comment-face nil :foreground "color-193")
 (set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
 (set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
 
@@ -564,7 +566,11 @@
   :global nil)
 
 ;;; * org-mode
+;; ** prior stuff
 
+(setq org-blank-before-new-entry
+      '((heading . nil)
+       (plain-list-item . auto)))
 ;; make sure we have the latest package of org
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 ;; org ellipsis
@@ -1118,7 +1124,7 @@ from lines like:
 ;; (we don t want all the "junk" to be seen, images, latex aux files, etc.)
 ;; (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are "mistreated/violated" by Dropbox)
 (defun create-hidden-org-file-folder (&optional filebasename path)
-   (interactive)
+  (interactive)
    ;; * determine filename
    (if (not filebasename)
        (setq filebasename (read-string "Org-file-name (without .org-extension):"))
@@ -1363,16 +1369,83 @@ new-org-file-full-name)
 
 
 
-;; ** basic behaviour - new headings
-(defun myorg-new-heading-enter-insert-state ()
+;; ** basic behaviour keybindings (implementation via "literal-key-funs)
+;; comment on concept:
+;; org has organized "key binding behavior with functions like org-return" so the keys are doing different stuff in different contexts (heading/item/table) . since i m using evil, this "layer" would have to be replaced completely by my own layer (functions) for each mode: myorgevil-insert-return/ myorgevil-normal-return/ myorgevil-visual-return, with this logic.
+;; however, i ll keep the original layer as a "fall back" by cond-statements "else -> fallback (e.g. org-metareturn).
+;; *** normal state
+;; **** enter
+(evil-define-key 'normal org-mode-map (kbd "RET") 'myorgevil-normal-RET)
+(defun myorgevil-normal-RET ()
   (interactive)
-  (org-insert-heading)
-  (evil-insert-state)
-  )
+  (cond 
+   ;; at plain list item -> new item same level
+   ((org-at-item-p)
+    (org-meta-return)
+    (evil-insert-state)
+    )
+   ;; "fallback"
+   (t
+    (org-return))))
 
-(setq org-blank-before-new-entry
-      '((heading . nil)
-       (plain-list-item . auto)))
+;; **** C-l (demote)
+(evil-define-key 'normal org-mode-map (kbd "C-l") 'myorgevil-normal-C-l)
+(defun myorgevil-normal-C-l ()
+  (interactive)
+  (cond 
+   ;; at plain list item -> new item same level
+   ((org-at-item-p)
+    (org-shiftmetaright)
+    )
+   ;; "fallback"
+   (t
+    (org-shiftmetaright))))
+
+;; **** C-h (promote)
+(evil-define-key 'normal org-mode-map (kbd "C-h") 'myorgevil-normal-C-h)
+(defun myorgevil-normal-C-h ()
+  (interactive)
+  (cond 
+   ;; at plain list item -> new item same level
+   ((org-at-item-p)
+    (org-shiftmetaleft)
+    )
+   ;; "fallback"
+   (t
+    (org-metaleft))))
+
+;; *** insert state
+;; **** M-RET
+(evil-define-key 'insert org-mode-map (kbd "M-RET") 'myorgevil-insert-M-RET)
+(defun myorgevil-insert-M-RET ()
+  (interactive)
+  (cond 
+   ;; at plain list item -> new item same level
+   ((org-at-item-p)
+    (org-meta-return)
+    )
+   ;; at plain heading -> new item same level
+   ((org-at-heading-p)
+    (org-meta-return)
+    )
+   ;; "fallback"
+   (t
+    (org-return))
+  ))
+
+
+;; **** C-l (demote)
+(evil-define-key 'insert org-mode-map (kbd "C-l") 'myorgevil-normal-C-l)
+(defun myorgevil-insert-C-l ()
+  (interactive)
+  (myorgevil-normal-C-l))
+;; **** C-h (promote)
+(evil-define-key 'insert org-mode-map (kbd "C-h") 'myorgevil-normal-C-h)
+(defun myorgevil-insert-C-h ()
+  (interactive)
+  (myorgevil-normal-C-h))
+
+
 
 (defun myorg-meta-return-enter-insert-state ()
   (interactive)
@@ -1384,9 +1457,7 @@ new-org-file-full-name)
 (evil-define-key 'insert org-mode-map (kbd "C-p") 'evil-paste-after)
 ;; ** basic navigation, consistent evil
 (evil-define-key 'normal org-mode-map (kbd "L") 'org-shiftright)
-(evil-define-key 'normal org-mode-map (kbd "RET") 'myorg-new-heading-enter-insert-state)
-(evil-define-key 'insert org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
-(evil-define-key 'normal org-mode-map (kbd "M-RET") 'myorg-meta-return-enter-insert-state)
+(evil-define-key 'normal org-mode-map (kbd "M-RET") 'myorg-return)
 (evil-define-key 'normal org-mode-map (kbd "H") 'org-shiftleft)
 (evil-define-key 'normal org-mode-map (kbd "C-K") 'org-shiftup)
 (evil-define-key 'normal org-mode-map (kbd "C-J") 'org-shiftdown) ;; leave "J" for joining lines
@@ -1408,8 +1479,8 @@ new-org-file-full-name)
   (message "this is a message from dummy-message")
   )
 
-(evil-define-key 'normal org-mode-map (kbd "M-L") 'org-shiftmetaright)
-(evil-define-key 'normal org-mode-map (kbd "M-H") 'org-shiftmetaleft)
+(evil-define-key 'normal org-mode-map (kbd "C-l") 'org-shiftmetaright)
+(evil-define-key 'normal org-mode-map (kbd "C-h") 'org-shiftmetaleft)
 (evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
 (evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
 
@@ -1426,13 +1497,16 @@ new-org-file-full-name)
 ;; * outshine mode (org-mode outlining in code-files)
 (require 'org)
 (require 'outshine)
+;; ** TODO ellipsis set to " ▾"
+;; this did not work (var doesnt exist):
+;; (setq outshine-ellipsis " ▾")
 ;; ** INFO -> this is all the stuff that works (https://orgmode.org/worg/org-tutorials/org-outside-org.html):
 ;; C-c 	PrefixCommand
 ;; <M-down> 	outline-next-visible-heading
 ;; <M-left> 	outline-hide-more
 ;; <M-right> 	outline-show-more
 ;; <M-up> 	outline-previous-visible-heading
-;; <tab> 	outshine-cycle-subtree
+;; <tab> 	outshine-cycle 
 ;; <backtab> 	outshine-cycle-buffer
 ;; C-c C-a 	show-all
 ;; C-c C-b 	outline-backward-same-level
@@ -1462,16 +1536,35 @@ new-org-file-full-name)
 ;; C-c C-< 	outline-promote
 ;; C-c C-> 	outline-demote
 
-;; ** TODOS
-;; *** cycling bug -> children only first
-;; *** allow preceding whitespaces / allow variable nr of comment-chars (not by default), e.g. "### ** heading", at the moment he needs "# ** header" to work fully
-;; *** make heading of comment -> SPC-8
-;; *** better colors
+(defun outshine-calc-outline-regexp ()
+  ;; FIXME: Rename function.
+  "Return the outline regexp for the current mode."
+   (concat " *" (when (and outshine-regexp-outcommented-p
+                     (or comment-start
+                         ;; MAYBE: Should this be `warn'?
+                         (message (concat "Cannot calculate outcommented outline-regexp without `comment-start' character defined"))))
+            (concat " *" (regexp-quote (outshine-calc-comment-region-starter)) ;; modified
+		    "*" ;; modified
+		    ;; "[^\\s]*"
+		    "[^ ]*" ;; somehow working for %%T but not %%TT (todo with outline-end-of-subtree, but hard to debug, and one char suffices, just a nice to have anyway)
+		    (if outshine-enforce-no-comment-padding-p
+                        ""
+                      (outshine-calc-comment-padding))))
+          outshine-normalized-outline-regexp-base
+          " "))
+  ;; ** TODOS
+;; *** DONE [outshine-cycle does it] cycling bug -> children only first
+;; *** DONE allow preceding whitespaces / allow variable nr of comment-chars (not by default), e.g. "### ** heading", at the moment he needs "# ** header" to work fully
+
+
+;; *** [need to make own lowlevel fun regexp insert etc.] make heading of comment -> SPC-8
+;; *** DONE better colors
 ;;    i d like to keep regular code color, just add a little "sth", prepend and format the leading stars rather, or not at all. maybe just make code bold.
+;; *** DONE allow for any additional non-whitespace chars directly after comment-char (so i can use for comment categories (important/side-note/workaround/etc.)
 ;; *** functions to format properly headings
-;; *** "***heading" -> "*** heading"
+;; **** "***heading" -> "*** heading"
  ;; " s/\(\*++\)\([^ *]\{1\}\)/; \1 \2/g")
-;; *** "%%*" --> "%% *"
+;; ****  "%%*" --> "%% *"
 ;; (setq myhost (getenv "MYHOST"))
 ;; (cond 
 ;;  ((equal myhost "phone") (message "on phone -> quelpa not set"))
@@ -1493,6 +1586,8 @@ new-org-file-full-name)
 (evil-leader/set-key "l2" (lambda () (interactive) (outshine-cycle-buffer 2)))
 (evil-leader/set-key "l3" (lambda () (interactive) (outshine-cycle-buffer 3)))
 
+;; *** tab -> outshine-cycle
+(evil-define-minor-mode-key 'normal 'outshine-mode (kbd "TAB") 'outshine-cycle)
 ;; ** appearance
 ;; *** style headings
 (set-face-attribute 'outshine-level-1 nil :foreground "color-141" :weight 'bold)
@@ -1800,10 +1895,10 @@ new-org-file-full-name)
 ;;(setq uniquify-buffer-name-style 'forward) ;;forward accomplishes this
 (require 'doom-modeline)
 (doom-modeline-mode  1)
+(when (not (display-graphic-p))
 ;; (setq doom-modeline-icon nil)
-(setq doom-modeline-icon t)
- 
-(setq doom-modeline-modal-icon t)
+(setq doom-modeline-icon nil)
+(setq doom-modeline-modal-icon nil))
 ;; (setq all-the-icons-scale-factor 1.2) ; (default)
 ;; (setq all-the-icons-scale-factor 0.9) ; (nice try to be sleakier, but e.g. emacs-icon does not react)
 ;; (use-package doom-modeline
@@ -4179,7 +4274,7 @@ buffer is not visiting a file."
 
 ;; * short-cuts (universal concept) for REPL/ debug / etc.
 ;; ** send to REPL current fun. def. (i.e. evaluate current function in elisp)
-(evil-leader/set-key "tf" 'eval-defun) 
+(evil-leader/set-key-for-mode 'elisp-mode "tf" 'eval-defun) 
 ;; send to REPL current line (removing leading white spaces)
 ;; send to REPL current region
 ;; send to REPL var under point
@@ -4221,3 +4316,6 @@ buffer is not visiting a file."
 ;;   ;; ;; 3. and replace the old by the new whole thing in the total string
 ;;   (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing this-string)
 ;;   )
+
+;; * lisp
+(evil-leader/set-key "<RET>" 'eval-expression) 
