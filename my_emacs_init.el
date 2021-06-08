@@ -384,6 +384,7 @@
   (async-shell-command command-string))
 
 (evil-leader/set-key ":" 'gsyn)
+(evil-leader/set-key ";" 'gsyn)
 
 ;;;+) MELPA packages - make them available (some very good additional package list)
 (require 'package) ;; You might already have this line
