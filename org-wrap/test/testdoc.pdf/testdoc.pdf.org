@@ -1,0 +1,4 @@
+* [[file:testdoc.pdf]]
+:PROPERTIES:
+:ID:       aa9cad6b-803e-448a-aae9-de8fe3684249
+:END:

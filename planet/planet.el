@@ -29,7 +29,7 @@
 
 (defvar planet-regexp-daily-file-folder ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$")
 
-(define-minor-mode planet-mode
+(define-minor-mode planet-mode "this is the documentation of planet-mode. blablah."
   :initial-value nil
   :lighter " planet"
   :keymap planet-mode-map
