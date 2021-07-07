@@ -1,3 +1,6 @@
+* EXWM window manager
+* birthdays
+* email (mu4e)
 * clocking/effort tasks/subtasks
 ** planet-clock-in-current-main-task --> nicht zeilen wechseln müssen, automatisch haupt-task
 ** sub-clocks / sub-efforts
