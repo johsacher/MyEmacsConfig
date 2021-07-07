@@ -31,3 +31,18 @@
 
 * install org-xournalpp -> integrate org with xournalpp
 ** auto OCR notes with tesseract (nr 1 free ocr tool in 2021)
+
+* "spare vim normal mode keys"
+** frequent actions "candidates"
+*** insert white space
+** spare keys
+*** D (del till eol, d$)
+*** | (insert at bol)
+*** H/L (top of screen)
+*** S (subs line)
+*** Z (extra quit cmds)
+*** '
+*** Q (ex mode)
+*** K (help)
+*** \ (not used)
+*** [/]
