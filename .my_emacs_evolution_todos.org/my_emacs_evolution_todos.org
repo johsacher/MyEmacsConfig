@@ -25,3 +25,6 @@
 ****** /related/
 *** "untergliederung" des efforts -> 
 [[./screenshot_20201127_153726.png]]
+
+* install org-xournalpp -> integrate org with xournalpp
+** auto OCR notes with tesseract (nr 1 free ocr tool in 2021)
