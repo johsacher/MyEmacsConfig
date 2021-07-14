@@ -36,13 +36,23 @@
 ** frequent actions "candidates"
 *** insert white space
 ** spare keys
-*** D (del till eol, d$)
-*** | (insert at bol)
-*** H/L (top of screen)
-*** S (subs line)
-*** Z (extra quit cmds)
-*** '
-*** Q (ex mode)
-*** K (help)
-*** \ (not used)
-*** [/]
+[[./screenshot_20210707_173351.png]]
+*** capital letter stuff
+**** Y (yank line)
+**** D (del till eol, d$)
+**** H/L (top of screen)
+**** C (change to eol)
+**** R (replace mode)
+**** S (subs line)
+**** Z (extra quit cmds)
+**** Q (ex mode)
+**** K (help)
+*** "one hit keys"
+**** '
+**** | (insert at bol)
+**** \ (not used)
+**** [ (misc)
+**** ] (misc)
+
+** practical keys i did not know about:
+*** X :: backspace
