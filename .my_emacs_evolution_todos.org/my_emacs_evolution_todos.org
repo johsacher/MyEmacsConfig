@@ -1,3 +1,5 @@
+* latex table -> shortcut for align, but wrap select-table-region around:
+** search backwards 'begin tabular' -> BEG, search forward 'end tabular' -> END . dann (align BEG END)
 * EXWM window manager
 * birthdays
 * email (mu4e)

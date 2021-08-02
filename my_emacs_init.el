@@ -4371,3 +4371,19 @@
  
  ;; * lisp
  ;; (evil-leader/set-key "<RET>" 'eval-expression) 
+
+(defun js/org-table-csv ()
+  (interactive)
+(org-table-export (format "%s.csv" name) "orgtbl-to-csv"))
+
+;; * hide/show modeline
+(defvar js/modeline-format-temp mode-line-format
+  "saves current modeline format as backup, to be restored after js/hide-mode-line js/show-mode-line")
+(defun js/hide-mode-line ()
+    (interactive)
+    (setq js/modeline-format-temp mode-line-format)
+    (setq mode-line-format nil))
+
+(defun js/show-mode-line ()
+    (interactive)
+    (setq mode-line-format js/modeline-format-temp))
