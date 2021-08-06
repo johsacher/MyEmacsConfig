@@ -4387,3 +4387,12 @@
 (defun js/show-mode-line ()
     (interactive)
     (setq mode-line-format js/modeline-format-temp))
+
+;; * evil vim customization
+;; ** 4 -> insert white space
+ (define-key evil-normal-state-map (kbd "4") 'js/insert-white-space)
+
+(defun js/insert-white-space ()
+  (interactive)
+  (insert " "))
+  
