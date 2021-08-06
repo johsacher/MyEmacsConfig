@@ -117,3 +117,6 @@ Okay, so this reply became much, much longer than I had expected it to be, and I
 *** X :: backspace
 *** I :: insert BEL
 *** R :: replace state
+
+* dired
+** (dired-listing-switches "-agho --group-directories-first")
