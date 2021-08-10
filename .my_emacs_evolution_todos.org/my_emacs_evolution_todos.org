@@ -1,7 +1,67 @@
+* latex table -> shortcut for align, but wrap select-table-region around:
+** search backwards 'begin tabular' -> BEG, search forward 'end tabular' -> END . dann (align BEG END)
 * EXWM window manager
 * birthdays
 * email (mu4e)
+<<<<<<< HEAD
 * handle passwords
+=======
+** reddit post 'mu4e for dummies' (rexommended by DT)
+** reddit post 'how to easily manage your emails with mu4e' (for gmail users)
+** good user report:
+IceDane
+5y
+Though it may be buried beneath all the top comments, I'll share my 2 cents as well.
+
+I was in a position similar to the one you're in. I have multiple email accounts, and I would like to filter and categorize all the email coming to all of them in a manner that lets me do it all in one place without having to set up filters and folders in each web-based client for each email address.
+
+But before I wanted to do that, I just wanted to try out email in emacs. To do that, I ended up setting up offlineimap and mu4e. After that, I tried to set up dovecot(and tried to make it categorize my email) and use gnus. I finally settled on notmuch + isync(mbsync) + msmtp.
+
+Here's a rundown of what you need to setup to get a functioning setup, and for many of these "items", there are multiple options.
+
+Something to fetch your email.
+Your email is located on multiple servers and you need to be able to fetch these mails. If you want to fetch and store it locally, you can do this with programs such as isync and offlineimap. After trying both, I have come to the same conclusion as many others: isync is simply objectively superior to offlineimap. It is more robust, it is faster and it is even easier to configure.
+
+Something to send mail.
+Emacs can do this for you, but I found it more robust to use msmtp. It is incredibly easy to setup(I think I have something like .. ~25 lines for 3 email accounts) and once you set it up, it's just a matter of configuring emacs to use it(which is also trivial), and then you can forget about it, until you need to add another email account or you change your password. I personally use pass to manage all my passwords, and I have just configured msmtp to use pass to my password. So if I change it there, then it "knows about it", so it's not a big issue.
+
+Something to view your mail
+This is perhaps the most important part. For this, there are so many different choices. I have tried:
+
+Mutt
+mu4e
+notmuch
+gnus
+gnus is impossibly complicated to set up and I simply gave up. I'm not willing to spend that much time setting it up until I actually reach a volume of email that I may want to use gnus' smart scording system to help me sift through it. That hasn't happened yet.
+
+mutt is .. terrible, IMHO. It is massively overrated, which I think may in part be due to not many people knowing about some good alternatives. It's also not an emacs "interface"(though maybe it's possible to run it from emacs or there exists some bridge?), and configuring multiple accounts for it is only possible using ugly hacks that use "event hooks".
+
+mu4e is pretty good, and I used it for a while. Although, to be honest, saying that I used it may be a lie. It was decent to use, but it still felt rather awkward to use. I don't think it's possible to set up filtering for it, though I may very well be wrong. I think the emphasis is on it being rather simple. At any rate, all my email was just one large mess and it was hard to see what email was important and so on, and I just ended up using the web clients for the most part. It has a pretty decent search interface, and a way to perform the same action on multiple emails that fulfilled some condition, but it was actually rather annoying to use. If I repeatedly wanted to delete several mails that fit certain conditions, it required the same sequence of keystrokes over and over again. This is probably pretty easily scriptable, but I'll explain why it wasn't as straight-forward as notmuch, which I ended up using, in a bit.
+
+notmuch is, in my opinion, the best solution. It built around search and tagging, and while the philosophy is simple, it is incredibly powerful. The idea is that you don't deal with folders and filtering into folders. Everything you do should be about reading as little email as possible, and to do that, you use search and tagging to view only mails that are important to you. We also do the tagging in one place(on our computer), which removes the need to set up filtering rules in multiple places.
+
+Caveats
+Some programs can do all of these. gnus can talk to IMAP directly, and emacs can send mail via SMTP directly as well. This works alright, but I found it simpler to isolate the different tasks and let software that was really good at one task handle that task.
+
+Setup and rationale
+Here's how my setup works and the rationale behind it.
+
+isync fetches my mail from all my email accounts and stores it in the maildir format in my homedirectory. The structure of this folder retains the information about the IMAP folders, but this doesn't really matter. This required a bit of set up in terms of which IMAP folders to fetch, but it's not a big deal.
+
+The maildir folder is then indexed by notmuch, which is also very simple to setup. After the mail has been indexed, notmuch doesn't care about which IMAP folder it comes from. It retains all other important information, like which email address the email was sent to, and everything else you'd expect. Using this information, I search for and tag emails as appropriate. Emails sent to my university email are tagged as such, and emails containing keywords pertaining to work are tagged as work and so on.
+
+This happens pretty fast -- the initial indexing takes a while, but tagging is quick and indexing every time you run isync is no problem, since it's only going to be a "few" emails each time. The email is now ready to view.
+
+To view my email, I use the notmuch emacs interface. Instead of going to a folder named "work", I simply open a saved search which just searches for all email tagged "work". Actually, I don't care about work mail that i have already read, so the search is actually something like tag:work and tag:unread. This is incredibly easy to setup, and since notmuch is all about searching and tagging and so on, this is explained in the documentation pretty much immediately.
+
+Once I have read all the emails I care about in a certain search, I use a keybinding I made to remove the unread tags from all the mails I'm currently looking at(the current search). Then it's just out of sight and out of mind, but if I every need to find it again, it's just a simple search away.
+
+When I want to send mail, notmuch basically hands the reins over to another part of emacs that knows how to send mails. Instead of setting emacs up to deal with my passwords and so on(the .authinfothing never seemed to work very well for me), I just tell emacs that to send my mail, it just needs to hand it over to this program named msmtp, mentioned before.
+
+This all works pretty seamlessly, and it kind of isolates most of the different parts of fetching, viewing and sending mail. One program fetches mail(isync). One program tags, searches and views it(notmuch and the notmuch emacs interface), and a third sends it(msmtp). To stich this all together, I setup a systemd service that runs a script that fetches my mail, and then runs notmuch to index and tag it. This means that if I ever decide I need to add additional "rules", I add them to this script, and then optionally add a saved search in the notmuch emacs configuration.
+
+Okay, so this reply became much, much longer than I had expected it to be, and I'm kind of inclined not to post it now, because it's kind of embarrassing to have this much to say about something as dull as viewing email. However, on the off chance that someone in a position similar to OPs or mine before I went through all this is feeling confused, I'll bite the bullet and just post it. Guess this was more like a dollar or two.
+>>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
 * clocking/effort tasks/subtasks
 ** planet-clock-in-current-main-task --> nicht zeilen wechseln müssen, automatisch haupt-task
 ** sub-clocks / sub-efforts
@@ -35,7 +95,7 @@
 
 * "spare vim normal mode keys"
 ** frequent actions "candidates"
-*** insert white space
+*** insert white space -> 4
 ** spare keys
 [[./screenshot_20210707_173351.png]]
 *** capital letter stuff
@@ -49,16 +109,31 @@
 **** Q (ex mode)
 **** K (help)
 *** "one hit keys"
+<<<<<<< HEAD
 **** | (insert at bol) \
+=======
+**** all numbers (!): 1 2 3 4 5 5 7 8 9
+***** i don t use those really, so better other use
+**** '
+**** | (insert at bol)
+>>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
 **** \ (not used)
 **** [ (misc)
 **** ] (misc)
 
 ** practical keys i did not know about:
 *** X :: backspace
+<<<<<<< HEAD
 
 * overall keybinding concept: clear conceptual separation of: global keys (editing etc.) versus local key-bindings (context-specific)
 ** three classes of "key purposes"
 *** helpfull normal state functions (most of the keyboard)
 *** global purposes (windows, paths, organization)
 *** context specific actions
+=======
+*** I :: insert BEL
+*** R :: replace state
+
+* dired
+** (dired-listing-switches "-agho --group-directories-first")
+>>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
