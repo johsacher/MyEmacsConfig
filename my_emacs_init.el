@@ -1,8 +1,8 @@
- ;; * TODOs
- ;; ** better mode-line color inactive window light-grey (?), active --> black??
+;; * TODOs
+;; ** better mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
- ;; * debugger-mode I (evil settings after evil)
+;; * debugger-mode I (evil settings after evil)
 ;; (set at start so comfortable debugging of init file in case it a biggy)
 (add-hook 'debugger-mode-hook
           (lambda ()
@@ -354,6 +354,35 @@
    (lambda ()
      (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
  
+
+
+;; ** general.el (setup another alternative to define keys)
+;; (require 'general) ;; not working/not in melpa, for now: 
+(load "~/.emacs.d/general.el/general.el")
+(general-evil-setup t)
+(general-create-definer my-local-leader1-def
+  ;; :prefix my-local-leader
+  :prefix ",")
+
+(general-create-definer my-local-leader2-def
+  ;; :prefix my-local-leader
+  :prefix "\\")
+
+
+;; (nvmap :prefix ","
+;;        "bb" 'back-to-previous-buffer
+;;        "ww" 'save-buffer
+;;        "oo" 'compile)
+
+;; ;; all keywords arguments are still supported
+;; (nvmap :prefix "SPC"
+;;        ; save windows layout
+;;        "ss" 'wg-create-workgroup
+;;        ;; load windows layout
+;;        "ll" 'my-wg-switch-workgroup)
+
+
+
  ;;
  
  
@@ -684,6 +713,45 @@
               (org-bullets-mode 1)
               ))
  (require 'org-install)
+
+;; * insert xournal note
+(defun async-shell-command-no-window (command output-buffer-name)
+  (interactive)
+  (let
+      ((display-buffer-alist
+        (list
+         (cons
+          output-buffer-name
+          (cons #'display-buffer-no-window nil)))))
+    (async-shell-command
+     command output-buffer-name)))
+
+(defun js/org-insert-xournal-note ()
+  (interactive)
+  ;; * file name
+  (setq date (planet-get-todays-date))
+  (setq min (format "%02i"(planet-date-get-min date)))
+  (setq hour (format "%02i"(planet-date-get-hour date)))
+  (setq filename (concat (planet-convert-date-to-filebasename date) "_" hour "_" min ".xoj"))
+  (message filename)
+  ;; * create file from template
+  (setq currentpath (file-name-directory buffer-file-name))
+  (setq filefullname (concat  currentpath "/" filename))
+  (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xoj")
+  ;; * open xournal file (no popup of async output)
+  (setq command_string (concat "xournal " filefullname))
+  (async-shell-command-no-window command_string  "*org_xournal_new_open_output*")
+  (copy-file template-filefullname filefullname)
+  ;; * insert file link
+  (end-of-line)
+  (newline)
+  (insert (concat "[[file:" filename "][✎]]")) ;; insert "pencil-button" to open and edit (org file link)
+  )
+
+(defun dummy ()
+  (interactive)
+  (newline)
+  )
  
  ;; ** clock in/out settings 
  ;; *** change todo state "CLOCKED IN..." / "", for clocked in headings
@@ -860,6 +928,10 @@
  (evil-leader/set-key-for-mode 'org-mode  "ji" 'org-toggle-italic-region)
  (evil-leader/set-key-for-mode 'org-mode  "jc" 'org-toggle-code-region)
  (evil-leader/set-key-for-mode 'org-mode "jr" 'org-toggle-red-region)
+(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "b" 'org-toggle-bold-region)
+(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "i" 'org-toggle-italic-region)
+(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "c" 'org-toggle-code-region)
+(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "r" 'org-toggle-red-region)
  
  (defun region-to-string ()
    (interactive)
@@ -1109,6 +1181,9 @@
    (setq command_string (concat "xclip -selection clipboard -t image/png -o > " filename))
    (shell-command command_string)
    ;; (message concat("executed command: "  command_string))
+   ;; insert new line with file ref
+   (end-of-line)
+   (newline)
    (insert (concat "[[./" filename "]]"))
    ;; (insert command_string)
    (org-display-inline-images)
@@ -2280,6 +2355,11 @@
  (defun dired-go-home ()
    (interactive)
    (dired home-dir))
+
+ (defvar temp-dir (concat (substitute-in-file-name "$HOME") "/temp"))
+ (defun dired-go-temp ()
+   (interactive)
+   (dired temp-dir))
  
  (defun dired-go-work ()
    (interactive)
@@ -2303,6 +2383,7 @@
    (dired downloads-dir))
  
  (evil-leader/set-key "hh" 'dired-go-home)
+ (evil-leader/set-key "ht" 'dired-go-temp)
  (evil-leader/set-key "hw" 'dired-go-work)
  (evil-leader/set-key "hf" 'dired-go-fast) ;; for mathe-cluster
  (evil-leader/set-key "hd" 'dired-go-downloads)
@@ -2873,7 +2954,40 @@
  (load "auctex.el" nil t t)
  (load "latex.el" nil t t)
  ;;(load "preview-latex.el" nil t t)
+
+;; * latex short cuts for formatting (bold/italic/etc)
+ (defun js/latex-toggle-bold-region ()
+   (interactive)
+   (my-toggle-marker-around-region "\\textbf{" "\\textbf{"  "}" "}")
+   )
  
+ ;; (evil-leader/set-key-for-mode 'lateX-mode  "jb" 'latex-toggle-bold-region)
+
+;; * latex tables
+;; ** quick align
+
+(defun latex-tabular-align ()
+  (interactive)
+  ;; * search for begin/end tabular
+  (save-excursion
+    (search-backward "\\begin{tabular")
+    (setq BEG (point))
+    (search-forward "\\end{tabular")
+    (setq END (point)))
+  ;; * align
+  (align BEG END))
+
+;; bind
+;; (general-define-key
+;;  :states 'normal
+;;  :keymaps 'LaTeX-mode-map
+;;  :prefix ","
+;;  "a" 'latex-tabular-align)
+
+(my-local-leader1-def
+  :states 'normal
+  :keymaps 'LaTeX-mode-map
+  "a" 'latex-tabular-align)
  
  ;; ** hook latex with minor-outline-mode
  (add-hook 'LaTeX-mode-hook 'outline-minor-mode)

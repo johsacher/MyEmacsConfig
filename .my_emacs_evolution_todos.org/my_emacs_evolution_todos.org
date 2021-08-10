@@ -1,6 +1,7 @@
 * EXWM window manager
 * birthdays
 * email (mu4e)
+* handle passwords
 * clocking/effort tasks/subtasks
 ** planet-clock-in-current-main-task --> nicht zeilen wechseln müssen, automatisch haupt-task
 ** sub-clocks / sub-efforts
@@ -48,11 +49,16 @@
 **** Q (ex mode)
 **** K (help)
 *** "one hit keys"
-**** '
-**** | (insert at bol)
+**** | (insert at bol) \
 **** \ (not used)
 **** [ (misc)
 **** ] (misc)
 
 ** practical keys i did not know about:
 *** X :: backspace
+
+* overall keybinding concept: clear conceptual separation of: global keys (editing etc.) versus local key-bindings (context-specific)
+** three classes of "key purposes"
+*** helpfull normal state functions (most of the keyboard)
+*** global purposes (windows, paths, organization)
+*** context specific actions

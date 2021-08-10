@@ -489,6 +489,15 @@ month)
   (setq day  (nth 3 date))
 day)
 
+(defun planet-date-get-hour (date)
+  (setq hour  (nth 2 date))
+hour)
+
+(setq date (planet-get-todays-date))
+(defun planet-date-get-min (date)
+  (setq min  (nth 1 date))
+min)
+
 
 (defun planet-convert-filebasename-to-date (filenamebase)
     ;;diese scheiße mit groups hat überhaupt nicht geklappt (when (string-match ".\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_\\([0-9][0-9]*\\)_...\.org$" last-daily-file-name) (match-string 1) etc.
