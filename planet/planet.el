@@ -29,12 +29,29 @@
 
 (defvar planet-regexp-daily-file-folder ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$")
 
+(defvar planet-home-dir (expand-file-name "~/org"))
 (define-minor-mode planet-mode "this is the documentation of planet-mode. blablah."
   :initial-value nil
   :lighter " planet"
   :keymap planet-mode-map
   :group 'planet
   :global nil)
+
+
+;; * planet base functionalities
+
+(defun planet-add-entry-on-date (date entry)
+ (setq filefullname (planet-get-full-file-name-for-date date))
+  (with-temp-file filefullname
+    (insert-file-contents filefullname)
+
+    (end-of-buffer)
+    (insert entry)))
+
+;; test
+;; (planet-add-entry-on-date (planet-get-todays-date) "hello")
+
+
 
 ;;* planet evil
 ;; this also did not work out:
@@ -75,6 +92,19 @@
 (setq date2 (decode-time (apply 'encode-time date2))) ;; this line "get s it correct again" in case the day "leaves its range" e.g. 40th of december (... 40 12 ...)
 ;; (apply 'encode-time (decode-time (current-time))) ;; this would be the equivalent "getting it right" the other way 'round
 date2)
+;; stackoverflow.com :
+;; (481 131184) represents the number of seconds as (HIGH LOW) where HIGH is the upper bits and LOW is the lower 16 bits. I.e. the real number of seconds is
+;; (+ (* 481 65536) 13184) == 31536000
+(defun planet-date-smaller-than (date1 date2)
+  (setq date1-encoded (apply 'encode-time date1))
+  (setq date1-realsecs (+ (* (nth 0 date1-encoded) 65536) (nth 0 date1-encoded)))
+  (setq date2-encoded (apply 'encode-time date2))
+  (setq date2-realsecs (+ (* (nth 0 date1-encoded) 65536) (nth 0 date2-encoded)))
+  (< date1-realsecs date2-realsecs))
+;; test:
+;; (planet-date-smaller-than today today) -> nil
+;; (planet-date-smaller-than today (planet-date-add-days today 1)) -> t
+;; (planet-date-smaller-than  (planet-date-add-days today 1) today) -> nil
 
 (defun planet-add-7-days (date1)
 ;; (setq date2 date1) --> this creates problem, is just a shallow copy
@@ -1144,10 +1174,11 @@ date)
 ;;* turn on planet-mode for the "right org-files (planet files)"
 (add-hook 'org-mode-hook
          (lambda ()
+	   (if buffer-file-name ;; when temp buffer -> nil -> "abort"
            (if (planet-detect-if-planet-file)
                (progn
                  (planet-mode)
-                 (planet-mode-hook-workaround)))))
+                 (planet-mode-hook-workaround))))))
 
 ;; detect planet mode
 (defun planet-detect-if-planet-file ()
@@ -1624,35 +1655,53 @@ date)
 
 ;; * planet-birthdays
 (defvar planet-birthdays-file "birthdays.org")
-;; (defun planet-birthdays-update-future-events ()
-;;   "Adds birthday events for all birthday items in birthday-file for all days in future (until limit of existing daily files). if exists, it checks and possibly updates."
-;;   (interactive)
-;;   ;; * assemble list of all birthdays from birthday-file
-;;   (setq entries-props nil)
-;;   (org-map-entries (lambda ()
-;;       (setq this-entry-props (org-entry-properties))
-;;       (push this-entry-props entries-props)
-;;       ))
-;;   ;;  (message entries-props)
-;;   ;; (("CATEGORY" . "birthdays")
-;;   ;;  ("BIRTHDAY" . "30.05.1969") ("NICKNAME" . "repke") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "jens-uwe repke"))
-;;   ;; (("CATEGORY" . "birthdays") ("BIRTHDAY" . "13.01.1988") ("NICKNAME" . "robert w") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "robert wilhelm")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "28.11.1998") ("NICKNAME" . "inga") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "inga strelnikova")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "31.05.1987") ("NICKNAME" . "carlos") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "carlos caceres")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "25.01.1987") ("NICKNAME" . "andrea s") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "andrea schermann")) (("CATEGORY" . "birthdays") ("BIRTHDAY" . "17.04.1986") ("NICKNAME" . "anja l") ("BLOCKED" . "") ("FILE" . "/data/data/com.termux/files/home/org/birthdays.org") ("PRIORITY" . "B") ("ITEM" . "anja lemoine")))
-;;   ;; * loop all future planet daily files -> update/delete birthday entries if necessary
-;;   ;; ** get all daily file names
-;;   (setq daily-filefullnames (planet-get-all-daily-filefullnames))
-;;   ;; ** filter future only
-;;   (setq daily-filefullnames-future ())
-;;   (dolist this-daily-filefullname daily-filefullnames-future
-;;           ;; * visit file
-;;           ;; * 
-;;           ))
 
+(defun planet-get-birthday-list ()
+  "returns list of lists with (nickname birthday). processed by other funs (add all birthdays etc)"
+  (setq birthday-file-fullname (concat planet-home-dir "/" planet-birthdays-file))
+;; (setq tempfile (expand-file-name "~/test.org"))
+  (with-temp-buffer
+	(insert-file-contents birthday-file-fullname) ;
+	(org-mode)
+	(setq nickname-birthday-list (org-map-entries (lambda ()
+	    (setq nickname (org-entry-get (point) "nickname"))
+	    (setq birthday (org-entry-get (point) "birthday"))
+	    `(,nickname ,birthday)))))
+    nickname-birthday-list) ;; return
+
+(defun planet-birthdays-update-future-events ()
+  "Adds birthday events for all birthday items in birthday-file for all days in future (until limit of existing daily files). if exists, it checks and possibly updates."
+  (interactive)
+  ;; * assemble list of all birthdays from birthday-file
+  (setq nickname-birthday-list (planet-get-birthday-list))
+  ;; * get all daily file names
+  (setq daily-filefullnames (planet-get-all-daily-filefullnames))
+;;   ;; ** filter future only
+  (setq daily-filefullnames-future
+	(remove-if
+	 (lambda (filefullname)
+	   (setq (date planet-convert-filefullname-to-date filefullname))
+	   (setq today (planet-get-todays-date))
+	   (planet-date-smaller-than date today)))
+	 daily-filefullnames)
+;;   (dolist this-daily-filefullname daily-filefullnames-future
+;; ;;           ;; * visit file
+;; ;;           ;; * 
+;; ;;           ))
+;;   )
+)
 ;; (defun dummy ()
 ;;   (interactive)
 ;;   (message (org-entry-get (point) "nickname")))
 
 ;; (
 ;; (--filter (< 3 it) '(1 2 3 4 5 6))
+
+
+
+
+
+
 
 
 

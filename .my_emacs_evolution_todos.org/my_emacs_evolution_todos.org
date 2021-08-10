@@ -120,3 +120,9 @@ Okay, so this reply became much, much longer than I had expected it to be, and I
 
 * dired
 ** (dired-listing-switches "-agho --group-directories-first")
+** navigate h/l -> dired-up-directory / dired-find-file
+** hook dired-mode -> all-the-icons-dired-mode
+** setq dired-open-extensions -> populate (maybe better than open-with package)
+** dired-async (including dired-ranger behaviour kill rings)
+
+* filters for switch-buffer (only dirs/ org files etc, SPC-b-d / SPC-b-o / etc.)
