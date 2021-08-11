@@ -1663,7 +1663,38 @@ date)
   )
 
 ;; * planet-birthdays
+;; ** concept:
+;; we want the following behavior:
+;; - control ALL birthdays we want to be reminded of in ONE file (birthdays.org)
+;; - (for now) remove/add birthday to list manually, just delete/add entry
+;; - (later) integrate with contact-management in orgmode, perform "group"-actions like "add all colleages/sport-club-members etc. to birthday reminders
+;; - update birthdays in future days (why would i be reminded of a birthday in the past)
+;; - (later) have a specialized view of birthdays in week-view/month-view
+;; -
+;; ** implementation
+;; - need to introduce PROPERTY "type" to my org entries! -> easy detection/remove/update of org-entries of type="birthday"
+;; - entry will look like so:
+;; | -- org-file of a specific day ---        |
+;; |* mascha Bday 31                          |
+;; | :PROPERTIES:                             |
+;; | :type: birthday                          |
+;; | :END:                                    |
+;;
+;; - we need following (sub-)functions
+;;   level 0:
+;;   - find birthday entry
+;;   - delete org-entry (whole subtree)
+;;   level 2:
+;;   - add/remove birthday entry in current daily-file
+;;   - (nice-to-have) check if the birthday entry already exists -> for now: just delete and add again
+;;
+;; planet-get-birthday-list  ->  |---------------------------------------|
+;;                               | planet-birthdays-update-future-events |
+;; daily-filefullnames       ->  |---------------------------------------|
+;;
+;;                                 
 (defvar planet-birthdays-file "birthdays.org")
+
 
 (defun planet-get-birthday-list ()
   "returns list of lists with (nickname birthday). processed by other funs (add all birthdays etc)"
