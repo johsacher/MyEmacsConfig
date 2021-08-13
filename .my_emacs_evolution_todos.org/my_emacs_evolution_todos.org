@@ -146,3 +146,6 @@ Okay, so this reply became much, much longer than I had expected it to be, and I
 =======
 >>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
 >>>>>>> cadccfaf0b5f5a6cbfb7b918c92f278912d0c5b4
+
+* calendar sync
+** https://unix.stackexchange.com/questions/1850/emacs-sync-w-google-calendar-and-contacts

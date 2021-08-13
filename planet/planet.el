@@ -575,6 +575,11 @@ date)
   (setq filebasename (file-name-base filefullname))
   filebasename)
 
+(defun planet-convert-date-to-filefullname (date)
+  (setq filebasename (planet-convert-date-to-filebasename date))
+  (setq full-file-name (planet-convert-filebasename-to-filefullname filebasename))
+  full-file-name)
+
 ;; open 'standard quick' notes.org file
 (defun planet-open-quick-notes ()
   (interactive)
@@ -1730,6 +1735,25 @@ date)
 ;; ;;           ))
 ;;   )
 )
+
+(defun planet-birthday-delete-all-birthday-entries-in-current-daily-file ()
+  (org-map-entries (lambda ()
+    (setq type (org-entry-get (point) "type"))
+    ;; (setq type "birthday")
+    (unless (not type)
+      (when (equal type "birthday")
+    	(org-mark-subtree)
+        (delete-region (point) (mark)))))))
+
+(defun planet-birthday-delete-all-birthday-entries-for-daily-file (fullfilename)
+;; (setq fullfilename (planet-convert-date-to-filefullname (planet-get-todays-date)))
+(with-temp-file fullfilename
+  (insert-file-contents filefullname)
+  ;; get all first level headings
+  (org-mode)
+  (planet-birthday-delete-all-birthday-entries-in-current-daily-file)))
+
+;; (setq fullfilename (planet-get-
 ;; (defun dummy ()
 ;;   (interactive)
 ;;   (message (org-entry-get (point) "nickname")))

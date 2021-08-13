@@ -336,37 +336,37 @@
  (define-key evil-normal-state-map (kbd "C-l") 'drag-stuff-right)
  
 ;; * planet-mode (my org extension)
- (load (concat my_load_path "planet/planet.el"))
+  (load (concat my_load_path "planet/planet.el"))
 
-;; ** save git mode default 
- (planet-git-save-turn-on)
- 
-           
- ;; ** default initial view (levels)
- (add-hook 'planet-mode-hook
-          (lambda ()
-            ;; (outline-show-all)
-            ))
- (defun org-show-3-levels ()
-   (interactive)
-   (org-content 3))
- (add-hook 'org-mode-hook
-   (lambda ()
-     (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
+ ;; ** save git mode default 
+  (planet-git-save-turn-on)
+
+         
+  ;; ** default initial view (levels)
+  (add-hook 'planet-mode-hook
+           (lambda ()
+             ;; (outline-show-all)
+             ))
+  (defun org-show-3-levels ()
+    (interactive)
+    (org-content 3))
+  (add-hook 'org-mode-hook
+    (lambda ()
+      (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
  
 
 
 ;; ** general.el (setup another alternative to define keys)
 ;; (require 'general) ;; not working/not in melpa, for now: 
-(load "~/.emacs.d/general.el/general.el")
-(general-evil-setup t)
-(general-create-definer my-local-leader1-def
-  ;; :prefix my-local-leader
-  :prefix ",")
+;; (load "~/.emacs.d/general.el/general.el")
+;; (general-evil-setup t)
+;; (general-create-definer my-local-leader1-def
+;;   ;; :prefix my-local-leader
+;;   :prefix ",")
 
-(general-create-definer my-local-leader2-def
-  ;; :prefix my-local-leader
-  :prefix "\\")
+;; (general-create-definer my-local-leader2-def
+;;   ;; :prefix my-local-leader
+;;   :prefix "\\")
 
 
 ;; (nvmap :prefix ","
@@ -928,10 +928,10 @@
  (evil-leader/set-key-for-mode 'org-mode  "ji" 'org-toggle-italic-region)
  (evil-leader/set-key-for-mode 'org-mode  "jc" 'org-toggle-code-region)
  (evil-leader/set-key-for-mode 'org-mode "jr" 'org-toggle-red-region)
-(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "b" 'org-toggle-bold-region)
-(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "i" 'org-toggle-italic-region)
-(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "c" 'org-toggle-code-region)
-(my-local-leader1-def :states 'normal :keymaps 'org-mode-map "r" 'org-toggle-red-region)
+;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "b" 'org-toggle-bold-region)
+;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "i" 'org-toggle-italic-region)
+;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "c" 'org-toggle-code-region)
+;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "r" 'org-toggle-red-region)
  
  (defun region-to-string ()
    (interactive)
@@ -2984,10 +2984,10 @@
 ;;  :prefix ","
 ;;  "a" 'latex-tabular-align)
 
-(my-local-leader1-def
-  :states 'normal
-  :keymaps 'LaTeX-mode-map
-  "a" 'latex-tabular-align)
+;; (my-local-leader1-def
+;;   :states 'normal
+;;   :keymaps 'LaTeX-mode-map
+;;   "a" 'latex-tabular-align)
  
  ;; ** hook latex with minor-outline-mode
  (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
