@@ -1397,7 +1397,7 @@
           "QUESTION"
           "DONEBEFORE"
           "NEXTDAY"
-          "BESTCHOICE"
+          "CHOICE"
           "DISCARDED"
           "PROGRESS..."
           "CLOCKED IN..."
@@ -1423,6 +1423,7 @@
        ("MAYBE" :background "gray" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
        ("APPT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
        ("DONE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
+       ("CHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("BESTCHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("CANCELLED" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
@@ -4510,3 +4511,35 @@
   (interactive)
   (insert " "))
   
+
+(if (equal myhost "phone")
+    (global-set-key (kbd "<f2>") 'android-paste-clipboard))
+
+;; (defun js/org-insert-link-from-android-clipboard ()
+;;   (interactive)
+;;   (insert "[[")
+;;   (android-paste-clipboard)
+;;   (insert "][]]")
+;;   (backward-char)
+;;   (backward-char)
+;;   (evil-insert-state))
+
+;; (defun js/org-insert-link-from-android-clipboard (text)
+;;   (interactive "sLink text: ")
+;;   (insert "[[")
+;;   (android-paste-clipboard)
+;;   (insert "][")
+;;   (insert text)
+;;   (insert "]]"))
+
+
+(defun js/org-insert-link-from-clipboard (text)
+  (interactive "sLink text: ")
+  (insert "[[")
+  (cond ((equal myhost "laptop")
+	 (yank))
+	((equal myhost "laptop")
+	 (android-paste-clipboarda)))
+  (insert "][")
+  (insert text)
+  (insert "]]"))
