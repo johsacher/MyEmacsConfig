@@ -4516,7 +4516,6 @@
   (insert " "))
   
 
-<<<<<<< HEAD
 ;; * scale fontsize (per frame)
 (defvar js/frame-font-scale-factor)
 (setq js/frame-font-scale-factor 1.2)
@@ -4651,7 +4650,7 @@
   (if (equal window-manager "exwm")
       (my-exwm-startup))
   )
-=======
+
 (if (equal myhost "phone")
     (global-set-key (kbd "<f2>") 'android-paste-clipboard))
 
@@ -4683,4 +4682,3 @@
   (insert "][")
   (insert text)
   (insert "]]"))
->>>>>>> d20fea3ac65a3457b713835f2a56ee7261004a54
