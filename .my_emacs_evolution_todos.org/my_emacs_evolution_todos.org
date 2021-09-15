@@ -149,3 +149,35 @@ Okay, so this reply became much, much longer than I had expected it to be, and I
 
 * calendar sync
 ** https://unix.stackexchange.com/questions/1850/emacs-sync-w-google-calendar-and-contacts
+** most importantly -> make concept(s)!
+*** calendar property?
+*** generic sync, replace unless string exists
+*** external vs internal data
+**** external: bdays, repetitive events, projects
+*** keep compatible with org-agenda!
+** two way merge concept with external calendars:
+*** step 1: from internet-calendar to local-calendar-file / from planet-dailies to local-calendar-file -> merge
+*** step 2: otherway round
+*** local-calendar-file can be of any format/type, e.g. ics-file, org-file. write two one-way-update functions for each type. used generixally for all internet-calendars
+*** what you gain: use your colleagues/work's scheduling system, but also emacs
+
+
+* encryption:git-remote-gcrypt 
+* mail: protonmailbridge paid users only -> might be necessary
+
+* idee: orgify your files
+** outcome:
+*** personal knowledge system
+*** full compatibility with "classic" file management / no customer lock-in
+*** build personal offline wiki with non-breakable links to files and notes
+*** all notes are in org-mode syntax -> plain text = useful even without org-mode
+** concept:
+*** keep your filesystem *as is*
+ -> no change of your file organisation necessary
+*** ~orgify a file~ -> put it into a subfolder of same name, add an org-file with GUID-link and notes on that file.
+*** when file is renamed -> renaming required for all (org-file-folder/org-file/file itself)
+*** a specified file manager with orgify-mode -> view/editing automatically, so user does not even notice
+*** ~orgify a directory~ -> enables linking to dir
+*** need cache system, maybe from org-roam
+**** cache build could run efficiently -> step 1 just use only org-files on system using linux' locate, step 2 scan these files for GUID's
+org-id-link-to-org-use-id
