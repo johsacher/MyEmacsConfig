@@ -4,8 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (zoom zenburn-theme xclip which-key treemacs-evil sudo-ext spacemacs-theme solarized-theme smart-mode-line-powerline-theme shackle rtags realgud rainbow-delimiters quelpa-use-package parrot pacmacs outshine org-ref org-evil org-download org-bullets openwith nyan-mode neotree multiple-cursors monokai-theme moe-theme matlab-mode magit leuven-theme latex-preview-pane jedi helm-swoop helm-rg helm-projectile helm-describe-modes helm-descbinds helm-ag flycheck expand-region evil-visualstar evil-textobj-line evil-org evil-numbers evil-mc evil-leader evil-collection elpy ein drag-stuff doom-modeline dired-toggle-sudo dired-ranger dired-narrow default-text-scale company-jedi comment-dwim-2 color-theme-buffer-local auctex async-await anaconda-mode ag))))
+   '(exwm zoom zenburn-theme use-package rainbow-delimiters outshine org-ref org-bullets openwith helm-rg helm-projectile helm-describe-modes expand-region evil-visualstar evil-org evil-numbers evil-leader evil-collection doom-modeline dired-ranger comment-dwim-2 color-theme-buffer-local avy auto-complete auctex async-await)))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
 ;;  ;; If you edit it by hand, you could mess it up, so be careful.
