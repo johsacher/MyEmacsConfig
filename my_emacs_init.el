@@ -1395,7 +1395,7 @@
  (setq org-todo-keywords
        '((sequence
           "DONE"
-          "CANCELLED"
+          "CANCELED"
           "DEFERRED"
           "ANSWERED"
           "QUESTION"
@@ -1430,7 +1430,7 @@
        ("CHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("BESTCHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
-       ("CANCELLED" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
+       ("CANCELED" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
  
  ;; evil org-mode
  ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
@@ -4578,18 +4578,32 @@
       ;; "feh" nil  "feh --bg-scale /usr/share/backgrounds/xfce/park.jpg"))
 
   ;; ** hooks on display change (undock/dock monitor)
-  (defvar update-displays-executed nil);; just a debug variable
+  (defvar update-displays-executed nil);; just a debug variable (setq update-displays-executed nil)
   (defun efs/update-displays ()
     (setq update-displays-executed t) ;; just a debug variable
-    (efs/set-wallpaper)
+    ;; (efs/set-wallpaper)
     ;; * autorandr/randr stuff -> i think i don t need this, already automatically
-	(efs/run-in-background "autorandr --change --force") ;; kind of "brute force approach" autorandr does not always run automatically somehow, so better execute that every time a change is detected
+    ;;T (efs/run-in-background "autorandr --change --force && ")
+    ;; * tried this for cleaner solution but did not work
+    ;; (efs/run-in-background
+    ;;  (concat
+    ;; "autorandr --change --force && "
+    ;; "xinput --map-to-output 'Wacom Pen and multitouch sensor Pen stylus' eDP1 && "
+    ;; "xinput --map-to-output 'Wacom Pen and multitouch sensor Pen eraser' eDP1 && "
+    ;; "xinput --map-to-output 'Wacom Pen and multitouch sensor Finger touch' eDP1")) ;; kind of "brute force approach" autorandr does not always run automatically somehow, so better execute that every time a change is detected
 	;; (message "Display config: %s"
 	;;   (string-trim (shell-command-to-string "autorandr --current")))
+    ;; * adjust touch/stylus areas
+    ;;T (sleep-for 2) ;; really really dirty work around but alright.. it works!
+    ;;T (js/adjust-stylus)
     )
 
-  (add-hook 'exwm-randr-screen-change-hook #'efs/update-displays)
-  (efs/update-displays) ;; execute it directly on x-server startup
+  (defun js/adjust-stylus ()
+    (interactive)
+    (start-process-shell-command "xinput" nil "xinput --map-to-output 'Wacom Pen and multitouch sensor Pen eraser' eDP1 & xinput --map-to-output 'Wacom Pen and multitouch sensor Pen stylus' eDP1 & xinput --map-to-output 'Wacom Pen and multitouch sensor Finger touch' eDP1")) ;; works, but needs to be executed some time after autorandr
+  ;;T (add-hook 'exwm-randr-screen-change-hook #'efs/update-displays)
+  ;;T (add-hook 'exwm-randr-screen-change-hook #'js/adjust-stylus-when-monitor-docked)
+  ;;T (efs/update-displays) ;; execute it directly on x-server startup
 
   ;; These keys should always pass through to Emacs
   (setq exwm-input-prefix-keys
@@ -4648,9 +4662,11 @@
 
   (setq window-manager (getenv "WINDOW_MANAGER")) ;; set in .xinitrc_exwm
   (if (equal window-manager "exwm")
-      (my-exwm-startup))
-  )
+      ;;T (my-exwm-startup)
+  ))
 
+
+;; * misc stuff (order later)
 (if (equal myhost "phone")
     (global-set-key (kbd "<f2>") 'android-paste-clipboard))
 
