@@ -107,9 +107,9 @@
          (possible-frames
           (sort
            (remove-if-not
-            '(lambda (f) (fm-frame-is-to-dir-of f dir thisframe))
+            (lambda (f) (fm-frame-is-to-dir-of f dir thisframe))
             (visible-frame-list))
-           '(lambda (f1 f2) (fm-frame-is-to-dir-of f1 (fm-opposite dir) f2)))))
+           (lambda (f1 f2) (fm-frame-is-to-dir-of f1 (fm-opposite dir) f2)))))
     (if possible-frames
         (let ((frames-in-line-of-cursor
                ;; try to find frame in line with cursor

@@ -1,11 +1,12 @@
+* my emacs design principles
+** compatibility with the outside-world (-> no Caps as CTRL, stick to "standard" vim-keybindings)
+** quick window manipulation is priority (-> Alt-key bindings control window config, e.g. Alt-h/j/k/l for windmove-commands)
 * latex table -> shortcut for align, but wrap select-table-region around:
 ** search backwards 'begin tabular' -> BEG, search forward 'end tabular' -> END . dann (align BEG END)
 * EXWM window manager
 * birthdays
 * email (mu4e)
-<<<<<<< HEAD
 * handle passwords
-=======
 ** reddit post 'mu4e for dummies' (rexommended by DT)
 ** reddit post 'how to easily manage your emails with mu4e' (for gmail users)
 ** good user report:
@@ -61,7 +62,6 @@ When I want to send mail, notmuch basically hands the reins over to another part
 This all works pretty seamlessly, and it kind of isolates most of the different parts of fetching, viewing and sending mail. One program fetches mail(isync). One program tags, searches and views it(notmuch and the notmuch emacs interface), and a third sends it(msmtp). To stich this all together, I setup a systemd service that runs a script that fetches my mail, and then runs notmuch to index and tag it. This means that if I ever decide I need to add additional "rules", I add them to this script, and then optionally add a saved search in the notmuch emacs configuration.
 
 Okay, so this reply became much, much longer than I had expected it to be, and I'm kind of inclined not to post it now, because it's kind of embarrassing to have this much to say about something as dull as viewing email. However, on the off chance that someone in a position similar to OPs or mine before I went through all this is feeling confused, I'll bite the bullet and just post it. Guess this was more like a dollar or two.
->>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
 * clocking/effort tasks/subtasks
 ** planet-clock-in-current-main-task --> nicht zeilen wechseln müssen, automatisch haupt-task
 ** sub-clocks / sub-efforts
@@ -109,43 +109,34 @@ Okay, so this reply became much, much longer than I had expected it to be, and I
 **** Q (ex mode)
 **** K (help)
 *** "one hit keys"
-<<<<<<< HEAD
 **** | (insert at bol) \
-=======
 **** all numbers (!): 1 2 3 4 5 5 7 8 9
 ***** i don t use those really, so better other use
 **** '
 **** | (insert at bol)
->>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
 **** \ (not used)
 **** [ (misc)
 **** ] (misc)
 
 ** practical keys i did not know about:
 *** X :: backspace
-<<<<<<< HEAD
 
 * overall keybinding concept: clear conceptual separation of: global keys (editing etc.) versus local key-bindings (context-specific)
 ** three classes of "key purposes"
 *** helpfull normal state functions (most of the keyboard)
 *** global purposes (windows, paths, organization)
 *** context specific actions
-=======
 *** I :: insert BEL
 *** R :: replace state
 
 * dired
 ** (dired-listing-switches "-agho --group-directories-first")
-<<<<<<< HEAD
 ** navigate h/l -> dired-up-directory / dired-find-file
 ** hook dired-mode -> all-the-icons-dired-mode
 ** setq dired-open-extensions -> populate (maybe better than open-with package)
 ** dired-async (including dired-ranger behaviour kill rings)
 
 * filters for switch-buffer (only dirs/ org files etc, SPC-b-d / SPC-b-o / etc.)
-=======
->>>>>>> b889b334cc1ed61fb071f47b7c927f7133324817
->>>>>>> cadccfaf0b5f5a6cbfb7b918c92f278912d0c5b4
 
 * calendar sync
 ** https://unix.stackexchange.com/questions/1850/emacs-sync-w-google-calendar-and-contacts

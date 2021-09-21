@@ -1,4 +1,4 @@
-keymaps background process seems (unfortunately) a bit complex. Here is how "it works" and "what that means" for straight forward key-binding definitions, especially for minor-mode specific evil-key-bindings:
+keymaps background process seems (unfortunately) a bit complex. Here is how "it works" and "what that means" for straight forward key-binding definitions, especially for minor-mode specific evil-key-bindings.
 
 * questions:
 ** QUESTION global-map <--> "major-mode-map" (does it even exist?)
@@ -6,18 +6,20 @@ keymaps background process seems (unfortunately) a bit complex. Here is how "it 
 ** QUESTION global set key
 ** QUESTION local set key
 ** QUESTION how does evil-define-key integrate into all of this
-* the emacs documentation is BAD...
+* the emacs documentation is "not exactly for beginners"...
 ** e.g.
 [[./screenshot_20190903_194115.png]]
+#+begin_quote
 — Variable: global-map
 
     This variable contains the default global keymap that maps Emacs keyboard input to commands. The global keymap is normally this keymap. The default global keymap is a full keymap that binds self-insert-command to all of the printing characters.
 
     It is normal practice to change the bindings in the global keymap, but you should not assign this variable any value other than the keymap it starts out with. 
+#+end_quote
 ** --> what??? what is even the "global map"? 
 * The Emacs background "key binding" process, in simple words:
 ** key background data structure: /keymaps/, like so: (<name of map> <keybinding1> <keybinding2> etc.)
-** most important thing: emacs has a *hierarchical* look up process within the active keymaps. the following are the practically important ones (in that order) during "key lookup process":
+** most important thing: emacs has a *hierarchical* look up process within the *active* keymaps. the following are the practically important ones during "key lookup process" - in that order (*starting with most prevailing*):
 (https://www.masteringemacs.org/article/mastering-key-bindings-emacs)
 *** emulation-mode-map-alists
 *** minor-mode-overriding-map-alist
@@ -26,8 +28,8 @@ keymaps background process seems (unfortunately) a bit complex. Here is how "it 
 **** manipulate with: (local-set-key <key> <function>)
 *** current-global-map (function) / (local-map (variable, nearly always the same)
 **** manipulate with: (global-set-key <key> <function>)
-* how does evil-mode play along with emacs' mode-map system:
-** evil-mode (global minor mode) sets up a evil-local-mode in each buffer, which takes care of all keybindings 
+* how does evil-mode play along with emacs' mode-map system?:
+** evil-mode (global minor mode) sets up an evil-local-mode in each buffer, which takes care of all keybindings 
 *** good description in evil-core.el:
 [...]
 Evil is defined as a globalized minor mode, enabled with the toggle function `evil-mode'.  This in turn enables `evil-local-mode' in every buffer, which sets up the buffer's state.

@@ -8,9 +8,7 @@
           (lambda ()
             (visual-line-mode)))
 
-
-
- ;; * debug on start-up
+;; * debug on start-up
 (setq debug-only-on-start-up t)
 (if debug-only-on-start-up
   (setq debug-on-error t)
@@ -141,11 +139,81 @@
  (setq my_load_path (file-name-directory load-file-name)) ;; the init file folder contains also all manual packages
  (add-to-list 'load-path my_load_path)
  ;;(add-to-list 'image-load-path my_load_path)
- 
- 
+
+;; * general.el
+;; (for now i use it only for leader-keys)
+;; (non leader bindings still with "legacy" commands (global-set-key, etc.) 
+(require 'general) 
+(general-evil-setup t)
+
+(general-create-definer js/leader-def
+  :states '(normal insert visual emacs)
+  :prefix "SPC"
+  :global-prefix "M-SPC") ;; evil leader access in "all situations" (this also "deactivates" prefix SPC for insert and emacs state so you can type spaces :D!)
+
+;; two context-dependent leaders
+;; (i think I do not need them really :D)
+;; (general-create-definer js/local-leader1-def
+;;   :states '(normal visual)
+;;   ;; :prefix my-local-leader
+;;   :prefix ",")
+;; (general-create-definer js/local-leader2-def
+;;   :states '(normal visual)
+;;   ;; :prefix my-local-leader
+;;   :prefix "\\")
+
+;; test:
+;; (js/leader-def "6" (lambda () (interactive) (message "hello")))
+;; or only for a mode
+;; (js/leader-def :keymaps 'org-mode-map "m" (lambda () (interactive) (message "heeello")))
+;; (js/leader-def :keymaps 'emacs-lisp-mode-map "m" (lambda () (interactive) (message "heeello")))
+
  ;;; * GENERAL SETTINGS
+
+;; * window movement/placement ("'M' is my leader")
+(global-set-key (kbd "M-2") 'split-window-below)
+(global-set-key (kbd "M-3") 'split-window-right)
+(global-set-key (kbd "M-0") 'delete-window)
+(global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
+(defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
+(global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt) 
+(global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
+(global-set-key (kbd "M-;") 'js/open-browser) 
+(global-set-key (kbd "M-y") 'previous-buffer) 
+(global-set-key (kbd "M-o") 'next-buffer) 
+
+(defun js/open-browser () 
+  "shall context dependent, open browser and do what i (probably) want:
+   customize to my liking.
+   for now: just open firefox (if EXWM window does not exist, create)"
+  (interactive)
+  ;; check if browser instance exists
+  (setq browser-exwm-window-exists (get-buffer "firefox"))
+  ;; if exists -> switch
+  (if browser-exwm-window-exists
+      (switch-to-buffer "firefox")
+    ;; else -> run new firefox
+      (start-process-shell-command "firefox" nil "firefox")))
+
+(global-set-key (kbd "M-b") 'helm-mini) 
+
+(global-set-key (kbd "M-K") 'enlarge-window-4)
+(global-set-key (kbd "M-J") 'shrink-window-4)
+(global-set-key (kbd "M-H") 'enlarge-window-horizontally-4)
+(global-set-key (kbd "M-L") 'shrink-window-horizontally-4)
+
+(global-set-key (kbd "M-[") 'winner-undo)
+(global-set-key (kbd "M-]") 'winner-redo)
+
+;; * default font
+(defvar js/default-font-size 120)
+;; (set-face-attribute 'default nil :font "FreeMono" :height js/default-font-size) ;; original default on arch
+;; (set-face-attribute 'default nil :font "Source Code Pro" :height js/default-font-size) ;; bit more decent than fira, but very similar 
+(set-face-attribute 'default nil :font "Fira Code Retina" :height js/default-font-size)
+;; (set-face-attribute 'default nil :font "Cantarell" :height js/default-font-size) ;; is variable pitch
+;; (set-face-attribute 'default nil :font "Courier New" :height js/default-font-size) ;; similar to FreeMono
  
- ;; * detect machine name
+ ;; ** detect machine name
  (defvar machine-name)  
  (cond
    ((equal system-name "johannes-ThinkPad-L380-Yoga")
@@ -183,7 +251,7 @@
  (rainbow-delimiters-mode t)
  
  ;; ** general COLOR THEMES ;;;;;;;;;;;;;
- (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-loccal --> not working)
+ (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
  
  (require 'color-theme)
  (setq color-theme-is-global nil)
@@ -293,35 +361,29 @@
    (evil-goto-mark ?\]))
  ;; ( -> mapped to evil leader v)
  
- ;;
- 
- ;; evil leader
- (use-package evil-leader
-   :ensure t
-   :config
-   (global-evil-leader-mode)
-   (evil-leader/set-leader "<SPC>") ;; space is handy, no interference with other functionalities, ',' is not a good choice, conflicts with repeat motion
+;; * (general) evil leader bindings
    (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
- 
-   (evil-leader/set-key "c" 'comment-dwim-2) ;
-   (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
-   (evil-leader/set-key "k" 'kill-this-buffer-no-prompt)
-   (evil-leader/set-key "s" 'save-buffer) 
-   (evil-leader/set-key "f" 'helm-find) 
-   (evil-leader/set-key "d" 'dired-go-current-buffer) 
-   (evil-leader/set-key "g" 'helm-swoop) ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
-   ;; (evil-leader/set-key "p" 'helm-projectile-find-file) ;; -> "p" ssh-clipboard-paste, defined there
-   (evil-leader/set-key "d" 'dired-go-current-buffer) 
-   (evil-leader/set-key "x" 'helm-M-x)
-   (evil-leader/set-key "2" 'split-window-below) 
-   (evil-leader/set-key "3" 'split-window-right) 
-   (evil-leader/set-key "0" 'delete-window) 
-   (evil-leader/set-key "1" 'delete-other-windows) 
-   (evil-leader/set-key "b" 'helm-mini)  ; recent files (better than recentf-open-files and/or helm-buffers-list)
-   (evil-leader/set-key "r" 'quick-evil-search-replace)  ; quick way to replace expression in region
-   (evil-leader/set-key "v" 'evil-select-pasted)  ; quick way to replace expression in region
-   (evil-leader/set-key "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))) 
-   (evil-leader/set-key "'" 'iresize-mode)
+   (js/leader-def
+   "c" 'comment-dwim-2
+   "k" 'kill-this-buffer-no-prompt
+   "s" 'save-buffer
+   "f" 'helm-find
+   "d" 'dired-go-current-buffer
+   "g" 'helm-swoop  ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
+   "p" 'helm-projectile-find-file ;; -> "p" ssh-clipboard-paste, defined there
+   "d" 'dired-go-current-buffer
+   "x" 'helm-M-x
+   "2" 'split-window-below
+   "3" 'split-window-right
+   "0" 'delete-window
+   "1" 'delete-other-windows
+   "b" 'helm-mini  ; recent files (better than recentf-open-files and/or helm-buffers-list)
+   "r" 'quick-evil-search-replace  ; quick way to replace expression in region
+   "v" 'evil-select-pasted  ; quick way to replace expression in region
+   "e" (lambda () (interactive) (revert-buffer t t) (message "buffer reverted" ))
+   "'" 'iresize-mode
+   ":" 'gsyn
+   ";" 'gsyn
  )                 
  
  (require 'evil-numbers)
@@ -359,35 +421,6 @@
       (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
  
 
-
-;; ** general.el (setup another alternative to define keys)
-;; (require 'general) ;; not working/not in melpa, for now: 
-;; (load "~/.emacs.d/general.el/general.el")
-;; (general-evil-setup t)
-;; (general-create-definer my-local-leader1-def
-;;   ;; :prefix my-local-leader
-;;   :prefix ",")
-
-;; (general-create-definer my-local-leader2-def
-;;   ;; :prefix my-local-leader
-;;   :prefix "\\")
-
-
-;; (nvmap :prefix ","
-;;        "bb" 'back-to-previous-buffer
-;;        "ww" 'save-buffer
-;;        "oo" 'compile)
-
-;; ;; all keywords arguments are still supported
-;; (nvmap :prefix "SPC"
-;;        ; save windows layout
-;;        "ss" 'wg-create-workgroup
-;;        ;; load windows layout
-;;        "ll" 'my-wg-switch-workgroup)
-
-
-
- ;;
  
  
  ;;; * )  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -417,8 +450,6 @@
    (async-shell-command command-string))
  
 
- (evil-leader/set-key ":" 'gsyn)
- (evil-leader/set-key ";" 'gsyn)
  
  ;;;+) MELPA packages - make them available (some very good additional package list)
  (require 'package) ;; You might already have this line
@@ -438,7 +469,11 @@
  ;; *** comments: two options in emacs: debug (old) ;  edebug -> better, interactive, "matlab-like", just a 'little overhead' --> need to perform 'instrumentalization' before every debugging...
  ;; *** --> just hit 'SPC-/'
  ;; *** more convenient short-cut for instrumentalize function: than "C-u C-M-x"!
- (evil-leader/set-key-for-mode 'emacs-lisp-mode "/" 'instrumentalize-fun) 
+ ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "/" 'instrumentalize-fun) 
+
+;;T this didnt work, really strange :( (js/leader-def :keymaps 'emacs-lisp-mode-map "/" 'instrumentalize-fun)
+
+
  (defun instrumentalize-fun ()
    (interactive)
    ;; (edebug-eval-defun t)
@@ -583,7 +618,7 @@
    (switch-to-buffer ipython-calculator-buffer-name)
    )
  
- (evil-leader/set-key "a" 'ipython-calculator) 
+(js/leader-def "a" 'ipython-calculator) 
  
  (defvar python-calculator-mode-map
    (let ((m (make-sparse-keymap))) ;; i think this achieves a "local key binding" for the buffer
@@ -635,8 +670,8 @@
  ;; ** fix TAB -> org-cycle for android phone
  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
  
- ;; ** redisplay inline images comfy key
- (evil-leader/set-key "or" 'org-redisplay-inline-images)
+ ;; ** redisplay inline images comfy key 
+(js/leader-def "or" 'org-redisplay-inline-images)
  
  ;; ** always redisplay inline images after ctrl-c-ctrl-c
  (advice-add 'org-ctrl-c-ctrl-c :after 'org-redisplay-inline-images)
@@ -736,12 +771,12 @@
   (setq date (planet-get-todays-date))
   (setq min (format "%02i"(planet-date-get-min date)))
   (setq hour (format "%02i"(planet-date-get-hour date)))
-  (setq filename (concat (planet-convert-date-to-filebasename date) "_" hour "_" min ".xoj"))
+  (setq filename (concat (planet-convert-date-to-filebasename date) "_" hour "_" min ".xpp"))
   (message filename)
   ;; * create file from template
   (setq currentpath (file-name-directory buffer-file-name))
   (setq filefullname (concat  currentpath "/" filename))
-  (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xoj")
+  (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xpp")
   ;; * open xournal file (no popup of async output)
   (setq command_string (concat "xournal " filefullname))
   (async-shell-command-no-window command_string  "*org_xournal_new_open_output*")
@@ -919,7 +954,7 @@
    )
  
  
- (defun org-toggle-underlined-region ()
+ (defun org-toggle-underline-region ()
    (interactive)
    (my-toggle-marker-around-region "_" "_"  "_" "_")
    )
@@ -928,14 +963,10 @@
    (my-toggle-marker-around-region "/" "\/" "/" "\/")
    )
  ;; todo: rethink these, already reserverd for other stuff
- (evil-leader/set-key-for-mode 'org-mode  "jb" 'org-toggle-bold-region)
- (evil-leader/set-key-for-mode 'org-mode  "ji" 'org-toggle-italic-region)
- (evil-leader/set-key-for-mode 'org-mode  "jc" 'org-toggle-code-region)
- (evil-leader/set-key-for-mode 'org-mode "jr" 'org-toggle-red-region)
-;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "b" 'org-toggle-bold-region)
-;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "i" 'org-toggle-italic-region)
-;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "c" 'org-toggle-code-region)
-;; (my-local-leader1-def :states 'normal :keymaps 'org-mode-map "r" 'org-toggle-red-region)
+(js/leader-def :keymaps 'org-mode-map "jb" 'org-toggle-bold-region)
+(js/leader-def :keymaps 'org-mode-map "ji" 'org-toggle-italic-region)
+(js/leader-def :keymaps 'org-mode-map "jc" 'org-toggle-code-region)
+(js/leader-def :keymaps 'org-mode-map "ju" 'org-toggle-underline-region)
  
  (defun region-to-string ()
    (interactive)
@@ -1193,15 +1224,14 @@
    (org-display-inline-images)
    )
  
- (evil-leader/set-key "ln" 'planet-open-quick-notes) 
+ ;; (evil-leader/set-key "ln" 'planet-open-quick-notes) 
  ;; paste image from clipboard
- (evil-leader/set-key-for-mode 'org-mode "i" 'org-insert-clipboard-image) 
+(js/leader-def :keymaps 'org-mode-map "i" 'org-insert-clipboard-image) 
  
- 
- ;; in dired -> create org mode file within hidden folder (of same name)
- ;; (we don t want all the "junk" to be seen, images, latex aux files, etc.)
- ;; (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are "mistreated/violated" by Dropbox)
  (defun create-hidden-org-file-folder (&optional filebasename path)
+ "in dired -> create org mode file within hidden folder (of same name)
+ (we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
+ (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
    (interactive)
     ;; * determine filename
     (if (not filebasename)
@@ -1460,7 +1490,6 @@
  ;; however, i ll keep the original layer as a "fall back" by cond-statements "else -> fallback (e.g. org-metareturn).
  ;; *** normal state
 ;; **** SPC-RET -> open-links
-(evil-leader/set-key "lo" 'org-open-at-point) 
  ;; **** enter
 (evil-define-key 'normal org-mode-map (kbd "RET") 'myorgevil-normal-RET)
  (defun myorgevil-normal-RET ()
@@ -1475,7 +1504,8 @@
 	(evil-insert-state))
 	;; "fallback"
 	(t
-	(org-return))))
+	;; (org-return))))
+	(org-meta-return)))) ;; i prefer this -> open new org file and "enter" -> pop new heading -> "p" paste sth
  
  ;; **** C-l/L (demote)
  (evil-define-key 'normal org-mode-map (kbd "C-l") 'myorgevil-normal-C-l)
@@ -1616,9 +1646,8 @@
  (evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
  (evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
  
- (evil-leader/set-key-for-mode 'org-mode "*" 'org-toggle-heading)
- (evil-leader/set-key-for-mode 'org-mode "8" 'org-toggle-heading) ;; lazy, 8 for *
- 
+(js/leader-def :keymaps 'org-mode-map "*" 'org-toggle-heading)
+(js/leader-def :keymaps 'org-mode-map "8" 'org-toggle-heading) ;; lazy, 8 for *
  
  ;; new emphasis-markers
  (setq org-hide-emphasis-markers t)
@@ -1713,10 +1742,13 @@
  (evil-define-key 'normal outshine-mode-map (kbd "C-h") 'outline-promote)
  (evil-define-key 'normal outshine-mode-map (kbd "C-l") 'outline-demote)
  ;; *** levels 1/2/3 -> SPC l 1/2/3
- (evil-leader/set-key "l0" 'outline-show-all)
- (evil-leader/set-key "l1" (lambda () (interactive) (outshine-cycle-buffer 1)))
- (evil-leader/set-key "l2" (lambda () (interactive) (outshine-cycle-buffer 2)))
- (evil-leader/set-key "l3" (lambda () (interactive) (outshine-cycle-buffer 3)))
+(js/leader-def "o0" 'outline-show-all)
+(js/leader-def "o1" (lambda () (interactive) (outshine-cycle-buffer 1)))
+(js/leader-def "o2" (lambda () (interactive) (outshine-cycle-buffer 2)))
+(js/leader-def "o3" (lambda () (interactive) (outshine-cycle-buffer 3)))
+(js/leader-def "o4" (lambda () (interactive) (outshine-cycle-buffer 4)))
+(js/leader-def "o5" (lambda () (interactive) (outshine-cycle-buffer 5)))
+(js/leader-def "o6" (lambda () (interactive) (outshine-cycle-buffer 6)))
  
  ;; *** tab -> outshine-cycle
  (evil-define-minor-mode-key 'normal 'outshine-mode (kbd "TAB") 'outshine-cycle)
@@ -1758,7 +1790,7 @@
  
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
- (evil-leader/set-key "7" 'stickyterm-noninteractive)
+ (js/leader-def "7" 'stickyterm-noninteractive)
  
  (require 'term)
  ;; (if color-theme-buffer-local-switch
@@ -1787,16 +1819,14 @@
   (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
   (evil-define-key 'normal term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state) ;; this is just to not get undesired error messages when repeating
  
- (evil-leader/set-key-for-mode 'term-mode "j" 'term-line-mode)
- ;; (evil-leader/set-key-for-mode 'term-mode "k" 'term-char-mode) 
- (evil-leader/set-key-for-mode 'term-mode "k" 'term-switch-char-mode-emacs-state) 
+(js/leader-def :keymaps 'term-mode-map "k" 'term-switch-char-mode-emacs-state) 
  ;; **** previous/next buffer key binding, set also for term's
- (evil-define-key 'emacs term-raw-map (kbd "M-'") 'previous-buffer)
- (evil-define-key 'emacs term-raw-map (kbd "M-\\") 'next-buffer)
- (evil-define-key 'normal term-raw-map (kbd "M-'") 'previous-buffer)
- (evil-define-key 'normal term-raw-map (kbd "M-\\") 'next-buffer)
- (evil-define-key 'visual term-raw-map (kbd "M-'") 'previous-buffer)
- (evil-define-key 'visual term-raw-map (kbd "M-\\") 'next-buffer)
+ (evil-define-key 'emacs term-raw-map (kbd "M-y") 'previous-buffer)
+ (evil-define-key 'emacs term-raw-map (kbd "M-o") 'next-buffer)
+ (evil-define-key 'normal term-raw-map (kbd "M-y") 'previous-buffer)
+ (evil-define-key 'normal term-raw-map (kbd "M-o") 'next-buffer)
+ (evil-define-key 'visual term-raw-map (kbd "M-y") 'previous-buffer)
+ (evil-define-key 'visual term-raw-map (kbd "M-o") 'next-buffer)
  
  (defun term-switch-line-mode-normal-state()
    (interactive)
@@ -2245,16 +2275,16 @@
  (define-key dired-mode-map (kbd "<f2>") 'change-dir-from-clipboard)
  
  ;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
- (evil-leader/set-key "y" 'copy-current-path) ;; analogouns to y = vim yank
- (evil-leader/set-key "p" 'change-dir-from-clipboard) ;; analogouns to p = vim yank
+ (js/leader-def "y" 'copy-current-path) ;; analogouns to y = vim yank
+ (js/leader-def "p" 'change-dir-from-clipboard) ;; analogouns to p = vim yank
  
  ;; copy current filename (e.g. execute in matlab command window)
  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
  
  ;;; ** avy/ace jump 
  (require 'avy)
- (evil-leader/set-key "j" 'avy-goto-char-2) ;; 'avy-goto-char
- (evil-leader/set-key "m" 'avy-goto-char) 
+ (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
+ (js/leader-def "m" 'avy-goto-char) 
  
                  
  (setq dired-recursive-copies 'always)
@@ -2264,12 +2294,12 @@
  (load "quickly-move-buffer-to-other-window.el")
  ;; copy current path key bindings
  (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
+ (global-set-key (kbd "M-u") 'get-this-buffer-to-move)
  (require 'dired)
  (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move) 
- (evil-leader/set-key "[" 'get-this-buffer-to-move)
- (evil-leader/set-key "]" 'switch-to-buffer-to-move)
  
  (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
+ (global-set-key (kbd "M-i") 'switch-to-buffer-to-move)
  (define-key dired-mode-map (kbd "<f4>") 'switch-to-buffer-to-move) 
  
  
@@ -2287,6 +2317,9 @@
              (dired-hide-details-mode)
              (display-line-numbers-mode -1)
              (dired-sort-toggle-or-edit)))
+
+;; ** show icons by default
+ (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
  
  
  ;; ** dired omit files
@@ -2329,14 +2362,14 @@
     (with-temp-buffer (write-file file-full-name))
     (find-file file-full-name))
  
- (evil-leader/set-key "nn" 'dired-create-new-empty-file)
- (evil-leader/set-key "nv" 'dired-create-new-empty-file-and-visit)
+ (js/leader-def "nn" 'dired-create-new-empty-file)
+ (js/leader-def "nv" 'dired-create-new-empty-file-and-visit)
  
  ;; * helm-rg
  (require 'helm-rg)
  (setq helm-rg-default-extra-args '("--hidden"))
  ;; only makes sence in dired buffers, for others-> helm-soop
- (evil-leader/set-key-for-mode 'dired-mode "g" 'helm-rg) ;
+ (js/leader-def :keymaps 'dired-mode-mode-map "g" 'helm-rg) ;
  ;; DIRED+ STUFF -> no longer officially supported MELPA (security reasons) --> outcommented
  ;;  (https://emacs.stackexchange.com/questions/38553/dired-missing-from-melpa)
  ;; ;;    .) reuse buffer,  don't open always new buffer when 
@@ -2387,17 +2420,17 @@
    (interactive)
    (dired downloads-dir))
  
- (evil-leader/set-key "hh" 'dired-go-home)
- (evil-leader/set-key "ht" 'dired-go-temp)
- (evil-leader/set-key "hw" 'dired-go-work)
- (evil-leader/set-key "hf" 'dired-go-fast) ;; for mathe-cluster
- (evil-leader/set-key "hd" 'dired-go-downloads)
+ (js/leader-def "hh" 'dired-go-home)
+ (js/leader-def "ht" 'dired-go-temp)
+ (js/leader-def "hw" 'dired-go-work)
+ (js/leader-def "hf" 'dired-go-fast) ;; for mathe-cluster
+ (js/leader-def "hd" 'dired-go-downloads)
  (defun dired-go-mucke ()
    (interactive)
    (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
    
- (evil-leader/set-key "hm" 'dired-go-mucke)
- (evil-leader/set-key "hb" 'helm-bookmarks)
+ (js/leader-def "hm" 'dired-go-mucke)
+ (js/leader-def "hb" 'helm-bookmarks)
  
  
  ;;    .) auto revert dired default
@@ -2518,7 +2551,8 @@
                                       ("\\.pdf\\'" "termux-open" (file)))))
        ((equal myhost "laptop")
         (setq openwith-associations '(
-                               ("\\.xoj\\'" "xournal" (file))
+                               ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
+                               ("\\.xopp\\'" "xournalpp" (file))
                                ("\\.pdf\\'" "okular" (file))))))
  
  ;;; * save desktop sessions
@@ -3031,7 +3065,7 @@
  )
  
  ;; ** other handy short-cuts with leader-key
- (evil-leader/set-key-for-mode 'LaTeX-mode "lv" 'TeX-view)
+ ;;T (evil-leader/set-key-for-mode 'LaTeX-mode "lv" 'TeX-view)
  ;; ** color short-cuts
  ;; todo: sth still wrong -> hello ->  \red{h}ello ↯↯↯
  ;; (defun latex-toggle-red-region ()
@@ -3043,22 +3077,24 @@
  ;; (evil-leader/set-key-for-mode 'latex-mode  "ji" 'org-toggle-italic-region)
  ;; (evil-leader/set-key-for-mode 'latex-mode  "jc" 'org-toggle-code-region)
  ;; (evil-leader/set-key-for-mode 'LaTeX-mode "j" 'latex-toggle-red-region)
+
  ;;; ** how to view pdf (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
- (add-hook 'LaTeX-mode-hook '(lambda ()
-                   (add-to-list 'TeX-expand-list
-                        '("%u" Okular-make-url))))
+;;    TODO: revisit this! line (server-start) made emacs init halt until key press for some reason
+ ;; (add-hook 'LaTeX-mode-hook (lambda ()
+ ;;                   (add-to-list 'TeX-expand-list
+ ;;                        '("%u" Okular-make-url))))
  
- (defun Okular-make-url () (concat
-                "file://"
-                (expand-file-name (funcall file (TeX-output-extension) t)
-                          (file-name-directory (TeX-master-file)))
-                "#src:"
-                (TeX-current-line)
-                (expand-file-name (TeX-master-directory))
-                "./"
-                (TeX-current-file-name-master-relative)))
+ ;; (defun Okular-make-url () (concat
+ ;;                "file://"
+ ;;                (expand-file-name (funcall file (TeX-output-extension) t)
+ ;;                          (file-name-directory (TeX-master-file)))
+ ;;                "#src:"
+ ;;                (TeX-current-line)
+ ;;                (expand-file-name (TeX-master-directory))
+ ;;                "./"
+ ;;                (TeX-current-file-name-master-relative)))
  
- (setq TeX-view-program-selection '((output-pdf "Okular")))
+ ;; (setq TeX-view-program-selection '((output-pdf "Okular")))
  
  ;;; *** setup viewer (okular) with synref
  ;;;    how to use:
@@ -3066,9 +3102,9 @@
  ;;;              go from emacs to okular ("forward search"): --> hit C-c C-v --> voila, okular opens exactly the position
  ;;;              go from okular to emacs ("inverse search"): (mind, only works with emacsclient/daemon)  --> Shift-MouseLeft on position
  ;;;     prerequisite - okular settings: simply: okular--> settings --> configure Okular --> Editor --> emacsclient 
- (server-start)
- (setq TeX-view-program-selection '((output-pdf "Okular")))
- (setq TeX-source-correlate-mode t)
+ ;; (server-start)
+ ;; (setq TeX-view-program-selection '((output-pdf "Okular")))
+ ;; (setq TeX-source-correlate-mode t)
  
  ;; ** make more easy/natural to read
  ;; *** break lines naturally
@@ -3091,25 +3127,17 @@
  (setq ispell-dictionary "english") ;
       ; this can obviously be set to any language your spell-checking program supports
  
- ;; (add-hook 'LaTeX-mode-hook 'flyspell-mode) 
- ;; (add-hook 'LaTeX-mode-hook 'flyspell-buffer)
+ (add-hook 'LaTeX-mode-hook 'flyspell-mode) 
+ (add-hook 'LaTeX-mode-hook 'flyspell-buffer)
  
  
- ;;; flymake
- ;(require 'flymake)
- ;
- ;(defun flymake-get-tex-args (file-name) (list "pdflatex" 
- ;    (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
- ;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+ ;; flymake
+ (require 'flymake)
  
+ (defun flymake-get-tex-args (file-name) (list "pdflatex" 
+    (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+ (add-hook 'LaTeX-mode-hook 'flymake-mode)
  
- ;;; My personal redefinition of menu-item appearance (before i could not see
-   ; the filenames since the path s were so long)
- (defsubst recentf-make-default-menu-element (file)
-   "Make a new default menu element with FILE.
- This a menu element (FILE . FILE)."
-   (setq menu-item-string (format "%s" (file-name-nondirectory file)))
-   (recentf-make-menu-element menu-item-string file))
  
  ;; ** misc settings
       (setq TeX-parse-self t) ; Enable parse on load.
@@ -3850,8 +3878,8 @@
  
  
  ;; ** ssh-clipboard key bindings
- (evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
- (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
+ ;;T (evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
+ ;;T (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
  ;; (global-set-key (kbd "<f1>") 'copy-current-path)
  
  ;; ** ssh-clipboard copy path
@@ -3935,7 +3963,7 @@
  ;;
  ;; c) copy fullfilename ->
  ;;                         dired/others ... "leader + u"
-    (evil-leader/set-key "u" 'copy-fullfilename)
+    ;;T (evil-leader/set-key "u" 'copy-fullfilename)
  ;; d) paste             ->
  ;;                         files        ... "p"
  ;;                         term         ... "ctrl + p"
@@ -3962,7 +3990,7 @@
  ;; c) ssh-copy filefullname  ->
  ;;                         dired/others ... "leader + U" 
  ;;                         (term         ...  "CTRL + U") <-- no use case
-    (evil-leader/set-key "U" 'ssh-clipboard-copy-fullfilename)
+    ;;T (evil-leader/set-key "U" 'ssh-clipboard-copy-fullfilename)
  ;;
  ;; d) ssh-paste           ->
  ;;                         files        ... "leader + P" 
@@ -4398,7 +4426,7 @@
    (switch-to-buffer draft-horse-term-buffer-name)
    )
  
- (evil-leader/set-key "z" 'draft-horse-term) 
+ (js/leader-def "z" 'draft-horse-term) 
  
  
  ;; * tutorials
@@ -4445,7 +4473,7 @@
  
  ;; * short-cuts (universal concept) for REPL/ debug / etc.
  ;; ** send to REPL current fun. def. (i.e. evaluate current function in elisp)
- (evil-leader/set-key-for-mode 'elisp-mode "tf" 'eval-defun) 
+ ;;T (evil-leader/set-key-for-mode 'elisp-mode "tf" 'eval-defun) 
  ;; send to REPL current line (removing leading white spaces)
  ;; send to REPL current region
  ;; send to REPL var under point
@@ -4541,130 +4569,11 @@
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; * EXWM window manager (this might go into some EXWM.el later)
-;; ** this is where the actual stuff is instructed (but defined in function, so that on other machines not loaded, or also when using other window manager)
-(defun my-exwm-startup ()
-  "this is invoked *when/once/if* exwm starts (just a list of instructions)"
-  (require 'exwm)
-  ;; not needed anymore (just for quick start beginners - load default configs, includes exwm-enable):
-  ;; (require 'exwm-config) ;; not needed anymore
-  ;; (exwm-config-default)  
-
-  ;; ** monitor, resolution and stuff ("hard-core stuff.. ://")
-  ;;    (todo: way not done yet.. but works alright)
-  (require 'exwm-randr)
-  (exwm-randr-enable)
-  ;; for some reasons names eDP-1 changed to eDP1 / HDMI-1 -> HDMI1 / etc. don t know why, so had to "renew" this xrandr command
-  ;; (start-process-shell-command "xrandr" nil "xrandr --output eDP-1 --primary --mode 1920x1080 --pos 320x1080 --rotate normal --output DP-1 --off --output HDMI-1 --off --output DP-2 --off --output HDMI-2 --mode 2560x1080 --pos 0x0 --rotate normal") ;; saved from arandr
-  ;; (start-process-shell-command "xrandr" nil "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off") ;; saved from arandr
-  (setq exwm-randr-workspace-monitor-plist '(2 "HDMI2" 3 "HDMI2"))
-
-  (setq exwm-workspace-number 5)
-
-  ;; system crafters stuff
-  (defun efs/run-in-background (command)
-  (let ((command-parts (split-string command "[ ]+")))
-    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
-
-  (defun efs/exwm-update-class ()
-    (exwm-workspace-rename-buffer exwm-class-name))
-  (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
-
-
-  (defun efs/set-wallpaper ()
-  (interactive)
-  ;; NOTE: You will need to update this to a valid background path!
-  (start-process-shell-command
-      "feh" nil  "feh --bg-scale /usr/share/backgrounds/xfce/Forrest.jpg"))
-      ;; "feh" nil  "feh --bg-scale /usr/share/backgrounds/xfce/park.jpg"))
-
-  ;; ** hooks on display change (undock/dock monitor)
-  (defvar update-displays-executed nil);; just a debug variable (setq update-displays-executed nil)
-  (defun efs/update-displays ()
-    (setq update-displays-executed t) ;; just a debug variable
-    ;; (efs/set-wallpaper)
-    ;; * autorandr/randr stuff -> i think i don t need this, already automatically
-    ;;T (efs/run-in-background "autorandr --change --force && ")
-    ;; * tried this for cleaner solution but did not work
-    ;; (efs/run-in-background
-    ;;  (concat
-    ;; "autorandr --change --force && "
-    ;; "xinput --map-to-output 'Wacom Pen and multitouch sensor Pen stylus' eDP1 && "
-    ;; "xinput --map-to-output 'Wacom Pen and multitouch sensor Pen eraser' eDP1 && "
-    ;; "xinput --map-to-output 'Wacom Pen and multitouch sensor Finger touch' eDP1")) ;; kind of "brute force approach" autorandr does not always run automatically somehow, so better execute that every time a change is detected
-	;; (message "Display config: %s"
-	;;   (string-trim (shell-command-to-string "autorandr --current")))
-    ;; * adjust touch/stylus areas
-    ;;T (sleep-for 2) ;; really really dirty work around but alright.. it works!
-    ;;T (js/adjust-stylus)
-    )
-
-  (defun js/adjust-stylus ()
-    (interactive)
-    (start-process-shell-command "xinput" nil "xinput --map-to-output 'Wacom Pen and multitouch sensor Pen eraser' eDP1 & xinput --map-to-output 'Wacom Pen and multitouch sensor Pen stylus' eDP1 & xinput --map-to-output 'Wacom Pen and multitouch sensor Finger touch' eDP1")) ;; works, but needs to be executed some time after autorandr
-  ;;T (add-hook 'exwm-randr-screen-change-hook #'efs/update-displays)
-  ;;T (add-hook 'exwm-randr-screen-change-hook #'js/adjust-stylus-when-monitor-docked)
-  ;;T (efs/update-displays) ;; execute it directly on x-server startup
-
-  ;; These keys should always pass through to Emacs
-  (setq exwm-input-prefix-keys
-    '(?\C-x
-      ?\C-h
-      ?\C-\ ;; Ctrl+Space
-      ?\M-x))
-
-  ;; Ctrl+Q will enable the next key to be sent directly
-  (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
-
-  ;; Set up global key bindings.  These always work, no matter the input state!
-  ;; Keep in mind that changing this list after EXWM initializes has no effect.
-  (setq exwm-input-global-keys
-        `(
-          ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
-          ([?\s-r] . exwm-reset) ;; daviwil finds it usefull to "always get back'
-	  
-          ;; Move between windows
-          ([?\M-h] . windmove-left)
-          ([?\M-l] . windmove-right)
-          ([?\M-k] . windmove-up)
-          ([?\M-j] . windmove-down)
-
-          ;; Launch applications via shell command
-          ([?\s-&] . (lambda (command)
-                       (interactive (list (read-shell-command "$ ")))
-                       (start-process-shell-command command nil command)))
-	  
-          ;; Switch workspace
-          ([?\s-w] . exwm-workspace-switch)
-          ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0))) ;; (recommendation by davi wil, use workspaces / quick change to workspace "0")
-	  
-          ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,i))))
-                    (number-sequence 0 9))))
-
-  ;; ** last step = exwm-enable (whyever..)
-  (defvar my-exwm-init-hook-launched t)
-  (exwm-enable)
+  (if (equal (getenv "WINDOW_MANAGER") "exwm");; env.-var set in .xinitrc_exwm
+      ;; (load "my_exwm_desktop.el")
+      (load "my_exwm_desktop1.el")
+    ;; (load "my_exwm_desktop_defaultconfig.el")
   )
-
-;; ** auto start my exwm on startup
-;; var 1 (did not work yet)
-;; (add-hook 'exwm-init-hook #'(my-exwm-startup))
-
-;; var2
-(when (equal myhost "laptop")
-  ;; TODO: start this only as hook on exwm-init or whatever don't know
-  ;;       hmmm... how to detect which window manager was invoked?
-  ;; hmm.. best way is to use exwm-init-hook -> TODO
-
-  (setq window-manager (getenv "WINDOW_MANAGER")) ;; set in .xinitrc_exwm
-  (if (equal window-manager "exwm")
-      ;;T (my-exwm-startup)
-  ))
-
 
 ;; * misc stuff (order later)
 (if (equal myhost "phone")
@@ -4698,3 +4607,20 @@
   (insert "][")
   (insert text)
   (insert "]]"))
+
+;; ;; * quick window config store/restore
+;; (defvar window-config-list nil)
+;; (defun window-config-store ()
+;;   (interactive)
+;;   (setq currwinconf (current-window-configuration))
+;;   (add-to-list window-config-list currwinconf))
+
+;; (defun window-config-restore ()
+;;   (interactive)
+;;   (setq currwinconf (current-window-configuration))
+;;   (setq window-config-shuffle-list 
+;;   (add-to-list window-config-list winconf))
+
+;; * treemacs
+  (add-hook 'treemacs-mode-hook
+            (lambda nil (display-line-numbers-mode -1)))

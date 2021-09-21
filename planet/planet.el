@@ -457,9 +457,9 @@ last-date)
 
 ;;test: (planet-open-today)
 ;;test: (planet-open-today)
-(evil-leader/set-key "ot" 'planet-today)
+ (js/leader-def "ot" 'planet-today)
 ;; (evil-leader/set-key "t" 'planet-today)
-(evil-leader/set-key "ow" 'planet-this-week)
+ (js/leader-def "oy" 'planet-this-week)
 
 
 
@@ -672,7 +672,8 @@ date)
   ;; ** set planet-view-state to "none"
   (setq planet-view-state "none")
   )
-(evil-leader/set-key "q" 'planet-view-quit)
+
+ (js/leader-def "oq" 'planet-view-quit)
 
 (defun planet-view-week2X4 ()
   (interactive)
@@ -734,7 +735,7 @@ date)
 
   ;; ** set planet-view-state to "view-week2X4"
 
-(evil-leader/set-key "w" 'planet-view-week2X4)
+ (js/leader-def "ow" 'planet-view-week2X4)
 
 (defun planet-setup-windows-config-2X4 ()
   (interactive)
@@ -1065,31 +1066,33 @@ date)
   (interactive)
   (org-set-property "Category" "work")
   )
-(evil-leader/set-key-for-mode 'org-mode "ocw" 'planet-set-category-work) 
+
+ ;; (js/leader-def :keymaps 'org-mode-mode-map "ocw" 'planet-set-category-work) ;; (did not work)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocw" 'planet-set-category-work)
 
 (defun planet-set-category-tools ()
   (interactive)
   (org-set-property "Category" "tools")
   )
-(evil-leader/set-key-for-mode 'org-mode "oct" 'planet-set-category-tools) 
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "oct" 'planet-set-category-tools)
 
 (defun planet-set-category-private ()
   (interactive)
   (org-set-property "Category" "private")
   )
-(evil-leader/set-key-for-mode 'org-mode "ocp" 'planet-set-category-private) 
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocp" 'planet-set-category-private)
 
 (defun planet-set-category-knowledge ()
   (interactive)
   (org-set-property "Category" "knowledge")
   )
-(evil-leader/set-key-for-mode 'org-mode "ock" 'planet-set-category-knowledge) 
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ock" 'planet-set-category-knowledge)
 
 (defun planet-set-category-sustainment ()
   (interactive)
   (org-set-property "Category" "sustainment")
   )
-(evil-leader/set-key-for-mode 'org-mode "ocs" 'planet-set-category-sustainment) 
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocs" 'planet-set-category-sustainment)
 
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
 
@@ -1107,12 +1110,12 @@ date)
   (planet-add-tag "tools")
   )
 ;;*** guter shortcut für clock in/out / effort
-;;**** clock in --> SPC-p-i
-(evil-leader/set-key-for-mode 'org-mode "oi" 'planet-clock-in) 
+;;**** clock in --> SPC-o-i
+ (js/leader-def :keymaps 'org-mode-map "oi" 'planet-clock-in) ;
 ;;**** clock out --> SPC-p-o
-(evil-leader/set-key-for-mode 'org-mode "oo" 'planet-clock-out) 
+ (js/leader-def :keymaps 'org-mode-map "oo" 'planet-clock-out) ;
 ;;**** set effort --> SPC-p-e
-(evil-leader/set-key-for-mode 'org-mode "oe" 'org-set-effort) 
+ (js/leader-def :keymaps 'org-mode-map "oe" 'org-set-effort) ;
 
 (defun planet-clock-in ()
   (interactive)
@@ -1256,21 +1259,6 @@ date)
         )
     )
   )
-(defun planet-git-pull ()
-  (interactive)
-  (setq command-string-pull "git -C ~/org pull")
-  (message (concat "executing: " command-string-pull))
-  (shell-command command-string-pull)
-  (planet-revert-all-planet-buffers))
-(evil-leader/set-key-for-mode 'org-mode "or" 'planet-git-pull) 
-
-(defun planet-gsyn ()
-  (interactive)
-  (setq command-string-pull "gsyn ~/org")
-  (message (concat "executing: " command-string-pull))
-  (shell-command command-string-pull))
-
-(evil-leader/set-key-for-mode 'org-mode "og" 'planet-gsyn) 
 
 ;; ** set buffer-local exception from git-save (even when globally turned on)
 ;; to achieve for a buffer either:
@@ -1461,15 +1449,10 @@ date)
     )
   )
 
-(evil-leader/set-key-for-mode 'org-mode "o1" 'planet-level-1-all)
-(evil-leader/set-key-for-mode 'org-mode "o2" 'planet-level-2-all)
-(evil-leader/set-key-for-mode 'org-mode "o3" 'planet-level-3-all)
-(evil-leader/set-key-for-mode 'org-mode "o0" 'planet-level-0-all)
-
-(evil-leader/set-key-for-mode 'org-mode "l1" 'planet-level-1)
-(evil-leader/set-key-for-mode 'org-mode "l2" 'planet-level-2)
-(evil-leader/set-key-for-mode 'org-mode "l3" 'planet-level-3)
-(evil-leader/set-key-for-mode 'org-mode "l0" 'planet-level-0)
+ (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "oa0" 'planet-level-0-all)
+ (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "oa1" 'planet-level-1-all)
+ (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "oa2" 'planet-level-2-all)
+ (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "oa3" 'planet-level-3-all)
 
 (defun planet-level-2-all ()
   (interactive)

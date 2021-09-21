@@ -276,5 +276,14 @@ Embedded Linux is the head-and-shoulders most common embedded solution, owing to
 ** IPython (interactive command line user interface for python)
 ** LAPACK
 ** numpy
-* fun tale: ricing cars -> comes from japanese car modding -> ricing linux popular term on forum r/unixporn,seems racist, is not, Race Inspired Car Enhancements
+* funny emacs tales:
+** fun tale: ricing cars -> comes from japanese car modding -> ricing linux popular term on forum r/unixporn,seems racist, is not, Race Inspired Car Enhancements
 [[file:Screenshot_20210429-121005_DuckDuckGo.jpg]]
+** web searching for emacs solutions, might make you appear to be a terrorist :D
+e.g. I once searched: "evil global versus local leader"
+you don't wanna know the results
+tipp: prepand "emacs" or "elisp" to your search and do not use google, but privacy-search-engine :D :D :D!
+
+** "The Matrix - Neo - Analogy" 
+*** first feel like inable to do anything -> photo Neo where he falls in the test <==> emacs first time edit text
+*** later <==> flying bullets escaping
