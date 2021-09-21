@@ -143,7 +143,8 @@
 ;; * general.el
 ;; (for now i use it only for leader-keys)
 ;; (non leader bindings still with "legacy" commands (global-set-key, etc.) 
-(require 'general) 
+(use-package general
+  :ensure t)
 (general-evil-setup t)
 
 (general-create-definer js/leader-def
@@ -247,13 +248,15 @@
  (show-paren-mode t)
  
  ;; ** rainbow delimiters
- (require 'rainbow-delimiters)
+(use-package rainbow-delimiters
+  :ensure t)
  (rainbow-delimiters-mode t)
  
  ;; ** general COLOR THEMES ;;;;;;;;;;;;;
  (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
  
- (require 'color-theme)
+(use-package color-theme
+  :ensure t)
  (setq color-theme-is-global nil)
  ;; (color-theme-aalto-light)
  ;;(load-theme 'leuven)
@@ -263,7 +266,8 @@
  ;; instruction:
  ;; add mode hook with color theme
  ;; Tipp: find out mode name of a buffer with e.g.: (buffer-local-value 'major-mode (get-buffer "*ansi-term*"))
- (require 'color-theme-buffer-local)
+(use-package color-theme-buffer-local
+  :ensure t)
  ;; use the following as templates
  
  ;; ** personal (general) customization of faces (comments light green, etc.)
@@ -308,8 +312,7 @@
  ;; necessary for evil-collection (before load evil first time):
  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
  (setq evil-want-keybinding nil)
- (require 'evil)
- 
+
  (use-package evil
    :ensure t
    :config
@@ -325,7 +328,8 @@
   'dired
   )
  ;;; use alternative for ESC
- (require 'key-chord)
+(use-package key-chord
+  :ensure t)
  (key-chord-mode 1)
  
  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
@@ -340,7 +344,8 @@
  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
  ;; ** search string under visual selection (commonly used also by vimmers) 
- (require 'evil-visualstar)
+(use-package evil-visualstar
+  :ensure t)
  
  ;; quick search replace
  (defun quick-evil-search-replace ()
@@ -386,7 +391,8 @@
    ";" 'gsyn
  )                 
  
- (require 'evil-numbers)
+(use-package evil-numbers
+  :ensure t)
  (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
  (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
  
@@ -452,7 +458,6 @@
 
  
  ;;;+) MELPA packages - make them available (some very good additional package list)
- (require 'package) ;; You might already have this line
 ;; (add-to-list 'package-archives
 ;;              '("melpa" . "https://melpa.org/packages/"))
  (when (< emacs-major-version 24)
@@ -524,7 +529,8 @@
    (evil-indent beginofline endofline)
    )
  ;; SET BREAKPOINT <F12>
- (require 'python)
+(use-package python
+  :ensure t)
  (define-key python-mode-map
    (kbd "<f12>") 'python-set-break-point-current-line)
  
@@ -661,7 +667,8 @@
  
  ;; other symbols
  ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
- (require 'org)
+(use-package org
+  :ensure t)
  (setq org-ellipsis " ▾")
  ;; (setq org-ellipsis " ▼")
  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
@@ -697,7 +704,8 @@
  
  ;; special symbols
  ;; “☀” “♼” “☼” “☾” “☽” “☣” “§” “¶” “‡” “※” “✕” “△” “◇” “▶” “◀” “◈”
- (require 'org-bullets)
+(use-package org-bullets
+  :ensure t)
  (add-hook 'org-mode-hook
            (lambda nil (org-bullets-mode 1)))
  (setq org-bullets-bullet-list
@@ -751,7 +759,7 @@
             (lambda nil
               (org-bullets-mode 1)
               ))
- (require 'org-install)
+(require 'org-install)
 
 ;; * insert xournal note
 (defun async-shell-command-no-window (command output-buffer-name)
@@ -831,8 +839,9 @@
    )
  
  ;; ** show distribution of clocked time per tag
- (require 'org-table)
- (require 'org-clock)
+(require 'org-table)
+
+(require 'org-clock)
  
  (defun clocktable-by-tag/shift-cell (n)
    (let ((str ""))
@@ -1194,7 +1203,8 @@
  (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
  
  ;; ** evil org
- (require 'evil-org)
+(use-package evil-org
+  :ensure t)
  (setq org-M-RET-may-split-line nil)
  
  ;;; ** make tab key work as org-cycle in terminal
@@ -1656,8 +1666,10 @@
                 ))
  
  ;; * outshine mode (org-mode outlining in code-files)
- (require 'org)
- (require 'outshine)
+(use-package org
+  :ensure t)
+(use-package outshine
+  :ensure t)
  ;; ** TODO ellipsis set to " ▾"
  ;; this did not work (var doesnt exist):
  ;; (setq outshine-ellipsis " ▾")
@@ -1738,7 +1750,8 @@
  
  ;; ** bindings (-> same as my org-mode workflow)
  ;; *** demote/promote C-h/C-l
- (require 'org)
+(use-package org
+  :ensure t)
  (evil-define-key 'normal outshine-mode-map (kbd "C-h") 'outline-promote)
  (evil-define-key 'normal outshine-mode-map (kbd "C-l") 'outline-demote)
  ;; *** levels 1/2/3 -> SPC l 1/2/3
@@ -1786,13 +1799,15 @@
  ;; (set-face-attribute 'outshine-level-5 nil :weight 'bold)
  ;; * term / terminal / ansi-term
  ;; ** use my own term version: stickyterm (slightly modified ansi-term)
- (require 'term) ;; stickyterm builds on /requires term (variables etc. -> load term before
+(use-package term
+  :ensure t) ;; stickyterm builds on /requires term (variables etc. -> load term before
  
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
  (js/leader-def "7" 'stickyterm-noninteractive)
  
- (require 'term)
+(use-package term
+  :ensure t)
  ;; (if color-theme-buffer-local-switch
  (add-hook 'term-mode-hook
             (lambda nil (color-theme-buffer-local 'color-theme-dark-laptop (current-buffer))))
@@ -1880,7 +1895,8 @@
  ;; +) move buffers
  (load "buffer-move.el")
  ;; To use it, simply put a (require 'buffer-move) in your ~/.emacs and
-  (require 'buffer-move)
+(use-package buffer-move
+  :ensure t)
  ;; define some keybindings. For example, i use :
  
  ;; (global-set-key (kbd "<C-S-up>")     'buf-move-up)
@@ -2023,7 +2039,8 @@
  ;(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
  
  ;; +) keyboard
- (require 'iso-transl)  ;; US-International auf Linux, sonst funzen dead keys nicht, fur quotes etc.
+;; (require 'iso-transl)
+ ;; US-International auf Linux, sonst funzen dead keys nicht, fur quotes etc.
  
  
  ;;+) AUTOMATIC PACKAGE INSTALLATION ;; LIST ALL PACKAGES HERE ;;;
@@ -2055,7 +2072,8 @@
      ;;        (getenv "USER")))
  ;;(require 'uniquify) ;; give buffer name part of path --> distinguish files with same names
  ;;(setq uniquify-buffer-name-style 'forward) ;;forward accomplishes this
- (require 'doom-modeline)
+(use-package doom-modeline
+  :ensure t)
  (doom-modeline-mode  1)
  (when (not (display-graphic-p))
  ;; (setq doom-modeline-icon nil)
@@ -2268,7 +2286,8 @@
  (evil-add-hjkl-bindings dired-mode-map 'emacs) 
  ;; copy current path key bindings
  (global-set-key (kbd "<f1>") 'copy-current-path)
- (require 'dired)
+(require 'dired)
+
  (define-key dired-mode-map (kbd "<f1>") 'copy-current-path) 
  
  (global-set-key (kbd "<f2>") 'change-dir-from-clipboard)
@@ -2282,7 +2301,8 @@
  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
  
  ;;; ** avy/ace jump 
- (require 'avy)
+(use-package avy
+  :ensure t)
  (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
  (js/leader-def "m" 'avy-goto-char) 
  
@@ -2295,7 +2315,7 @@
  ;; copy current path key bindings
  (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
  (global-set-key (kbd "M-u") 'get-this-buffer-to-move)
- (require 'dired)
+(require 'dired)
  (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move) 
  
  (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
@@ -2323,7 +2343,7 @@
  
  
  ;; ** dired omit files
- (require 'dired-x)
+(require 'dired-x)
    (defun dired-dotfiles-toggle ()
      "Show/hide dot-files"
      (interactive)
@@ -2366,7 +2386,8 @@
  (js/leader-def "nv" 'dired-create-new-empty-file-and-visit)
  
  ;; * helm-rg
- (require 'helm-rg)
+(use-package helm-rg
+  :ensure t)
  (setq helm-rg-default-extra-args '("--hidden"))
  ;; only makes sence in dired buffers, for others-> helm-soop
  (js/leader-def :keymaps 'dired-mode-mode-map "g" 'helm-rg) ;
@@ -2456,7 +2477,8 @@
  
  
  ;; ;;; dired ranger key's - nicely copy/paste files/dirs
- (require 'dired-ranger)
+(use-package dired-ranger
+  :ensure t)
   (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
   (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
   (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
@@ -2543,7 +2565,8 @@
  ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; * open with external applications (in dired/ org-mode links / etc.)
- (require 'openwith)
+(use-package openwith
+  :ensure t)
  (openwith-mode t)
  (cond ((equal myhost "phone")
         (setq openwith-associations '(
@@ -2610,14 +2633,16 @@
  
  
  ;; * helm
- (require 'helm)
+(use-package helm
+  :ensure t)
  (global-set-key (kbd "M-x") #'helm-M-x)
  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
  (global-set-key (kbd "C-x C-f") #'helm-find-files)
  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
  
  ;; ** helm describe modes
- (require 'helm-describe-modes)
+(use-package helm-describe-modes
+  :ensure t)
  (global-set-key [remap describe-mode] #'helm-describe-modes)
  ;; (setq helm-display-function 'helm-display-buffer-in-own-frame
  ;;         helm-display-buffer-reuse-frame nil
@@ -2977,7 +3002,8 @@
  ;; END GENREAL STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
  ;;; * recentf (recent files) 
- (require 'recentf)
+(use-package recentf
+  :ensure t)
  ; Enable recentf mode
  (recentf-mode t)
  ; Show last 200 files (with helm-interface no problem, i have easily 100+ files open and want to quickly access them in future session) 
@@ -3132,7 +3158,8 @@
  
  
  ;; flymake
- (require 'flymake)
+(use-package flymake
+  :ensure t)
  
  (defun flymake-get-tex-args (file-name) (list "pdflatex" 
     (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
@@ -3612,8 +3639,10 @@
  
  
  ;; *** move buffers - key bindings
- (require 'windmove)
- (require 'framemove)
+(use-package windmove
+  :ensure t)
+(require 'framemove)
+
  (setq framemove-hook-into-windmove t)
  (global-set-key (kbd "<C-up>")     'windmove-up)
  (global-set-key (kbd "<C-down>")   'windmove-down)
@@ -3678,7 +3707,7 @@
  (global-set-key (kbd "M-\\") 'next-buffer)
  
  ;;; * pdf-view
- (require 'pdf-view)
+(require 'pdf-view)
   
   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
   
@@ -4216,7 +4245,7 @@
    )
  
  ;; * auto-complete
- (require 'auto-complete-config)
+(require 'auto-complete-config)
  (ac-config-default)
  (set-face-attribute 'ac-selection-face t :background "deep sky blue" :foreground "black")
  
@@ -4370,7 +4399,8 @@
  
  
  ;; * expand-region
- (require 'expand-region)
+(use-package expand-region
+  :ensure t)
  
  ;; ** expand-region -> evil-mode shortcut -> visual mode map: "v" -> expand region / instead of exit visual mode
  (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
