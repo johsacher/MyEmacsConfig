@@ -253,13 +253,13 @@
  (rainbow-delimiters-mode t)
  
  ;; ** general COLOR THEMES ;;;;;;;;;;;;;
- (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
+;;  (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
  
-(use-package color-theme
-  :ensure t)
- (setq color-theme-is-global nil)
- ;; (color-theme-aalto-light)
- ;;(load-theme 'leuven)
+;; (use-package color-theme
+;;   :ensure t)
+;;  (setq color-theme-is-global nil)
+;;  ;; (color-theme-aalto-light)
+;;  ;;(load-theme 'leuven)
  (add-to-list 'custom-theme-load-path "emacs-leuven-theme")
  (load-theme 'zenburn t)
  
