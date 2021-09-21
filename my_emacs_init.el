@@ -260,7 +260,7 @@
 ;;  (setq color-theme-is-global nil)
 ;;  ;; (color-theme-aalto-light)
 ;;  ;;(load-theme 'leuven)
- (add-to-list 'custom-theme-load-path "emacs-leuven-theme")
+ ;;T (add-to-list 'custom-theme-load-path "emacs-leuven-theme")
  (load-theme 'zenburn t)
  
  ;; instruction:
