@@ -261,7 +261,7 @@
 ;;  ;; (color-theme-aalto-light)
 ;;  ;;(load-theme 'leuven)
  ;;T (add-to-list 'custom-theme-load-path "emacs-leuven-theme")
- (load-theme 'zenburn t)
+;; (load-theme 'zenburn t)
  
  ;; instruction:
  ;; add mode hook with color theme
@@ -324,9 +324,9 @@
  )
  
  ;;; evil-collection --> set for certain modes
- (evil-collection-init
-  'dired
-  )
+;;T (evil-collection-init
+;;T  'dired
+;;T  )
  ;;; use alternative for ESC
 (use-package key-chord
   :ensure t)
@@ -465,6 +465,8 @@
    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
  
  ;;; * elisp mode
+(use-package auto-complete
+   :ensure t)
  (add-hook 'emacs-lisp-mode-hook
            (lambda ()
              (auto-complete-mode)
@@ -2672,8 +2674,12 @@
  (setq helm-display-function #'display-buffer)
  
  ;;; * projectile
+(use-package projectile
+    :ensure t)
  (projectile-global-mode)
  (setq projectile-completion-system 'helm)
+(use-package helm-projectile
+    :ensure t)
  (helm-projectile-on)
  (setq projectile-indexing-method 'native)  
  (setq projectile-enable-caching t) 
@@ -3016,8 +3022,11 @@
  ;;; * latex (auctex) 
  ;; somehow auctex does not load with (require 'auctex) (i don t like that and think the guys should do loading consistent with standard like other packages, but whatever..)
  ;; but auctex-manual instructs like this
- (load "auctex.el" nil t t)
- (load "latex.el" nil t t)
+;; (use-package auctex
+;;    :ensure t)
+;; (require 'auctex)
+;;t (load "auctex.el" nil t t)
+;;t (load "latex.el" nil t t)
  ;;(load "preview-latex.el" nil t t)
 
 ;; * latex short cuts for formatting (bold/italic/etc)
@@ -3081,8 +3090,8 @@
  ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
  )
  
- (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
- (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)  
+ ;;t (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
+ ;;t (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)  
  
  (defun run-bibtex-on-master-file ()
  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."

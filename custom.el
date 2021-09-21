@@ -4,7 +4,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
+<<<<<<< HEAD
    '(zoom zenburn-theme use-package treemacs rainbow-delimiters outshine org-ref org-bullets openwith helm-rg helm-projectile helm-describe-modes general exwm expand-region evil-visualstar evil-org evil-numbers evil-leader evil-collection doom-modeline dired-ranger comment-dwim-2 color-theme-buffer-local buffer-move auto-complete auctex async-await all-the-icons-dired)))
+=======
+   '(expand-region async-await use-package rainbow-delimiters outshine org-ref org-bullets openwith helm-rg helm-projectile helm-describe-modes general evil-visualstar evil-org evil-numbers doom-modeline dired-ranger comment-dwim-2 color-theme-buffer-local buffer-move avy auto-complete auctex)))
+>>>>>>> 9bf51a862cd44858d2c8509e46ffd8e1b22a68dd
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
 ;;  ;; If you edit it by hand, you could mess it up, so be careful.
