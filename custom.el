@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(treemacs all-the-icons-dired zoom zenburn-theme use-package rainbow-delimiters outshine org-ref org-bullets openwith helm-rg helm-projectile helm-describe-modes general exwm expand-region evil-visualstar evil-org evil-numbers evil-leader evil-collection doom-modeline dired-ranger comment-dwim-2 color-theme-buffer-local avy auto-complete auctex async-await)))
+   '(expand-region async-await use-package rainbow-delimiters outshine org-ref org-bullets openwith helm-rg helm-projectile helm-describe-modes general evil-visualstar evil-org evil-numbers doom-modeline dired-ranger comment-dwim-2 color-theme-buffer-local buffer-move avy auto-complete auctex)))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
 ;;  ;; If you edit it by hand, you could mess it up, so be careful.
