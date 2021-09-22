@@ -149,6 +149,7 @@
 
 (general-create-definer js/leader-def
   :states '(normal insert visual emacs)
+  :keymaps 'override
   :prefix "SPC"
   :global-prefix "M-SPC") ;; evil leader access in "all situations" (this also "deactivates" prefix SPC for insert and emacs state so you can type spaces :D!)
 
@@ -253,15 +254,17 @@
  (rainbow-delimiters-mode t)
  
  ;; ** general COLOR THEMES ;;;;;;;;;;;;;
-;;  (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
+ (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
  
-;; (use-package color-theme
-;;   :ensure t)
-;;  (setq color-theme-is-global nil)
-;;  ;; (color-theme-aalto-light)
+(use-package color-theme
+  :ensure t)
+ (setq color-theme-is-global nil)
+ ;; (color-theme-aalto-light)
 ;;  ;;(load-theme 'leuven)
  ;;T (add-to-list 'custom-theme-load-path "emacs-leuven-theme")
-;; (load-theme 'zenburn t)
+;; (use-package zenburn-theme
+  ;; :ensure t)
+(load-theme 'zenburn t)
  
  ;; instruction:
  ;; add mode hook with color theme
@@ -324,9 +327,11 @@
  )
  
  ;;; evil-collection --> set for certain modes
-;;T (evil-collection-init
-;;T  'dired
-;;T  )
+(use-package evil-collection
+  :ensure t)
+ (evil-collection-init
+  'dired
+  )
  ;;; use alternative for ESC
 (use-package key-chord
   :ensure t)
@@ -2341,7 +2346,8 @@
              (dired-sort-toggle-or-edit)))
 
 ;; ** show icons by default
- (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+ ;; (if (not (display-graphic-p))
+ ;;     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
  
  
  ;; ** dired omit files
@@ -2469,6 +2475,7 @@
  
  ;; ;; go up directory with backspace
  (define-key dired-mode-map (kbd "<DEL>") 'dired-up-directory)
+;;
  
  ;; ;; quickly choose files by letters
  
