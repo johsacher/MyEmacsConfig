@@ -231,7 +231,7 @@
  (setq auto-revert-verbose nil)
  
  ;; ** title (play around -> tribute to emacs)
- (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
+ ;; (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
  
  ; ** global line number mode on
  (global-display-line-numbers-mode)
@@ -312,6 +312,9 @@
  ;; (global-unset-key (kbd "<f10>") 'mydefault-buffer-local-theme) ;; work around because default color was strange in cygwin-emacs-nw --> just press f10 when color is strange
  
  ;;; * evil - load/ general (comes first -> basis for other packages/definitions)
+;; ** evil undo-redo behavior 
+(require 'evil)
+(evil-set-undo-system 'undo-redo)
  ;; necessary for evil-collection (before load evil first time):
  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
  (setq evil-want-keybinding nil)
@@ -689,6 +692,9 @@
  
  ;; ** always redisplay inline images after ctrl-c-ctrl-c
  (advice-add 'org-ctrl-c-ctrl-c :after 'org-redisplay-inline-images)
+
+;; ** display of latex formulas -> increase size
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
  
  ;; ** org bullets
  ;; hexagrams
@@ -980,9 +986,33 @@
    )
  ;; todo: rethink these, already reserverd for other stuff
 (js/leader-def :keymaps 'org-mode-map "jb" 'org-toggle-bold-region)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "jb" 'org-toggle-bold-region)
 (js/leader-def :keymaps 'org-mode-map "ji" 'org-toggle-italic-region)
 (js/leader-def :keymaps 'org-mode-map "jc" 'org-toggle-code-region)
 (js/leader-def :keymaps 'org-mode-map "ju" 'org-toggle-underline-region)
+(js/leader-def :keymaps 'org-mode-map "jq" 'org-toggle-quote-region)
+
+;; toggle latex preview
+(defvar org-latex-previews-toggled-on nil)
+
+(defun org-latex-preview-all ()
+  (interactive)
+  ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
+  (org-latex-preview '(16)))
+(defun org-latex-clear-all ()
+  (interactive)
+  (org-latex-preview '(64)))
+
+;; (defun org-latex-preview-toggle-clear-preview-all ()
+;;   (interactive)
+;;   (cond (equal org-latex-previews-toggled-on nil)
+;; 	((org-latex-preview-all)
+;; 	(setq org-latex-previews-toggled-on t))
+;; 	(equal org-latex-previews-toggled-on t)
+;;   )
+
+(js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview-toggle-clear-preview-all)
+(js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview)
  
  (defun region-to-string ()
    (interactive)
@@ -1090,8 +1120,9 @@
  		 (concat
  		  ;; If headline is the first sibling, start a list.
  		  (when (org-export-first-sibling-p headline info)
- 		    ;; (format "\\begin{%s}\n" (if numberedp 'enumerate 'itemize))) <===== CHANGED
- 		    (format "\\begin{%s}\n" 'itemize))
+ 		    (format "\\begin{%s}\n" (if numberedp 'enumerate 'itemize))) ;; <===== CHANGED
+ 		    ;; (format "\\begin{%s}\n" 'itemize))
+ 		    ;; (format "\\begin{%s}\n" 'enumerate))
  		  ;; Itemize headline
  		  "\\item"
  		  (and full-text
@@ -1107,8 +1138,9 @@
  	    (if (not (org-export-last-sibling-p headline info)) low-level-body
  	      (replace-regexp-in-string
  	       "[ \t\n]*\\'"
- 	       ;; (format "\n\\\\end{%s}" (if numberedp 'enumerate 'itemize)) <====== CHANGED
- 	       (format "\n\\\\end{%s}" 'itemize)
+ 	       (format "\n\\\\end{%s}" (if numberedp 'enumerate 'itemize)) ;; <====== CHANGED
+ 	       ;; (format "\n\\\\end{%s}" 'enumerate)
+ 	       ;; (format "\n\\\\end{%s}" 'itemize)
  	       low-level-body)))
  	;; This is a standard headline.  Export it as a section.  Add
  	;; an alternative heading when possible, and when this is not
@@ -1207,7 +1239,9 @@
  (add-to-list 'display-buffer-alist
    (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
  ;; **** define the "run-f5" short cut
- (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
+
+(require 'latex)
+(define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
  
  ;; ** evil org
 (use-package evil-org
@@ -1378,7 +1412,7 @@
  
  ;; ** default LATEX_HEADER
  
- ;; *** allow bindings to work "#BIND+ ..."
+ ;; *** allow bindings ("entangled code execution") to work "#BIND+ ..."
  (setq org-export-allow-bind-keywords t)
  ;; (not code, just doc here)
  
@@ -2310,7 +2344,7 @@
  ;;; ** avy/ace jump 
 (use-package avy
   :ensure t)
- (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
+ ;; (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
  (js/leader-def "m" 'avy-goto-char) 
  
                  
@@ -3097,14 +3131,21 @@
  ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
  )
  
- ;;t (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
- ;;t (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)  
  
  (defun run-bibtex-on-master-file ()
  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
  (interactive)
  (TeX-command "BibTeX" 'TeX-master-file nil)
  )
+
+ (defun run-biber-on-master-file ()
+ "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
+ (interactive)
+ (TeX-command "Biber" 'TeX-master-file nil)
+ )
+
+(define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
+(define-key LaTeX-mode-map (kbd "<f6>") 'run-biber-on-master-file)  
  
  ;; ** other handy short-cuts with leader-key
  ;;T (evil-leader/set-key-for-mode 'LaTeX-mode "lv" 'TeX-view)
@@ -4009,6 +4050,7 @@
  ;; c) copy fullfilename ->
  ;;                         dired/others ... "leader + u"
     ;;T (evil-leader/set-key "u" 'copy-fullfilename)
+(js/leader-def "u" 'copy-fullfilename)
  ;; d) paste             ->
  ;;                         files        ... "p"
  ;;                         term         ... "ctrl + p"
@@ -4609,15 +4651,15 @@
 (global-set-key (kbd "C--") 'js/frame-font-size-decrease)
 
 ;; * set transparency
-(set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
-(add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
 ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+    (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
+    (add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
 
 ;; * EXWM window manager (this might go into some EXWM.el later)
   (if (equal (getenv "WINDOW_MANAGER") "exwm");; env.-var set in .xinitrc_exwm
-      ;; (load "my_exwm_desktop.el")
-      (load "my_exwm_desktop1.el")
+    ;; (load "my_exwm_desktop.el")
+    (load "my_exwm_desktop1.el")
     ;; (load "my_exwm_desktop_defaultconfig.el")
   )
 
