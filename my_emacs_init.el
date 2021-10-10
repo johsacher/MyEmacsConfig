@@ -1,5 +1,11 @@
+(xterm-mouse-mode 1)
+(global-set-key [mouse-4] 'scroll-down-line)
+(global-set-key [mouse-5] 'scroll-up-line)
+
+
+
 ;; * TODOs
-;; ** better mode-line color inactive window light-grey (?), active --> black??
+;; ** bbetter mode-line color inactive window light-grey (?), active --> black??
 ;; ** combine org/headline with major-mode in programming-language --> fold/unfold capability sections / short-cuts new-heading / sub-heading etc.
 
 ;; * debugger-mode I (evil settings after evil)
@@ -42,18 +48,18 @@
 ;; * define local / server machines
  (defvar my-server-machine-names '("mathe" "hlrn" "emmy"))
  (defvar my-local-machine-names '("laptop" "phone"))
- 
+
  ;; * current-server
  (defvar my-current-server-name "hlrn") ;; the server i m currently working on
- 
+
  (defun set-my-current-server-name ()
    (interactive)
    (setq new-ssh-server-name (read-string "enter server name alias (aliases defined in your ~/.ssh/config file, e.g. blogin/mathe):"))
    (setq ssh-server-name new-ssh-server-name)
    (message "server name set to %s" new-ssh-server-name)
    )
- 
- 
+
+
  (defun myhost-is-local ()
    (interactive)
    (setq result nil)
@@ -63,7 +69,7 @@
     ( t (setq result nil)))
    result)
  ;; test : (myhost-is-local)
- 
+
  (defun myhost-is-server ()
    (interactive)
    (setq result nil)
@@ -73,7 +79,7 @@
     ( t (setq result nil)))
    result)
  ;; test : (myhost-is-server)
- 
+
  ;; * general requirement: use-package and quelpa-use-package
 ;; ** use-package
 (require 'package)
@@ -91,12 +97,12 @@
  ;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
  ;; (require 'quelpa-use-package)
  ;; )))
- 
+
  ;; overlay an arrow where the mark is
    (defvar mp-overlay-arrow-position)
    (make-variable-buffer-local 'mp-overlay-arrow-position)
    (add-to-list 'overlay-arrow-variable-list  'mp-overlay-arrow-position)
- 
+
   (defun mp-mark-hook ()
          ;; (make-local-variable 'mp-overlay-arrow-position)
      (unless (or (minibufferp (current-buffer)) (not (mark)))
@@ -106,17 +112,17 @@
           (goto-char (mark))
           (forward-line 0)
           (point-marker)))))
- 
+
  ;;; USER CONTROL
- 
+
  ;; decide if want to use different themes for different files/modes
  (setq color-theme-buffer-local-switch nil)
- 
- ;;; END USER CONTROL
- 
- ;;; TODOS
- 
- 
+
+; END USER CONTROL
+
+; TODOS
+
+
  ;;; copy/paste in terminal-mode, also remote
  ;; todo: first check if xclip is installed in system
  ;;(require 'xclip)
@@ -124,13 +130,18 @@
  (message system-name)
  ;;;; customization go to specific file (in cloud)
  (setq my_load_path (file-name-directory load-file-name)) ;; save custom file also to the same path
+
  (setq custom-file-name "custom.el")
+
+
+
+
  (setq custom-file (concat my_load_path custom-file-name)) ;; has to be name "custom-file" -> so emacs recognizes it and writes saved customization there (https://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Customizations.html)
- 
+
  ;; do NOT load it (i don t want that custom shit)
  ;; (load custom-file)
- 
- 
+
+
  ;;; GENERAL STUFF ;;;;;;
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -139,6 +150,7 @@
  (setq my_load_path (file-name-directory load-file-name)) ;; the init file folder contains also all manual packages
  (add-to-list 'load-path my_load_path)
  ;;(add-to-list 'image-load-path my_load_path)
+
 
 ;; * general.el
 ;; (for now i use it only for leader-keys)
@@ -163,27 +175,27 @@
 ;;   :states '(normal visual)
 ;;   ;; :prefix my-local-leader
 ;;   :prefix "\\")
-
+;; 
 ;; test:
 ;; (js/leader-def "6" (lambda () (interactive) (message "hello")))
 ;; or only for a mode
 ;; (js/leader-def :keymaps 'org-mode-map "m" (lambda () (interactive) (message "heeello")))
 ;; (js/leader-def :keymaps 'emacs-lisp-mode-map "m" (lambda () (interactive) (message "heeello")))
-
- ;;; * GENERAL SETTINGS
-
-;; * window movement/placement ("'M' is my leader")
-(global-set-key (kbd "M-2") 'split-window-below)
-(global-set-key (kbd "M-3") 'split-window-right)
-(global-set-key (kbd "M-0") 'delete-window)
-(global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
-(defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
-(global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt) 
-(global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
-(global-set-key (kbd "M-;") 'js/open-browser) 
-(global-set-key (kbd "M-y") 'previous-buffer) 
-(global-set-key (kbd "M-o") 'next-buffer) 
-
+;; 
+;;  GENERAL SETTINGS
+;; 
+;; ;; * window movement/placement ("'M' is my leader")
+;; (global-set-key (kbd "M-2") 'split-window-below)
+;; (global-set-key (kbd "M-3") 'split-window-right)
+;; (global-set-key (kbd "M-0") 'delete-window)
+;; (global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
+;; (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
+;; (global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt) 
+;; (global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
+;; (global-set-key (kbd "M-;") 'js/open-browser) 
+;; (global-set-key (kbd "M-y") 'previous-buffer) 
+;; (global-set-key (kbd "M-o") 'next-buffer) 
+;; 
 (defun js/open-browser () 
   "shall context dependent, open browser and do what i (probably) want:
    customize to my liking.
@@ -204,8 +216,11 @@
 (global-set-key (kbd "M-H") 'enlarge-window-horizontally-4)
 (global-set-key (kbd "M-L") 'shrink-window-horizontally-4)
 
-(global-set-key (kbd "M-[") 'winner-undo)
-(global-set-key (kbd "M-]") 'winner-redo)
+;; kbd "M-[" makes (xterm-mouse-mode behave strange/break (bug?)
+
+;; (global-set-key (kbd "M-[") 'dummy-message)
+;; (global-set-key (kbd "M-[") 'winner-undo)
+;; (global-set-key (kbd "M-]") 'winner-redo)
 
 ;; * default font
 (defvar js/default-font-size 120)
@@ -214,7 +229,7 @@
 (set-face-attribute 'default nil :font "Fira Code Retina" :height js/default-font-size)
 ;; (set-face-attribute 'default nil :font "Cantarell" :height js/default-font-size) ;; is variable pitch
 ;; (set-face-attribute 'default nil :font "Courier New" :height js/default-font-size) ;; similar to FreeMono
- 
+
  ;; ** detect machine name
  (defvar machine-name)  
  (cond
@@ -225,14 +240,14 @@
     (setq machine-name "unknown")
     )
    )
- 
- 
+
+
  ;; ** suppress "spamy" auto-revert messages
  (setq auto-revert-verbose nil)
- 
+
  ;; ** title (play around -> tribute to emacs)
  (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
- 
+
  ; ** global line number mode on
  (global-display-line-numbers-mode)
  ; ** scroll bar off
@@ -241,21 +256,24 @@
    )
  ;; ** tool bar off
  (tool-bar-mode -1)
- 
+
  ;; ** menu bar off
  (menu-bar-mode -1)
- 
+
  ;; ** highlight corresponding parenthesis
  (show-paren-mode t)
- 
+
  ;; ** rainbow delimiters
 (use-package rainbow-delimiters
   :ensure t)
  (rainbow-delimiters-mode t)
+
+
+;;;;;TTTTTTTT
  
  ;; ** general COLOR THEMES ;;;;;;;;;;;;;
  (color-theme-initialize) ;;; must first initialize (otherwise color-theme-buffer-local --> not working)
- 
+
 (use-package color-theme
   :ensure t)
  (setq color-theme-is-global nil)
@@ -265,21 +283,21 @@
 ;; (use-package zenburn-theme
   ;; :ensure t)
 (load-theme 'zenburn t)
- 
+
  ;; instruction:
  ;; add mode hook with color theme
  ;; Tipp: find out mode name of a buffer with e.g.: (buffer-local-value 'major-mode (get-buffer "*ansi-term*"))
 (use-package color-theme-buffer-local
   :ensure t)
  ;; use the following as templates
- 
+
  ;; ** personal (general) customization of faces (comments light green, etc.)
  ;; (set-face-attribute 'font-lock-comment-face nil :foreground "light green")
  (set-face-attribute 'font-lock-comment-face nil :foreground "green yellow")
  ;; (set-face-attribute 'font-lock-comment-face nil :foreground "color-193")
  (set-face-attribute 'font-lock-keyword-face nil :foreground "SkyBlue1" :weight 'bold)
  (set-face-attribute 'font-lock-string-face nil :foreground "hot pink")
- 
+
  ;; **
  (if color-theme-buffer-local-switch
      (add-hook 'text-mode-hook
@@ -287,30 +305,30 @@
    )
  ;; (add-hook 'after-change-major-mode-hook  --> not working as default color --> produced mess in ansi-term
  ;;      (lambda nil (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))))
- 
- 
+
+
  ;; strange arrow up/down error --> outcommented
  (if color-theme-buffer-local-switch
      (add-hook 'c++-mode-hook
        (lambda nil (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))))
  )
- 
+
  (if color-theme-buffer-local-switch
  (add-hook 'dired-mode-hook
            (lambda nil (color-theme-buffer-local 'color-theme-classic (current-buffer))))
  )
- 
+
  (if color-theme-buffer-local-switch
  (add-hook 'dired-mode-hook
     (lambda nil (color-theme-buffer-local 'color-theme-charcoal-black (current-buffer))))
  )
- 
+
  (defun mydefault-buffer-local-theme () ;; 
     (interactive)
  (color-theme-buffer-local 'color-theme-aalto-light (current-buffer))
  )
  ;; (global-unset-key (kbd "<f10>") 'mydefault-buffer-local-theme) ;; work around because default color was strange in cygwin-emacs-nw --> just press f10 when color is strange
- 
+
  ;;; * evil - load/ general (comes first -> basis for other packages/definitions)
  ;; necessary for evil-collection (before load evil first time):
  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
@@ -325,7 +343,7 @@
    ;;; quirk to allow to move beyond last character of line to evaluate lisp expressions
    (setq evil-move-beyond-eol t)
  )
- 
+
  ;;; evil-collection --> set for certain modes
 (use-package evil-collection
   :ensure t)
@@ -336,22 +354,22 @@
 (use-package key-chord
   :ensure t)
  (key-chord-mode 1)
- 
+
  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
  (key-chord-define evil-visual-state-map "jk" 'evil-normal-state)
  (key-chord-define evil-replace-state-map "jk" 'evil-normal-state)
- 
+
  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
  ;; (key-chord-define evil-visual-state-map "jj" 'evil-normal-state) # this has nasty effect, commented out
  (key-chord-define evil-replace-state-map "jj" 'evil-normal-state)
- 
+
  ;; ** 
  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
  ;; ** search string under visual selection (commonly used also by vimmers) 
 (use-package evil-visualstar
   :ensure t)
- 
+
  ;; quick search replace
  (defun quick-evil-search-replace ()
    (interactive)
@@ -361,7 +379,7 @@
      (lambda () (backward-char (/ 7 2)))
      (evil-ex my-string)))
  )
- 
+
  ;; quickly select pasted region
  (defun evil-select-pasted ()
    "Visually select last pasted text."
@@ -370,7 +388,7 @@
    (evil-visual-char)
    (evil-goto-mark ?\]))
  ;; ( -> mapped to evil leader v)
- 
+
 ;; * (general) evil leader bindings
    (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
    (js/leader-def
@@ -395,15 +413,15 @@
    ":" 'gsyn
    ";" 'gsyn
  )                 
- 
+
 (use-package evil-numbers
   :ensure t)
  (global-set-key (kbd "C-c +") 'evil-numbers/inc-at-pt)
  (global-set-key (kbd "C-c -") 'evil-numbers/dec-at-pt)
- 
+
  ;; * debugger-mode II (evil settings)
  (add-to-list 'evil-normal-state-modes 'debugger-mode)
- 
+
  ;; * drag-stuff (evilized)
  ;; ( this is already a bit "tweaking" of evil mode )
  (define-key evil-normal-state-map (kbd "C-j") 'drag-stuff-down)
@@ -411,14 +429,14 @@
  (define-key evil-normal-state-map (kbd "C-k") 'drag-stuff-up)
  (define-key evil-normal-state-map (kbd "C-h") 'drag-stuff-left)
  (define-key evil-normal-state-map (kbd "C-l") 'drag-stuff-right)
- 
+
 ;; * planet-mode (my org extension)
   (load (concat my_load_path "planet/planet.el"))
 
  ;; ** save git mode default 
   (planet-git-save-turn-on)
 
-         
+      
   ;; ** default initial view (levels)
   (add-hook 'planet-mode-hook
            (lambda ()
@@ -430,14 +448,14 @@
   (add-hook 'org-mode-hook
     (lambda ()
       (define-key org-mode-map "\C-cm" 'org-show-two-levels)))
- 
 
- 
- 
+
+
+
  ;;; * )  my packages ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;-----------------------------------------------------------
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
+
  ;; * gsyn dependency
  (defun gsyn-is-setup ()
    (interactive)
@@ -459,16 +477,16 @@
    (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
    (message (concat "git-synchronization launched ... (executed: " command-string ")"))
    (async-shell-command command-string))
- 
 
- 
+
+
  ;;;+) MELPA packages - make them available (some very good additional package list)
 ;; (add-to-list 'package-archives
 ;;              '("melpa" . "https://melpa.org/packages/"))
  (when (< emacs-major-version 24)
    ;; For important compatibility libraries like cl-lib
    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
- 
+
  ;;; * elisp mode
 (use-package auto-complete
    :ensure t)
@@ -494,35 +512,35 @@
  ;;; *** 
  (evil-define-key 'normal edebug-mode-map (kbd "n") 'edebug-next-mode)
  (evil-define-key 'normal edebug-mode-map (kbd "F10") 'edebug-next-mode)
- 
+
  (evil-define-key 'normal edebug-mode-map (kbd "q") 'top-level)
  (evil-define-key 'normal edebug-mode-map (kbd "F8") 'top-level)
- 
+
  ;;; * bash (=shell-script-mode)
  (add-hook 'shell-script-mode-hook
            (lambda ()
              (auto-complete-mode)
              (rainbow-delimiters-mode t)
              ))
- 
+
  ;;; * c++
  (add-hook 'c++-mode-hook
            (lambda ()
              (auto-complete-mode)
              (rainbow-delimiters-mode t)
              ))
- 
+
  ;;; * python
  (add-hook 'python-mode-hook
            (lambda ()
              (auto-complete-mode)
              (rainbow-delimiters-mode t)
              ))
- 
+
  (autoload 'pylint "pylint")
  (add-hook 'python-mode-hook 'pylint-add-menu-items)
  (add-hook 'python-mode-hook 'pylint-add-key-bindings)
- 
+
  ;;; ** python debug key-bindings
  (defun python-set-break-point-current-line()
    (interactive)
@@ -540,12 +558,12 @@
   :ensure t)
  (define-key python-mode-map
    (kbd "<f12>") 'python-set-break-point-current-line)
- 
- 
+
+
  ;;; * english-german-translator
  (defvar english-german-translator-buffer-name "*english-german-translator*")
- 
- 
+
+
  (defun english-german-translator-init ()
    (interactive)
    "currently: Start eww-buffer with dict.cc in a new buffer."
@@ -554,18 +572,18 @@
    (rename-buffer english-german-translator-buffer-name)
    (english-german-translator-move-point-to-input-field)
    )
- 
+
  (defun get-point-position ()
    (interactive)
    (setq current_pos (point))
    (message current_pos)
    current_pos)
- 
+
  (defun english-german-translator-move-point-to-input-field ()
    (interactive)
    (goto-char 332)
    )
- 
+
  (defun english-german-translator ()
    (interactive)
    ;; initiate if not already exists
@@ -582,27 +600,27 @@
    ;; (switch-to-buffer english-german-translator-buffer-name)
    ;; (english-german-translator-move-point-to-input-field)
    )
- 
+
  ;;; * ipython-calculator (my)
  ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
  (defvar ipython-calculator-buffer-name "*ipython-calculator*")
- 
+
  (defun ipython-calculator-init ()
    "Start a terminal-emulator in a new buffer and run ipython."
    (interactive)
    (setq program "/bin/bash")
- 
+
    (setq term-ansi-buffer-name (concat ipython-calculator-buffer-name))
- 
+
    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
- 
+
    (switch-to-buffer term-ansi-buffer-name)
-   
+
    (set-buffer term-ansi-buffer-name)
    (term-mode)
    (term-char-mode)
    (python-calculator-mode)
- 
+
    ;; Historical baggage.  A call to term-set-escape-char used to not
    ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
    ;; ended up with both C-x and C-c as escape chars.  Who knows what
@@ -612,15 +630,15 @@
      ;; I wanna have find-file on C-x C-f -mm
      ;; your mileage may definitely vary, maybe it's better to put this in your .emacs ...
      (term-set-escape-char ?\C-x))
- 
- 
+
+
    ;; * execute ipython
    (cond ((equal myhost "phone")
           (comint-send-string ipython-calculator-buffer-name "python\n"))
          (t
           (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
- 
- 
+
+
  (defun ipython-calculator ()
    (interactive)
    ;; initiate if not already exists
@@ -630,24 +648,24 @@
    ;; switch to that buffer
    (switch-to-buffer ipython-calculator-buffer-name)
    )
- 
+
 (js/leader-def "a" 'ipython-calculator) 
- 
+
  (defvar python-calculator-mode-map
    (let ((m (make-sparse-keymap))) ;; i think this achieves a "local key binding" for the buffer
      (define-key m (kbd "M-p") 'term-send-up)
      m))
- 
+
  (define-minor-mode python-calculator-mode "this is the documentation."
    :init-value nil
    :lighter " py-calc"
    :keymap python-calculator-mode-map
    :group 'python-calculator
    :global nil)
- 
+
  ;;; * org-mode
  ;; ** prior stuff
- 
+
  (setq org-blank-before-new-entry
        '((heading . nil)
         (plain-list-item . auto)))
@@ -656,22 +674,22 @@
  ;; org ellipsis
  ;; right arrows
  ;; “↝” “⇉” “⇝” “⇢” “⇨” “⇰” “➔” “➙” “➛” “➜” “➝” “➞”
- 
+
  ;; “➟” “➠” “➡” “➥” “➦” “➧” “➨”
- 
+
  ;; “➩” “➪” “➮” “➯” “➱” “➲”
- 
+
  ;; “➳” “➵” “➸” “➺” “➻” “➼” “➽”
- 
+
  ;; arrow heads
  ;; “➢” “➣” “➤” “≪”, “≫”, “«”, “»”
- 
+
  ;; other arrows
  ;; “↞” “↠” “↟” “↡” “↺” “↻”
- 
+
  ;; lightening
  ;; “⚡”
- 
+
  ;; other symbols
  ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 (use-package org
@@ -683,32 +701,32 @@
  ;; (setq org-ellipsis " ⤵")
  ;; ** fix TAB -> org-cycle for android phone
  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
- 
+
  ;; ** redisplay inline images comfy key 
 (js/leader-def "or" 'org-redisplay-inline-images)
- 
+
  ;; ** always redisplay inline images after ctrl-c-ctrl-c
  (advice-add 'org-ctrl-c-ctrl-c :after 'org-redisplay-inline-images)
- 
+
  ;; ** org bullets
  ;; hexagrams
  ;; “✡” “⎈” “✽” “✲” “✱” “✻” “✼” “✽” “✾” “✿” “❀” “❁” “❂” “❃” “❄” “❅” “❆” “❇”
- 
+
  ;; circles
  ;; “○” “☉” “◎” “◉” “○” “◌” “◎” “●” “◦” “◯” “⚪” “⚫” “⚬” “❍” “￮” “⊙” “⊚” “⊛” “∙” “∘”
- 
+
  ;; special circles
  ;; “◐” “◑” “◒” “◓” “◴” “◵” “◶” “◷” “⚆” “⚇” “⚈” “⚉” “♁” “⊖” “⊗” “⊘”
- 
+
  ;; crosses
  ;; “✙” “♱” “♰” “☥” “✞” “✟” “✝” “†” “✠” “✚” “✜” “✛” “✢” “✣” “✤” “✥”
- 
+
  ;; poker sybmols
  ;; “♠” “♣” “♥” “♦” “♤” “♧” “♡” “♢”
- 
+
  ;; yinyang
  ;; “☯” “☰” “☱” “☲” “☳” “☴” “☵” “☶” “☷”
- 
+
  ;; special symbols
  ;; “☀” “♼” “☼” “☾” “☽” “☣” “§” “¶” “‡” “※” “✕” “△” “◇” “▶” “◀” “◈”
 (use-package org-bullets
@@ -732,7 +750,7 @@
      ;; ► • ★ ▸
      )
    )
- 
+
  ;; ** pretty symbols
  (setq-default prettify-symbols-alist '(
   ("#+BEGIN_SRC" . "†")
@@ -744,7 +762,7 @@
   ("->" . "➔")
   ("-->" . "➔")
   )) 
- 
+
  ;; ** pretty tags (todo future) http://blog.lujun9972.win/emacs-document/blog/2020/02/19/beautify-org-mode/index.html 
  ;; (use-package org-pretty-tags
  ;;  :demand t
@@ -761,7 +779,7 @@
  ;; ** disable line-numbers
   (add-hook 'org-mode-hook
             (lambda nil (display-line-numbers-mode -1)))
- 
+
   (add-hook 'org-mode-hook
             (lambda nil
               (org-bullets-mode 1)
@@ -806,7 +824,7 @@
   (interactive)
   (newline)
   )
- 
+
  ;; ** clock in/out settings 
  ;; *** change todo state "CLOCKED IN..." / "", for clocked in headings
  (defvar org-todo-state-on-clock-in-saved)
@@ -817,7 +835,7 @@
             (setq org-todo-state-on-clock-in-saved (org-get-todo-state))
             (org-todo "CLOCKED IN...")
            ))
- 
+
  (add-hook 'org-clock-out-hook
           (lambda ()
             (org-set-todo-state-before-clocked)
@@ -825,37 +843,37 @@
             (message (concat "current todo state: " (org-get-todo-state))) 
             (message (concat "old/new todo state:" org-todo-state-on-clock-in-saved))
            ))
- 
+
  (defun org-set-todo-state-before-clocked ()
    (interactive)
    (org-todo org-todo-state-on-clock-in-saved)
    )
- 
+
  (defun org-get-todo-state ()
    (interactive)
    (setq components (org-heading-components))
    ;; (message (nth 2 components))
    (setq todo-state (nth 2 components))
    todo-state)
- 
+
  (defun org-print-todo-state ()
    (interactive)
    (setq components (org-heading-components))
    (setq todo-state (nth 2 components))
    (message (concat "current todo state: " todo-state))
    )
- 
+
  ;; ** show distribution of clocked time per tag
 (require 'org-table)
 
 (require 'org-clock)
- 
+
  (defun clocktable-by-tag/shift-cell (n)
    (let ((str ""))
      (dotimes (i n)
        (setq str (concat str "| ")))
      str))
- 
+
  (defun clocktable-by-tag/insert-tag (params)
    (let ((tag (plist-get params :tags)))
      (insert "|--\n")
@@ -883,7 +901,7 @@
      (org-table-blank-field)
      (insert (format "*%.2f*" (/ total 60.0)))))
      (org-table-align)))
- 
+
  (defun org-dblock-write:clocktable-by-tag (params)
    (insert "| Tag | Headline | Time (h) |\n")
    (insert "|     |          | <r>  |\n")
@@ -892,13 +910,13 @@
            (setq params (plist-put params :tags tag))
            (clocktable-by-tag/insert-tag params))
          tags)))
- 
+
  (provide 'clocktable-by-tag)
- 
+
  ;; ** links in org-mode
  ;; *** copy url to clipboard and stuff
  ;; --> best way -> just M-x org-toggle-link-display , and copy url with evil "yi]"
- 
+
  ;; ** evaluate code snippets in org
  ;; *** don t confirm every time
  (setq org-confirm-babel-evaluate nil)
@@ -914,7 +932,7 @@
     (shell . t);; (sh . t) does not work (docum. faulty)
     ) 
   )
- 
+
  ;; *** add quick-templates (<s <TAB> / 
  ;; delete all that crap and do my own
  ;; add c++
@@ -949,7 +967,7 @@
  ;; #+END_EXPORT") ("H" "#+HTML: ") ("a" "#+BEGIN_EXPORT ascii
  ;; ?
  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
- 
+
  ;; ** org-mode toggle bold/italic
  (defun org-toggle-quote-region ()
    (interactive)
@@ -963,13 +981,13 @@
    (interactive)
    (my-toggle-marker-around-region "~" "\~"  "~" "\~")
    )
- 
+
  (defun org-toggle-red-region ()
    (interactive)
    (my-toggle-marker-around-region "=" "="  "=" "=")
    )
- 
- 
+
+
  (defun org-toggle-underline-region ()
    (interactive)
    (my-toggle-marker-around-region "_" "_"  "_" "_")
@@ -983,7 +1001,7 @@
 (js/leader-def :keymaps 'org-mode-map "ji" 'org-toggle-italic-region)
 (js/leader-def :keymaps 'org-mode-map "jc" 'org-toggle-code-region)
 (js/leader-def :keymaps 'org-mode-map "ju" 'org-toggle-underline-region)
- 
+
  (defun region-to-string ()
    (interactive)
    (setq region-string (buffer-substring (mark) (point)))
@@ -993,7 +1011,7 @@
    (setq begin (region-beginning))
    (setq end (region-end))
    (setq region_string (buffer-substring (mark) (point)))
- 
+
    ;; if begins and ends with single star --> bold 
    (if (string-match (concat "^" marker-begin-regex ".*" marker-end-regex "$") region_string) ;; org-headings are : '* blabla' or '** blabla' etc.
        (progn 
@@ -1019,9 +1037,9 @@
          )
        )
    )
- 
+
  ;; ** org latex export (settings and tweaks)
- 
+
  ;; *** make plainlists below level always unnumbered
  ;; the "blunt way" redefine function (better later-> use advice or sth)
  (defun org-latex-headline (headline contents info)
@@ -1152,18 +1170,18 @@
  	    ;; regular sectioning format string.
  	    (format section-fmt full-text
  		    (concat headline-label pre-blanks contents))))))))
- 
+
  ;; *** (? check) enable enumerations with a./b./c.
  (setq org-list-allow-alphabetical t)
- 
+
  ;; *** org-ref (--> citation management & pdflatex export)
  (use-package org-ref
     :ensure t)
  ;; *** org export --> has to run bibtex also
  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
- 
+
  (setq org-latex-prefer-user-labels t)
- 
+
  ;; *** my latex pdf export with hooked command from option #+export_pdf_hook (short-cut to f5) 
  ;;   (wrote this for automatic syncing on compilation in first place
  ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
@@ -1173,7 +1191,7 @@
    (interactive)
    ;; export to pdf
    (org-latex-export-to-pdf)
- 
+
    ;; apply my hooked process (syncing)
    (setq export_pdf_hook (org-kwd "EXPORT_PDF_HOOK"))
    (setq filename-base (file-name-base (buffer-file-name)))
@@ -1189,7 +1207,7 @@
    (message (concat "apply export-pdf-hook, executing command: " export_pdf_hook_final " ; output in buffer: *org_export_pdf_hook_process_output*"))
    (async-shell-command export_pdf_hook_final "*org_export_pdf_hook_process_output*")
    )
- 
+
  ;; **** use of 2 helper functions: org-kwds / org-kwd
  ;; (from: http://kitchingroup.cheme.cmu.edu/blog/2013/05/05/Getting-keyword-options-in-org-files/)
  (defun org-kwds ()
@@ -1202,27 +1220,27 @@
  (defun org-kwd (KEYWORD)
    "get the value of a KEYWORD in the form of #+KEYWORD: value"
    (cdr (assoc KEYWORD (org-kwds))))
- 
+
  ;; **** make the output not pop-up
  (add-to-list 'display-buffer-alist
    (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
  ;; **** define the "run-f5" short cut
  (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
- 
+
  ;; ** evil org
 (use-package evil-org
   :ensure t)
  (setq org-M-RET-may-split-line nil)
- 
+
  ;;; ** make tab key work as org-cycle in terminal
  (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
- 
+
  (add-hook 'org-mode-hook
            (lambda ()
              (org-indent-mode)
              (visual-line-mode)))
- 
- 
+
+
  ;; ** paste image from clipboard in org-mode
  (defun org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
    (interactive)
@@ -1240,11 +1258,11 @@
    ;; (insert command_string)
    (org-display-inline-images)
    )
- 
+
  ;; (evil-leader/set-key "ln" 'planet-open-quick-notes) 
  ;; paste image from clipboard
 (js/leader-def :keymaps 'org-mode-map "i" 'org-insert-clipboard-image) 
- 
+
  (defun create-hidden-org-file-folder (&optional filebasename path)
  "in dired -> create org mode file within hidden folder (of same name)
  (we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
@@ -1254,7 +1272,7 @@
     (if (not filebasename)
         (setq filebasename (read-string "Org-file-name (without .org-extension):"))
       )
- 
+
     ;; * path
     (if (not path) ;; default --> put to current path
          (setq path (get-current-path))
@@ -1278,7 +1296,7 @@
          ;; return full file name of org file 
         )
  new-org-file-full-name)
- 
+
  ;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
  (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
     (interactive)
@@ -1293,14 +1311,14 @@
         )
       )
     )
- 
+
  (defun create-symlinks-for-all-hidden-org-file-folders (&optional path)
     (interactive)
     ;; process opt. arg
     (when (not path)
       (setq path (get-current-path))
       )
- 
+
      ;; later restore default-directory (don t know if necessary...)
     (setq original-default-directory default-directory)
     (cd path)
@@ -1325,14 +1343,14 @@
       )
     (cd original-default-directory)
  )
- 
- 
+
+
  (defun delete-all-symbolic-links (&optional path)
    (interactive)
     (when (not path)
       (setq path (get-current-path))
       )
- 
+
      ;; later restore default-directory (don t know if necessary...)
     (setq original-default-directory default-directory)
     (cd path)
@@ -1348,7 +1366,7 @@
       )
     (cd original-default-directory)
     )
- 
+
  (defun create-hidden-org-file-folder-with-symlink (&optional filename)
     (interactive)
     (if (not filename)
@@ -1361,7 +1379,7 @@
     (setq link-name (concat currentpath "/" filename ".org"))
     (make-symbolic-link target-name link-name)
  )
- 
+
  (defun get-current-path ()
    (interactive)
    (cond ( (equal major-mode 'dired-mode)
@@ -1375,13 +1393,13 @@
  	)
     )
   currentpath)
- 
+
  ;; ** default LATEX_HEADER
- 
+
  ;; *** allow bindings to work "#BIND+ ..."
  (setq org-export-allow-bind-keywords t)
  ;; (not code, just doc here)
- 
+
  ;; #+title: <title>
  ;; #
  ;; # options:
@@ -1394,28 +1412,28 @@
  ;; #+LATEX_HEADER: \renewcommand{\labelitemii}{$\bullet$}
  ;; #+LATEX_HEADER: \renewcommand{\labelitemiii}{$\bullet$}
  ;; #+LATEX_HEADER: \renewcommand{\labelitemiv}{$\bullet$}
- 
+
  ;; #+BIND: org-latex-image-default-width ".98\\linewidth"
  ;; # or
  ;; #+BIND: org-latex-image-default-width "9cm"
- 
+
  ;; # other export language (mind "for technical reasons" has to be first english than ngerman, otherwise english, whyever.. latex-"bug")
  ;; #+LATEX_HEADER: \usepackage[english, ngerman]{babel}
- 
- 
+
+
  ;; ** make sure emacs visits the target of a link (otherwise currentpath is wrong -> problem with pasting images)
  (setq find-file-visit-truename t)
- 
+
  ;; org-mode inline images appearance
  (setq org-image-actual-width 300) ;; --> makes images more readable, for closer look, just open in image viewer
- 
+
  ;; ** org mode startup appearance
  ;; *** org mode pretty entities (arrows and stuff)
  ;; (setq org-pretty-entities t)
  (setq org-pretty-entities nil)
  ;; *** show inline images 
  (setq org-startup-with-inline-images t)
- 
+
  ;; ** emphasis markers -> outcommented -> decided to not mess around with that, since this belongs to org-mode convention!
  ;; --> need another solution to highlight important text with background (red/green/etc.) -> todo
  ;; (setq org-hide-emphasis-markers t)                            
@@ -1437,7 +1455,7 @@
  ;; (:strike-through t))
  ;; )))
  ;; ( org-set-emph-re) 
- 
+
  ;; ** add some new labels
  (setq org-todo-keywords
        '((sequence
@@ -1456,7 +1474,7 @@
           "WAITING"
           "TODO"
           )))
- 
+
    (setq org-todo-keyword-faces
      '(("PROJ" :background "blue" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
        ("TODO" :background "red1" :foreground "white" :weight bold :box (:line-width 2 :style released-button))
@@ -1478,7 +1496,7 @@
        ("BESTCHOICE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("ANSWERED" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
        ("CANCELED" :background "grey" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
- 
+
  ;; evil org-mode
  ;; (evil-leader/set-key-for-mode 'org-mode "l" 'org-preview-latex-fragment)
  ;; (evil-leader/set-key "l" 'org-preview-latex-fragment) 
@@ -1492,15 +1510,15 @@
  (set-face-attribute 'org-level-2 nil :foreground "#DCDCCC" :weight 'normal)
  (set-face-attribute 'org-level-3 nil :foreground "#DCDCCC" :weight 'normal)
  (set-face-attribute 'org-level-4 nil :foreground "#DCDCCC")
- 
+
  ;; (set-face-attribute 'org-level-1 nil :foreground "color-141" :weight 'bold)
  ;; (set-face-attribute 'org-level-2 nil :foreground "color-105" :weight 'bold)
  ;; (set-face-attribute 'org-level-3 nil :foreground "color-147" :weight 'bold)
- 
+
  (set-face-attribute 'org-link nil :foreground "#5fffff")
- 
- 
- 
+
+
+
  ;; ** basic behaviour keybindings (implementation via "literal-key-funs)
  ;; comment on concept:
  ;; org has organized "key binding behavior with functions like org-return" so the keys are doing different stuff in different contexts (heading/item/table) . since i m using evil, this "layer" would have to be replaced completely by my own layer (functions) for each mode: myorgevil-insert-return/ myorgevil-normal-return/ myorgevil-visual-return, with this logic.
@@ -1523,7 +1541,7 @@
 	(t
 	;; (org-return))))
 	(org-meta-return)))) ;; i prefer this -> open new org file and "enter" -> pop new heading -> "p" paste sth
- 
+
  ;; **** C-l/L (demote)
  (evil-define-key 'normal org-mode-map (kbd "C-l") 'myorgevil-normal-C-l)
  (defun myorgevil-normal-C-l ()
@@ -1548,7 +1566,7 @@
     ;; "fallback"
     (t
      (org-shiftmetaright))))
- 
+
  ;; **** C-h/H (promote)
  (evil-define-key 'normal org-mode-map (kbd "C-h") 'myorgevil-normal-C-h)
  (defun myorgevil-normal-C-h ()
@@ -1573,7 +1591,7 @@
     ;; "fallback"
     (t
      (org-shiftmetaleft))))
- 
+
  ;; **** M-RET
  (evil-define-key 'normal org-mode-map (kbd "M-RET") 'myorgevil-normal-M-RET)
  (defun myorgevil-normal-M-RET ()
@@ -1611,8 +1629,8 @@
     (t
      (org-return))
    ))
- 
- 
+
+
  ;; **** C-l (demote)
  (evil-define-key 'insert org-mode-map (kbd "C-l") 'myorgevil-normal-C-l)
  (defun myorgevil-insert-C-l ()
@@ -1623,15 +1641,15 @@
  (defun myorgevil-insert-C-h ()
    (interactive)
    (myorgevil-normal-C-h))
- 
- 
- 
+
+
+
  (defun myorg-meta-return-enter-insert-state ()
    (interactive)
    (org-meta-return)
    (evil-insert-state)
    )
- 
+
  ;; ** copy/paste - behavior
  (evil-define-key 'insert org-mode-map (kbd "C-p") 'evil-paste-after)
  ;; ** basic navigation, consistent evil
@@ -1640,38 +1658,38 @@
  (evil-define-key 'normal org-mode-map (kbd "H") 'org-shiftleft)
  (evil-define-key 'normal org-mode-map (kbd "C-K") 'org-shiftup)
  (evil-define-key 'normal org-mode-map (kbd "C-J") 'org-shiftdown) ;; leave "J" for joining lines
- 
+
  ;;exception: M-h/j/k/l are reserved for window-management --> map to C-h/j/k/l
  (evil-define-key 'normal org-mode-map (kbd "C-l") 'org-metaright)
  (evil-define-key 'normal org-mode-map (kbd "C-h") 'org-metaleft)
  (evil-define-key 'normal org-mode-map (kbd "C-k") 'org-metaup)
  (evil-define-key 'normal org-mode-map (kbd "C-j") 'org-metadown)
- 
+
  (evil-define-key 'insert org-mode-map (kbd "C-l") 'org-metaright)
  (evil-define-key 'insert org-mode-map (kbd "C-h") 'org-metaleft)
  (evil-define-key 'insert org-mode-map (kbd "C-k") 'org-metaup)
  (evil-define-key 'insert org-mode-map (kbd "C-j") 'org-metadown)
- 
+
  ;; (evil-define-key 'normal org-mode-map (kbd "left") 'dummy-message)
  (defun dummy-message ()
    (interactive)
    (message "this is a message from dummy-message")
    )
- 
+
  (evil-define-key 'normal org-mode-map (kbd "C-l") 'org-shiftmetaright)
  (evil-define-key 'normal org-mode-map (kbd "C-h") 'org-shiftmetaleft)
  (evil-define-key 'normal org-mode-map (kbd "M-K") 'org-shiftmetaup)
  (evil-define-key 'normal org-mode-map (kbd "M-J") 'org-shiftmetadown)
- 
+
 (js/leader-def :keymaps 'org-mode-map "*" 'org-toggle-heading)
 (js/leader-def :keymaps 'org-mode-map "8" 'org-toggle-heading) ;; lazy, 8 for *
- 
+
  ;; new emphasis-markers
  (setq org-hide-emphasis-markers t)
  (add-to-list 'org-emphasis-alist
               '("^" (:foreground "red")
                 ))
- 
+
  ;; * outshine mode (org-mode outlining in code-files)
 (use-package org
   :ensure t)
@@ -1715,7 +1733,7 @@
  ;; C-c L 	outline-show-more
  ;; C-c C-< 	outline-promote
  ;; C-c C-> 	outline-demote
- 
+
  (defun outshine-calc-outline-regexp ()
    ;; FIXME: Rename function.
    "Return the outline regexp for the current mode."
@@ -1735,8 +1753,8 @@
    ;; ** TODOS
  ;; *** DONE [outshine-cycle does it] cycling bug -> children only first
  ;; *** DONE allow preceding whitespaces / allow variable nr of comment-chars (not by default), e.g. "### ** heading", at the moment he needs "# ** header" to work fully
- 
- 
+
+
  ;; *** [need to make own lowlevel fun regexp insert etc.] make heading of comment -> SPC-8
  ;; *** DONE better colors
  ;;    i d like to keep regular code color, just add a little "sth", prepend and format the leading stars rather, or not at all. maybe just make code bold.
@@ -1753,8 +1771,8 @@
  ;;       (use-package outshine
  ;; 	:quelpa (outshine :fetcher github :repo "alphapapa/outshine"))
  ;;       )))
- 
- 
+
+
  ;; ** bindings (-> same as my org-mode workflow)
  ;; *** demote/promote C-h/C-l
 (use-package org
@@ -1769,7 +1787,7 @@
 (js/leader-def "o4" (lambda () (interactive) (outshine-cycle-buffer 4)))
 (js/leader-def "o5" (lambda () (interactive) (outshine-cycle-buffer 5)))
 (js/leader-def "o6" (lambda () (interactive) (outshine-cycle-buffer 6)))
- 
+
  ;; *** tab -> outshine-cycle
  (evil-define-minor-mode-key 'normal 'outshine-mode (kbd "TAB") 'outshine-cycle)
  ;; ** appearance
@@ -1778,7 +1796,7 @@
  (set-face-attribute 'outshine-level-2 nil :foreground "color-105" :weight 'bold)
  (set-face-attribute 'outshine-level-3 nil :foreground "color-147" :weight 'bold)
  ;; color-176
- 
+
   ;; color-160
   ;; color-161
   ;; color-162
@@ -1797,29 +1815,29 @@
   ;; color-175
   ;; color-176
   ;; color-177
- 
- 
- 
- 
- 
+
+
+
+
+
  ;; (set-face-attribute 'outshine-level-4 nil :weight 'bold)
  ;; (set-face-attribute 'outshine-level-5 nil :weight 'bold)
  ;; * term / terminal / ansi-term
  ;; ** use my own term version: stickyterm (slightly modified ansi-term)
 (use-package term
   :ensure t) ;; stickyterm builds on /requires term (variables etc. -> load term before
- 
+
  (load "stickyterm.el")
  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
  (js/leader-def "7" 'stickyterm-noninteractive)
- 
+
 (use-package term
   :ensure t)
  ;; (if color-theme-buffer-local-switch
  (add-hook 'term-mode-hook
             (lambda nil (color-theme-buffer-local 'color-theme-dark-laptop (current-buffer))))
   ;; )
- 
+
  (add-hook 'term-mode-hook
             (lambda nil (display-line-numbers-mode -1)))
  ;; *** Alt-p --> map to arrow-up always 
@@ -1827,20 +1845,20 @@
  ;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
   (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
   (evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
- 
- 
+
+
  ;; *** short cut for term-paste
   (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
   (evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
   (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
   (evil-define-key 'insert term-raw-map (kbd "C-p") 'term-paste)
- 
- 
- 
+
+
+
  ;; *** switch only between (term char with emacs-state) and (term line with normal-state)
   (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
   (evil-define-key 'normal term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state) ;; this is just to not get undesired error messages when repeating
- 
+
 (js/leader-def :keymaps 'term-mode-map "k" 'term-switch-char-mode-emacs-state) 
  ;; **** previous/next buffer key binding, set also for term's
  (evil-define-key 'emacs term-raw-map (kbd "M-y") 'previous-buffer)
@@ -1849,13 +1867,13 @@
  (evil-define-key 'normal term-raw-map (kbd "M-o") 'next-buffer)
  (evil-define-key 'visual term-raw-map (kbd "M-y") 'previous-buffer)
  (evil-define-key 'visual term-raw-map (kbd "M-o") 'next-buffer)
- 
+
  (defun term-switch-line-mode-normal-state()
    (interactive)
    (evil-normal-state)
    (term-line-mode)
    )
- 
+
  (defun term-switch-char-mode-emacs-state()
    (interactive)
    (evil-emacs-state)
@@ -1868,7 +1886,7 @@
   (evil-define-key 'normal term-raw-map (kbd "k") 'term-send-up)
   (evil-define-key 'normal term-raw-map (kbd "j") 'term-send-down)
   (evil-define-key 'normal term-raw-map (kbd "x") 'term-send-del)
- 
+
  ;; *** term color theme
  ;; (how did I get it from customization? -> customized in menue, then copied from custem.el ("custom-set-faces ...") and formatted 
  (set-face-attribute 'term nil :background "black" :foreground "white")
@@ -1877,15 +1895,15 @@
  (set-face-attribute 'term-color-white nil :background "black" :foreground "white")
  (set-face-attribute 'term-color-blue nil :background "#5fafd7" :foreground "#5fafd7")
  (set-face-attribute 'term-color-green nil :background "#a1db00" :foreground "#a1db00")
- 
- 
+
+
  ;; **** make initial state for term emacs-state
  ;; this did not work:
   ;; (add-hook 'term-mode-hook
             ;; (lambda nil (evil-emacs-state)))
  ;; this did work:
  (evil-set-initial-state 'term-mode 'emacs)
- 
+
  ;; *** tramp connection to hlrn (fast command)
  ;; **** still have problem that it hangs on "waiting for prompts from remote shell..." 
  ;; -> could not solve it, tried like this
@@ -1894,36 +1912,36 @@
  ;; (setq exec-path-from-shell nil)
  (load "hlrn_tramp_connect.el")
  ;; --> includes hlrn_tramp_home / hlrn_tramp_work1 / hlrn_tramp_work2
- 
- 
+
+
  ;;; +) save minibuffer history for future sessions
  (savehist-mode 1)
- 
+
  ;; +) move buffers
  (load "buffer-move.el")
  ;; To use it, simply put a (require 'buffer-move) in your ~/.emacs and
 (use-package buffer-move
   :ensure t)
  ;; define some keybindings. For example, i use :
- 
+
  ;; (global-set-key (kbd "<C-S-up>")     'buf-move-up)
  ;; (global-set-key (kbd "<C-S-down>")   'buf-move-down)
  ;; (global-set-key (kbd "<C-S-left>")   'buf-move-left)
  ;; (global-set-key (kbd "<C-S-right>")  'buf-move-right)
- 
+
  ;; +) windows stuff
- 
+
  ;;  -) undo-/ redo window configuration
  (winner-mode 1)
  ;;  -) resize windows
- 
+
  ;; VARI
  (global-set-key (kbd "<C-S-up>")     'enlarge-window)
  (global-set-key (kbd "<C-S-down>")   'shrink-window)
  (global-set-key (kbd "<C-S-left>")   'shrink-window-horizontally)
  (global-set-key (kbd "<C-S-right>")  'enlarge-window-horizontally)
- 
- 
+
+
  (defvar iresize-mode-map
    (let ((m (make-sparse-keymap)))
      (define-key m (kbd "C-p") 'enlarge-window)
@@ -1936,20 +1954,20 @@
      (define-key m (kbd "<right>") 'enlarge-window-horizontally)
      (define-key m (kbd "<left>") 'shrink-window-horizontally)     
      m))
- 
+
  (define-minor-mode iresize-mode "this is the documentation of iresize-mode. blablah."
    :init-value nil
    :lighter " IResize"
    :keymap iresize-mode-map
    :group 'iresize
    :global t)
- 
+
  ;; iresize/evil
  ;; (evil-define-key 'normal iresize-mode-map (kbd "k") 'enlarge-window)
  ;; (evil-define-key 'normal iresize-mode-map (kbd "j") 'shrink-window)
  ;; (evil-define-key 'normal iresize-mode-map (kbd "l") 'enlarge-window-horizontally)
  ;; (vil-define-key 'normal iresize-mode-map (kbd "h") 'shrink-window-horizontally)
- 
+
  (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "K") 'enlarge-window)
  (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "J") 'shrink-window)
  (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "L") 'enlarge-window-horizontally)
@@ -1959,7 +1977,7 @@
  (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "j") 'shrink-window-4)
  (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "l") 'enlarge-window-horizontally-4)
  (evil-define-minor-mode-key 'normal 'iresize-mode (kbd "h") 'shrink-window-horizontally-4)
- 
+
  (defun shrink-window-horizontally-2 ()
    (interactive)
    (shrink-window-horizontally 2)
@@ -1976,7 +1994,7 @@
    (interactive)
    (enlarge-window 2)
    )
- 
+
  (defun shrink-window-horizontally-3 ()
    (interactive)
    (shrink-window-horizontally 3)
@@ -1993,7 +2011,7 @@
    (interactive)
    (enlarge-window 3)
    )
- 
+
  (defun shrink-window-horizontally-4 ()
    (interactive)
    (shrink-window-horizontally 4)
@@ -2010,62 +2028,62 @@
    (interactive)
    (enlarge-window 4)
    )
- 
+
  (provide 'iresize)
- 
+
  ;;  -) create new big window (my-split- ... functions)
  (defun my-split-root-window (size direction)
    (split-window (frame-root-window)
                  (and size (prefix-numeric-value size))
                  direction))
- 
+
  (defun my-split-root-window-below (&optional size)
    (interactive "P")
    (my-split-root-window size 'below))
- 
+
  (defun my-split-root-window-above (&optional size)
    (interactive "P")
    (my-split-root-window size 'above))
- 
+
  (defun my-split-root-window-right (&optional size)
    (interactive "P")
    (my-split-root-window size 'right))
- 
+
  (defun my-split-root-window-left (&optional size)
    (interactive "P")
    (my-split-root-window size 'left))
- 
+
  ;;;
  ;;(require 'ivy)
  ;;(load "recent_dirs.el")
- 
- 
- 
+
+
+
  ;; +) copy under linux ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq x-select-enable-clipboard t)
  ;(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
- 
+
  ;; +) keyboard
 ;; (require 'iso-transl)
  ;; US-International auf Linux, sonst funzen dead keys nicht, fur quotes etc.
- 
- 
+
+
  ;;+) AUTOMATIC PACKAGE INSTALLATION ;; LIST ALL PACKAGES HERE ;;;
  ;-------------------------------------------------------------------
  ;;;;;;; DID NOT WORK ... ;;;;;;;;;;;;;;;;;;;;;
  ;; list the packages you want
- 
- 
- 
- 
- 
+
+
+
+
+
  ;; * mode line
  ;; ** todos
  ;; *** eliminate infos (or move to tabbar)
  ;; **** major mode string -> eliminate 
  ;; **** git branch -> eliminate
  ;; **** effort/clocking -> move to tabbar
- 
+
      ;; (setq mode-line-format
      ;;       (list
      ;;        ;; value of `mode-name'
@@ -2092,50 +2110,50 @@
  ;;    :ensure   t
  ;;    :init  (doom-modeline-mode  1 ))
  ;; quick and dirty own custom -> circle (also in terminal mode)
- 
+
  ;; *** don t show UTF-8/bla
  (setq doom-modeline-buffer-encoding nil)
  ;; (setq doom-modeline-buffer-encoding t)
- 
+
  (when (not (display-graphic-p))
  (setq evil-normal-state-tag "●")
  (setq evil-insert-state-tag "●")
  (setq evil-visual-state-tag "●")
  (setq evil-motion-state-tag "●")
  (setq evil-emacs-state-tag "●"))
- 
+
  ;; my colors for normal/visual/etc evil states
  ;; more obtrusive:
  ;; (set-face-attribute 'doom-modeline-evil-normal-state nil :foreground "lawn green")
  ;; (set-face-attribute 'doom-modeline-evil-visual-state nil :foreground "dark orange")
  ;; (set-face-attribute 'doom-modeline-evil-insert-state nil :foreground "dodger blue")
- 
+
  ;; less obtrusive:
  (set-face-attribute 'doom-modeline-evil-normal-state nil :foreground "green yellow")
  ;; (set-face-attribute 'doom-modeline-evil-normal-state nil :foreground "lime green")
  (set-face-attribute 'doom-modeline-evil-visual-state nil :foreground "gold")
  (set-face-attribute 'doom-modeline-evil-insert-state nil :foreground "turquoise1")
- 
- 
+
+
  (set-face-attribute 'mode-line-inactive nil :background "#444444")
  (set-face-attribute 'mode-line-inactive nil :foreground "#626262")
- 
+
  ;; ** settings from doom-modeline homepage:
  ;; ;; How tall the mode-line should be. It's only respected in GUI.
  ;; ;; If the actual char height is larger, it respects the actual height.
  ;; (setq doom-modeline-height 25)
  (setq doom-modeline-height 0) ;; -> always minimal height
- 
+
  ;; ;; How wide the mode-line bar should be. It's only respected in GUI.
  ;; (setq doom-modeline-bar-width 4)
- 
+
  ;; ;; Whether to use hud instead of default bar. It's only respected in GUI.
  ;; (defcustom doom-modeline-hud nil)
- 
+
  ;; ;; The limit of the window width.
  ;; ;; If `window-width' is smaller than the limit, some information won't be displayed.
  ;; (setq doom-modeline-window-width-limit fill-column)
- 
+
  ;; ;; How to detect the project root.
  ;; ;; The default priority of detection is `ffip' > `projectile' > `project'.
  ;; ;; nil means to use `default-directory'.
@@ -2144,7 +2162,7 @@
  ;; ;; to hanle sub-projects.
  ;; ;; You can specify one if you encounter the issue.
  ;; (setq doom-modeline-project-detection 'project)
- 
+
  ;; ;; Determines the style used by `doom-modeline-buffer-file-name'.
  ;; ;;
  ;; ;; Given ~/Projects/FOSS/emacs/lisp/comint.el
@@ -2165,99 +2183,99 @@
  ;; ;; with tramp, please try `file-name' style.
  ;; ;; Please refer to https://github.com/bbatsov/projectile/issues/657.
  ;; (setq doom-modeline-buffer-file-name-style 'auto)
- 
+
  ;; ;; Whether display icons in the mode-line.
  ;; ;; While using the server mode in GUI, should set the value explicitly.
  ;; (setq doom-modeline-icon (display-graphic-p))
- 
+
  ;; ;; Whether display the icon for `major-mode'. It respects `doom-modeline-icon'.
  ;; (setq doom-modeline-major-mode-icon t)
- 
+
  ;; ;; Whether display the colorful icon for `major-mode'.
  ;; ;; It respects `all-the-icons-color-icons'.
  ;; (setq doom-modeline-major-mode-color-icon t)
- 
+
  ;; ;; Whether display the icon for the buffer state. It respects `doom-modeline-icon'.
  ;; (setq doom-modeline-buffer-state-icon t)
- 
+
  ;; ;; Whether display the modification icon for the buffer.
  ;; ;; It respects `doom-modeline-icon' and `doom-modeline-buffer-state-icon'.
  ;; (setq doom-modeline-buffer-modification-icon t)
- 
+
  ;; ;; Whether to use unicode as a fallback (instead of ASCII) when not using icons.
  ;; (setq doom-modeline-unicode-fallback nil)
- 
+
  ;; ;; Whether display the minor modes in the mode-line.
  ;; (setq doom-modeline-minor-modes nil)
- 
+
  ;; ;; If non-nil, a word count will be added to the selection-info modeline segment.
  ;; (setq doom-modeline-enable-word-count nil)
- 
+
  ;; ;; Major modes in which to display word count continuously.
  ;; ;; Also applies to any derived modes. Respects `doom-modeline-enable-word-count'.
  ;; ;; If it brings the sluggish issue, disable `doom-modeline-enable-word-count' or
  ;; ;; remove the modes from `doom-modeline-continuous-word-count-modes'.
  ;; (setq doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
- 
+
  ;; ;; Whether display the buffer encoding.
  ;; (setq doom-modeline-buffer-encoding t)
- 
+
  ;; ;; Whether display the indentation information.
  ;; (setq doom-modeline-indent-info nil)
- 
+
  ;; ;; If non-nil, only display one number for checker information if applicable.
  ;; (setq doom-modeline-checker-simple-format t)
- 
+
  ;; ;; The maximum number displayed for notifications.
  ;; (setq doom-modeline-number-limit 99)
- 
+
  ;; ;; The maximum displayed length of the branch name of version control.
  ;; (setq doom-modeline-vcs-max-length 12)
- 
+
  ;; ;; Whether display the workspace name. Non-nil to display in the mode-line.
  ;; (setq doom-modeline-workspace-name t)
  ;; (setq doom-modeline-workspace-name nil)
- 
+
  ;; ;; Whether display the perspective name. Non-nil to display in the mode-line.
  ;; (setq doom-modeline-persp-name t)
- 
+
  ;; ;; If non nil the default perspective name is displayed in the mode-line.
  ;; (setq doom-modeline-display-default-persp-name nil)
- 
+
  ;; ;; If non nil the perspective name is displayed alongside a folder icon.
  ;; (setq doom-modeline-persp-icon t)
- 
+
  ;; ;; Whether display the `lsp' state. Non-nil to display in the mode-line.
  ;; (setq doom-modeline-lsp t)
- 
+
  ;; ;; Whether display the GitHub notifications. It requires `ghub' package.
  ;; (setq doom-modeline-github nil)
- 
+
  ;; ;; The interval of checking GitHub.
  ;; (setq doom-modeline-github-interval (* 30 60))
- 
+
  ;; ;; Whether display the modal state icon.
  ;; ;; Including `evil', `overwrite', `god', `ryo' and `xah-fly-keys', etc.
  ;; (setq doom-modeline-modal-icon t)
- 
+
  ;; ;; Whether display the mu4e notifications. It requires `mu4e-alert' package.
  ;; (setq doom-modeline-mu4e nil)
- 
+
  ;; ;; Whether display the gnus notifications.
  ;; (setq doom-modeline-gnus t)
- 
+
  ;; ;; Wheter gnus should automatically be updated and how often (set to 0 or smaller than 0 to disable)
  ;; (setq doom-modeline-gnus-timer 2)
- 
+
  ;; ;; Wheter groups should be excludede when gnus automatically being updated.
  ;; (setq doom-modeline-gnus-excluded-groups '("dummy.group"))
- 
+
  ;; ;; Whether display the IRC notifications. It requires `circe' or `erc' package.
  ;; (setq doom-modeline-irc t)
- 
+
  ;; ;; Function to stylize the irc buffer names.
  ;; (setq doom-modeline-irc-stylize 'identity)
- 
+
  ;; ;; Whether display the environment version.
  ;; (setq doom-modeline-env-version t)
  ;; ;; Or for individual languages
@@ -2267,7 +2285,7 @@
  ;; (setq doom-modeline-env-enable-go t)
  ;; (setq doom-modeline-env-enable-elixir t)
  ;; (setq doom-modeline-env-enable-rust t)
- 
+
  ;; ;; Change the executables to use for the language version string
  ;; (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
  ;; (setq doom-modeline-env-ruby-executable "ruby")
@@ -2275,17 +2293,17 @@
  ;; (setq doom-modeline-env-go-executable "go")
  ;; (setq doom-modeline-env-elixir-executable "iex")
  ;; (setq doom-modeline-env-rust-executable "rustc")
- 
+
  ;; ;; What to display as the version while a new one is being loaded
  ;; (setq doom-modeline-env-load-string "...")
- 
+
  ;; ;; Hooks that run before/after the modeline version string is updated
  ;; (setq doom-modeline-before-update-env-hook nil)
  ;; (setq doom-modeline-after-update-env-hook nil)
- 
- 
- 
- 
+
+
+
+
  ;;; * WINDOW / BUFFER NAVIGATION STUFF
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;;; ** copy/paste path between buffers (terminal/dired)
@@ -2296,27 +2314,27 @@
 (require 'dired)
 
  (define-key dired-mode-map (kbd "<f1>") 'copy-current-path) 
- 
+
  (global-set-key (kbd "<f2>") 'change-dir-from-clipboard)
  (define-key dired-mode-map (kbd "<f2>") 'change-dir-from-clipboard)
- 
+
  ;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
  (js/leader-def "y" 'copy-current-path) ;; analogouns to y = vim yank
  (js/leader-def "p" 'change-dir-from-clipboard) ;; analogouns to p = vim yank
- 
+
  ;; copy current filename (e.g. execute in matlab command window)
  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
- 
+
  ;;; ** avy/ace jump 
 (use-package avy
   :ensure t)
  (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
  (js/leader-def "m" 'avy-goto-char) 
- 
-                 
+
+              
  (setq dired-recursive-copies 'always)
  (setq dired-dwim-target t) ;; do what i mean --> automatic "inteligent" copy location etc.
- 
+
  ;;; * ) quickly move buffer to another window
  (load "quickly-move-buffer-to-other-window.el")
  ;; copy current path key bindings
@@ -2324,20 +2342,20 @@
  (global-set-key (kbd "M-u") 'get-this-buffer-to-move)
 (require 'dired)
  (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move) 
- 
+
  (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
  (global-set-key (kbd "M-i") 'switch-to-buffer-to-move)
  (define-key dired-mode-map (kbd "<f4>") 'switch-to-buffer-to-move) 
- 
- 
+
+
  ;; .) disable the "nerviges/sinnloses" automatic copy-path of other dired buffer (especially when renaming)
  ;;    (this was suppose to "help" when performing copy / rename etc. operations in mini-buffer, so you would not have to type the location manually but get some "intelligent guess" from clipboard, BUT:
  ;;    this is obsolete with dired-ranger --> much better copy/paste workflow)
  (setq dired-dwim-target nil)
- 
- 
+
+
  ;;; * dired
- 
+
  ;; ** hide details by default
  (add-hook 'dired-mode-hook
            (lambda ()
@@ -2348,8 +2366,8 @@
 ;; ** show icons by default
  ;; (if (not (display-graphic-p))
  ;;     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
- 
- 
+
+
  ;; ** dired omit files
 (require 'dired-x)
    (defun dired-dotfiles-toggle ()
@@ -2366,14 +2384,14 @@
                 (set (make-local-variable 'dired-dotfiles-show-p) t)))))
  ;; ** add option to list directories first
  ;;(setq dired-listing-switches "-aBhl  --group-directories-first")
- 
+
  ;; ** open in dired with external applications --> see '* open with external applications' (below)
- 
+
  ;; ;;; * ) dired "options" (minor-modes)
  ;; ;;;--------------------------------------------
  ;; ;;    .) open recent directories
  ;; (global-set-key (kbd "C-x C-d") 'dired-recent-dirs-ivy-bjm) ;; see definition recent_dirs.el
- 
+
  ;; ** create empty file ( = bash's touch)
  (defun dired-create-new-empty-file ()
     (interactive)
@@ -2381,7 +2399,7 @@
     (setq filename (read-string "file-name: "))
     (setq file-full-name (concat  (dired-current-directory) "/" filename))
     (with-temp-buffer (write-file file-full-name)))
- 
+
  (defun dired-create-new-empty-file-and-visit ()
     (interactive)
     ;; create the hidden (dotted) folder with same name of org file
@@ -2389,10 +2407,10 @@
     (setq file-full-name (concat  (dired-current-directory) "/" filename))
     (with-temp-buffer (write-file file-full-name))
     (find-file file-full-name))
- 
+
  (js/leader-def "nn" 'dired-create-new-empty-file)
  (js/leader-def "nv" 'dired-create-new-empty-file-and-visit)
- 
+
  ;; * helm-rg
 (use-package helm-rg
   :ensure t)
@@ -2406,8 +2424,8 @@
  ;; ;;;   .) reuse buffer when clicking on directory
  ;; (diredp-toggle-find-file-reuse-dir 1)
  ;; (define-key dired-mode-map (kbd "<mouse-2>") 'diredp-mouse-find-file) 
- 
- 
+
+
  ;; ;;   .) toggle sudo-rights
  ;; (require 'dired-toggle-sudo)
  ;; (define-key dired-mode-map (kbd "C-c C-s") 'dired-toggle-sudo)
@@ -2416,7 +2434,7 @@
  ;;     ;; Allow to use: /sudo:user@host:/path/to/file
  ;;     (add-to-list 'tramp-default-proxies-alist
  ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
- 
+
  ;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
  (defvar home-dir (substitute-in-file-name "$HOME"))
  (defun dired-go-home ()
@@ -2427,28 +2445,28 @@
  (defun dired-go-temp ()
    (interactive)
    (dired temp-dir))
- 
+
  (defun dired-go-work ()
    (interactive)
    (dired (substitute-in-file-name "$WORK"))
    )
- 
+
  (defun dired-go-fast ()
    (interactive)
    (dired (substitute-in-file-name "$FAST"))
    )
- 
+
  (defvar downloads-dir)
  (cond
   ((equal myhost "phone")
    (setq downloads-dir "/storage/emulated/0/Download/"))
   ((equal myhost "laptop")
    (setq downloads-dir (concat home-dir "/Downloads"))))
- 
+
  (defun dired-go-downloads ()
    (interactive)
    (dired downloads-dir))
- 
+
  (js/leader-def "hh" 'dired-go-home)
  (js/leader-def "ht" 'dired-go-temp)
  (js/leader-def "hw" 'dired-go-work)
@@ -2457,53 +2475,53 @@
  (defun dired-go-mucke ()
    (interactive)
    (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
-   
+
  (js/leader-def "hm" 'dired-go-mucke)
  (js/leader-def "hb" 'helm-bookmarks)
- 
- 
+
+
  ;;    .) auto revert dired default
  (add-hook 'dired-mode-hook 'auto-revert-mode)
- 
+
  ;;    .) don't confirm deletion on every
        (setq dired-recursive-deletes 'always)
- 
+
  ;; ;;;   .) add icons
  ;; ;;(require 'dired-icon)
  ;; ;;(add-hook 'dired-mode-hook 'dired-icon-mode)
- 
- 
+
+
  ;; ;; go up directory with backspace
  (define-key dired-mode-map (kbd "<DEL>") 'dired-up-directory)
 ;;
- 
+
  ;; ;; quickly choose files by letters
- 
+
  ;; dired-narrow was not so handy.. this was not soo effective...
  ;; todo -> better solution (maybe use / ? evil like to simply search)
  ;; (require 'dired-narrow)
  ;; (define-key dired-mode-map (kbd "<SPC>") 'dired-narrow)
- 
- 
+
+
  ;; ;;; dired ranger key's - nicely copy/paste files/dirs
 (use-package dired-ranger
   :ensure t)
   (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
   (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
   (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
- 
- 
+
+
  ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
  (defun dired-go-current-buffer ()
     (interactive)
         (dired default-directory)
    )
- 
+
  ;;; evil dired - (results in mixture of evil and dired, evil: gg,G,/,?,yy,v  , dired, s,m,W,X,Y, etc.)
   (evil-define-key 'normal dired-mode-map (kbd "W") 'dired-ranger-copy)
   (evil-define-key 'normal dired-mode-map (kbd "X") 'dired-ranger-move)
   (evil-define-key 'normal dired-mode-map (kbd "Y") 'dired-ranger-paste)
- 
+
    (evil-define-key 'normal dired-mode-map (kbd "<DEL>") 'dired-up-directory)
    ;; (evil-define-key 'normal dired-mode-map "l" 'dired-find-alternate-file)
   ;; (evil-define-key 'normal dired-mode-map "o" 'dired-sort-toggle-or-edit)
@@ -2517,16 +2535,16 @@
    (evil-define-key 'normal dired-mode-map "n" 'evil-search-next)
    (evil-define-key 'normal dired-mode-map "N" 'evil-search-previous)
    (evil-define-key 'normal dired-mode-map "q" 'kill-this-buffer)
- 
- 
+
+
  ;; ** )  by hitting enter -> exit narrow-mode and enter file/dir
  ;; --------------------------------------------------------------------
  ;; ;;; (quick and dirty way)
  ;; ;; source: http://oremacs.com/2015/07/16/callback-quit/
- 
+
  ;; ;;; adjust some stuff for dired-narrow work-flow:
  ;; ;;; this macro is necessary (don't understand but ok...)
- 
+
  ;; (defmacro dired-narrow-quit-and-run (&rest body)
  ;;   "Quit the minibuffer and run BODY afterwards."
  ;;   `(progn
@@ -2536,7 +2554,7 @@
  ;;                     (put 'quit 'error-message "Quit")
  ;;                     ,@body))
  ;;      (minibuffer-keyboard-quit)))
- 
+
  ;; ;;
  ;; (defun dired-narrow-quit-and-enter-file-or-dir ()
  ;;    (interactive)
@@ -2546,31 +2564,31 @@
  ;;      (user-error
  ;;       "Not completing files currently")
  ;;   )
- 
+
  ;; (define-key dired-narrow-map (kbd "<return>") 'dired-narrow-quit-and-enter-file-or-dir)
  ;; (define-key dired-narrow-map (kbd "RET") 'dired-narrow-quit-and-enter-file-or-dir)
  ;; (define-key dired-narrow-map (kbd "C-e") 'exit-minibuffer)
- 
+
  ;; ;; however the RET key by default is used to actually: start operating on the filtered files
  ;; ;; --> define another key for that
- 
- 
+
+
  ;; (define-key dired-narrow-map (kbd "<SPC>") 'exit-minibuffer)
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
  ;; ;; (defun exit-minibuffer-and-diredp-find-file-reuse-dir-buffer ()
  ;; ;;   (interactive)
  ;; ;;   (exit-minibuffer)
  ;; ;;   (diredp-find-file-reuse-dir-buffer)
  ;; ;; )
- 
+
  ;; (define-key dired-narrow-map (kbd "RET") 'dired-narrow-quit-and-enter-file-or-dir)
- 
- 
+
+
  ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; * open with external applications (in dired/ org-mode links / etc.)
@@ -2586,21 +2604,21 @@
                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
                                ("\\.xopp\\'" "xournalpp" (file))
                                ("\\.pdf\\'" "okular" (file))))))
- 
+
  ;;; * save desktop sessions
  ;;    (require 'session)
  ;;    (add-hook 'after-init-hook 'session-initialize)
  ;;(desktop-save-mode 1)
- 
- 
+
+
  ;; * sticky buffers (make possible for window to "stick" to its buffer)
  (define-minor-mode sticky-buffer-mode
    "Make the current window always display this buffer."
    nil " sticky" nil
    (set-window-dedicated-p (selected-window) sticky-buffer-mode))
- 
+
  ;;; .) set ansi-term buffers sticky
- 
+
  ;; ..) this did not work! because at this point no window still exists: see discussion:  https://stackoverflow.com/questions/24152863/how-do-i-configure-emacs-to-dedicate-the-calculator-window
  ;;(add-hook 'term-mode-hook 'sticky-buffer-mode)
  ;; OR
@@ -2615,7 +2633,7 @@
   ;;  (set-window-dedicated-p  (get-buffer-window "*ansi-term*") t))
  ;;)
  ;;   (advice-add 'ansi-term :after 'ansi-term--after)
- 
+
  ;;; .) this worked! :
  ;;       *  manipulated the ansi-term function in term.el
  ;;       * included a (sticky-buffer-mode) there
@@ -2624,9 +2642,9 @@
  ;;       * renamed to mod_term.el and put to my load path (on dropbox)
  ;;       * --> this effectively overwrites the usual term.el
  ;;       * --> available for all my emacs computers
- 
- 
- 
+
+
+
  ;;; * ) copy current buffer path clipboard
  (defun cp-fullpath-of-current-buffer ()
    "copy full path into clipboard"
@@ -2635,12 +2653,12 @@
      (setq filepath (file-name-directory buffer-file-name))
      (kill-new  filepath)
      (message (concat "copied current file path: " filepath   ))))
- 
+
  ;;; * ) ido-mode
  ;; (require 'ido)
      ;; (ido-mode t)
- 
- 
+
+
  ;; * helm
 (use-package helm
   :ensure t)
@@ -2648,7 +2666,7 @@
  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
  (global-set-key (kbd "C-x C-f") #'helm-find-files)
  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
- 
+
  ;; ** helm describe modes
 (use-package helm-describe-modes
   :ensure t)
@@ -2656,7 +2674,7 @@
  ;; (setq helm-display-function 'helm-display-buffer-in-own-frame
  ;;         helm-display-buffer-reuse-frame nil
  ;;         helm-use-undecorated-frame-option nil)
- 
+
  ;; ** helm window
  ;; *** option1 (full frame)
  ;; (setq helm-full-frame t)
@@ -2664,7 +2682,7 @@
  ;; (setq helm-autoresize-min-height 20)
  ;; (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
  ;; (setq helm-buffer-max-length 70) ;; file name column width
- 
+
  ;; *** option2 (half frame, show only current buffer aside)
  ;; (setq helm-split-window-in-side-p nil)
  ;; (helm-autoresize-mode t)
@@ -2672,14 +2690,14 @@
  ;; (setq helm-autoresize-min-height 50)
  ;; (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4)))
  ;; (setq helm-buffer-max-length 70) ;; file name column width
- 
+
  ;; *** option3 (half frame, show all buffers aside, compressed)
  (add-to-list 'display-buffer-alist
               '("\\`\\*helm"
                 (display-buffer-in-side-window)
                 (window-height . 0.4)))
  (setq helm-display-function #'display-buffer)
- 
+
  ;;; * projectile
 (use-package projectile
     :ensure t)
@@ -2691,8 +2709,8 @@
  (setq projectile-indexing-method 'native)  
  (setq projectile-enable-caching t) 
  (setq helm-exit-idle-delay 0)
- 
- 
+
+
  ;;; * matlab
  ;;; ** Matlab matlab-emacs project;;
  load-path
@@ -2700,32 +2718,32 @@
  (add-to-list 'load-path path_to_matlab_emacs)
  (load-library "matlab-load")
  (load-library "matlab")
- 
+
  (matlab-cedet-setup)
- 
+
  (add-hook 'matlab-mode-hook
            (lambda nil (auto-complete-mode)
              (rainbow-delimiters-mode t)
              ))
- 
+
  (add-hook 'M-shell-mode-hook
   	     (lambda nil (company-mode)))
- 
+
  ;; ;; turn off auto-fill-mode
  ;; ;; (still does not work --> todo)
- 
+
  (add-hook 'matlab-mode-hook
   	     (lambda nil (auto-fill-mode -1)))
- 
+
  ;; ** personal color theme manipulation
  (set-face-attribute 'matlab-unterminated-string-face t :foreground "dark blue" :underline t)
- 
- 
+
+
  ;; tweak matlab key map 
  (define-key matlab-mode-map "\M-j" 'windmove-down)
- 
- 
- 
+
+
+
  ;;; MATLAB comodity things
  (defun send-string-to-matlab-shell-buffer-and-execute (sendstring)
    "execute region line by line in interactive shell (buffer *shell*)."
@@ -2749,7 +2767,7 @@
      )
      (matlab-shell-end-of-buffer) ;; scroll down always
  )
- 
+
  (defun matlab-shell-end-of-buffer ()
    (interactive)
      ; get region into string
@@ -2786,7 +2804,7 @@
  ;;         ;; (end-of-buffer)
  ;;     ;; )
  ;; )
- 
+
  ;; (alternative)
  (defun send-scriptname-to-matlab-shell-buffer-and-execute ()
    "execute "
@@ -2794,14 +2812,14 @@
    (setq this-buffer-filename-base (file-name-base (buffer-file-name)))
    (send-string-to-matlab-shell-buffer-and-execute this-buffer-filename-base)
  )
- 
+
  (defun save-and-send-scriptname-to-matlab-shell-buffer-and-execute ()
    (interactive)
    (save-buffer)
    (send-scriptname-to-matlab-shell-buffer-and-execute)
  )
- 
- 
+
+
  (defun send-current-line-to-matlab-shell-buffer-and-execute ()
    (interactive)
    (move-beginning-of-line nil)
@@ -2809,30 +2827,30 @@
    (move-end-of-line nil)
    (setq endofline (point))
    (setq currentlinestring (buffer-substring beginofline endofline))
- 
+
    (send-string-to-matlab-shell-buffer-and-execute currentlinestring)
  )
- 
- 
+
+
  (defun send-current-region-to-matlab-shell-buffer-and-execute ()
  (interactive)
      (setq region_string (buffer-substring (mark) (point)))
      (send-string-to-matlab-shell-buffer-and-execute region_string)
  )
- 
+
  (defun send-variable-at-cursor-matlab-shell-buffer-and-execute ()
  (interactive)
      (setq variable_name (thing-at-point 'symbol))
      (send-string-to-matlab-shell-buffer-and-execute variable_name)
  )
- 
+
  (defun send-current-region-line-by-line-to-matlab-shell-buffer-and-execute ()
  (interactive)
     (save-excursion
       ; get line numbers of region beginning/end
       (setq beginning_line_number (line-number-at-pos (region-beginning)))
       (setq ending_line_number (line-number-at-pos (region-end)))
-   
+
      ;; (message (format "%i" beginning_line_number) )
      ;; (message (format "%i" ending_line_number) )
      (setq current_line_number beginning_line_number)
@@ -2846,7 +2864,7 @@
        )
      )
  )
- 
+
  (defun send-current-line-or-region-line-by-line-to-matlab-shell-buffer-and-execute ()
  (interactive)
     (if (use-region-p)
@@ -2854,8 +2872,8 @@
       (send-current-line-to-matlab-shell-buffer-and-execute)
     )
  )
- 
- 
+
+
  (defun matlab-dbstep()
    (interactive)
    (send-string-to-matlab-shell-buffer-and-execute "dbstep")
@@ -2867,12 +2885,12 @@
    ;; (message "finished ...")
    (matlab-get-jump-new-line-number-from-last-debug-output)
  )
- 
+
  (defun matlab-dbcont()
    (interactive)
    (send-string-to-matlab-shell-buffer-and-execute "dbcont")
  )
- 
+
  (defun matlab-set-breakpoint-current-line()
    (interactive)
    ; get line number
@@ -2881,24 +2899,24 @@
   (setq filename-base (file-name-base (buffer-file-name)))
    (send-string-to-matlab-shell-buffer-and-execute (concat "dbstop " filename-base " at " line-nr))
  )
- 
- 
+
+
  (defun matlab-dbclear-all()
    (interactive)
    (send-string-to-matlab-shell-buffer-and-execute "dbclear all")
  )
- 
+
  (defun matlab-dbquit()
    (interactive)
    (send-string-to-matlab-shell-buffer-and-execute "dbquit")
  )
- 
+
  (defun matlab-dbclear-current-file()
    (interactive)
    (setq filename-base (file-name-base (buffer-file-name)))
    (send-string-to-matlab-shell-buffer-and-execute (concat "dbclear " filename-base))
  )
- 
+
  (defun matlab-get-jump-new-line-number-from-last-debug-output ()
    (interactive)
    (save-excursion
@@ -2919,8 +2937,8 @@
      )
      (goto-line (string-to-number line-nr))
    )
- 
- 
+
+
  (defun matlab-jump-to-current-debug-position ()
    (interactive)
    ;; (sleep-for 0.1)
@@ -2947,7 +2965,7 @@
             (move-end-of-line nil)
             (setq endofline (point))
             (setq line-string (buffer-substring beginofline endofline))
- 
+
             ;; could be something like this "> In transit/expand (line 82)" --> get "transit"
             (if (string-match "> In \\([^ /]*\\).* (line \\([0-9][0-9]*\\))" line-string)
                 (setq finished t)
@@ -2977,7 +2995,7 @@
  (define-key matlab-mode-map (kbd "<f6>") 'matlab-dbcont)
  ;; RUN script <F5>
  (define-key matlab-mode-map (kbd "<f5>") 'save-and-send-scriptname-to-matlab-shell-buffer-and-execute)  
- 
+
  ;; (define-key matlab-mode-map (kbd "<f9>") 'send-current-line-or-region-line-by-line-to-matlab-shell-buffer-and-execute)
  ;; DEBUG QUIT <F8>
  (define-key matlab-mode-map (kbd "<f8>") 'matlab-dbquit)
@@ -2990,7 +3008,7 @@
  ;; JUMP TO CURRENT DEBUG POS <F11> (todo --> just for now because automatic not working flawlessly)
  (define-key matlab-mode-map (kbd "<f11>") 'matlab-jump-to-current-debug-position)
  ;;; END MATLAB COMODITIES
- 
+
  ;; matlab shell key bindings (--> have to be implemented as hooks, since matlab-shell-mode-map does not exist before opening a matlab-shell()
  (add-hook 'matlab-shell-mode-hook
            (lambda ()
@@ -3002,18 +3020,18 @@
              (define-key matlab-shell-mode-map (kbd "M-p") 'matlab-shell-previous-matching-input-from-input)
              (define-key matlab-shell-mode-map (kbd "M-n") 'matlab-shell-next-matching-input-from-input)
              ))
- 
+
  ;; ;; color theme for matlab, defined by my own
  ;; (load "color-theme-matlab.el")
- 
+
  ;; (if color-theme-buffer-local-switch
  ;;     (add-hook 'matlab-mode-hook
  ;;       (lambda nil (color-theme-buffer-local 'color-theme-matlab (current-buffer))))
  ;;   )
- 
- 
+
+
  ;; END GENREAL STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
+
  ;;; * recentf (recent files) 
 (use-package recentf
   :ensure t)
@@ -3024,8 +3042,8 @@
  (setq recentf-max-menu-items 200)
  ; Reset C-x C-r to display recently opened files
  (global-set-key "\C-x\ \C-r" 'recentf-open-files)
- 
- 
+
+
  ;;; * latex (auctex) 
  ;; somehow auctex does not load with (require 'auctex) (i don t like that and think the guys should do loading consistent with standard like other packages, but whatever..)
  ;; but auctex-manual instructs like this
@@ -3041,7 +3059,7 @@
    (interactive)
    (my-toggle-marker-around-region "\\textbf{" "\\textbf{"  "}" "}")
    )
- 
+
  ;; (evil-leader/set-key-for-mode 'lateX-mode  "jb" 'latex-toggle-bold-region)
 
 ;; * latex tables
@@ -3069,19 +3087,19 @@
 ;;   :states 'normal
 ;;   :keymaps 'LaTeX-mode-map
 ;;   "a" 'latex-tabular-align)
- 
+
  ;; ** hook latex with minor-outline-mode
  (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
- 
+
  (evil-define-minor-mode-key 'normal 'outline-minor-mode (kbd "TAB") 'org-cycle) ;; comment: org and outline go hand-in-hand, the org-function kind of "expand" the outline-functions, in pure outline-mode there is no toggling function
- 
+
  ;; ** hook with TeX-fold-mode (the shit to hide figures/tables and stuff)
  ;;   (does not conflict with outline-minor-mode, yeah)
  ;;   usefull functions:
  ;;                     go to figure/table and M-x TeX-fold-env 
  (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
- 
- 
+
+
  ;; ** F5 -> run pdflatex / F6 -> bibtex
  (defun run-pdflatex-on-master-file ()
  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
@@ -3096,16 +3114,16 @@
  ;; * show compile window, where pointer is always at end
  ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
  )
- 
+
  ;;t (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
  ;;t (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)  
- 
+
  (defun run-bibtex-on-master-file ()
  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
  (interactive)
  (TeX-command "BibTeX" 'TeX-master-file nil)
  )
- 
+
  ;; ** other handy short-cuts with leader-key
  ;;T (evil-leader/set-key-for-mode 'LaTeX-mode "lv" 'TeX-view)
  ;; ** color short-cuts
@@ -3114,7 +3132,7 @@
  ;;   (interactive)
  ;;   (my-toggle-marker-around-region "\\red{" "\\red{"  "}" "}")
  ;;   )
- 
+
  ;; (evil-leader/set-key-for-mode 'latex-mode  "jb" 'org-toggle-bold-region)
  ;; (evil-leader/set-key-for-mode 'latex-mode  "ji" 'org-toggle-italic-region)
  ;; (evil-leader/set-key-for-mode 'latex-mode  "jc" 'org-toggle-code-region)
@@ -3125,7 +3143,7 @@
  ;; (add-hook 'LaTeX-mode-hook (lambda ()
  ;;                   (add-to-list 'TeX-expand-list
  ;;                        '("%u" Okular-make-url))))
- 
+
  ;; (defun Okular-make-url () (concat
  ;;                "file://"
  ;;                (expand-file-name (funcall file (TeX-output-extension) t)
@@ -3135,9 +3153,9 @@
  ;;                (expand-file-name (TeX-master-directory))
  ;;                "./"
  ;;                (TeX-current-file-name-master-relative)))
- 
+
  ;; (setq TeX-view-program-selection '((output-pdf "Okular")))
- 
+
  ;;; *** setup viewer (okular) with synref
  ;;;    how to use:
  ;;     (https://tex.stackexchange.com/questions/161797/how-to-configure-emacs-and-auctex-to-perform-forward-and-inverse-search)
@@ -3147,51 +3165,51 @@
  ;; (server-start)
  ;; (setq TeX-view-program-selection '((output-pdf "Okular")))
  ;; (setq TeX-source-correlate-mode t)
- 
+
  ;; ** make more easy/natural to read
  ;; *** break lines naturally
  (add-hook 'LaTeX-mode-hook 'visual-line-mode)  
  ;; *** (did not work out) show prose in block text, more easy/natural to read (--> auto-fill-mode)
  ;; (add-hook 'LaTeX-mode-hook 'auto-fill-mode)  
- 
+
  ;;; ** reftex
  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
  (setq reftex-plug-into-AUCTeX t)
  ;;
  (setq reftex-cite-format 'natbib)
- 
+
  (setq reftex-refstyle "\\autoref")
- 
+
  ;;; ** aspell
  (setq-default ispell-program-name "aspell")
  ;(setq ispell-program-name "aspell") 
       ; could be ispell as well, depending on your preferences ;
  (setq ispell-dictionary "english") ;
       ; this can obviously be set to any language your spell-checking program supports
- 
+
  (add-hook 'LaTeX-mode-hook 'flyspell-mode) 
  (add-hook 'LaTeX-mode-hook 'flyspell-buffer)
- 
- 
+
+
  ;; flymake
 (use-package flymake
   :ensure t)
- 
+
  (defun flymake-get-tex-args (file-name) (list "pdflatex" 
     (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
  (add-hook 'LaTeX-mode-hook 'flymake-mode)
- 
- 
+
+
  ;; ** misc settings
       (setq TeX-parse-self t) ; Enable parse on load.
       (setq TeX-auto-save t) ; Enable parse on save.
       (setq TeX-save-query nil) ; Dont ask if to save every time, just save and run LaTeX
- 
+
  ;;(require 'tex-mik)
  (setq TeX-PDF-mode t) ; pdf mode (for preview latex would need to be true, but preview latex currently not used)
- 	
+     
  (setq-default TeX-master nil) ; Query for master file.
- 
+
  ;;; ** my latex-editing functions
  (defun include-input-toggle ()
  "This function toggles between include and input"
@@ -3219,9 +3237,9 @@
  (interactive)
  (shell-command "texworks c:/Users/Joe/Documents/Beruf/PUC/'Trabajo de investigacion'/Studienarbeit/Alembic_Final_Report.pdf"))
  ;; 
- 
- 
- 
+
+
+
  (defun eps-convert-all-in-folder ()
    (interactive)
    (setq pnglist (directory-files (file-name-directory buffer-file-name) nil "\\.png"))
@@ -3230,14 +3248,14 @@
      (shell-command (format "sam2p %s.png %s.eps" filename filename))
      ;; sam2p image.png image.eps
      )
- 
+
    (setq jpglist (directory-files (file-name-directory buffer-file-name) nil "\\.jpg"))
    (dolist (jpgfile jpglist)
      (setq filename (file-name-sans-extension jpgfile))
      (shell-command (format "sam2p %s.jpg %s.eps" filename filename))
      ;; sam2p image.jpg image.eps
      )
- 
+
    (setq pdflist (directory-files (file-name-directory buffer-file-name) nil "\\.pdf"))
    (dolist (pdffile pdflist)
      (setq filename (file-name-sans-extension pdffile))
@@ -3247,12 +3265,12 @@
        )
      )
  )
- 
+
  (defun eps-convert-file (file)  ;;requires installation and path-variable-entry for "nircmd" program
    (interactive)
    (shell-command (format "sam2p %s %s.eps" file (file-name-sans-extension file)))
  )
- 
+
  (defun paste-image-latex ()
  (interactive)
  (setq label (read-string "Image label and file name: "))
@@ -3269,44 +3287,44 @@
  (setq end (point)) ;; save end
  (preview-region begin end)
  )
- 
+
  (global-set-key (kbd "<f9>") 'paste-image-latex)
- 
+
  ;;; *** Insert quickly most popular environments by easy short cuts (ctrl-shift-<...>)
  (defun insert-latex-environment-align ()
  (interactive)
  (LaTeX-environment-menu "align")
  )
  (global-set-key (kbd "C-S-a") 'insert-latex-environment-align)
- 
+
  (defun insert-latex-environment-equation ()
  (interactive)
  (LaTeX-environment-menu "equation")
  )
  (global-set-key (kbd "C-S-e") 'insert-latex-environment-equation)
- 
+
  (defun insert-latex-environment-alignstar ()
  (interactive)
  (LaTeX-environment-menu "align*")
  )
  (global-set-key (kbd "C-c a") 'insert-latex-environment-alignstar)
- 
- 
+
+
  (defun insert-latex-environment-alignstar ()
  (interactive)
  (LaTeX-environment-menu "flalign*")
  )
  (global-set-key (kbd "C-c f") 'insert-latex-environment-alignstar)
- 
- 
+
+
  (defun insert-latex-environment-equationstar ()
  (interactive)
  (LaTeX-environment-menu "equation*")
  )
  (global-set-key (kbd "C-c e") 'insert-latex-environment-equationstar)
- 
- 
- 
+
+
+
  (defun insert-latex-environment-figure ()
  (interactive)
     (setq full-image-file-name (read-file-name "Select image file: "))
@@ -3327,13 +3345,13 @@
  ;(preview-region begin end)
  )
  (global-set-key (kbd "C-S-f") 'insert-latex-environment-figure)
- 
+
  (defun insert-latex-environment-table ()
  (interactive)
  (LaTeX-environment-menu "table")
  )
  (global-set-key (kbd "C-S-t") 'insert-latex-environment-table)
- 
+
  ;; * misc
  ;; quickly add relative path of some file
  (defun find-file-insert-relative-path ()
@@ -3342,7 +3360,7 @@
  (setq rel-path (file-relative-name file-name))
  (insert rel-path)
  )
- 
+
  ;; * convert latex to org (region -> headings to org-headers)
  (defun convert-latex-to-org-region-to-clipboard ()
    (interactive)
@@ -3364,7 +3382,7 @@
    ;; (setq region-string-converted (replace-regexp-in-string
     ;; "}" 
     ;; "" region-string-converted))
- 
+
    ;; var2 -> using groups -> so get the parts in one \section{<heading>} = '\section{' + <heading> +'}'
      ;; (replace-first-enclosing-pair-in-string region_string "\\\\section{" "}" "* " "")
      (setq converted-string (replace-all-enclosing-pairs-in-string region_string "\\\\section{" "}" "* " ""))
@@ -3376,15 +3394,15 @@
      (kill-new  converted-string)
      )
    )
- 
+
  ;; test:
  ;; \section{hello1}
  ;; \section{hello2}
  ;; ===>
  ;; * hello1
  ;; * hello2
- 
- 
+
+
  (defun replace-first-enclosing-pair-in-string (in-string old-begin old-end new-begin new-end)
         (let (
               ;; (in-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}.")
@@ -3399,7 +3417,7 @@
           ;;                     /              \      /    \       /           \   
           (setq regexp (concat "\\(" old-begin "\\)" "\\(.*?\\)" "\\(" old-end "\\)"))
  	 ;; side-note: "Note that ‘\\’ is needed in Lisp syntax to include a ‘\’ in the string, which is needed to deny the first star its special meaning in regexp syntax. See Regexp Backslash.)" https://www.gnu.org/software/emacs/manual/html_node/emacs/Options-for-Comments.html)
- 
+
           ;; debug..
           ;; (setq old-begin "\\section{")
           ;; (setq old-end "}")
@@ -3419,7 +3437,7 @@
             (setq result (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing in-string))
           result)
         ))
- 
+
  (defun replace-all-enclosing-pairs-in-string (in-string old-begin old-end new-begin new-end)
         (let ((converted-string in-string))
           ;; (setq in-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}.")
@@ -3431,21 +3449,21 @@
                  (setq converted-string this-result)
                  (setq continue nil)))
           converted-string))
- 
+
  ;; test:
  ;; (setq in-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}.")
  ;; (replace-first-enclosing-pair-in-string in-string "begin{exp1}" "end{exp1}" "begin{exp2}" "end{exp2}")
  ;; (replace-all-enclosing-pairs-in-string in-string "begin{exp1}" "end{exp1}" "begin{exp2}" "end{exp2}")
- 
+
  ;;; * c++
- 
+
  ;; ** c++ -mode key bindings consistent (overwrite)
  (define-key c++-mode-map "\M-k" 'windmove-up)
  (define-key c++-mode-map "\M-h" 'windmove-left)
  (define-key c++-mode-map "\M-l" 'windmove-right)
  (define-key c++-mode-map "\M-j" 'windmove-down)
- 
- 
+
+
  ;;; * openfoam 
  (defun openfoam-dired-tutorials ()
     (interactive)
@@ -3459,14 +3477,14 @@
     (interactive)
     (dired "/opt/OpenFOAM-6/src")
  )
- 
+
  ;;Grosses Fazit:
  ; konnte nicht shell-environment (bash_profile oder bashrc) in emacs-shell-prozess ausfuehren
  ; hab s nicht hinbekommen login-option mitauszufuehren
  ; --> Umweg ueber Emacs-interactive *shell*, eigene funktionen kopieren zeilen dort rein und fuehren sie aus
  ; der ganze andere kram wird nicht mehr gebraucht
- 
- 
+
+
  ; purpose: execute shell-script in emacs line by line with <f3>
  ; or execute region in script with <f4>
  ; with emacs invoked shell "knowing" the openfoam environment
@@ -3483,28 +3501,28 @@
  " sh-command-on-region          is implemented in sh-mode, uses shell-command-on-region, 
                                  with some extra stuff, did not understand this extra stuff
                                  but probably is usefull, so i decided to use/modify this function
- 
+
    shell-command-on-region       uses effectively call-process-region
                                  also has some additional stuff, i did not really understand,
                                  but prob. usefull, defined in lisp/simple.el
- 
+
    call-process-region          uses call-process, before creates some temporary file, where all the
                                  region is loaded and given as input to call-process
- 
+
    call-process                  is C-written elementary function, launching a shell-program, executing
                                  an input file
- 
+
    FAZIT: i only had a chance to add sth to the region, because luckily shell-command-on-region can interpret alternatively the first argument start in (start end) as a string, so end will be ignored.
  this way i could pack my string together (with concat) and pass it.
  so no need to modify the shell-command-on-region or write my own temporary file (write my own call-process-region, ooh my gosh...!)"
- 
+
  (setq ofvers "of240")
- 
+
  (defun sh-execute-region-openfoam (start end &optional flag)
    "Pass optional header and region to a subshell for noninteractive execution.
  The working directory is that of the buffer, and only environment variables
  are already set which is why you can mark a header within the script.
- 
+
  With a positive prefix ARG, instead of sending region, define header from
  beginning of buffer to point.  With a negative prefix ARG, instead of sending
  region, clear header."
@@ -3526,7 +3544,7 @@
       (setq start (concat ofvers "\n" regionstring) )
       (shell-command-on-region start end "bash -l" ))) ;; If start is a string, then write-region writes or appends that string, rather than text from the buffer. end is ignored in this case. 
  )                                      ;;  bash with -l option --> login --> so it will read .bash_profile (--> includes bashrc) --> so the openfoam-environment sourcing functions are known
- 
+
  ;;; ** shell workflow openfoam
  ;;; send to noninteractive shell (not "so" usefull, only for whole loops 
  (defun sh-execute-line-openfoam ()
@@ -3537,7 +3555,7 @@
  (setq endofline (point))
  (sh-execute-region-openfoam beginofline endofline)
  )
- 
+
  (defun sh-send-region-to-shell ()
  (interactive)
  (setq regionstring (buffer-substring (region-beginning) (region-end)))
@@ -3546,10 +3564,10 @@
  (setq start sendstring)
  (append-to-buffer "*shell*" start end)
  )
- 
- 
+
+
  ;; modified function from append-to-buffer
- 
+
  (defun send-string-to-shell-buffer-and-execute (sendstring)
    "execute region line by line in interactive shell (buffer *shell*)."
    (interactive)
@@ -3562,7 +3580,7 @@
       (end-of-buffer)
      )
  )
- 
+
  (defun send-scriptname-to-shell-buffer-and-execute ()
    "execute region line by line in interactive shell (buffer *shell*)."
    (interactive)
@@ -3576,7 +3594,7 @@
       (comint-send-input) ;; execute
      )
  )
- 
+
  (defun send-current-line-to-shell-buffer-and-execute ()
  (interactive)
  (move-beginning-of-line nil)
@@ -3584,17 +3602,17 @@
  (move-end-of-line nil)
  (setq endofline (point))
  (setq currentlinestring (buffer-substring beginofline endofline))
- 
+
  (send-string-to-shell-buffer-and-execute currentlinestring)
  )
- 
+
  (defun send-current-region-line-by-line-to-shell-buffer-and-execute ()
  (interactive)
     (save-excursion
       ; get line numbers of region beginning/end
       (setq beginning_line_number (line-number-at-pos (region-beginning)))
       (setq ending_line_number (line-number-at-pos (region-end)))
-   
+
      (setq current_line_number beginning_line_number)
      (goto-line beginning_line_number)
      ;(message (format "%i" current_line_number) )
@@ -3606,7 +3624,7 @@
        )
      )
  )
- 
+
  (defun send-current-line-or-region-line-by-line-to-shell-buffer-and-execute ()
  (interactive)
     (if (use-region-p)
@@ -3614,20 +3632,20 @@
       (send-current-line-to-shell-buffer-and-execute)
     )
  )
- 
+
  (defun openfoam-shell-keys ()
    (local-set-key (kbd "<f4>") 'send-current-line-or-region-line-by-line-to-shell-buffer-and-execute)
    (local-set-key (kbd "<f5>") 'send-scriptname-to-shell-buffer-and-execute)  
  )
- 
+
  (add-hook 'sh-mode-hook 'openfoam-shell-keys)
- 
+
  ;; original function (  http://repo.or.cz/w/emacs.git/blob/HEAD:/lisp/progmodes/sh-script.el )
  ;; (defun sh-execute-region (start end &optional flag)
  ;;   "Pass optional header and region to  subshell for noninteractive execution.
  ;; The working directory is that of the buffer, and only environment variables
  ;; are already set which is why you can mark a header within the script.
- 
+
  ;; With a positive prefix ARG, instead of sending region, define header from
  ;; beginning of buffer to point.  With a negative prefix ARG, instead of sending
  ;; region, clear header."
@@ -3646,14 +3664,14 @@
  ;; 				     sh-shell-file)
  ;; 	    (delete-region sh-header-marker end)))
  ;;       (shell-command-on-region start end (concat sh-shell-file " -")))))
- 
+
  ;; ** open-foam-workflow tipps 
- 
+
  ;; * zoom frame on smaller monitor
  ;;    status: no working solution, but no priority
  ;; (require 'zoom-frm)
- 
- 
+
+
  ;; *** move buffers - key bindings
 (use-package windmove
   :ensure t)
@@ -3664,24 +3682,24 @@
  (global-set-key (kbd "<C-down>")   'windmove-down)
  (global-set-key (kbd "<C-left>")   'windmove-left)
  (global-set-key (kbd "<C-right>")  'windmove-right)
- 
+
  (global-set-key (kbd "M-k")     'windmove-up)
  (global-set-key (kbd "M-j")   'windmove-down)
  (global-set-key (kbd "M-h")   'windmove-left)
  (global-set-key (kbd "M-l")  'windmove-right)
- 
+
  ;; tweak in term-mode, so these also work in term-windows:
   (define-key term-raw-map "\M-k" 'windmove-up)
   (define-key term-raw-map "\M-h" 'windmove-left)
   (define-key term-raw-map "\M-l" 'windmove-right)
   (define-key term-raw-map "\M-j" 'windmove-down)
- 
+
  ;; tweek for org-mode, other
  (define-key org-mode-map "\M-k" 'windmove-up)
  (define-key org-mode-map "\M-h" 'windmove-left)
  (define-key org-mode-map "\M-l" 'windmove-right)
  (define-key org-mode-map "\M-j" 'windmove-down)
- 
+
  ;; evil-like other bindings, that I like
  ;; hmm.. maybe not yet, might by usefull for other stuff (-> outcommented)
  ;; (define-key org-mode-map "L" 'org-shiftright)
@@ -3696,7 +3714,7 @@
  ;;    - the exception for the escape key is implemented in just this way actually:
  ;;      term.el:912   (define-key term-raw-map term-escape-char term-raw-escape-map)
  ;;      just leads to a second map where a new command can be executed (e.g. M-x)
- 
+
  ;; * mode-line appearance
  ;; set mode line to show full path of current file
  ;; (setq-default mode-line-format
@@ -3715,29 +3733,29 @@
  ;; (require 'smart-mode-line)
  ;; (sml/setup)
  ;; (setq sml/no-confirm-load-theme t) ;; avoid being asked "wanna compile theme in elisp" (or so..) everytime
- 
- 
+
+
  ;; * buffer/window navigation management
  ;; ** better short cuts for previous / next buffer
  (global-set-key (kbd "M-'") 'previous-buffer)
  (global-set-key (kbd "M-\\") 'next-buffer)
- 
+
  ;;; * pdf-view
 (require 'pdf-view)
-  
+
   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
-  
+
   (setq pdf-view-midnight-colors `(,(face-attribute 'default :foreground) .
                                    ,(face-attribute 'default :background)))
-  
+
   (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
-  
+
   (add-hook 'pdf-view-mode-hook (lambda ()
                                   (pdf-view-midnight-minor-mode)))
-  
+
   (provide 'init-pdfview)
- 
- 
+
+
  ;; * quickly print variable to scratch buffer
  (defun print-var-to-scratch-buffer (var)
    (interactive)
@@ -3746,7 +3764,7 @@
      (insert (concat "\n\n" (prin1-to-string var)))
      )
    )
- 
+
  ;; (defun dummy-fun (arg)
  ;;   (interactive)
  ;;   ;; ;; (message org-structure-template-alist)
@@ -3755,8 +3773,8 @@
  ;;   ;; (message (symbol-value x))
  ;;   (message arg)
  ;;   )
- 
- 
+
+
  (debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
  (cancel-debug-on-entry 'print-value-of-var-under-selection-to-scratch-buffer)
  (defun print-value-of-var-under-selection-to-scratch-buffer ()
@@ -3781,34 +3799,34 @@
      (message (concat "no such symbol exists with name: " var_string))
      )
    )
- 
- 
+
+
  ;; * git-save
- 
+
  ;; (defun git-save ()
  ;;   (interactive)
  ;;   ;; * update
- 
+
  ;;   )
- 
+
  ;; * async-await (needed to be able to wait for "external" shell commands)
  (use-package async-await
    :ensure t
    )
- 
+
  ;; * async process behaviour
  ;; ** turn off 'pop-up' of the *Async Shell Command* buffer
  (add-to-list 'display-buffer-alist
    (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
- 
- 
+
+
  ;; * stopwatch
  ;; (load (concat my_load_path "other_packages/stopwatch/stopwatch.el"))
- 
+
  ;; * ssh clipboard
  ;; ** user settings
  (defvar ssh-clipboard-file "~/ssh_clipboard.txt")
- 
+
  (defun ssh-clipboard-copy-string (str1) 
    (interactive)
    ;; ** copy current region -> into string
@@ -3827,7 +3845,7 @@
           (message "sending (via rsync) ssh_clipboard.txt to all servers.")
           (dolist (this-server-name my-server-machine-names)
             (message (concat "sending ssh_clipboard.txt to server '" this-server-name "'..."))
- 
+
             ;; * i tried various options to execute command (and let server resolve '~' aka home-path)
             ;; ** shell-command (problem: no asynchronous)
             ;; (setq path2 (concat this-server-name ":'~'/")) ;; without ' quotes -> for start-process (circumvents kind of the shell string processing, so it s what the command will get and it "does not want quotes".
@@ -3854,15 +3872,15 @@
             (message (concat "rsync'ed to ssh server (" this-server-name ")" ))))
          (t
           (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/local/etc.'"))))
- 
+
  (defun ssh-clipboard-copy () 
    (interactive)
    ;; ** copy current region -> into string
    (setq current-region-string (buffer-substring (mark) (point)))
    (ssh-clipboard-copy-string current-region-string)
    (message (concat "region copied to " ssh-clipboard-file "." )))
-          
- 
+       
+
  (defun ssh-clipboard-paste ()
    (interactive)
    ;; if on local machine -> rsync ssh-clipboard from server first
@@ -3870,7 +3888,7 @@
          ((myhost-is-server)
           ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
           )
- 
+
          ((myhost-is-local)
           ;; (message "ssh-clipboard-copy: i m on myhost=local")
           ;; * send it so ssh server
@@ -3881,27 +3899,27 @@
           (message (concat "rsync'ed from ssh server (" my-current-server-name ")" )))
          (t
           (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/laptop/phone/etc.'")))
- 
+
    ;; * read content into string
    (with-temp-buffer
      (insert-file-contents ssh-clipboard-file)
      (setq ssh-clipboard-content (buffer-string)))
    ;; * paste content
    (insert ssh-clipboard-content))
- 
+
  (defun ssh-clipboard-term-paste ()
    (interactive)
    (ssh-clipboard-update-ssh-clipboard-file)
    (setq ssh-clipboard-string (ssh-clipboard-file-content-to-string))
    (term-send-raw-string ssh-clipboard-string))
- 
+
  (defun ssh-clipboard-file-content-to-string ()
    (interactive)
    ;; * read content into string
    (with-temp-buffer
      (insert-file-contents ssh-clipboard-file)
      (setq ssh-clipboard-content (buffer-string))))
- 
+
  (defun ssh-clipboard-update-ssh-clipboard-file ()
    (interactive)
    ;; if on local machine -> rsync ssh-clipboard from server first
@@ -3909,7 +3927,7 @@
          ((myhost-is-server)
           ;; (message "ssh-clipboard-copy: i m on myhost=mathe or hlrn")
           )
- 
+
          ((myhost-is-local)
           ;; (message "ssh-clipboard-copy: i m on myhost=local")
           ;; * send it so ssh server
@@ -3920,20 +3938,20 @@
           (message (concat "rsync'ed from ssh server (" my-current-server-name ")" )))
          (t
           (message "myhost not set. set first: M-x set-myhost , or in shell with 'export MYHOST=mathe/hlrn/laptop/phone/etc.'"))))
- 
- 
+
+
  ;; ** ssh-clipboard key bindings
  ;;T (evil-leader/set-key "Y" 'ssh-clipboard-copy) ;; analogouns to y = vim yank
  ;;T (evil-leader/set-key "P" 'ssh-clipboard-paste) ;; analogous to p = vim paste
  ;; (global-set-key (kbd "<f1>") 'copy-current-path)
- 
+
  ;; ** ssh-clipboard copy path
  (defun ssh-clipboard-copy-path ()
    (interactive)
    (setq currentpath (copy-current-path))
    (ssh-clipboard-copy-string currentpath)
    (message (concat "copied path to ssh-clipboard: "  currentpath)))
- 
+
  (defun get-fullfilename ()
    (interactive)
      (cond
@@ -3947,21 +3965,21 @@
              (setq currentpath fullfilename))
          (t 
           (setq fullfilename (buffer-file-name)))))
- 
+
  (defun ssh-clipboard-copy-fullfilename ()
    (interactive)
    (setq fullfilename (get-fullfilename))
    (ssh-clipboard-copy-string fullfilename)
    (message (concat "copied fullfilename to ssh-clipboard: "  fullfilename)))
- 
+
  (defun copy-fullfilename ()
    (interactive)
    (setq fullfilename (get-fullfilename))
    (kill-new fullfilename)
    (message (concat "copied fullfilename to clipboard: "  fullfilename)))
- 
+
  ;;  (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
- 
+
  ;; ** short cuts-concept for copy/paste  region/path/fullfilename
  ;; *** normal clipboard
  ;; a) copy region       ->
@@ -3991,7 +4009,7 @@
  ;;                         files        ... "leader + P" 
  ;;                         term         ...  CTRL + P" 
  ;; e) (change-path in clipboard) <-- no use case 
- 
+
  ;; ** short cuts-implementation for copy/paste  region/path/fullfilename
  ;; *** normal clipboard
  ;; a) copy region       ->
@@ -4053,9 +4071,9 @@
   (evil-define-key 'normal dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
   (evil-define-key 'emacs dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
   (evil-define-key 'insert dired-mode-map (kbd "C-S-y") 'ssh-clipboard-copy) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
- 
- 
- 
+
+
+
  ;; * frequently used unicode characters
  ;; ** docu/instruction -> how to get the code of a character
  ;;    - copy the symbol (e.g. from browser) to an emacs buffer ;;    - type 'C-x =' (M-x what-cursor-position, or also M-x describe-char) , -> it will give you the unicode number in decimal/octal/hex
@@ -4114,7 +4132,7 @@
    ;; (insert "\u21af")
    (insert "\U000021af")
    )
- 
+
  (defun insert-char-pencil ()
    ;; inserts a pencil-symbol ✎
    (interactive)
@@ -4122,17 +4140,17 @@
    ;; (insert "\u21af")
    (insert "\U0000270e")
    )
- 
- 
+
+
  ;; (insert "\U0000270E")✎
  ;; (insert "\U0000270f")✏
  ;; (insert "\U00002710")✐
  ;; (insert "\U00002711")✑
  ;; (insert "\U00002712")✒
- 
- 
+
+
  ;; * termux android
- 
+
  ;; ** paste from android-clipboard
  (defun android-paste-clipboard () 
    (interactive)
@@ -4140,7 +4158,7 @@
    (setq clipboard-string output) ;; in case no error occured, could be checked before
    (insert clipboard-string)
  )
- 
+
  ;; ** put frequent things to clipboard
  (defun android-copy-to-clipboard ()
    (interactive)
@@ -4161,26 +4179,26 @@
    (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
    (async-shell-command command-string)
    )
- 
+
  (defun my-address-to-clipboard ()
    (interactive)
    (setq my-address "Fanningerstr. 52 10635 Berlin")
    (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
    (async-shell-command command-string)
    )
- 
+
  (defun android-go-to-camera-directory ()
    (interactive)
    (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
    (dired camera-pics-dir)
    )
- 
+
  (defun android-go-to-screenshots-directory ()
    (interactive)
    (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
    (dired screenshots-dir)
    )
- 
+
  (defun latest-screenshot-pic-get-file-name ()
    (interactive)
    ;; get current dir
@@ -4193,7 +4211,7 @@
    (setq latest-pic-file-fullname (concat screenshots-dir latest-pic-file))
    (message (concat "latest screenshot file:" latest-pic-file-fullname))
    latest-pic-file)
- 
+
  (defun latest-camera-pic-get-file-name ()
    (interactive)
    ;; get current dir
@@ -4206,7 +4224,7 @@
    (setq latest-pic-file (car (last all-files)))
    (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
    latest-pic-file)
- 
+
  (defun latest-camera-pic-get-file-fullname ()
    (interactive)
    ;; get current dir
@@ -4219,7 +4237,7 @@
    (setq latest-pic-file (car (last all-files)))
    (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
    latest-pic-file-fullname)
- 
+
  (defun latest-camera-pic-copy-to-currentdir ()
    (interactive)
    ;; get current dir
@@ -4235,7 +4253,7 @@
    ;; copy
    (copy-file latest-pic-file-fullname current-path t)
    )
- 
+
  (defun org-insert-latest-camera-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
    (interactive)
    ;; copy to current dir
@@ -4247,7 +4265,7 @@
    (insert (concat "[[file:" filename "]]"))
    ;; (org-redisplay-inline-images)
    )
- 
+
  (defun org-insert-latest-screenshot-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
    (interactive)
    ;; copy to current dir
@@ -4259,23 +4277,23 @@
    (insert (concat "[[file:" filename "]]"))
    ;; (org-redisplay-inline-images)
    )
- 
+
  ;; * auto-complete
 (require 'auto-complete-config)
  (ac-config-default)
  (set-face-attribute 'ac-selection-face t :background "deep sky blue" :foreground "black")
- 
+
  (set-face-attribute 'popup-menu-selection-face t :inherit 'default :background "cyan" :foreground "black")
  (set-face-attribute 'popup-scroll-bar-foreground-face t :background "deep sky blue")
- 
- 
- 
- 
+
+
+
+
  ;; * if debug on start-up (-> disable now debug for session)
  (if debug-only-on-start-up
    (setq debug-on-error nil)
    )
- 
+
  ;; * image viewing (imagemagick)
  ;; ** image-set-size (not built-in (!) --> 100% 200% etc)
  (defun image-set-size ()
@@ -4288,12 +4306,12 @@
    ;;   (plist-put (cdr image) :scale new_scale)))
    (image-transform-set-scale)
    )
- 
+
  ;; ** no line numbers
  (add-hook 'image-mode-hook
            (lambda ()
              (display-line-numbers-mode -1)))
- 
+
  ;; ** evil key bindings
  (evil-define-key 'normal image-mode-map (kbd "n") 'image-next-file)
  (evil-define-key 'normal image-mode-map (kbd "p") 'image-previous-file)
@@ -4303,23 +4321,23 @@
  (evil-define-key 'normal image-mode-map (kbd "-") 'image-decrease-size)
  (evil-define-key 'normal image-mode-map (kbd "s") 'image-save)
  (evil-define-key 'normal image-mode-map (kbd "w") 'image-transform-fit-to-width)
- 
+
  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
  ;; o               image-save
- 
+
  ;; +               image-increase-size
  ;;   (that binding is currently shadowed by another mode)
  ;; -               image-decrease-size
  ;;   (that binding is currently shadowed by another mode)
- 
+
  ;; r               image-rotate
- 
+
  ;; n               image-next-file
  ;;   (that binding is currently shadowed by another mode)
  ;; o               image-save
  ;;   (that binding is currently shadowed by another mode)
  ;; p               image-previous-file
- 
+
  ;; C-c             Prefix Command
  ;; RET             image-toggle-animation
  ;;   (that binding is currently shadowed by another mode)
@@ -4365,7 +4383,7 @@
  ;;   (that binding is currently shadowed by another mode)
  ;; S-SPC           image-scroll-down
  ;; <remap>         Prefix Command
- 
+
  ;; <remap> <backward-char>         image-backward-hscroll
  ;; <remap> <beginning-of-buffer>   image-bob
  ;; <remap> <end-of-buffer>         image-eob
@@ -4383,11 +4401,11 @@
  ;; <remap> <scroll-right>          image-scroll-right
  ;; <remap> <scroll-up>             image-scroll-up
  ;; <remap> <scroll-up-command>     image-scroll-up
- 
+
  ;; C-c C-c         image-toggle-display
  ;; C-c C-x         image-toggle-hex-display
- 
- 
+
+
  ;; * mucke
  (defun mucke-new-song-folder ()
    "creates song folder/file in default mucke folder (currently ~/org/mucke), and opens it in INSERT mode"
@@ -4408,23 +4426,23 @@
    (if (equal myhost "phone")
    (android-paste-clipboard))
    )
- 
+
  ;; * sound
  ;; ** disable annoying bell sound
  (setq ring-bell-function 'ignore)
- 
- 
+
+
  ;; * expand-region
 (use-package expand-region
   :ensure t)
- 
+
  ;; ** expand-region -> evil-mode shortcut -> visual mode map: "v" -> expand region / instead of exit visual mode
  (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
- 
+
  ;; * sudo-edit
  (defun sudo-edit (&optional arg)
    "Edit currently visited file as root.
- 
+
  With a prefix ARG prompt for a file to visit.
  Will also prompt for a file to visit if current
  buffer is not visiting a file."
@@ -4433,8 +4451,8 @@
        (find-file (concat "/sudo:root@localhost:"
                           (ido-read-file-name "Find file(as root): ")))
      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
- 
- 
+
+
  ;; * draft-horse-term
  (defvar draft-horse-term-buffer-name "*draft-horse-term*")
  (defun draft-horse-term-init ()
@@ -4443,13 +4461,13 @@
    (setq program "/bin/bash")
    (setq term-ansi-buffer-name (concat draft-horse-term-buffer-name))
    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
- 
+
    (switch-to-buffer term-ansi-buffer-name)
-   
+
    (set-buffer term-ansi-buffer-name)
    (term-mode)
    (term-char-mode)
- 
+
    ;; Historical baggage.  A call to term-set-escape-char used to not
    ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
    ;; ended up with both C-x and C-c as escape chars.  Who knows what
@@ -4461,7 +4479,7 @@
      ;; .emacs ...
      (term-set-escape-char ?\C-x))
    )
- 
+
  (defun draft-horse-term ()
    (interactive)
    ;; initiate if not already exists
@@ -4471,10 +4489,10 @@
    ;; switch to that buffer
    (switch-to-buffer draft-horse-term-buffer-name)
    )
- 
+
  (js/leader-def "z" 'draft-horse-term) 
- 
- 
+
+
  ;; * tutorials
  ;; ;; ** match groups
  ;; (let
@@ -4484,11 +4502,11 @@
  ;;   ;; (match-string 0 "The quick brown fox jumped quickly.")
  ;;   ;; (match-string 1 "The quick brown fox jumped quickly.")
  ;;   (match-string 1 this-string))
- 
+
  ;; ;; ** repace (sub)string in string
  ;; (let ((this-string "foo.buzz"))
  ;; (replace-regexp-in-string (regexp-quote ".") "bar" this-string)) ;; => foobarbuzz
- 
+
  ;; ;; ** replace "pair around something"
  ;; (let ((this-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}."))
  ;;   ;; 1. with groups we can "dissect" the "<begin> <between> <end>" construct
@@ -4502,7 +4520,7 @@
  ;;   (setq the-new-whole-thing (concat "begin{exp2}" the-between-thing "end{exp2}"))
  ;;   ;; ;; 3. and replace the old by the new whole thing in the total string
  ;;   (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing this-string)
- 
+
  ;; * move position to number in clipboard
  ;; * aliases for unintuitively named functions
  (defun move-curser-to-buffer-position-in-clipboard ()
@@ -4516,22 +4534,22 @@
    (interactive "nType position (integer):")
    (goto-char POSITION)
    )
- 
+
  ;; * short-cuts (universal concept) for REPL/ debug / etc.
  ;; ** send to REPL current fun. def. (i.e. evaluate current function in elisp)
  ;;T (evil-leader/set-key-for-mode 'elisp-mode "tf" 'eval-defun) 
  ;; send to REPL current line (removing leading white spaces)
  ;; send to REPL current region
  ;; send to REPL var under point
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
  ;; =======
- 
+
  ;; ;; * tutorials
  ;; ;; ** match groups
  ;; (let
@@ -4541,11 +4559,11 @@
  ;;   ;; (match-string 0 "The quick brown fox jumped quickly.")
  ;;   ;; (match-string 1 "The quick brown fox jumped quickly.")
  ;;   (match-string 1 this-string))
- 
+
  ;; ;; ** repace (sub)string in string
  ;; (let ((this-string "foo.buzz"))
  ;; (replace-regexp-in-string (regexp-quote ".") "bar" this-string)) ;; => foobarbuzz
- 
+
  ;; ;; ** replace "pair around something"
  ;; (let ((this-string "hello, begin{exp1} my 1st expression end{exp1}, and here comes begin{exp1} my 2nd expression end{exp1}."))
  ;;   ;; 1. with groups we can "dissect" the "<begin> <between> <end>" construct
@@ -4554,14 +4572,14 @@
  ;;   (setq the-whole-thing   (match-string 0 this-string))
  ;;   (setq the-begin-thing   (match-string 1 this-string))
  ;;   (setq the-between-thing (match-string 2 this-string))
- 
+
  ;;   (setq the-end-thing     (match-string 3 this-string))
  ;;   ;; 2. now we can design "the-new-whole-thing"
  ;;   (setq the-new-whole-thing (concat "begin{exp2}" the-between-thing "end{exp2}"))
  ;;   ;; ;; 3. and replace the old by the new whole thing in the total string
  ;;   (replace-regexp-in-string (regexp-quote the-whole-thing) the-new-whole-thing this-string)
  ;;   )
- 
+
  ;; * lisp
  ;; (evil-leader/set-key "<RET>" 'eval-expression) 
 
@@ -4588,7 +4606,7 @@
 (defun js/insert-white-space ()
   (interactive)
   (insert " "))
-  
+
 
 ;; * scale fontsize (per frame)
 (defvar js/frame-font-scale-factor)

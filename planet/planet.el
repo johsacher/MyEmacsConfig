@@ -457,9 +457,9 @@ last-date)
 
 ;;test: (planet-open-today)
 ;;test: (planet-open-today)
- (js/leader-def "ot" 'planet-today)
+(unless (boundp 'doom-version) (js/leader-def "ot" 'planet-today))
 ;; (evil-leader/set-key "t" 'planet-today)
- (js/leader-def "oy" 'planet-this-week)
+(unless (boundp 'doom-version) (js/leader-def "oy" 'planet-this-week))
 
 
 
@@ -673,7 +673,7 @@ date)
   (setq planet-view-state "none")
   )
 
- (js/leader-def "oq" 'planet-view-quit)
+(unless (boundp 'doom-version) (js/leader-def "oq" 'planet-view-quit))
 
 (defun planet-view-week2X4 ()
   (interactive)
@@ -735,7 +735,7 @@ date)
 
   ;; ** set planet-view-state to "view-week2X4"
 
- (js/leader-def "ow" 'planet-view-week2X4)
+(unless (boundp 'doom-version) (js/leader-def "ow" 'planet-view-week2X4))
 
 (defun planet-setup-windows-config-2X4 ()
   (interactive)
@@ -1111,11 +1111,11 @@ date)
   )
 ;;*** guter shortcut für clock in/out / effort
 ;;**** clock in --> SPC-o-i
- (js/leader-def :keymaps 'org-mode-map "oi" 'planet-clock-in) ;
+(unless (boundp 'doom-version) (js/leader-def :keymaps 'org-mode-map "oi" 'planet-clock-in)) ;
 ;;**** clock out --> SPC-p-o
- (js/leader-def :keymaps 'org-mode-map "oo" 'planet-clock-out) ;
+(unless (boundp 'doom-version) (js/leader-def :keymaps 'org-mode-map "oo" 'planet-clock-out)) ;
 ;;**** set effort --> SPC-p-e
- (js/leader-def :keymaps 'org-mode-map "oe" 'org-set-effort) ;
+(unless (boundp 'doom-version) (js/leader-def :keymaps 'org-mode-map "oe" 'org-set-effort)) ;
 
 (defun planet-clock-in ()
   (interactive)
