@@ -1067,6 +1067,13 @@ date)
   (org-set-property "Category" "work")
   )
 
+;;* set categories (work/tools/etc.)
+(defun planet-set-category-science ()
+  (interactive)
+  (org-set-property "Category" "science")
+  )
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "occ" 'planet-set-category-science)
+
  ;; (js/leader-def :keymaps 'org-mode-mode-map "ocw" 'planet-set-category-work) ;; (did not work)
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocw" 'planet-set-category-work)
 

@@ -47,6 +47,8 @@
 	  ([?\s-1] . (lambda () (interactive) (exwm-workspace-switch 1))) 
 	  ([?\s-2] . (lambda () (interactive) (exwm-workspace-switch 2))) 
 	  ([?\s-3] . (lambda () (interactive) (exwm-workspace-switch 3)))
+	  ([?\s-4] . (lambda () (interactive) (exwm-workspace-switch 4)))
+	  ([?\s-5] . (lambda () (interactive) (exwm-workspace-switch 5)))
 	  ;; * launch apps
           ([?\s-&] . (lambda (command)
                        (interactive (list (read-shell-command "$ ")))
@@ -98,8 +100,9 @@
 ;; (setq exwm-workspace-number 4) ;;-> workspaces numbered: 0,1,2,3
 ;; (setq exwm-randr-workspace-monitor-plist '(0 "HDMI2" 1 "HDMI2")) ;; tech.comm.: maybe needs to be set after exwm-randr
 ;; ** setup minimal (2) workspaces
-(setq exwm-workspace-number 2) ;;-> workspaces numbered: 0,1
-(setq exwm-randr-workspace-monitor-plist '(1 "HDMI2")) 
+(setq exwm-workspace-number 6) ;;-> workspaces numbered: 0,1,...
+;; (setq exwm-randr-workspace-monitor-plist '(1 "HDMI2")) 
+(setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "eDP1" 2 "eDP1" 3"HDMI2" 4 "HDMI2" 5 "HDMI2" )) 
 
 ;; (add-hook 'exwm-randr-screen-change-hook #'efs/update-displays) ;; causes trouble
 (add-hook 'exwm-randr-screen-change-hook #'efs/update-displays) ;; causes trouble (js/adjust-stylus)
@@ -109,8 +112,12 @@
 (exwm-enable)
 
 
-(setq mouse-autoselect-window t)
-(setq focus-follows-mouse t)
+;; (setq mouse-autoselect-window t)
+;; (setq focus-follows-mouse t)
+(setq mouse-autoselect-window nil)
+(setq focus-follows-mouse nil)
+(setq exwm-workspace-show-all-buffers t)
+(setq exwm-layout-show-all-buffers t)
 
 
 ;; EXWM-ENABLE to be executed as LAST command AND BEFORE EXWM-INIT
@@ -118,7 +125,24 @@
 
 (defun js/screenshot-mouse-select-to-clipboard ()
   (interactive)
-  (shell-command "scrot 'screenshot_%Y-%m-%d_%H-%M-%S.png' -s -e 'xclip -selection clipboard -t image/png -i $f    &&  mv $f ~/.screenshots/'"))
-;; hangs / error, even though in terminal it works... :(
+  ;; (async-shell-command "scrot 'screenshot_%Y-%m-%d_%H-%M-%S.png' -s -e 'xclip -selection clipboard -t image/png -i $f    &&  mv $f ~/.screenshots/'"))
+;;  (hangs / error, even though in terminal it works... :(
+  ;; -> workaround:
+  (setq command-string (concat "scrot 'screenshot_%Y-%m-%d_%H-%M-%S.png' -s -e 'xclip -selection clipboard -t image/png -i $f    &&  mv $f ~/.screenshots/'" "\n")) ;; "\n" = execute
+  (comint-send-string  draft-horse-term-buffer-name command-string))
 (global-set-key (kbd "M-<print>") 'js/screenshot-mouse-select-to-clipboard)
       
+
+;; * enable "normal" CTRL-c for copy in applications (exwm-buffers)
+(define-key exwm-mode-map (kbd "C-c") nil)
+;; (mind: this disables the typical EXWM bindings (so rebind those if you wanna use theme):
+;; C-c C-f 	exwm-layout-set-fullscreen 	Enter fullscreen mode
+;; C-c C-h 	exwm-floating-hide 	Hide a floating X window
+;; C-c C-k 	exwm-input-release-keyboard 	Switch to char-mode
+;; C-c C-m 	exwm-workspace-move-window 	Move X window to another workspace
+;; C-c C-q 	exwm-input-send-next-key 	Send a single key to the X window;
+;; can be prefixed with C-u to send multiple keys
+;; C-c C-t C-f 	exwm-floating-toggle-floating 	Toggle between tiling and floating mode
+;; C-c C-t C-m 	exwm-layout-toggle-mode-line 	Toggle mode-line
+
+(setq framemove-hook-into-windmove nil)
