@@ -434,7 +434,7 @@
 ;;NOT DOOM ;;;
 
 ;; planet-mode (my org extension)
-  (load (concat my_load_path "planet/planet.el"))
+(load! "planet/planet")
 
  ;; ** save git mode default
   (planet-git-save-turn-on)
