@@ -132,7 +132,7 @@
 ;;NOT DOOM ;;;  ;;(xclip-mode 1)
 ;;NOT DOOM ;;;  (message system-name)
 ;;NOT DOOM ;;;  ;;;; customization go to specific file (in cloud)
-(setq my_load_path (file-name-directory load-file-name)) ;; save custom file also to the same path
+;;NOT DOOM (less complicated with doom's ~add-to-path!~) ;;;(setq my_load_path (file-name-directory load-file-name)) ;; save custom file also to the same path
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (setq custom-file-name "custom.el")
 ;;NOT DOOM ;;;
@@ -150,9 +150,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; path of my init file loaded in .emacs init file --> all manually installed .el-files (packages) should be located there
 ;; add this path to load path
-(setq my_load_path "~/MyEmacsConfig/") ;; the init file folder contains also all manual packages
-(add-to-list 'load-path my_load_path)
+;; (setq my_load_path "~/MyEmacsConfig/") ;; the init file folder contains also all manual packages
+;; (add-to-list 'load-path my_load_path)
 ;;(add-to-list 'image-load-path my_load_path)
+;;
+(add-load-path! ".")
 
 
 ;;NOT DOOM ;;; ;; * general.el
@@ -1266,40 +1268,77 @@
 ;;NOT DOOM ;;;  ;; paste image from clipboard
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "i" 'org-insert-clipboard-image)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun create-hidden-org-file-folder (&optional filebasename path)
-;;NOT DOOM ;;;  "in dired -> create org mode file within hidden folder (of same name)
-;;NOT DOOM ;;;  (we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
-;;NOT DOOM ;;;  (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;     ;; * determine filename
-;;NOT DOOM ;;;     (if (not filebasename)
-;;NOT DOOM ;;;         (setq filebasename (read-string "Org-file-name (without .org-extension):"))
-;;NOT DOOM ;;;       )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;     ;; * path
-;;NOT DOOM ;;;     (if (not path) ;; default --> put to current path
-;;NOT DOOM ;;;          (setq path (get-current-path))
-;;NOT DOOM ;;;       )
-;;NOT DOOM ;;;     ;; (if not already exists) create the hidden (dotted) folder with same name of org file
-;;NOT DOOM ;;;       (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
-;;NOT DOOM ;;;       (if (not (file-directory-p new-directory-full-name))
-;;NOT DOOM ;;;           (progn
-;;NOT DOOM ;;;           (make-directory new-directory-full-name)
-;;NOT DOOM ;;;            ;; create the org file within that folder
-;;NOT DOOM ;;;            (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
-;;NOT DOOM ;;;            ;; * create file (2 options)
-;;NOT DOOM ;;;            ;; ** option1: with-temp-buffer
-;;NOT DOOM ;;;            ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
-;;NOT DOOM ;;;            ;; ** option2: write-region
-;;NOT DOOM ;;;            (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
-;;NOT DOOM ;;;            ;; option2 safer, in case dayfile exists, content is not deleted
-;;NOT DOOM ;;;            )
-;;NOT DOOM ;;;         ;; else
-;;NOT DOOM ;;;          (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
-;;NOT DOOM ;;;          ;; return full file name of org file
-;;NOT DOOM ;;;         )
-;;NOT DOOM ;;;  new-org-file-full-name)
-;;NOT DOOM ;;;
+;;
+;; begin "UNDOOMED" ;;;
+(defun create-hidden-org-file-folder (&optional filebasename path)
+"in dired -> create org mode file within hidden folder (of same name)
+(we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
+(originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
+  (interactive)
+   ;; * determine filename
+   (if (not filebasename)
+       (setq filebasename (read-string "Org-file-name (without .org-extension):"))
+     )
+
+   ;; * path
+   (if (not path) ;; default --> put to current path
+        (setq path (get-current-path))
+     )
+   ;; (if not already exists) create the hidden (dotted) folder with same name of org file
+     (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
+     (if (not (file-directory-p new-directory-full-name))
+         (progn
+         (make-directory new-directory-full-name)
+          ;; create the org file within that folder
+          (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
+          ;; * create file (2 options)
+          ;; ** option1: with-temp-buffer
+          ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
+          ;; ** option2: write-region
+          (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
+          ;; option2 safer, in case dayfile exists, content is not deleted
+          )
+       ;; else
+        (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
+        ;; return full file name of org file
+       )
+new-org-file-full-name)
+
+
+(defun create-org-file-folder (&optional filebasename path)
+"in dired -> create org mode file within folder (of same name)
+(we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
+(originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
+  (interactive)
+   ;; * determine filename
+   (if (not filebasename)
+       (setq filebasename (read-string "Org-file-name (without .org-extension):"))
+     )
+
+   ;; * path
+   (if (not path) ;; default --> put to current path
+        (setq path (get-current-path))
+     )
+   ;; (if not already exists) create the folder with same name of org file
+     (setq new-directory-full-name (concat (file-name-as-directory path) filebasename ".org"))
+     (if (not (file-directory-p new-directory-full-name))
+         (progn
+         (make-directory new-directory-full-name)
+          ;; create the org file within that folder
+          (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
+          ;; * create file (2 options)
+          ;; ** option1: with-temp-buffer
+          ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
+          ;; ** option2: write-region
+          (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
+          ;; option2 safer, in case dayfile exists, content is not deleted
+          )
+       ;; else
+        (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
+        ;; return full file name of org file
+       )
+new-org-file-full-name)
+
 ;;NOT DOOM ;;;  ;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
 ;;NOT DOOM ;;;  (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
 ;;NOT DOOM ;;;     (interactive)
@@ -3678,9 +3717,12 @@
 ;;NOT DOOM ;;;  ;; *** move buffers - key bindings
 ;;NOT DOOM ;;; (use-package windmove
 ;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;; (require 'framemove)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (setq framemove-hook-into-windmove t)
+;;
+;;
+;; (require 'framemove)
+(load! "framemove")
+(setq framemove-hook-into-windmove t)
+
 ;;NOT DOOM ;;;  (global-set-key (kbd "<C-up>")     'windmove-up)
 ;;NOT DOOM ;;;  (global-set-key (kbd "<C-down>")   'windmove-down)
 ;;NOT DOOM ;;;  (global-set-key (kbd "<C-left>")   'windmove-left)

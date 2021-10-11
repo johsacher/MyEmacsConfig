@@ -246,13 +246,8 @@
  (setq auto-revert-verbose nil)
 
  ;; ** title (play around -> tribute to emacs)
-<<<<<<< HEAD
- (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
-
-=======
  ;; (setq frame-title-format '("I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs I ❤ Emacs ❤ I"))
  
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  ; ** global line number mode on
  (global-display-line-numbers-mode)
  ; ** scroll bar off
