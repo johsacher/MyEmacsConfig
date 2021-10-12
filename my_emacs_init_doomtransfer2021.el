@@ -481,7 +481,8 @@
   (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
   (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
   (message (concat "git-synchronization launched ... (executed: " command-string ")"))
-  (async-shell-command command-string))
+  ;;(let (shell-command-buffer-name-async "*gsyn output*")
+    (async-shell-command command-string "*gsyn output*"))
 
 
 
