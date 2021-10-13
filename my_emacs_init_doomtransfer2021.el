@@ -1,3 +1,7 @@
+;; * next todos
+;; ** gsyn SPC g ;
+;; ** planet funs
+;;
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
 (global-set-key [mouse-5] 'scroll-up-line)
@@ -2400,28 +2404,8 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  ;;; * dired
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** hide details by default
-;;NOT DOOM ;;;  (add-hook 'dired-mode-hook
-;;NOT DOOM ;;;            (lambda ()
-;;NOT DOOM ;;;              (dired-hide-details-mode)
-;;NOT DOOM ;;;              (display-line-numbers-mode -1)
-;;NOT DOOM ;;;              (dired-sort-toggle-or-edit)))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; ;; ** show icons by default
-;;NOT DOOM ;;;  ;; (if (not (display-graphic-p))
-;;NOT DOOM ;;;  ;;     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** dired omit files
-;;NOT DOOM ;;; (require 'dired-x)
-;;NOT DOOM ;;;    (defun dired-dotfiles-toggle ()
-;;NOT DOOM ;;;      "Show/hide dot-files"
-;;NOT DOOM ;;;      (interactive)
-;;NOT DOOM ;;;      (when (equal major-mode 'dired-mode)
-;;NOT DOOM ;;;        (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
-;;NOT DOOM ;;;  	  (progn
-;;NOT DOOM ;;;  	    (set (make-local-variable 'dired-dotfiles-show-p) nil)
-;;NOT DOOM ;;;  	    (message "h")
-;;NOT DOOM ;;;  	    (dired-mark-files-regexp "^\\\.")
+(add-hook 'dired-mode-hook
+            'dired-hide-details-mode)
 ;;NOT DOOM ;;;  	    (dired-do-kill-lines))
 ;;NOT DOOM ;;;  	(progn (revert-buffer) ; otherwise just revert to re-show
 ;;NOT DOOM ;;;                 (set (make-local-variable 'dired-dotfiles-show-p) t)))))
