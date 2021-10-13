@@ -3735,7 +3735,6 @@ new-org-file-full-name)
        :nvieomr "M-j" nil
        :nvieomr "M-h" nil
        :nvieomr "M-l" nil)
-(map! ;map )
 
 (map! :map term-raw-map
         "M-k"  #'windmove-up
