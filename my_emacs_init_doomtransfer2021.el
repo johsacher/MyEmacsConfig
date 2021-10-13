@@ -3724,15 +3724,40 @@ new-org-file-full-name)
 (load! "framemove")
 (setq framemove-hook-into-windmove t)
 
-;;NOT DOOM ;;;  (global-set-key (kbd "<C-up>")     'windmove-up)
-;;NOT DOOM ;;;  (global-set-key (kbd "<C-down>")   'windmove-down)
-;;NOT DOOM ;;;  (global-set-key (kbd "<C-left>")   'windmove-left)
-;;NOT DOOM ;;;  (global-set-key (kbd "<C-right>")  'windmove-right)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (global-set-key (kbd "M-k")     'windmove-up)
-;;NOT DOOM ;;;  (global-set-key (kbd "M-j")   'windmove-down)
-;;NOT DOOM ;;;  (global-set-key (kbd "M-h")   'windmove-left)
-;;NOT DOOM ;;;  (global-set-key (kbd "M-l")  'windmove-right)
+
+;; (global-set-key (kbd "<C-up>")     'windmove-up)
+;; (global-set-key (kbd "<C-down>")   'windmove-down)
+;; (global-set-key (kbd "<C-left>")   'windmove-left)
+;; (global-set-key (kbd "<C-right>")  'windmove-right)
+;; * TOP priority window movement/handling with M/Alt
+
+(map! :map general-override-mode-map
+        "M-k"  #'windmove-up
+        "M-j"  #'windmove-down
+        "M-h"  #'windmove-left
+        "M-l"  #'windmove-right)
+
+;; also affect org-mode -> this worked
+(map! :map evil-org-mode-map
+       :nvieomr "M-k" nil
+       :nvieomr "M-j" nil
+       :nvieomr "M-h" nil
+       :nvieomr "M-l" nil)
+
+(map! :map term-raw-map
+        "M-k"  #'windmove-up
+        "M-j"  #'windmove-down
+        "M-h"  #'windmove-left
+        "M-l"  #'windmove-right)
+
+;;NOT DOOM ;;;  ;; tweek for org-mode, other
+;; (define-key org-mode-map "\M-k" 'windmove-up)
+;; (define-key org-mode-map "\M-h" 'windmove-left)
+;; (define-key org-mode-map "\M-l" 'windmove-right)
+;; (define-key org-mode-map "\M-j" 'windmove-down)
+
+
+
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; tweak in term-mode, so these also work in term-windows:
 ;;NOT DOOM ;;;   (define-key term-raw-map "\M-k" 'windmove-up)
@@ -3740,11 +3765,6 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;   (define-key term-raw-map "\M-l" 'windmove-right)
 ;;NOT DOOM ;;;   (define-key term-raw-map "\M-j" 'windmove-down)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; tweek for org-mode, other
-;;NOT DOOM ;;;  (define-key org-mode-map "\M-k" 'windmove-up)
-;;NOT DOOM ;;;  (define-key org-mode-map "\M-h" 'windmove-left)
-;;NOT DOOM ;;;  (define-key org-mode-map "\M-l" 'windmove-right)
-;;NOT DOOM ;;;  (define-key org-mode-map "\M-j" 'windmove-down)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; evil-like other bindings, that I like
 ;;NOT DOOM ;;;  ;; hmm.. maybe not yet, might by usefull for other stuff (-> outcommented)
