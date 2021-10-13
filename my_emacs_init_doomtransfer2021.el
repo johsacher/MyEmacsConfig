@@ -1,5 +1,5 @@
 ;; * next todos
-;; ** gsyn SPC g ;
+;; ** DONE gsyn SPC g ;
 ;; ** planet funs
 ;;
 (xterm-mouse-mode 1)
@@ -488,7 +488,10 @@
   ;;(let (shell-command-buffer-name-async "*gsyn output*")
     (async-shell-command command-string "*gsyn output*"))
 
-
+;; key binding (conform with doom "SPC g ...")
+(map! :leader
+      ;; :prefix ("g" . "+git") ;; not necessary
+      "g ;" 'gsyn)
 
 ;;NOT DOOM ;;;  ;;;+) MELPA packages - make them available (some very good additional package list)
 ;;NOT DOOM ;;; ;; (add-to-list 'package-archives
@@ -3720,6 +3723,11 @@ new-org-file-full-name)
         "M-j"  #'windmove-down
         "M-h"  #'windmove-left
         "M-l"  #'windmove-right)
+(map! :map evil-org-mode-map
+       :nvieomr "C-k" #'org-metaup
+       :nvieomr "C-j" #'org-metadown
+       :nvieomr "C-h" #'org-metaleft
+       :nvieomr "C-l" #'org-metaright)
 
 ;; also affect org-mode -> this worked
 (map! :map evil-org-mode-map
@@ -3727,6 +3735,7 @@ new-org-file-full-name)
        :nvieomr "M-j" nil
        :nvieomr "M-h" nil
        :nvieomr "M-l" nil)
+(map! ;map )
 
 (map! :map term-raw-map
         "M-k"  #'windmove-up
