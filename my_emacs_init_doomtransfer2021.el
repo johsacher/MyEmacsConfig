@@ -2,7 +2,7 @@
 ;; ** DONE gsyn SPC g ;
 ;; ** DONE M-hjkl -> windmove
 ;; ** DONE org-metaup etc. C-h/j/k/l
-;; ** planet funs
+;; ** DONE planet funs
 ;;
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
