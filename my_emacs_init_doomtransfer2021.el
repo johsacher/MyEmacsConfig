@@ -1,5 +1,7 @@
 ;; * next todos
 ;; ** DONE gsyn SPC g ;
+;; ** DONE M-hjkl -> windmove
+;; ** DONE org-metaup etc. C-h/j/k/l
 ;; ** planet funs
 ;;
 (xterm-mouse-mode 1)
@@ -443,6 +445,12 @@
  ;; ** save git mode default
   (planet-git-save-turn-on)
 
+(map! :leader
+      (:prefix-map ("d" . "planet")
+       :desc "planet today"      "d" #'planet-today
+       :desc "planet week"       "y" #'planet-this-week
+       :desc "planet view week"  "w" #'planet-view-week2X4
+       :desc "planet view quit"  "q" #'planet-view-quit))
 
   ;; don t know if usefull ;; ;; ** default initial view (levels)
   ;; don t know if usefull ;; (add-hook 'planet-mode-hook
