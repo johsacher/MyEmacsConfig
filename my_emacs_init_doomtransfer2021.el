@@ -418,9 +418,6 @@
 (map! :leader "d" #'dired-go-current-buffer)
 
 
-
-(map! :leader "M-d" #'kill-this-buffer-no-prompt)
-
 ;;NOT DOOM POT;;;    "g" 'helm-swoop  ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
 ;;NOT DOOM POT;;;    "p" 'helm-projectile-find-file ;; -> "p" ssh-clipboard-paste, defined there
 ;;NOT DOOM POT;;;    "d" 'dired-go-current-buffer
@@ -3754,7 +3751,7 @@ new-org-file-full-name)
         "M-1"  #'delete-other-windows
         "M-2"  #'split-window-below
         "M-3"  #'split-window-right
-        "M-d"  #'kill-this-buffer-no-promp
+        "M-d"  #'kill-this-buffer-no-prompt
         "M-y" #'previous-buffer
         "M-o" #'next-buffer
         "M-u" #'get-this-buffer-to-move
