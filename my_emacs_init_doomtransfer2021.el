@@ -222,12 +222,13 @@
 ;;NOT DOOM ;;;     ;; else -> run new firefox
 ;;NOT DOOM ;;;       (start-process-shell-command "firefox" nil "firefox")))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; (global-set-key (kbd "M-b") 'helm-mini)
+;;NOT DOOM ;;; (global-set-key (kbd "M-b") 'helm-mini )
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; (global-set-key (kbd "M-K") 'enlarge-window-4)
-;;NOT DOOM ;;; (global-set-key (kbd "M-J") 'shrink-window-4)
-;;NOT DOOM ;;; (global-set-key (kbd "M-H") 'enlarge-window-horizontally-4)
-;;NOT DOOM ;;; (global-set-key (kbd "M-L") 'shrink-window-horizontally-4)
+(map!
+"M-K" '(lambda () (interactive) (enlarge-window 4))
+"M-J" '(lambda () (interactive) (shrink-window 4))
+"M-H" '(lambda () (interactive) (enlarge-window-horizontally 4))
+"M-L" '(lambda () (interactive) (shrink-window-horizontally 4)))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; ;; kbd "M-[" makes (xterm-mouse-mode behave strange/break (bug?)
 ;;NOT DOOM ;;;
@@ -380,15 +381,17 @@
 ;;NOT DOOM ;;; (use-package evil-visualstar
 ;;NOT DOOM ;;;   :ensure t)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; quick search replace
-;;NOT DOOM POT ;;;  (defun quick-evil-search-replace ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;  (let ((my-string "'<,'>s///g"))
-;;NOT DOOM ;;;    (minibuffer-with-setup-hook
-;;NOT DOOM ;;;     ;; (lambda () (backward-char  4))
-;;NOT DOOM ;;;      (lambda () (backward-char (/ 7 2)))
-;;NOT DOOM ;;;      (evil-ex my-string)))
-;;NOT DOOM ;;;  )
+;; quick search replace
+(defun quick-evil-search-replace ()
+  (interactive)
+(let ((my-string "'<,'>s///g"))
+  (minibuffer-with-setup-hook
+   ;; (lambda () (backward-char  4))
+    (lambda () (backward-char (/ 7 2)))
+    (evil-ex my-string))))
+
+(map! :leader
+      :n "r" #'quick-evil-search-replace)
 ;;NOT DOOM ;;;
 ;;NOT DOOM POT ;;;  ;; quickly select pasted region
 ;;NOT DOOM ;;;  (defun evil-select-pasted ()
@@ -2084,10 +2087,9 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;    (interactive)
 ;;NOT DOOM ;;;    (shrink-window 4)
 ;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun enlarge-window-4 ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (enlarge-window 4)
-;;NOT DOOM ;;;    )
+;;NOT DOOM ;;;(defun enlarge-window-4 ()
+;;NOT DOOM ;;;  (interactive)
+;;NOT DOOM ;;;  (enlarge-window 4))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (provide 'iresize)
 ;;NOT DOOM ;;;
