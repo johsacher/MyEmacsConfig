@@ -1564,7 +1564,6 @@ date)
   (face-remap-add-relative 'header-line :foreground foreground-color)
   (face-remap-add-relative 'header-line :background background-color)
   (face-remap-add-relative 'header-line :weight 'bold)
-:weight 'bold
   ;;* show header line
   (setq header-line-format title-string)
   )
