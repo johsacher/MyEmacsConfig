@@ -2543,13 +2543,20 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "<SPC>") 'dired-narrow)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;;; dired ranger key's - nicely copy/paste files/dirs
-;;NOT DOOM ;;; (use-package dired-ranger
-;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;;   (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
-;;NOT DOOM ;;;   (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
-;;NOT DOOM ;;;   (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
-;;NOT DOOM ;;;
+
+ ;; ;;; dired ranger key's - nicely copy/paste files/dirs
+(after! dired-ranger
+  (map! :map dired-mode-map
+        :n  "Y"  #'dired-ranger-copy
+        :n  "X"  #'dired-ranger-move
+        :n  "P"  #'dired-ranger-paste))
+
+  ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
+  ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
+  ;; (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
+
+
+
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
 ;;NOT DOOM ;;;  (defun dired-go-current-buffer ()
@@ -3738,18 +3745,19 @@ new-org-file-full-name)
         "M-2"  #'split-window-below
         "M-3"  #'split-window-right)
 
+
+;; also affect org-mode -> this worked
+(after! evil-org
 (map! :map evil-org-mode-map
        :nvieomr "C-k" #'org-metaup
        :nvieomr "C-j" #'org-metadown
        :nvieomr "C-h" #'org-metaleft
        :nvieomr "C-l" #'org-metaright)
-
-;; also affect org-mode -> this worked
 (map! :map evil-org-mode-map
        :nvieomr "M-k" nil
        :nvieomr "M-j" nil
        :nvieomr "M-h" nil
-       :nvieomr "M-l" nil)
+       :nvieomr "M-l" nil))
 
 (map! :map term-raw-map
         "M-k"  #'windmove-up
