@@ -3,7 +3,8 @@
 ;; ** DONE M-hjkl -> windmove
 ;; ** DONE org-metaup etc. C-h/j/k/l
 ;; ** DONE planet funs
-;; ** DONE line wrapping default (the doom way?)
+;; ** TODO line wrapping default (the doom way?)
+;; ** TODO visual state - expand on repeat "v"
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
@@ -197,12 +198,12 @@
 ;;NOT DOOM ;;; ;;  GENERAL SETTINGS
 ;;NOT DOOM ;;; ;;
 ;;NOT DOOM ;;; ;; ;; * window movement/placement ("'M' is my leader")
-;;NOT DOOM POT;;; ;; (global-set-key (kbd "M-2") 'split-window-below)
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-3") 'split-window-right)
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-0") 'delete-window)
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
+;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-2") 'split-window-below)
+;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-3") 'split-window-right)
+;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-0") 'delete-window)
+;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
 ;;NOT DOOM ;;; ;; (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt)
+;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt)
 ;;NOT DOOM ;;; ;; (global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
 ;;NOT DOOM ;;; ;; (global-set-key (kbd "M-;") 'js/open-browser)
 ;;NOT DOOM ;;; ;; (global-set-key (kbd "M-y") 'previous-buffer)
@@ -3731,7 +3732,12 @@ new-org-file-full-name)
         "M-k"  #'windmove-up
         "M-j"  #'windmove-down
         "M-h"  #'windmove-left
-        "M-l"  #'windmove-right)
+        "M-l"  #'windmove-right
+        "M-0"  #'delete-window
+        "M-1"  #'delete-other-windows
+        "M-2"  #'split-window-below
+        "M-3"  #'split-window-right)
+
 (map! :map evil-org-mode-map
        :nvieomr "C-k" #'org-metaup
        :nvieomr "C-j" #'org-metadown
