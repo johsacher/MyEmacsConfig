@@ -3,8 +3,9 @@
 ;; ** DONE M-hjkl -> windmove
 ;; ** DONE org-metaup etc. C-h/j/k/l
 ;; ** DONE planet funs
+;; ** DONE quick search replace in region
 ;; ** TODO line wrapping default (the doom way?)
-;; ** TODO visual state - expand on repeat "v"
+;; ** DONE visual state - expand on repeat "v"
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
@@ -202,12 +203,11 @@
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-3") 'split-window-right)
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-0") 'delete-window)
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
-;;NOT DOOM ;;; ;; (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt)
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
+;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
 ;;NOT DOOM ;;; ;; (global-set-key (kbd "M-;") 'js/open-browser)
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-y") 'previous-buffer)
-;;NOT DOOM ;;; ;; (global-set-key (kbd "M-o") 'next-buffer)
+;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-y") 'previous-buffer)
+;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-o") 'next-buffer)
 ;;NOT DOOM ;;; ;;
 ;;NOT DOOM ;;; (defun js/open-browser ()
 ;;NOT DOOM ;;;   "shall context dependent, open browser and do what i (probably) want:
@@ -382,7 +382,7 @@
 ;;NOT DOOM ;;;   :ensure t)
 ;;NOT DOOM ;;;
 ;; quick search replace
-(defun quick-evil-search-replace ()
+(defun quick-evil-search-replace-region ()
   (interactive)
 (let ((my-string "'<,'>s///g"))
   (minibuffer-with-setup-hook
@@ -391,7 +391,7 @@
     (evil-ex my-string))))
 
 (map! :leader
-      :n "r" #'quick-evil-search-replace)
+      :n "r" #'quick-evil-search-replace-region)
 ;;NOT DOOM ;;;
 ;;NOT DOOM POT ;;;  ;; quickly select pasted region
 ;;NOT DOOM ;;;  (defun evil-select-pasted ()
@@ -409,7 +409,18 @@
 ;;NOT DOOM POT;;;    "k" 'kill-this-buffer-no-prompt
 ;;NOT DOOM POT;;;    "s" 'save-buffer
 ;;NOT DOOM POT;;;    "f" 'helm-find
-;;NOT DOOM POT;;;    "d" 'dired-go-current-buffer
+
+
+;; dired-go-current-buffer
+(defun dired-go-current-buffer ()
+   (interactive)
+       (dired default-directory))
+(map! :leader "d" #'dired-go-current-buffer)
+
+
+
+(map! :leader "M-d" #'kill-this-buffer-no-prompt)
+
 ;;NOT DOOM POT;;;    "g" 'helm-swoop  ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
 ;;NOT DOOM POT;;;    "p" 'helm-projectile-find-file ;; -> "p" ssh-clipboard-paste, defined there
 ;;NOT DOOM POT;;;    "d" 'dired-go-current-buffer
@@ -451,7 +462,7 @@
   (planet-git-save-turn-on)
 
 (map! :leader
-      (:prefix-map ("d" . "planet")
+      (:prefix-map ("e" . "planet")
        :desc "planet today"      "d" #'planet-today
        :desc "planet week"       "y" #'planet-this-week
        :desc "planet view week"  "w" #'planet-view-week2X4
@@ -2534,7 +2545,7 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ;; go up directory with backspace
-;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<DEL>") 'dired-up-directory)
+(map! :map dired-mode-map "<DEL>" 'dired-up-directory)
 ;;NOT DOOM ;;; ;;
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ;; quickly choose files by letters
@@ -2561,10 +2572,6 @@ new-org-file-full-name)
 
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
-;;NOT DOOM ;;;  (defun dired-go-current-buffer ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;         (dired default-directory)
-;;NOT DOOM ;;;    )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; evil dired - (results in mixture of evil and dired, evil: gg,G,/,?,yy,v  , dired, s,m,W,X,Y, etc.)
 ;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "W") 'dired-ranger-copy)
@@ -3737,6 +3744,7 @@ new-org-file-full-name)
 ;; (global-set-key (kbd "<C-right>")  'windmove-right)
 ;; * TOP priority window movement/handling with M/Alt
 
+;; * "M as my leader" for prime-window/buffer management
 (map! :map general-override-mode-map
         "M-k"  #'windmove-up
         "M-j"  #'windmove-down
@@ -3745,8 +3753,26 @@ new-org-file-full-name)
         "M-0"  #'delete-window
         "M-1"  #'delete-other-windows
         "M-2"  #'split-window-below
-        "M-3"  #'split-window-right)
+        "M-3"  #'split-window-right
+        "M-d"  #'kill-this-buffer-no-promp
+        "M-y" #'previous-buffer
+        "M-o" #'next-buffer
+        "M-u" #'get-this-buffer-to-move
+        "M-i" #'switch-to-buffer-to-move)
 
+(defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
+
+(defun get-this-buffer-to-move ()
+  (interactive)
+  ;;(setq buffer-to-move-to-another-window (current-buffer))
+  (kill-new (buffer-name))
+  (previous-buffer)
+  (message (concat "buffer set to move: " (buffer-name))))
+(defun switch-to-buffer-to-move ()
+  (interactive)
+  (setq buffer-name-to-move-to (current-kill 0))
+  (message buffer-name-to-move-to)
+  (switch-to-buffer buffer-name-to-move-to))
 
 ;; also affect org-mode -> this worked
 (after! evil-org
@@ -3754,12 +3780,20 @@ new-org-file-full-name)
        :nvieomr "C-k" #'org-metaup
        :nvieomr "C-j" #'org-metadown
        :nvieomr "C-h" #'org-metaleft
-       :nvieomr "C-l" #'org-metaright)
+       :nvieomr "C-l" #'org-metaright
+       :nvieomr "C-K" #'org-shiftmetaup
+       :nvieomr "C-J" #'org-shiftmetadown
+       :nvieomr "C-H" #'org-shiftmetaleft
+       :nvieomr "C-L" #'org-shiftmetaright)
 (map! :map evil-org-mode-map
        :nvieomr "M-k" nil
        :nvieomr "M-j" nil
        :nvieomr "M-h" nil
-       :nvieomr "M-l" nil))
+       :nvieomr "M-l" nil
+       :nvieomr "M-K" nil
+       :nvieomr "M-J" nil
+       :nvieomr "M-H" nil
+       :nvieomr "M-L" nil))
 
 (map! :map term-raw-map
         "M-k"  #'windmove-up
@@ -4523,7 +4557,7 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;   :ensure t)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** expand-region -> evil-mode shortcut -> visual mode map: "v" -> expand region / instead of exit visual mode
-;;NOT DOOM ;;;  (define-key evil-visual-state-map (kbd "v") 'er/expand-region)
+(map! :map evil-visual-state-map "v" 'er/expand-region)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; * sudo-edit
 ;;NOT DOOM ;;;  (defun sudo-edit (&optional arg)
