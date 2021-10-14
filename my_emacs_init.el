@@ -711,12 +711,9 @@
  ;; ** always redisplay inline images after ctrl-c-ctrl-c
  (advice-add 'org-ctrl-c-ctrl-c :after 'org-redisplay-inline-images)
 
-<<<<<<< HEAD
-=======
 ;; ** display of latex formulas -> increase size
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
  
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  ;; ** org bullets
  ;; hexagrams
  ;; “✡” “⎈” “✽” “✲” “✱” “✻” “✼” “✽” “✾” “✿” “❀” “❁” “❂” “❃” “❄” “❅” “❆” “❇”
@@ -1011,9 +1008,7 @@
 (js/leader-def :keymaps 'org-mode-map "ji" 'org-toggle-italic-region)
 (js/leader-def :keymaps 'org-mode-map "jc" 'org-toggle-code-region)
 (js/leader-def :keymaps 'org-mode-map "ju" 'org-toggle-underline-region)
-<<<<<<< HEAD
 
-=======
 (js/leader-def :keymaps 'org-mode-map "jq" 'org-toggle-quote-region)
 
 ;; toggle latex preview
@@ -1038,7 +1033,6 @@
 (js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview-toggle-clear-preview-all)
 (js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview)
  
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  (defun region-to-string ()
    (interactive)
    (setq region-string (buffer-substring (mark) (point)))
@@ -1264,15 +1258,12 @@
  (add-to-list 'display-buffer-alist
    (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
  ;; **** define the "run-f5" short cut
-<<<<<<< HEAD
  (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
 
-=======
 
 (require 'latex)
 (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)  
  
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  ;; ** evil org
 (use-package evil-org
   :ensure t)
@@ -1441,13 +1432,8 @@
   currentpath)
 
  ;; ** default LATEX_HEADER
-<<<<<<< HEAD
 
- ;; *** allow bindings to work "#BIND+ ..."
-=======
- 
  ;; *** allow bindings ("entangled code execution") to work "#BIND+ ..."
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  (setq org-export-allow-bind-keywords t)
  ;; (not code, just doc here)
 
@@ -3165,23 +3151,18 @@
  ;; * show compile window, where pointer is always at end
  ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
  )
-<<<<<<< HEAD
 
  ;;t (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
  ;;t (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)  
 
-=======
  
  
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  (defun run-bibtex-on-master-file ()
  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
  (interactive)
  (TeX-command "BibTeX" 'TeX-master-file nil)
  )
 
-<<<<<<< HEAD
-=======
  (defun run-biber-on-master-file ()
  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
  (interactive)
@@ -3191,7 +3172,6 @@
 (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)  
 (define-key LaTeX-mode-map (kbd "<f6>") 'run-biber-on-master-file)  
  
->>>>>>> bc20391cf0e102d3cf84b4bd3ea34bb1d4e576a5
  ;; ** other handy short-cuts with leader-key
  ;;T (evil-leader/set-key-for-mode 'LaTeX-mode "lv" 'TeX-view)
  ;; ** color short-cuts
@@ -4698,8 +4678,11 @@
 ;; * set transparency
 ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(when (equal (getenv "WINDOW_MANAGER") "exwm");; env.-var set in .xinitrc_exwm
     (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
     (add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
+    )
 
 ;; * EXWM window manager (this might go into some EXWM.el later)
   (if (equal (getenv "WINDOW_MANAGER") "exwm");; env.-var set in .xinitrc_exwm
