@@ -30,16 +30,6 @@
    )     
 )
 
-
-(defun dummy-fun-fun ()
-  (interactive)
-  (setq dummy  default-directory)
-  (message dummy)
-  ;;(message major-mode)
-  )
-(switch-to-buffer "sacher_init.el")
-
-
 (defun copy-current-file-name ()
   (interactive)
   (cond ( (equal major-mode 'dired-mode)

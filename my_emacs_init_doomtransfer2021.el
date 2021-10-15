@@ -2376,21 +2376,14 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; * WINDOW / BUFFER NAVIGATION STUFF
 ;;NOT DOOM ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;NOT DOOM ;;;  ;;; ** copy/paste path between buffers (terminal/dired)
-;;NOT DOOM ;;;  (load "copy-paste-paths.el")
-;;NOT DOOM ;;;  (evil-add-hjkl-bindings dired-mode-map 'emacs)
-;;NOT DOOM ;;;  ;; copy current path key bindings
-;;NOT DOOM ;;;  (global-set-key (kbd "<f1>") 'copy-current-path)
-;;NOT DOOM ;;; (require 'dired)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<f1>") 'copy-current-path)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (global-set-key (kbd "<f2>") 'change-dir-from-clipboard)
-;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<f2>") 'change-dir-from-clipboard)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
-;;NOT DOOM ;;;  (js/leader-def "y" 'copy-current-path) ;; analogouns to y = vim yank
-;;NOT DOOM ;;;  (js/leader-def "p" 'change-dir-from-clipboard) ;; analogouns to p = vim yank
+;;; ** copy/paste path between buffers (terminal/dired)
+(load "copy-paste-paths.el")
+;; copy current path key bindings
+;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
+(map! :leader
+      (:prefix-map ("y" . "paths")
+       :desc "copy current path" "y" 'copy-current-path ;; analogouns to y = vim yank
+       :desc "change path"       "p" 'change-dir-from-clipboard)) ;; analogouns to y = vim yank
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
 ;;NOT DOOM ;;;  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
@@ -2485,47 +2478,29 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  ;;     (add-to-list 'tramp-default-proxies-alist
 ;;NOT DOOM ;;;  ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
-;;NOT DOOM ;;;  (defvar home-dir (substitute-in-file-name "$HOME"))
-;;NOT DOOM ;;;  (defun dired-go-home ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (dired home-dir))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defvar temp-dir (concat (substitute-in-file-name "$HOME") "/temp"))
-;;NOT DOOM ;;;  (defun dired-go-temp ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (dired temp-dir))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun dired-go-work ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (dired (substitute-in-file-name "$WORK"))
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun dired-go-fast ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (dired (substitute-in-file-name "$FAST"))
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defvar downloads-dir)
-;;NOT DOOM ;;;  (cond
-;;NOT DOOM ;;;   ((equal myhost "phone")
-;;NOT DOOM ;;;    (setq downloads-dir "/storage/emulated/0/Download/"))
-;;NOT DOOM ;;;   ((equal myhost "laptop")
-;;NOT DOOM ;;;    (setq downloads-dir (concat home-dir "/Downloads"))))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun dired-go-downloads ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (dired downloads-dir))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (js/leader-def "hh" 'dired-go-home)
-;;NOT DOOM ;;;  (js/leader-def "ht" 'dired-go-temp)
-;;NOT DOOM ;;;  (js/leader-def "hw" 'dired-go-work)
-;;NOT DOOM ;;;  (js/leader-def "hf" 'dired-go-fast) ;; for mathe-cluster
-;;NOT DOOM ;;;  (js/leader-def "hd" 'dired-go-downloads)
-;;NOT DOOM ;;;  (defun dired-go-mucke ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (dired (concat (substitute-in-file-name "$HOME") "/org/mucke/basking_project")))
-;;NOT DOOM ;;;
+;;
+;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
+(defvar downloads-dir)
+(cond
+ ((equal myhost "phone")
+  (setq downloads-dir "/storage/emulated/0/Download/"))
+ ((equal myhost "laptop")
+  (setq downloads-dir (concat home-dir "/Downloads"))))
+
+(defun dired-go-downloads ()
+  (interactive)
+  (dired downloads-dir))
+
+(map! :leader
+      (:prefix-map ("l" . "frequent dirs")
+      :desc "home"            "h" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME")))
+      :desc "downloads"       "d" #'dired-go-downloads
+      :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
+      :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
+      :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
+      :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/basking_project")))
+ ))
+
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
 ;;NOT DOOM ;;;  (js/leader-def "hb" 'helm-bookmarks)
 ;;NOT DOOM ;;;
@@ -2542,7 +2517,7 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ;; go up directory with backspace
-(map! :map dired-mode-map "<DEL>" 'dired-up-directory)
+(map! :map dired-mode-map :n "<DEL>" 'dired-up-directory)
 ;;NOT DOOM ;;; ;;
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ;; quickly choose files by letters
@@ -2796,7 +2771,7 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  (define-key matlab-mode-map "\M-j" 'windmove-down)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;
+;;T (load "my_matlab_hacks.el")
 ;;NOT DOOM ;;;  ;;; MATLAB comodity things
 ;;NOT DOOM ;;;  (defun send-string-to-matlab-shell-buffer-and-execute (sendstring)
 ;;NOT DOOM ;;;    "execute region line by line in interactive shell (buffer *shell*)."
