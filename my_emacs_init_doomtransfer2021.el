@@ -6,12 +6,17 @@
 ;; ** DONE quick search replace in region
 ;; ** TODO line wrapping default (the doom way?)
 ;; ** DONE visual state - expand on repeat "v"
+;; ** TODO check hooks doom way? add-hook or add-hook!
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
 (global-set-key [mouse-5] 'scroll-up-line)
 
-
+;; * leader ; -> M-x
+;;   leader : -> eval-expression
+(map! :leader
+      :desc "M-x" ";" #'execute-extended-command
+      :desc "Eval expression" ":" #'eval-expression)
 
 ;; * TODOs
 ;; ** better mode-line color inactive window light-grey (?), active --> black??
@@ -465,6 +470,23 @@
        :desc "planet view week"  "w" #'planet-view-week2X4
        :desc "planet view quit"  "q" #'planet-view-quit))
 
+;; not working (see learnings key evil emacs):
+;; (map! :map planet-mode-map
+;;       :n ">" #'planet-next
+;;       :n "<" #'planet-previous)
+;; (evil-make-overriding-map planet-mode-map 'normal)
+
+;; "brute" solution (works, since evil-normal-state-local-map precedes evil-org):
+(add-hook 'planet-mode-hook
+  (lambda ()
+    (define-key evil-normal-state-local-map ">" 'planet-next)
+    (define-key evil-normal-state-local-map "<" 'planet-previous)))
+
+
+(defun efs/run-in-background (command)
+  (let ((command-parts (split-string command "[ ]+")))
+    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+
   ;; don t know if usefull ;; ;; ** default initial view (levels)
   ;; don t know if usefull ;; (add-hook 'planet-mode-hook
   ;; don t know if usefull ;;          (lambda ()
@@ -832,27 +854,31 @@
 ;;NOT DOOM ;;;     (async-shell-command
 ;;NOT DOOM ;;;      command output-buffer-name)))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; (defun js/org-insert-xournal-note ()
-;;NOT DOOM ;;;   (interactive)
-;;NOT DOOM ;;;   ;; * file name
-;;NOT DOOM ;;;   (setq date (planet-get-todays-date))
-;;NOT DOOM ;;;   (setq min (format "%02i"(planet-date-get-min date)))
-;;NOT DOOM ;;;   (setq hour (format "%02i"(planet-date-get-hour date)))
-;;NOT DOOM ;;;   (setq filename (concat (planet-convert-date-to-filebasename date) "_" hour "_" min ".xpp"))
-;;NOT DOOM ;;;   (message filename)
-;;NOT DOOM ;;;   ;; * create file from template
-;;NOT DOOM ;;;   (setq currentpath (file-name-directory buffer-file-name))
-;;NOT DOOM ;;;   (setq filefullname (concat  currentpath "/" filename))
-;;NOT DOOM ;;;   (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xpp")
-;;NOT DOOM ;;;   ;; * open xournal file (no popup of async output)
-;;NOT DOOM ;;;   (setq command_string (concat "xournal " filefullname))
-;;NOT DOOM ;;;   (async-shell-command-no-window command_string  "*org_xournal_new_open_output*")
-;;NOT DOOM ;;;   (copy-file template-filefullname filefullname)
-;;NOT DOOM ;;;   ;; * insert file link
-;;NOT DOOM ;;;   (end-of-line)
-;;NOT DOOM ;;;   (newline)
-;;NOT DOOM ;;;   (insert (concat "[[file:" filename "][✎]]")) ;; insert "pencil-button" to open and edit (org file link)
-;;NOT DOOM ;;;   )
+(defun js/org-insert-xournal-note ()
+  (interactive)
+  ;; * file name
+  (setq date (planet-get-todays-date))
+  (setq min (format "%02i"(planet-date-get-min date)))
+  (setq hour (format "%02i"(planet-date-get-hour date)))
+  (setq filename (concat (planet-convert-date-to-filebasename date) "_" hour "_" min ".xopp"))
+  (message filename)
+  ;; * create file from template
+  (setq currentpath (file-name-directory buffer-file-name))
+  (setq filefullname (concat  currentpath "/" filename))
+  (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xopp")
+  ;; * open xournal file (no popup of async output)
+  (setq command_string (concat "xournalpp " filefullname))
+  (async-shell-command-no-window command_string  "*org_xournal_new_open_output*")
+  (copy-file template-filefullname filefullname)
+  ;; * insert file link
+  (end-of-line)
+  (newline)
+  (insert (concat "[[file:" filename "][✎]]")) ;; insert "pencil-button" to open and edit (org file link)
+  )
+
+
+
+
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; (defun dummy ()
 ;;NOT DOOM ;;;   (interactive)
@@ -1275,24 +1301,24 @@
 ;;NOT DOOM ;;;              (visual-line-mode)))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** paste image from clipboard in org-mode
-;;NOT DOOM ;;;  (defun org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq filename
-;;NOT DOOM ;;;          (concat
-;;NOT DOOM ;;;                    "screenshot_"
-;;NOT DOOM ;;;                    (format-time-string "%Y%m%d_%H%M%S") ".png"))
-;;NOT DOOM ;;;    (setq command_string (concat "xclip -selection clipboard -t image/png -o > " filename))
-;;NOT DOOM ;;;    (shell-command command_string)
-;;NOT DOOM ;;;    ;; (message concat("executed command: "  command_string))
-;;NOT DOOM ;;;    ;; insert new line with file ref
-;;NOT DOOM ;;;    (end-of-line)
-;;NOT DOOM ;;;    (newline)
-;;NOT DOOM ;;;    (insert (concat "[[./" filename "]]"))
-;;NOT DOOM ;;;    ;; (insert command_string)
-;;NOT DOOM ;;;    (org-display-inline-images)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
+;; ** paste image from clipboard in org-mode
+(defun org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
+  (interactive)
+  (setq filename
+        (concat
+                  "screenshot_"
+                  (format-time-string "%Y%m%d_%H%M%S") ".png"))
+  (setq command_string (concat "xclip -selection clipboard -t image/png -o > " filename))
+  (shell-command command_string)
+  ;; (message concat("executed command: "  command_string))
+  ;; insert new line with file ref
+  (end-of-line)
+  (newline)
+  (insert (concat "[[./" filename "]]"))
+  ;; (insert command_string)
+  (org-display-inline-images)
+  )
+
 ;;NOT DOOM ;;;  ;; (evil-leader/set-key "ln" 'planet-open-quick-notes)
 ;;NOT DOOM ;;;  ;; paste image from clipboard
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "i" 'org-insert-clipboard-image)
@@ -1898,9 +1924,41 @@ new-org-file-full-name)
 ;;NOT DOOM ;;; (use-package term
 ;;NOT DOOM ;;;   :ensure t) ;; stickyterm builds on /requires term (variables etc. -> load term before
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (load "stickyterm.el")
-;;NOT DOOM ;;;  (global-set-key (kbd "<f12>") 'stickyterm-noninteractive)
-;;NOT DOOM ;;;  (js/leader-def "7" 'stickyterm-noninteractive)
+(load "stickyterm.el")
+(defun js/launch-ansi-term ()
+  "Start a terminal-emulator in a new buffer."
+  (interactive)
+  ;; Pick the name of the new buffer.
+  (setq program "/bin/bash")
+  (setq new-buffer-name nil)
+  (setq term-ansi-buffer-name
+	(if new-buffer-name
+	    new-buffer-name
+	  (if term-ansi-buffer-base-name
+	      (if (eq term-ansi-buffer-base-name t)
+		  (file-name-nondirectory program)
+		term-ansi-buffer-base-name)
+	    "ansi-term")))
+
+  (setq term-ansi-buffer-name (concat "*" term-ansi-buffer-name "*"))
+
+  ;; In order to have more than one term active at a time
+  ;; I'd like to have the term names have the *term-ansi-term<?>* form,
+  ;; for now they have the *term-ansi-term*<?> form but we'll see...
+
+  (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
+  (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
+
+  (switch-to-buffer term-ansi-buffer-name)
+
+  (set-buffer term-ansi-buffer-name)
+  (term-mode)
+  (term-char-mode)
+    (evil-emacs-state)
+    (term-char-mode))
+
+(map! :leader
+      "o s" 'js/launch-ansi-term)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; (use-package term
 ;;NOT DOOM ;;;   :ensure t)
@@ -1911,53 +1969,50 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (add-hook 'term-mode-hook
 ;;NOT DOOM ;;;             (lambda nil (display-line-numbers-mode -1)))
-;;NOT DOOM ;;;  ;; *** Alt-p --> map to arrow-up always
-;;NOT DOOM ;;;  ;; ( reason: ipython, I could n t achieve ipython remapping of "Alt-p"= "up", so I achieved it with this kind of workaround: the terminal-emulator / ipython "does not see" Alt-p coming, emacs will translate it to "up" before. so i get the desired behaviour and don t have to tediously use arrow keys)
-;;NOT DOOM ;;;  ;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
-;;NOT DOOM ;;;   (evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
-;;NOT DOOM ;;;   (evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; *** short cut for term-paste
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
-;;NOT DOOM ;;;   (evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
-;;NOT DOOM ;;;   (evil-define-key 'insert term-raw-map (kbd "C-p") 'term-paste)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; *** switch only between (term char with emacs-state) and (term line with normal-state)
-;;NOT DOOM ;;;   (evil-define-key 'emacs term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "C-/") 'term-switch-line-mode-normal-state) ;; this is just to not get undesired error messages when repeating
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; (js/leader-def :keymaps 'term-mode-map "k" 'term-switch-char-mode-emacs-state)
-;;NOT DOOM ;;;  ;; **** previous/next buffer key binding, set also for term's
-;;NOT DOOM ;;;  (evil-define-key 'emacs term-raw-map (kbd "M-y") 'previous-buffer)
-;;NOT DOOM ;;;  (evil-define-key 'emacs term-raw-map (kbd "M-o") 'next-buffer)
-;;NOT DOOM ;;;  (evil-define-key 'normal term-raw-map (kbd "M-y") 'previous-buffer)
-;;NOT DOOM ;;;  (evil-define-key 'normal term-raw-map (kbd "M-o") 'next-buffer)
-;;NOT DOOM ;;;  (evil-define-key 'visual term-raw-map (kbd "M-y") 'previous-buffer)
-;;NOT DOOM ;;;  (evil-define-key 'visual term-raw-map (kbd "M-o") 'next-buffer)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun term-switch-line-mode-normal-state()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (evil-normal-state)
-;;NOT DOOM ;;;    (term-line-mode)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun term-switch-char-mode-emacs-state()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (evil-emacs-state)
-;;NOT DOOM ;;;    (term-char-mode)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  ;; *** evil term
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "RET") 'term-send-raw)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "h") 'term-send-left)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "l") 'term-send-right)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "k") 'term-send-up)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "j") 'term-send-down)
-;;NOT DOOM ;;;   (evil-define-key 'normal term-raw-map (kbd "x") 'term-send-del)
-;;NOT DOOM ;;;
+
+
+
+(after! term
+;; Alt-p --> map to arrow-up always
+;; ( reason: ipython, I could n t achieve ipython remapping of "Alt-p"= "up", so I achieved it with this kind of workaround: the terminal-emulator / ipython "does not see" Alt-p coming, emacs will translate it to "up" before. so i get the desired behaviour and don t have to tediously use arrow keys)
+;; IMPLICATION (!): all desired terminal behaviour on "Alt-p" has to be bound BOTH for (a) arrow up (so it ll work in emacs) and (b) also for "Alt-p" (i.e. .inputrc etc.), so I ll also get the behaviour outside emacs' term-mode, like normal shell.
+(evil-define-key 'emacs term-raw-map (kbd "M-p") 'term-send-up)
+(evil-define-key 'emacs term-raw-map (kbd "M-n") 'term-send-down)
+
+
+;; *** short cut for term-paste
+(evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
+(evil-define-key 'normal term-raw-map (kbd "C-p") 'term-paste)
+(evil-define-key 'emacs term-raw-map (kbd "C-p") 'term-paste)
+(evil-define-key 'insert term-raw-map (kbd "C-p") 'term-paste)
+
+
+;; *** switch only between (term char with emacs-state) and (term line with normal-state)
+;;
+
+(define-key term-raw-map [?\C-/] 'term-switch-line-mode-normal-state) ;; glaube: der wird "durchgelassen vorbei an emacs-state und landet dann in term-raw-map ->> deshalb hier ändern"
+(define-key term-raw-map [?\M-/] 'term-switch-line-mode-normal-state) ;; sogar noch etwas mehr convenient: der wird "durchgelassen vorbei an emacs-state und landet dann in term-raw-map ->> deshalb hier ändern"
+(map! :leader :map  'term-raw-map "k" 'term-switch-char-mode-emacs-state)
+ ;; **** previous/next buffer key binding, set also for term's
+ (evil-define-key 'emacs term-raw-map (kbd "M-y") 'previous-buffer)
+ (evil-define-key 'emacs term-raw-map (kbd "M-o") 'next-buffer)
+ (evil-define-key 'normal term-raw-map (kbd "M-y") 'previous-buffer)
+ (evil-define-key 'normal term-raw-map (kbd "M-o") 'next-buffer)
+ (evil-define-key 'visual term-raw-map (kbd "M-y") 'previous-buffer)
+ (evil-define-key 'visual term-raw-map (kbd "M-o") 'next-buffer)
+
+ (defun term-switch-line-mode-normal-state()
+   (interactive)
+   (evil-normal-state)
+   (term-line-mode)
+   )
+
+ (defun term-switch-char-mode-emacs-state()
+   (interactive)
+   (evil-emacs-state)
+   (term-char-mode)
+   )
+
 ;;NOT DOOM ;;;  ;; *** term color theme
 ;;NOT DOOM ;;;  ;; (how did I get it from customization? -> customized in menue, then copied from custem.el ("custom-set-faces ...") and formatted
 ;;NOT DOOM ;;;  (set-face-attribute 'term nil :background "black" :foreground "white")
@@ -1968,13 +2023,15 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  (set-face-attribute 'term-color-green nil :background "#a1db00" :foreground "#a1db00")
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; **** make initial state for term emacs-state
-;;NOT DOOM ;;;  ;; this did not work:
-;;NOT DOOM ;;;   ;; (add-hook 'term-mode-hook
-;;NOT DOOM ;;;             ;; (lambda nil (evil-emacs-state)))
-;;NOT DOOM ;;;  ;; this did work:
-;;NOT DOOM ;;;  (evil-set-initial-state 'term-mode 'emacs)
-;;NOT DOOM ;;;
+
+;; make initial state for term emacs-state
+;; this did not work:
+;; (add-hook 'term-mode-hook
+;;            (lambda nil (evil-emacs-state)))
+;; this did work:
+(evil-set-initial-state 'term-mode 'emacs)
+
+) ;; end after!
 ;;NOT DOOM ;;;  ;; *** tramp connection to hlrn (fast command)
 ;;NOT DOOM ;;;  ;; **** still have problem that it hangs on "waiting for prompts from remote shell..."
 ;;NOT DOOM ;;;  ;; -> could not solve it, tried like this
@@ -2435,24 +2492,42 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  ;; ;;    .) open recent directories
 ;;NOT DOOM ;;;  ;; (global-set-key (kbd "C-x C-d") 'dired-recent-dirs-ivy-bjm) ;; see definition recent_dirs.el
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** create empty file ( = bash's touch)
-;;NOT DOOM ;;;  (defun dired-create-new-empty-file ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;     ;; create the hidden (dotted) folder with same name of org file
-;;NOT DOOM ;;;     (setq filename (read-string "file-name: "))
-;;NOT DOOM ;;;     (setq file-full-name (concat  (dired-current-directory) "/" filename))
-;;NOT DOOM ;;;     (with-temp-buffer (write-file file-full-name)))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun dired-create-new-empty-file-and-visit ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;     ;; create the hidden (dotted) folder with same name of org file
-;;NOT DOOM ;;;     (setq filename (read-string "file-name: "))
-;;NOT DOOM ;;;     (setq file-full-name (concat  (dired-current-directory) "/" filename))
-;;NOT DOOM ;;;     (with-temp-buffer (write-file file-full-name))
-;;NOT DOOM ;;;     (find-file file-full-name))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (js/leader-def "nn" 'dired-create-new-empty-file)
-;;NOT DOOM ;;;  (js/leader-def "nv" 'dired-create-new-empty-file-and-visit)
+
+;; create empty file ( = bash's touch)
+(defun dired-create-new-empty-file ()
+   (interactive)
+   ;; create the hidden (dotted) folder with same name of org file
+   (setq filename (read-string "file-name: "))
+   (setq file-full-name (concat  (dired-current-directory) "/" filename))
+   (with-temp-buffer (write-file file-full-name)))
+
+(defun dired-create-new-empty-file-and-visit ()
+   (interactive)
+   ;; create the hidden (dotted) folder with same name of org file
+   (setq filename (read-string "file-name: "))
+   (setq file-full-name (concat  (dired-current-directory) "/" filename))
+   (with-temp-buffer (write-file file-full-name)))
+
+(defun dired-create-new-xournal-file-and-visit ()
+  (interactive)
+  ;; * file name
+  (setq filename (read-string "xournal file name (without .xopp extension): "))
+  ;; (message filename)
+  ;; * create file from template
+  (setq currentpath (file-name-directory (dired-current-directory)))
+  (setq filefullname (concat  currentpath "/" filename))
+  (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xopp")
+  ;; * open xournal file (no popup of async output)
+  (setq command_string (concat "xournalpp " filefullname))
+  (efs/run-in-background command_string)
+  (copy-file template-filefullname filefullname))
+
+(map! :localleader
+      :map dired-mode-map
+      "m" #'dired-create-new-empty-file
+      "v" #'dired-create-new-empty-file-and-visit
+      "x" #'dired-create-new-xournal-file-and-visit)
+
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; * helm-rg
 ;;NOT DOOM ;;; (use-package helm-rg
@@ -2480,16 +2555,13 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;
 ;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
-(defvar downloads-dir)
-(cond
- ((equal myhost "phone")
-  (setq downloads-dir "/storage/emulated/0/Download/"))
- ((equal myhost "laptop")
-  (setq downloads-dir (concat home-dir "/Downloads"))))
-
 (defun dired-go-downloads ()
   (interactive)
-  (dired downloads-dir))
+(cond
+ ((equal myhost "phone")
+  (dired "/storage/emulated/0/Download/"))
+ ((equal myhost "laptop")
+  (dired (substitute-in-file-name "$HOME/Downloads")))))
 
 (map! :leader
       (:prefix-map ("l" . "frequent dirs")
@@ -2499,6 +2571,7 @@ new-org-file-full-name)
       :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
       :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/basking_project")))
+      :desc "temp"           "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -2619,19 +2692,23 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;NOT DOOM ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;NOT DOOM ;;;  ;; * open with external applications (in dired/ org-mode links / etc.)
-;;NOT DOOM ;;; (use-package openwith
-;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;;  (openwith-mode t)
-;;NOT DOOM ;;;  (cond ((equal myhost "phone")
-;;NOT DOOM ;;;         (setq openwith-associations '(
-;;NOT DOOM ;;;                                       ("\\.jpg\\'" "termux-open" (file))
-;;NOT DOOM ;;;                                       ("\\.pdf\\'" "termux-open" (file)))))
-;;NOT DOOM ;;;        ((equal myhost "laptop")
-;;NOT DOOM ;;;         (setq openwith-associations '(
-;;NOT DOOM ;;;                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
-;;NOT DOOM ;;;                                ("\\.xopp\\'" "xournalpp" (file))
-;;NOT DOOM ;;;                                ("\\.pdf\\'" "okular" (file))))))
+
+
+
+
+
+;; * open with external applications (in dired/ org-mode links / etc.)
+(after! openwith
+ (openwith-mode t)
+ (cond ((equal myhost "phone")
+        (setq openwith-associations '(
+                                      ("\\.jpg\\'" "termux-open" (file))
+                                      ("\\.pdf\\'" "termux-open" (file)))))
+       ((equal myhost "laptop")
+        (setq openwith-associations '(
+                               ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
+                               ("\\.xopp\\'" "xournalpp" (file))
+                               ("\\.pdf\\'" "okular" (file)))))))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; * save desktop sessions
 ;;NOT DOOM ;;;  ;;    (require 'session)
@@ -2771,7 +2848,7 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  (define-key matlab-mode-map "\M-j" 'windmove-down)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;T (load "my_matlab_hacks.el")
+(load "my_matlab_hacks.el")
 ;;NOT DOOM ;;;  ;;; MATLAB comodity things
 ;;NOT DOOM ;;;  (defun send-string-to-matlab-shell-buffer-and-execute (sendstring)
 ;;NOT DOOM ;;;    "execute region line by line in interactive shell (buffer *shell*)."
@@ -3730,7 +3807,8 @@ new-org-file-full-name)
         "M-y" #'previous-buffer
         "M-o" #'next-buffer
         "M-u" #'get-this-buffer-to-move
-        "M-i" #'switch-to-buffer-to-move)
+        "M-i" #'switch-to-buffer-to-move
+        "M-b" #'consult-buffer)
 
 (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
@@ -3767,11 +3845,12 @@ new-org-file-full-name)
        :nvieomr "M-H" nil
        :nvieomr "M-L" nil))
 
+(after! term
 (map! :map term-raw-map
         "M-k"  #'windmove-up
         "M-j"  #'windmove-down
         "M-h"  #'windmove-left
-        "M-l"  #'windmove-right)
+        "M-l"  #'windmove-right))
 
 ;;NOT DOOM ;;;  ;; tweek for org-mode, other
 ;; (define-key org-mode-map "\M-k" 'windmove-up)
@@ -4781,3 +4860,12 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;   (add-hook 'treemacs-mode-hook
 ;;NOT DOOM ;;;             (lambda nil (display-line-numbers-mode -1)))
 ;;NOT DOOM ;;;
+
+;; * launch external program
+(defun efs/run-in-background (command)
+  (let ((command-parts (split-string command "[ ]+")))
+    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+(defun js/launch-app-command (command)
+  (interactive "sApp command: ")
+  ;; (message (concat "your command was: " command))
+  (efs/run-in-background command))
