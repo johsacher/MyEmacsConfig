@@ -7,6 +7,9 @@
 ;; ** TODO line wrapping default (the doom way?)
 ;; ** DONE visual state - expand on repeat "v"
 ;; ** TODO check hooks doom way? add-hook or add-hook!
+;; ** TODO add CRNT keyword for 'current'
+;; ** TODO org variable pitch font
+;; ** TODO org latex preview all toggle etc.
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
@@ -2571,7 +2574,8 @@ new-org-file-full-name)
       :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
       :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/basking_project")))
-      :desc "temp"           "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
+      :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
+      :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
