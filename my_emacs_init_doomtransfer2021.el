@@ -3162,6 +3162,30 @@ new-org-file-full-name)
 ;;NOT DOOM ;;; ;;t (load "auctex.el" nil t t)
 ;;NOT DOOM ;;; ;;t (load "latex.el" nil t t)
 ;;NOT DOOM ;;;  ;;(load "preview-latex.el" nil t t)
+
+
+;; toggle latex preview
+(defvar org-latex-previews-toggled-on nil)
+(defun org-latex-preview-all ()
+  (interactive)
+  ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
+  (org-latex-preview '(16)))
+(defun org-latex-clear-all ()
+  (interactive)
+  (org-latex-preview '(64)))
+
+(defun org-latex-preview-toggle-clear-preview-all ()
+  (interactive)
+  (cond (equal org-latex-previews-toggled-on nil)
+	((org-latex-preview-all)
+	(setq org-latex-previews-toggled-on t))
+	(equal org-latex-previews-toggled-on t)
+  )
+
+(js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview-toggle-clear-preview-all)
+(js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview)
+
+
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; ;; * latex short cuts for formatting (bold/italic/etc)
 ;;NOT DOOM ;;;  (defun js/latex-toggle-bold-region ()
