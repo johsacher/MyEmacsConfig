@@ -1250,45 +1250,48 @@
 ;;NOT DOOM ;;;  ;;   like so: #+export_pdf_hook: rclone sync {} googledrive:ExistenzGruendungSacherFlitz)
 ;;NOT DOOM ;;;  ;;   or for autocompression with gs:
 ;;NOT DOOM ;;;  ;; #+export_pdf_hook: gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -sOutputFile=output.pdf {} && mv -f output.pdf {}
-;;NOT DOOM ;;;  (defun org-export-latex-pdf-with-hook ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; export to pdf
-;;NOT DOOM ;;;    (org-latex-export-to-pdf)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; apply my hooked process (syncing)
-;;NOT DOOM ;;;    (setq export_pdf_hook (org-kwd "EXPORT_PDF_HOOK"))
-;;NOT DOOM ;;;    (setq filename-base (file-name-base (buffer-file-name)))
-;;NOT DOOM ;;;    (setq pdffile-name (concat filename-base ".pdf"))
-;;NOT DOOM ;;;    ;; (message pdffile-name)
-;;NOT DOOM ;;;    ;; get the argument for export_hook
-;;NOT DOOM ;;;    ;; can be like so:
-;;NOT DOOM ;;;    ;; #+export_hook: rclone {} googledrive:ExistenzGruendungSacherFlitz
-;;NOT DOOM ;;;    ;; --> command to be executed "rclone {} googledrive:ExistenzGruendungSacherFlitz"
-;;NOT DOOM ;;;    ;; (message export_pdf_hook)
-;;NOT DOOM ;;;    ;; {} will be replaced by
-;;NOT DOOM ;;;    (setq export_pdf_hook_final (replace-regexp-in-string "{}" pdffile-name export_pdf_hook))
-;;NOT DOOM ;;;    (message (concat "apply export-pdf-hook, executing command: " export_pdf_hook_final " ; output in buffer: *org_export_pdf_hook_process_output*"))
-;;NOT DOOM ;;;    (async-shell-command export_pdf_hook_final "*org_export_pdf_hook_process_output*")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; **** use of 2 helper functions: org-kwds / org-kwd
-;;NOT DOOM ;;;  ;; (from: http://kitchingroup.cheme.cmu.edu/blog/2013/05/05/Getting-keyword-options-in-org-files/)
-;;NOT DOOM ;;;  (defun org-kwds ()
-;;NOT DOOM ;;;    "parse the buffer and return a cons list of (property . value)
-;;NOT DOOM ;;;  from lines like:
-;;NOT DOOM ;;;  #+PROPERTY: value"
-;;NOT DOOM ;;;    (org-element-map (org-element-parse-buffer 'element) 'keyword
-;;NOT DOOM ;;;                     (lambda (keyword) (cons (org-element-property :key keyword)
-;;NOT DOOM ;;;                                             (org-element-property :value keyword)))))
-;;NOT DOOM ;;;  (defun org-kwd (KEYWORD)
-;;NOT DOOM ;;;    "get the value of a KEYWORD in the form of #+KEYWORD: value"
-;;NOT DOOM ;;;    (cdr (assoc KEYWORD (org-kwds))))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; **** make the output not pop-up
-;;NOT DOOM ;;;  (add-to-list 'display-buffer-alist
-;;NOT DOOM ;;;    (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
-;;NOT DOOM ;;;  ;; **** define the "run-f5" short cut
-;;NOT DOOM ;;;  (define-key org-mode-map (kbd "<f5>") 'org-export-latex-pdf-with-hook)
+
+(defun org-export-latex-pdf-with-hook ()
+  (interactive)
+  (save-buffer)
+  ;; export to pdf
+  (org-latex-export-to-pdf)
+
+  ;; apply my hooked process (syncing)
+  (setq export_pdf_hook (org-kwd "EXPORT_PDF_HOOK"))
+  (setq filename-base (file-name-base (buffer-file-name)))
+  (setq pdffile-name (concat filename-base ".pdf"))
+  ;; (message pdffile-name)
+  ;; get the argument for export_hook
+  ;; can be like so:
+  ;; #+export_hook: rclone {} googledrive:ExistenzGruendungSacherFlitz
+  ;; --> command to be executed "rclone {} googledrive:ExistenzGruendungSacherFlitz"
+  ;; (message export_pdf_hook)
+  ;; {} will be replaced by
+  (setq export_pdf_hook_final (replace-regexp-in-string "{}" pdffile-name export_pdf_hook))
+  (message (concat "apply export-pdf-hook, executing command: " export_pdf_hook_final " ; output in buffer: *org_export_pdf_hook_process_output*"))
+  (async-shell-command export_pdf_hook_final "*org_export_pdf_hook_process_output*")
+  )
+
+;; **** use of 2 helper functions: org-kwds / org-kwd
+;; (from: http://kitchingroup.cheme.cmu.edu/blog/2013/05/05/Getting-keyword-options-in-org-files/)
+(defun org-kwds ()
+  "parse the buffer and return a cons list of (property . value)
+from lines like:
+#+PROPERTY: value"
+  (org-element-map (org-element-parse-buffer 'element) 'keyword
+                   (lambda (keyword) (cons (org-element-property :key keyword)
+                                           (org-element-property :value keyword)))))
+(defun org-kwd (KEYWORD)
+  "get the value of a KEYWORD in the form of #+KEYWORD: value"
+  (cdr (assoc KEYWORD (org-kwds))))
+
+;; **** make the output not pop-up
+(add-to-list 'display-buffer-alist
+  (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
+;; **** define the "run-f5" short cut
+(after! org-mode 
+(map! :map org-mode-map "<f5>" 'org-export-latex-pdf-with-hook))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** evil org
 ;;NOT DOOM ;;; (use-package evil-org
@@ -3165,26 +3168,30 @@ new-org-file-full-name)
 
 
 ;; toggle latex preview
+(after! org-mode
 (defvar org-latex-previews-toggled-on nil)
+(make-variable-buffer-local org-latex-previews-toggled-on)
 (defun org-latex-preview-all ()
   (interactive)
   ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
   (org-latex-preview '(16)))
+
 (defun org-latex-clear-all ()
   (interactive)
   (org-latex-preview '(64)))
 
 (defun org-latex-preview-toggle-clear-preview-all ()
   (interactive)
-  (cond (equal org-latex-previews-toggled-on nil)
-	((org-latex-preview-all)
-	(setq org-latex-previews-toggled-on t))
-	(equal org-latex-previews-toggled-on t)
-  )
+  (cond ((equal org-latex-previews-toggled-on nil)
+         (org-latex-preview-all)
+         (setq org-latex-previews-toggled-on t))
+	((equal org-latex-previews-toggled-on t)
+         (org-latex-clear-all)
+         (setq org-latex-previews-toggled-on nil))))
 
-(js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview-toggle-clear-preview-all)
-(js/leader-def :keymaps 'org-mode-map "jl" 'org-latex-preview)
-
+(map! :map 'org-mode-map :n "zp" 'org-latex-preview)
+(map! :map 'org-mode-map :n "zP" 'org-latex-preview-toggle-clear-preview-all)
+)
 
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; ;; * latex short cuts for formatting (bold/italic/etc)
@@ -3233,24 +3240,25 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** F5 -> run pdflatex / F6 -> bibtex
-;;NOT DOOM ;;;  (defun run-pdflatex-on-master-file ()
-;;NOT DOOM ;;;  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
-;;NOT DOOM ;;;  (interactive)
-;;NOT DOOM ;;;  ;;save buffer
-;;NOT DOOM ;;;  (save-buffer)
-;;NOT DOOM ;;;  ;; * option1:
-;;NOT DOOM ;;;  (TeX-command "LaTeX" 'TeX-master-file nil)
-;;NOT DOOM ;;;  ;; * option2: (discarded)
-;;NOT DOOM ;;;  ;; (save-buffer)
-;;NOT DOOM ;;;  ;; (shell-command (format "pdflatex %s.tex" (TeX-master-file)))
-;;NOT DOOM ;;;  ;; * show compile window, where pointer is always at end
-;;NOT DOOM ;;;  ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
-;;NOT DOOM ;;;  )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;t (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)
-;;NOT DOOM ;;;  ;;t (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)
-;;NOT DOOM ;;;
+;; ** F5 -> run pdflatex / F6 -> bibtex
+(after! LaTeX-mode
+(defun run-pdflatex-on-master-file ()
+"This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
+(interactive)
+;;save buffer
+(save-buffer)
+;; * option1:
+(TeX-command "LaTeX" 'TeX-master-file nil)
+;; * option2: (discarded)
+;; (save-buffer)
+;; (shell-command (format "pdflatex %s.tex" (TeX-master-file)))
+;; * show compile window, where pointer is always at end
+;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
+)
+(define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)
+(define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)
+)
+              
 ;;NOT DOOM ;;;  (defun run-bibtex-on-master-file ()
 ;;NOT DOOM ;;;  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 ;;NOT DOOM ;;;  (interactive)
@@ -4897,3 +4905,8 @@ new-org-file-full-name)
   (interactive "sApp command: ")
   ;; (message (concat "your command was: " command))
   (efs/run-in-background command))
+
+;; * org color words
+(defface org-red-face '((nil :foreground "red")) "org red face")
+(font-lock-add-keywords 'org-mode '(("\\\\red{.*}" . 'org-red-face)))
+ 
