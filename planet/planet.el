@@ -20,6 +20,9 @@
 ;;*** define appearance seperate for daily / weekly -> find way to regnize/define what type of org file it is (maybe over local variables, ooooor (even better) --> make file-name analysis as org-mode-hook -> determine type --> fire-up respective minor-mode --> do some learnings about minor-mode priorities (make sure the minor-mode does not get "corrupted/dominated" by other-minor mode)
 ;;** concept about categories/tags/properties -> work / privat / projects / task-clocking
 ;;** ("sync-save" --> lauch git sync up on save --> shortcut: also spc-s / toggle-sync-save on/off , but only for planet-mode) -> not necessary with gsyn checkout / checkin
+;; * BUG s (minor) todos:
+;; ** planet add one day, --> not working for daylight change, since 24 hours added is still same day :D
+;;    (but i can live with that for now, just affects one day of the year)
 
 (defvar planet-mode-map
   (let ((m (make-sparse-keymap)))

@@ -401,14 +401,16 @@
 (map! :leader
       :n "r" #'quick-evil-search-replace-region)
 ;;NOT DOOM ;;;
-;;NOT DOOM POT ;;;  ;; quickly select pasted region
-;;NOT DOOM ;;;  (defun evil-select-pasted ()
-;;NOT DOOM ;;;    "Visually select last pasted text."
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (evil-goto-mark ?\[)
-;;NOT DOOM ;;;    (evil-visual-char)
-;;NOT DOOM ;;;    (evil-goto-mark ?\]))
-;;NOT DOOM ;;;  ;; ( -> mapped to evil leader v)
+;; quickly select pasted region
+(defun evil-select-pasted ()
+  "Visually select last pasted text."
+  (interactive)
+  (evil-goto-mark ?\[)
+  (evil-visual-char)
+  (evil-goto-mark ?\]))
+
+(map! :n "zv" 'evil-select-pasted)
+;; ( -> mapped to evil leader v)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; ;; * (general) evil leader bindings
 ;;NOT DOOM ;;;    (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
@@ -563,11 +565,11 @@
 ;;NOT DOOM ;;; ;;T this didnt work, really strange :( (js/leader-def :keymaps 'emacs-lisp-mode-map "/" 'instrumentalize-fun)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun instrumentalize-fun ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; (edebug-eval-defun t)
-;;NOT DOOM ;;;    (eval-defun t) ;; argument can be any --> effect is to instrumentalize for edebug
-;;NOT DOOM ;;;    )
+(defun instrumentalize-fun ()
+  (interactive)
+  ;; (edebug-eval-defun t)
+  (eval-defun t) ;; argument can be any --> effect is to instrumentalize for edebug
+  )
 ;;NOT DOOM ;;;  ;;; ***
 ;;NOT DOOM ;;;  (evil-define-key 'normal edebug-mode-map (kbd "n") 'edebug-next-mode)
 ;;NOT DOOM ;;;  (evil-define-key 'normal edebug-mode-map (kbd "F10") 'edebug-next-mode)
