@@ -9,6 +9,7 @@
 ;; ** TODO check hooks doom way? add-hook or add-hook!
 ;; ** TODO add CRNT keyword for 'current'
 ;; ** TODO org variable pitch font
+;; ** TODO org no lin nrs
 ;; ** TODO org latex preview all toggle etc.
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
