@@ -1293,6 +1293,8 @@ from lines like:
 (add-to-list 'display-buffer-alist
   (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
 ;; **** define the "run-f5" short cut
+(add-hook! org-mode
+           (lambda () (display-line-numbers-mode -1)))
 (after! org-mode 
 (map! :map org-mode-map "<f5>" 'org-export-latex-pdf-with-hook))
 ;;NOT DOOM ;;;
