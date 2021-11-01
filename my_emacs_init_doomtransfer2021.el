@@ -756,7 +756,7 @@
 ;;NOT DOOM ;;;  ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 ;;NOT DOOM ;;; (use-package org
 ;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;;  (setq org-ellipsis " ▾")
+(setq org-ellipsis " ▾")
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis " ▼")
 ;;NOT DOOM ;;;  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis "▾")

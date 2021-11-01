@@ -1167,6 +1167,8 @@ date)
   ;; this function is called on every open/revert/etc.
   (interactive)
   ;; (message "planet-mode start up script started...")
+  ;; settings all
+  (planet-theme1)
   ;; settings day-files
   (cond ( (planet-current-buffer-is-day-file)
           (planet-day-file-start-up)
@@ -1187,7 +1189,7 @@ date)
   ;; (setq mode-line-format "")
   (setq mode-line-format nil)
   ;; * default initial visibility ("overwrites" org-mode's initial visibility)
-  (planet-level-2)
+  (planet-level-1)
   )
 
 (defun planet-week-file-start-up ()
@@ -1752,3 +1754,12 @@ date)
 
 ;; (
 ;; (--filter (< 3 it) '(1 2 3 4 5 6))
+
+;; * themes
+(defun planet-theme1 ()
+  (interactive)
+  (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+  (visual-line-mode -1)
+  ;; (org-superstar-restart)
+  )
