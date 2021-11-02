@@ -3177,12 +3177,29 @@ new-org-file-full-name)
 ;;NOT DOOM ;;; ;;t (load "latex.el" nil t t)
 ;;NOT DOOM ;;;  ;;(load "preview-latex.el" nil t t)
 
+;; org-mode default bullet chars
+(add-hook! org-mode
+           ;; TODO "require superstar" -> how best in doom emacs
+  (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  (setq org-superstar-headline-bullets-list '(
+                                              "◉"
+                                              "○"
+                                              "•"
+                                              "★"
+                                              "✸"
+                                              "◆"
+                                              "♣"
+                                              "♠"
+                                              "♥"
+                                              "♦")))
 
 ;; toggle latex preview
 (after! org
-(defvar org-latex-previews-toggled-on nil)
-(make-variable-buffer-local org-latex-previews-toggled-on)
-(defun org-latex-preview-all ()
+  (defvar org-latex-previews-toggled-on nil)
+  ;; outcomment following: tried to be smart with buffer-local var, but not necessary and created bug-errors
+  ;; (add-hook! org-mode
+  ;; (make-variable-buffer-local org-latex-previews-toggled-on))
+    (defun org-latex-preview-all ()
   (interactive)
   ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
   (org-latex-preview '(16)))
