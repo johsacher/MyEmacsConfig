@@ -756,8 +756,12 @@
 ;;NOT DOOM ;;;  ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 ;;NOT DOOM ;;; (use-package org
 ;;NOT DOOM ;;;   :ensure t)
-(after! org-mode (setq org-ellipsis " ▾"))
-(setq org-ellipsis " ▾")
+(after! org
+  (setq org-ellipsis " ▾"))
+        ;; (add-hook! org-mode-abbrev-table
+  ;; (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  ;; (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+           ;; )
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis " ▼")
 ;;NOT DOOM ;;;  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis "▾")
