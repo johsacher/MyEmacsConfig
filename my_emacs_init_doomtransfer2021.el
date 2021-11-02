@@ -756,11 +756,8 @@
 ;;NOT DOOM ;;;  ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 ;;NOT DOOM ;;; (use-package org
 ;;NOT DOOM ;;;   :ensure t)
-<<<<<<< HEAD
 (after! org-mode (setq org-ellipsis " ▾"))
-=======
 (setq org-ellipsis " ▾")
->>>>>>> b7bde4870386501c5e340c292811faf75579b0e3
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis " ▼")
 ;;NOT DOOM ;;;  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis "▾")
