@@ -1301,7 +1301,7 @@ from lines like:
 (add-hook! 'org-mode-hook
               #'doom-disable-line-numbers-h)
 
-(after! org-mode
+(after! org
 (map! :map org-mode-map "<f5>" 'org-export-latex-pdf-with-hook))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** evil org
@@ -3179,7 +3179,7 @@ new-org-file-full-name)
 
 
 ;; toggle latex preview
-(after! org-mode
+(after! org
 (defvar org-latex-previews-toggled-on nil)
 (make-variable-buffer-local org-latex-previews-toggled-on)
 (defun org-latex-preview-all ()
@@ -3252,7 +3252,7 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
 ;; ** F5 -> run pdflatex / F6 -> bibtex
-(after! LaTeX-mode
+(after! auctex
 (defun run-pdflatex-on-master-file ()
 "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 (interactive)
