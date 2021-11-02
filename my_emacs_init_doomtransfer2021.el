@@ -756,7 +756,11 @@
 ;;NOT DOOM ;;;  ;; …, ▼, ↴, , ∞, ⬎, ⤷, ⤵
 ;;NOT DOOM ;;; (use-package org
 ;;NOT DOOM ;;;   :ensure t)
+<<<<<<< HEAD
 (after! org-mode (setq org-ellipsis " ▾"))
+=======
+(setq org-ellipsis " ▾")
+>>>>>>> b7bde4870386501c5e340c292811faf75579b0e3
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis " ▼")
 ;;NOT DOOM ;;;  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis "▾")
@@ -1293,7 +1297,10 @@ from lines like:
 (add-to-list 'display-buffer-alist
   (cons "\\*org_export_pdf_hook_process_output*\\*.*" (cons #'display-buffer-no-window nil)))
 ;; **** define the "run-f5" short cut
-(after! org-mode 
+(add-hook! 'org-mode-hook
+              #'doom-disable-line-numbers-h)
+
+(after! org-mode
 (map! :map org-mode-map "<f5>" 'org-export-latex-pdf-with-hook))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** evil org
