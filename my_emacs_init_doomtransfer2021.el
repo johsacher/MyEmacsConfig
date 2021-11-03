@@ -761,6 +761,7 @@
         ;; (add-hook! org-mode-abbrev-table
   ;; (make-variable-buffer-local 'org-superstar-headline-bullets-list)
   ;; (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+  ;; (setq org-superstar-headline-bullets-list '(" "))
            ;; )
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis " ▼")
 ;;NOT DOOM ;;;  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
