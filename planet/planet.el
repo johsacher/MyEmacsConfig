@@ -1168,7 +1168,7 @@ date)
   (interactive)
   ;; (message "planet-mode start up script started...")
   ;; settings all
-  (planet-theme1)
+  (planet-theme-1)
   ;; settings day-files
   (cond ( (planet-current-buffer-is-day-file)
           (planet-day-file-start-up)
@@ -1756,16 +1756,24 @@ date)
 ;; (--filter (< 3 it) '(1 2 3 4 5 6))
 
 ;; * themes
-(defun planet-theme1 ()
+(defun planet-theme-1 ()
   (interactive)
+  ;; * no bullets (working buggy, outcommented, issue feature request sent to github:org-superstar)
   ;; TODO ensure org-superstar "is there"
-  (make-variable-buffer-local 'org-superstar-headline-bullets-list)
-  (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+  ;; (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  ;; (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+  ;; * truncate lines (-> better/more for week view, lengthy headigs)
   (visual-line-mode -1)
   ;; (org-superstar-restart)
   )
 
-(defun planet-theme0 () ;; default org theme like in other org buffers
+(defun planet-change-theme-1 ()
+  (interactive)
+  (planet-theme-1)
+  (org-superstar-restart)
+  )
+
+(defun planet-change-theme-0 () ;; default org theme like in other org buffers
   (interactive)
   ;; TODO ensure org-superstar "is there"
   (make-variable-buffer-local 'org-superstar-headline-bullets-list)

@@ -2621,6 +2621,9 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;
 
  ;; ;;; dired ranger key's - nicely copy/paste files/dirs
+(after! org
+        (require 'dired-ranger))
+
 (after! dired-ranger
   (map! :map dired-mode-map
         :n  "Y"  #'dired-ranger-copy
@@ -2716,6 +2719,15 @@ new-org-file-full-name)
 
 
 ;; * open with external applications (in dired/ org-mode links / etc.)
+;;
+;; (use-package! dired-ranger
+;;  after: dired)
+;; (use-package! openwith
+;; after: dired)
+(after! dired
+	(require 'openwith)
+        (openwith-mode +1))
+
 (after! openwith
  (openwith-mode t)
  (cond ((equal myhost "phone")
@@ -4843,24 +4855,27 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;   (insert " "))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; ;; * scale fontsize (per frame)
-;;NOT DOOM ;;; (defvar js/frame-font-scale-factor)
-;;NOT DOOM ;;; (setq js/frame-font-scale-factor 1.2)
-;;NOT DOOM ;;; (defun js/frame-font-size-increase ()
-;;NOT DOOM ;;;   (interactive)
-;;NOT DOOM ;;;   (setq current-frame-fontsize (face-attribute 'default :height (selected-frame)))
-;;NOT DOOM ;;;   (set-face-attribute 'default (selected-frame) :height  (round (* js/frame-font-scale-factor current-frame-fontsize)))
-;;NOT DOOM ;;; )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; (defun js/frame-font-size-decrease ()
-;;NOT DOOM ;;;   (interactive)
-;;NOT DOOM ;;;   (setq current-frame-fontsize (face-attribute 'default :height (selected-frame)))
-;;NOT DOOM ;;;   (set-face-attribute 'default (selected-frame) :height  (round (/ current-frame-fontsize js/frame-font-scale-factor)))
-;;NOT DOOM ;;; )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; (global-set-key (kbd "C-=") 'js/frame-font-size-increase)
-;;NOT DOOM ;;; (global-set-key (kbd "C--") 'js/frame-font-size-decrease)
-;;NOT DOOM ;;;
+;; * scale fontsize (per frame)
+(defvar js/frame-font-scale-factor)
+(setq js/frame-font-scale-factor 1.2)
+(defun js/frame-font-size-increase ()
+  (interactive)
+  (setq current-frame-fontsize (face-attribute 'default :height (selected-frame)))
+  (set-face-attribute 'default (selected-frame) :height  (round (* js/frame-font-scale-factor current-frame-fontsize)))
+)
+
+(defun js/frame-font-size-decrease ()
+  (interactive)
+  (setq current-frame-fontsize (face-attribute 'default :height (selected-frame)))
+  (set-face-attribute 'default (selected-frame) :height  (round (/ current-frame-fontsize js/frame-font-scale-factor)))
+)
+
+(global-set-key (kbd "M-+") 'js/frame-font-size-increase)
+(after! undo-fu)
+(map! :map undo-fu-mode-map
+       "M-_" nil) ;; first gotto eliminate in higher priority key map
+(global-set-key (kbd "M-_") 'js/frame-font-size-decrease)
+
 ;;NOT DOOM ;;; ;; * set transparency
 ;;NOT DOOM ;;; (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
 ;;NOT DOOM ;;; (add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
