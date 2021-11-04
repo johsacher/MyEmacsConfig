@@ -1758,11 +1758,23 @@ date)
 ;; * themes
 (defun planet-theme-1 ()
   (interactive)
+<<<<<<< HEAD
   ;; * no bullets (working buggy, outcommented, issue feature request sent to github:org-superstar)
   ;; TODO ensure org-superstar "is there"
   ;; (make-variable-buffer-local 'org-superstar-headline-bullets-list)
   ;; (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
   ;; * truncate lines (-> better/more for week view, lengthy headigs)
+=======
+<<<<<<< HEAD
+  ;;t (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  ;;t (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+  ;; (setq org-superstar-headline-bullets-list '(" " " " "*" "*"))
+=======
+  ;; TODO ensure org-superstar "is there"
+  (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+>>>>>>> d549430a6f9ef857f2764f04cd510993d5078e56
+>>>>>>> 0d0542bdc3dbdd954abb11c29f2f5b6249386b47
   (visual-line-mode -1)
   ;; (org-superstar-restart)
   )

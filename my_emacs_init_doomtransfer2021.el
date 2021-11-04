@@ -761,6 +761,7 @@
         ;; (add-hook! org-mode-abbrev-table
   ;; (make-variable-buffer-local 'org-superstar-headline-bullets-list)
   ;; (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+  ;; (setq org-superstar-headline-bullets-list '(" "))
            ;; )
 ;;NOT DOOM ;;;  ;; (setq org-ellipsis " ▼")
 ;;NOT DOOM ;;;  (set-face-attribute 'org-ellipsis nil :underline nil  :foreground "gray65")
@@ -2590,6 +2591,7 @@ new-org-file-full-name)
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/basking_project")))
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
+      :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
