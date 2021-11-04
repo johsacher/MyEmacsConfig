@@ -1758,9 +1758,33 @@ date)
 ;; * themes
 (defun planet-theme1 ()
   (interactive)
+<<<<<<< HEAD
   ;;t (make-variable-buffer-local 'org-superstar-headline-bullets-list)
   ;;t (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
   ;; (setq org-superstar-headline-bullets-list '(" " " " "*" "*"))
+=======
+  ;; TODO ensure org-superstar "is there"
+  (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  (setq org-superstar-headline-bullets-list '("" "" "*" "*"))
+>>>>>>> d549430a6f9ef857f2764f04cd510993d5078e56
   (visual-line-mode -1)
   ;; (org-superstar-restart)
   )
+
+(defun planet-theme0 () ;; default org theme like in other org buffers
+  (interactive)
+  ;; TODO ensure org-superstar "is there"
+  (make-variable-buffer-local 'org-superstar-headline-bullets-list)
+  (setq org-superstar-headline-bullets-list '(
+                                              "◉"
+                                              "○"
+                                              "•"
+                                              "★"
+                                              "✸"
+                                              "◆"
+                                              "♣"
+                                              "♠"
+                                              "♥"
+                                              "♦"))
+  (visual-line-mode +1)
+  (org-superstar-restart))
