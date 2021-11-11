@@ -1040,76 +1040,83 @@
 ;;NOT DOOM ;;;  ;; ?
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** org-mode toggle bold/italic
-;;NOT DOOM ;;;  (defun org-toggle-quote-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "\"" "\""  "\"" "\"")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun org-toggle-bold-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "*" "\*"  "*" "\*")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun org-toggle-code-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "~" "\~"  "~" "\~")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun org-toggle-red-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "=" "="  "=" "=")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun org-toggle-underline-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "_" "_"  "_" "_")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun org-toggle-italic-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "/" "\/" "/" "\/")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  ;; todo: rethink these, already reserverd for other stuff
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "jb" 'org-toggle-bold-region)
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "ji" 'org-toggle-italic-region)
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "jc" 'org-toggle-code-region)
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "ju" 'org-toggle-underline-region)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun region-to-string ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq region-string (buffer-substring (mark) (point)))
-;;NOT DOOM ;;;    ;; (message (concat region-string))
-;;NOT DOOM ;;;    region-string)
-;;NOT DOOM ;;;  (defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
-;;NOT DOOM ;;;    (setq begin (region-beginning))
-;;NOT DOOM ;;;    (setq end (region-end))
-;;NOT DOOM ;;;    (setq region_string (buffer-substring (mark) (point)))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; if begins and ends with single star --> bold
-;;NOT DOOM ;;;    (if (string-match (concat "^" marker-begin-regex ".*" marker-end-regex "$") region_string) ;; org-headings are : '* blabla' or '** blabla' etc.
-;;NOT DOOM ;;;        (progn
-;;NOT DOOM ;;;          (save-excursion
-;;NOT DOOM ;;;            (goto-char begin)
-;;NOT DOOM ;;;            (delete-char (length marker-begin))
-;;NOT DOOM ;;;            (goto-char end)
-;;NOT DOOM ;;;            (backward-char);; because we deleted the char '*'
-;;NOT DOOM ;;;            (delete-char (length marker-begin))
-;;NOT DOOM ;;;            (message (concat "region is: " region_string))
-;;NOT DOOM ;;;            )
-;;NOT DOOM ;;;          )
-;;NOT DOOM ;;;        ;; else (toggle state: not marked)
-;;NOT DOOM ;;;        (progn
-;;NOT DOOM ;;;          (save-excursion
-;;NOT DOOM ;;;            (goto-char begin)
-;;NOT DOOM ;;;            (insert marker-begin)
-;;NOT DOOM ;;;            (goto-char end)
-;;NOT DOOM ;;;            (forward-char) ;; because we added the char '*'
-;;NOT DOOM ;;;            (insert marker-end)
-;;NOT DOOM ;;;            (message (concat "region is: " region_string))
-;;NOT DOOM ;;;            )
-;;NOT DOOM ;;;          )
-;;NOT DOOM ;;;        )
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
+;; ** org-mode toggle bold/italic
+
+(after! org
+  (defun org-toggle-quote-region ()
+    (interactive)
+    (my-toggle-marker-around-region "\"" "\""  "\"" "\"")
+    )
+  (defun org-toggle-bold-region ()
+    (interactive)
+    (my-toggle-marker-around-region "*" "\*"  "*" "\*")
+    )
+  (defun org-toggle-code-region ()
+    (interactive)
+    (my-toggle-marker-around-region "~" "\~"  "~" "\~")
+    )
+
+  (defun org-toggle-red-region ()
+    (interactive)
+    (my-toggle-marker-around-region "=" "="  "=" "=")
+    )
+
+
+  (defun org-toggle-underline-region ()
+    (interactive)
+    (my-toggle-marker-around-region "_" "_"  "_" "_")
+    )
+  (defun org-toggle-italic-region ()
+    (interactive)
+    (my-toggle-marker-around-region "/" "\/" "/" "\/")
+    )
+  ;; todo: rethink these, already reserverd for other stuff
+  (map!
+   :map evil-org-mode-map
+   :leader
+   (:prefix-map ("j" . "format")
+    :desc "toggle bold"       "b" #'org-toggle-bold-region
+    :desc "toggle italic"     "i" #'org-toggle-italic-region
+    :desc "toggle code"       "c" #'org-toggle-code-region
+    :desc "toggle underline"  "u" #'org-toggle-underline-region))
+  ) ;; after! org
+
+ (defun region-to-string ()
+   (interactive)
+   (setq region-string (buffer-substring (mark) (point)))
+   ;; (message (concat region-string))
+   region-string)
+ (defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
+   (setq begin (region-beginning))
+   (setq end (region-end))
+   (setq region_string (buffer-substring (mark) (point)))
+
+   ;; if begins and ends with single star --> bold
+   (if (string-match (concat "^" marker-begin-regex ".*" marker-end-regex "$") region_string) ;; org-headings are : '* blabla' or '** blabla' etc.
+       (progn
+         (save-excursion
+           (goto-char begin)
+           (delete-char (length marker-begin))
+           (goto-char end)
+           (backward-char);; because we deleted the char '*'
+           (delete-char (length marker-begin))
+           (message (concat "region is: " region_string))
+           )
+         )
+       ;; else (toggle state: not marked)
+       (progn
+         (save-excursion
+           (goto-char begin)
+           (insert marker-begin)
+           (goto-char end)
+           (forward-char) ;; because we added the char '*'
+           (insert marker-end)
+           (message (concat "region is: " region_string))
+           )
+         )
+       )
+   )
+
 ;;NOT DOOM ;;;  ;; ** org latex export (settings and tweaks)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; *** make plainlists below level always unnumbered
@@ -1799,8 +1806,13 @@ new-org-file-full-name)
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "*" 'org-toggle-heading)
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "8" 'org-toggle-heading) ;; lazy, 8 for *
 ;;NOT DOOM ;;;
+;; ** org variable pitch for text
+(setq doom-variable-pitch-font (font-spec :family "Cantarell"))
+(add-hook! org-mode
+           (mixed-pitch-mode 1))
+;; ** org -> hide emphasis markers
+(setq org-hide-emphasis-markers t)
 ;;NOT DOOM ;;;  ;; new emphasis-markers
-;;NOT DOOM ;;;  (setq org-hide-emphasis-markers t)
 ;;NOT DOOM ;;;  (add-to-list 'org-emphasis-alist
 ;;NOT DOOM ;;;               '("^" (:foreground "red")
 ;;NOT DOOM ;;;                 ))
@@ -3221,6 +3233,12 @@ new-org-file-full-name)
 (defun org-latex-clear-all ()
   (interactive)
   (org-latex-preview '(64)))
+
+
+(defun org-latex-refresh-all ()
+  (interactive)
+  (org-latex-clear-all)
+  (org-latex-preview-all))
 
 (defun org-latex-preview-toggle-clear-preview-all ()
   (interactive)
@@ -4836,18 +4854,23 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;   (interactive)
 ;;NOT DOOM ;;; (org-table-export (format "%s.csv" name) "orgtbl-to-csv"))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; ;; * hide/show modeline
-;;NOT DOOM ;;; (defvar js/modeline-format-temp mode-line-format
-;;NOT DOOM ;;;   "saves current modeline format as backup, to be restored after js/hide-mode-line js/show-mode-line")
-;;NOT DOOM ;;; (defun js/hide-mode-line ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;     (setq js/modeline-format-temp mode-line-format)
-;;NOT DOOM ;;;     (setq mode-line-format nil))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; (defun js/show-mode-line ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;     (setq mode-line-format js/modeline-format-temp))
-;;NOT DOOM ;;;
+;; * hide/show modeline
+(defvar js/modeline-format-temp mode-line-format
+  "saves current modeline format as backup, to be restored after js/hide-mode-line js/show-mode-line")
+(defun js/hide-mode-line ()
+    (interactive)
+    (setq js/modeline-format-temp mode-line-format)
+    (setq mode-line-format nil))
+
+(defun js/set-mode-line-str (str)
+    (interactive)
+    (setq js/modeline-format-temp mode-line-format)
+    (setq mode-line-format str))
+
+(defun js/show-mode-line ()
+    (interactive)
+    (setq mode-line-format js/modeline-format-temp))
+
 ;;NOT DOOM ;;; ;; * evil vim customization
 ;;NOT DOOM ;;; ;; ** 4 -> insert white space
 ;;NOT DOOM ;;;  (define-key evil-normal-state-map (kbd "4") 'js/insert-white-space)
@@ -4955,3 +4978,53 @@ new-org-file-full-name)
 (defface org-red-face '((nil :foreground "red")) "org red face")
 (font-lock-add-keywords 'org-mode '(("\\\\red{.*}" . 'org-red-face)))
  
+
+;; * org-present
+;; ** increase latex preview size also
+(defvar js/org-latex-preview-scale-default 1.5)
+(defvar js/org-latex-preview-scale-treeslide 3.0)
+;; (add-hook! org-tree-slide-mode
+;;            ;; (message "org-tree-slide-mode hook executing..")
+;;            (js/org-latex-preview-scale-set-treeslide))
+
+(defun js/org-latex-preview-scale-set-default ()
+  (interactive)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-default))
+  (org-latex-refresh-all))
+
+
+(defun js/org-latex-preview-scale-set-treeslide ()
+  (interactive)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-treeslide))
+  (org-latex-refresh-all))
+
+;; ** presentation startup script
+(setq org-tree-slide-play-hook nil)
+(add-hook! 'org-tree-slide-play-hook
+           (lambda () (message "slide-play-hooks executing..."))
+           #'js/org-latex-preview-scale-set-treeslide
+           (lambda () (setq inhibit-message t)) ;; inhibit for presentation
+           (lambda () (interactive) (js/set-mode-line-str ("BASF Aufgabe: Stabilisierung Füllstände Turmreaktor - Analyse/Lösungskonzepte | Johannes Sacher | johannes.sacher@googlemail.com | 8.11.2021")))
+           (lambda () (message "slide-play-hooks executed."))
+  )
+
+;; ** presentation stop script
+(add-hook! 'org-tree-slide-stop-hook
+           #'js/org-latex-preview-scale-set-default
+           (lambda () (setq inhibit-message nil)) ;; inhibit for presentation
+           )
+
+(add-hook! 'org-tree-slide-next-hook
+  #'(org-latex-refresh-all))
+
+;; kind of "start-up" script when slide is loaded
+(setq org-tree-slide-after-narrow-hook nil)
+(add-hook! 'org-tree-slide-after-narrow-hook
+           #'org-latex-refresh-all
+           (lambda () (interactive) (js/set-mode-line-str ("BASF Aufgabe: Stabilisierung Füllstände Turmreaktor - Analyse/Lösungskonzepte | Johannes Sacher | johannes.sacher@googlemail.com | 8.11.2021"))))
+           ;; (lambda () (message "org-tree-slide-after-narrow-hook executing.."))
+
+(org-tree-slide-presentation-profile)
+
+(org-tree-slide-simple-profile)
+(org-tree-slide-narrowing-control-profile)
