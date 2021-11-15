@@ -4,13 +4,13 @@
 ;; ** DONE org-metaup etc. C-h/j/k/l
 ;; ** DONE planet funs
 ;; ** DONE quick search replace in region
-;; ** TODO line wrapping default (the doom way?)
+;; ** DONE [visual-line-mode] line wrapping default (the doom way?)
 ;; ** DONE visual state - expand on repeat "v"
 ;; ** TODO check hooks doom way? add-hook or add-hook!
 ;; ** TODO add CRNT keyword for 'current'
-;; ** TODO org variable pitch font
-;; ** TODO org no lin nrs
-;; ** TODO org latex preview all toggle etc.
+;; ** DONE org variable pitch font
+;; ** DONE org no lin nrs
+;; ** DONE org latex preview all toggle etc.
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
@@ -1061,76 +1061,83 @@
 ;;NOT DOOM ;;;  ;; ?
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** org-mode toggle bold/italic
-;;NOT DOOM ;;;  (defun org-toggle-quote-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "\"" "\""  "\"" "\"")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun org-toggle-bold-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "*" "\*"  "*" "\*")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun org-toggle-code-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "~" "\~"  "~" "\~")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun org-toggle-red-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "=" "="  "=" "=")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun org-toggle-underline-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "_" "_"  "_" "_")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun org-toggle-italic-region ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (my-toggle-marker-around-region "/" "\/" "/" "\/")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  ;; todo: rethink these, already reserverd for other stuff
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "jb" 'org-toggle-bold-region)
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "ji" 'org-toggle-italic-region)
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "jc" 'org-toggle-code-region)
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "ju" 'org-toggle-underline-region)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun region-to-string ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq region-string (buffer-substring (mark) (point)))
-;;NOT DOOM ;;;    ;; (message (concat region-string))
-;;NOT DOOM ;;;    region-string)
-;;NOT DOOM ;;;  (defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
-;;NOT DOOM ;;;    (setq begin (region-beginning))
-;;NOT DOOM ;;;    (setq end (region-end))
-;;NOT DOOM ;;;    (setq region_string (buffer-substring (mark) (point)))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; if begins and ends with single star --> bold
-;;NOT DOOM ;;;    (if (string-match (concat "^" marker-begin-regex ".*" marker-end-regex "$") region_string) ;; org-headings are : '* blabla' or '** blabla' etc.
-;;NOT DOOM ;;;        (progn
-;;NOT DOOM ;;;          (save-excursion
-;;NOT DOOM ;;;            (goto-char begin)
-;;NOT DOOM ;;;            (delete-char (length marker-begin))
-;;NOT DOOM ;;;            (goto-char end)
-;;NOT DOOM ;;;            (backward-char);; because we deleted the char '*'
-;;NOT DOOM ;;;            (delete-char (length marker-begin))
-;;NOT DOOM ;;;            (message (concat "region is: " region_string))
-;;NOT DOOM ;;;            )
-;;NOT DOOM ;;;          )
-;;NOT DOOM ;;;        ;; else (toggle state: not marked)
-;;NOT DOOM ;;;        (progn
-;;NOT DOOM ;;;          (save-excursion
-;;NOT DOOM ;;;            (goto-char begin)
-;;NOT DOOM ;;;            (insert marker-begin)
-;;NOT DOOM ;;;            (goto-char end)
-;;NOT DOOM ;;;            (forward-char) ;; because we added the char '*'
-;;NOT DOOM ;;;            (insert marker-end)
-;;NOT DOOM ;;;            (message (concat "region is: " region_string))
-;;NOT DOOM ;;;            )
-;;NOT DOOM ;;;          )
-;;NOT DOOM ;;;        )
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
+;; ** org-mode toggle bold/italic
+
+(after! org
+  (defun org-toggle-quote-region ()
+    (interactive)
+    (my-toggle-marker-around-region "\"" "\""  "\"" "\"")
+    )
+  (defun org-toggle-bold-region ()
+    (interactive)
+    (my-toggle-marker-around-region "*" "\*"  "*" "\*")
+    )
+  (defun org-toggle-code-region ()
+    (interactive)
+    (my-toggle-marker-around-region "~" "\~"  "~" "\~")
+    )
+
+  (defun org-toggle-red-region ()
+    (interactive)
+    (my-toggle-marker-around-region "=" "="  "=" "=")
+    )
+
+
+  (defun org-toggle-underline-region ()
+    (interactive)
+    (my-toggle-marker-around-region "_" "_"  "_" "_")
+    )
+  (defun org-toggle-italic-region ()
+    (interactive)
+    (my-toggle-marker-around-region "/" "\/" "/" "\/")
+    )
+  ;; todo: rethink these, already reserverd for other stuff
+  (map!
+   :map evil-org-mode-map
+   :leader
+   (:prefix-map ("j" . "format")
+    :desc "toggle bold"       "b" #'org-toggle-bold-region
+    :desc "toggle italic"     "i" #'org-toggle-italic-region
+    :desc "toggle code"       "c" #'org-toggle-code-region
+    :desc "toggle underline"  "u" #'org-toggle-underline-region))
+  ) ;; after! org
+
+ (defun region-to-string ()
+   (interactive)
+   (setq region-string (buffer-substring (mark) (point)))
+   ;; (message (concat region-string))
+   region-string)
+ (defun my-toggle-marker-around-region (marker-begin marker-begin-regex marker-end marker-end-regex)
+   (setq begin (region-beginning))
+   (setq end (region-end))
+   (setq region_string (buffer-substring (mark) (point)))
+
+   ;; if begins and ends with single star --> bold
+   (if (string-match (concat "^" marker-begin-regex ".*" marker-end-regex "$") region_string) ;; org-headings are : '* blabla' or '** blabla' etc.
+       (progn
+         (save-excursion
+           (goto-char begin)
+           (delete-char (length marker-begin))
+           (goto-char end)
+           (backward-char);; because we deleted the char '*'
+           (delete-char (length marker-begin))
+           (message (concat "region is: " region_string))
+           )
+         )
+       ;; else (toggle state: not marked)
+       (progn
+         (save-excursion
+           (goto-char begin)
+           (insert marker-begin)
+           (goto-char end)
+           (forward-char) ;; because we added the char '*'
+           (insert marker-end)
+           (message (concat "region is: " region_string))
+           )
+         )
+       )
+   )
+
 ;;NOT DOOM ;;;  ;; ** org latex export (settings and tweaks)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; *** make plainlists below level always unnumbered
@@ -1820,8 +1827,13 @@ new-org-file-full-name)
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "*" 'org-toggle-heading)
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "8" 'org-toggle-heading) ;; lazy, 8 for *
 ;;NOT DOOM ;;;
+;; ** org variable pitch for text
+(setq doom-variable-pitch-font (font-spec :family "Cantarell"))
+(add-hook! org-mode
+           (mixed-pitch-mode 1))
+;; ** org -> hide emphasis markers
+(setq org-hide-emphasis-markers t)
 ;;NOT DOOM ;;;  ;; new emphasis-markers
-;;NOT DOOM ;;;  (setq org-hide-emphasis-markers t)
 ;;NOT DOOM ;;;  (add-to-list 'org-emphasis-alist
 ;;NOT DOOM ;;;               '("^" (:foreground "red")
 ;;NOT DOOM ;;;                 ))
@@ -2460,6 +2472,8 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       (:prefix-map ("y" . "paths")
        :desc "copy current path" "y" 'copy-current-path ;; analogouns to y = vim yank
+       :desc "copy file path" "u" 'copy-fullfilename
+ ;; analogouns to y = vim yank
        :desc "change path"       "p" 'change-dir-from-clipboard)) ;; analogouns to y = vim yank
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
@@ -2728,12 +2742,18 @@ and `C-x' being marked as a `term-escape-char'."
 ;;  after: dired)
 ;; (use-package! openwith
 ;; after: dired)
-(after! dired
+;; after! dired -> somehow not working
+;; doesn't matter -> load it straight away, not so expensive
+;; (after! dired
 	(require 'openwith)
-        (openwith-mode +1))
 
-(after! openwith
- (openwith-mode t)
+        (openwith-mode -1)
+        (openwith-mode +1)
+        (openwith-mode -1)
+        (openwith-mode +1)
+        ;; )
+
+;; (after! openwith
  (cond ((equal myhost "phone")
         (setq openwith-associations '(
                                       ("\\.jpg\\'" "termux-open" (file))
@@ -2742,7 +2762,8 @@ and `C-x' being marked as a `term-escape-char'."
         (setq openwith-associations '(
                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
                                ("\\.xopp\\'" "xournalpp" (file))
-                               ("\\.pdf\\'" "okular" (file)))))))
+                               ("\\.pdf\\'" "okular" (file))))))
+;; )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; * save desktop sessions
 ;;NOT DOOM ;;;  ;;    (require 'session)
@@ -3223,6 +3244,12 @@ and `C-x' being marked as a `term-escape-char'."
 (defun org-latex-clear-all ()
   (interactive)
   (org-latex-preview '(64)))
+
+
+(defun org-latex-refresh-all ()
+  (interactive)
+  (org-latex-clear-all)
+  (org-latex-preview-all))
 
 (defun org-latex-preview-toggle-clear-preview-all ()
   (interactive)
@@ -4203,31 +4230,31 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;    (ssh-clipboard-copy-string currentpath)
 ;;NOT DOOM ;;;    (message (concat "copied path to ssh-clipboard: "  currentpath)))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun get-fullfilename ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;      (cond
-;;NOT DOOM ;;;          ((equal major-mode 'dired-mode)
-;;NOT DOOM ;;;              ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
-;;NOT DOOM ;;;              ;; (dired-copy-file-as-kill)
-;;NOT DOOM ;;;              ;; (setq filename (current-kill 0))
-;;NOT DOOM ;;;              ;; (setq currentpath (concat currentpath "/" filename))
-;;NOT DOOM ;;;              ;; (setq fullfilename (dired-file-name-at-point))
-;;NOT DOOM ;;;              (setq fullfilename (dired-get-filename))
-;;NOT DOOM ;;;              (setq currentpath fullfilename))
-;;NOT DOOM ;;;          (t
-;;NOT DOOM ;;;           (setq fullfilename (buffer-file-name)))))
-;;NOT DOOM ;;;
+(defun get-fullfilename ()
+  (interactive)
+    (cond
+        ((equal major-mode 'dired-mode)
+            ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
+            ;; (dired-copy-file-as-kill)
+            ;; (setq filename (current-kill 0))
+            ;; (setq currentpath (concat currentpath "/" filename))
+            ;; (setq fullfilename (dired-file-name-at-point))
+            (setq fullfilename (dired-get-filename))
+            (setq currentpath fullfilename))
+        (t
+         (setq fullfilename (buffer-file-name)))))
+
 ;;NOT DOOM ;;;  (defun ssh-clipboard-copy-fullfilename ()
 ;;NOT DOOM ;;;    (interactive)
 ;;NOT DOOM ;;;    (setq fullfilename (get-fullfilename))
 ;;NOT DOOM ;;;    (ssh-clipboard-copy-string fullfilename)
 ;;NOT DOOM ;;;    (message (concat "copied fullfilename to ssh-clipboard: "  fullfilename)))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun copy-fullfilename ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq fullfilename (get-fullfilename))
-;;NOT DOOM ;;;    (kill-new fullfilename)
-;;NOT DOOM ;;;    (message (concat "copied fullfilename to clipboard: "  fullfilename)))
+(defun copy-fullfilename ()
+  (interactive)
+  (setq fullfilename (get-fullfilename))
+  (kill-new fullfilename)
+  (message (concat "copied fullfilename to clipboard: "  fullfilename)))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;  (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
 ;;NOT DOOM ;;;
@@ -4838,18 +4865,23 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;   (interactive)
 ;;NOT DOOM ;;; (org-table-export (format "%s.csv" name) "orgtbl-to-csv"))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; ;; * hide/show modeline
-;;NOT DOOM ;;; (defvar js/modeline-format-temp mode-line-format
-;;NOT DOOM ;;;   "saves current modeline format as backup, to be restored after js/hide-mode-line js/show-mode-line")
-;;NOT DOOM ;;; (defun js/hide-mode-line ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;     (setq js/modeline-format-temp mode-line-format)
-;;NOT DOOM ;;;     (setq mode-line-format nil))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; (defun js/show-mode-line ()
-;;NOT DOOM ;;;     (interactive)
-;;NOT DOOM ;;;     (setq mode-line-format js/modeline-format-temp))
-;;NOT DOOM ;;;
+;; * hide/show modeline
+(defvar js/modeline-format-temp mode-line-format
+  "saves current modeline format as backup, to be restored after js/hide-mode-line js/show-mode-line")
+(defun js/hide-mode-line ()
+    (interactive)
+    (setq js/modeline-format-temp mode-line-format)
+    (setq mode-line-format nil))
+
+(defun js/set-mode-line-str (str)
+    (interactive)
+    (setq js/modeline-format-temp mode-line-format)
+    (setq mode-line-format str))
+
+(defun js/show-mode-line ()
+    (interactive)
+    (setq mode-line-format js/modeline-format-temp))
+
 ;;NOT DOOM ;;; ;; * evil vim customization
 ;;NOT DOOM ;;; ;; ** 4 -> insert white space
 ;;NOT DOOM ;;;  (define-key evil-normal-state-map (kbd "4") 'js/insert-white-space)
@@ -4953,13 +4985,69 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (message (concat "your command was: " command))
   (efs/run-in-background command))
 
+(map! :leader
+      :desc "Launch (terminal) command" ">" #'js/launch-app-command)
+
 ;; * org color words
 (defface org-red-face '((nil :foreground "red")) "org red face")
 (font-lock-add-keywords 'org-mode '(("\\\\red{.*}" . 'org-red-face)))
  
+<<<<<<< HEAD
 ;; * orgify (my own package for orgified-file-concept)
 ;; each file can be "orgified", simply means: put it file.ext in folder file.ext
 ;; folder can contain file.ext.org file, with "connective data/id" and meta-data/description/wiki
 (orgify-dired-open ()
                    (interactive)
 )                   (setq filename (dired-get-file-for-visit))
+=======
+
+;; * org-present
+;; ** increase latex preview size also
+(defvar js/org-latex-preview-scale-default 1.5)
+(defvar js/org-latex-preview-scale-treeslide 3.0)
+;; (add-hook! org-tree-slide-mode
+;;            ;; (message "org-tree-slide-mode hook executing..")
+;;            (js/org-latex-preview-scale-set-treeslide))
+
+(defun js/org-latex-preview-scale-set-default ()
+  (interactive)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-default))
+  (org-latex-refresh-all))
+
+
+(defun js/org-latex-preview-scale-set-treeslide ()
+  (interactive)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-treeslide))
+  (org-latex-refresh-all))
+
+;; ** presentation startup script
+(setq org-tree-slide-play-hook nil)
+(add-hook! 'org-tree-slide-play-hook
+           (lambda () (message "slide-play-hooks executing..."))
+           #'js/org-latex-preview-scale-set-treeslide
+           (lambda () (setq inhibit-message t)) ;; inhibit for presentation
+           (lambda () (interactive) (js/set-mode-line-str ("BASF Aufgabe: Stabilisierung Füllstände Turmreaktor - Analyse/Lösungskonzepte | Johannes Sacher | johannes.sacher@googlemail.com | 8.11.2021")))
+           (lambda () (message "slide-play-hooks executed."))
+  )
+
+;; ** presentation stop script
+(add-hook! 'org-tree-slide-stop-hook
+           #'js/org-latex-preview-scale-set-default
+           (lambda () (setq inhibit-message nil)) ;; inhibit for presentation
+           )
+
+(add-hook! 'org-tree-slide-next-hook
+  #'(org-latex-refresh-all))
+
+;; kind of "start-up" script when slide is loaded
+(setq org-tree-slide-after-narrow-hook nil)
+(add-hook! 'org-tree-slide-after-narrow-hook
+           #'org-latex-refresh-all
+           (lambda () (interactive) (js/set-mode-line-str ("BASF Aufgabe: Stabilisierung Füllstände Turmreaktor - Analyse/Lösungskonzepte | Johannes Sacher | johannes.sacher@googlemail.com | 8.11.2021"))))
+           ;; (lambda () (message "org-tree-slide-after-narrow-hook executing.."))
+
+(org-tree-slide-presentation-profile)
+
+(org-tree-slide-simple-profile)
+(org-tree-slide-narrowing-control-profile)
+>>>>>>> 9e43908428fd5e6adf321b45e67dcd15477ff891

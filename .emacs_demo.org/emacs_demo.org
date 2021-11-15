@@ -287,3 +287,4 @@ tipp: prepand "emacs" or "elisp" to your search and do not use google, but priva
 ** "The Matrix - Neo - Analogy" 
 *** first feel like inable to do anything -> photo Neo where he falls in the test <==> emacs first time edit text
 *** later <==> flying bullets escaping
+** [[file:emacs_hero_anime_post.png]]
