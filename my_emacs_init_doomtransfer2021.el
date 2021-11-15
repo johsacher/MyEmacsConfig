@@ -4957,3 +4957,9 @@ and `C-x' being marked as a `term-escape-char'."
 (defface org-red-face '((nil :foreground "red")) "org red face")
 (font-lock-add-keywords 'org-mode '(("\\\\red{.*}" . 'org-red-face)))
  
+;; * orgify (my own package for orgified-file-concept)
+;; each file can be "orgified", simply means: put it file.ext in folder file.ext
+;; folder can contain file.ext.org file, with "connective data/id" and meta-data/description/wiki
+(orgify-dired-open ()
+                   (interactive)
+)                   (setq filename (dired-get-file-for-visit))
