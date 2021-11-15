@@ -4,13 +4,13 @@
 ;; ** DONE org-metaup etc. C-h/j/k/l
 ;; ** DONE planet funs
 ;; ** DONE quick search replace in region
-;; ** TODO line wrapping default (the doom way?)
+;; ** DONE [visual-line-mode] line wrapping default (the doom way?)
 ;; ** DONE visual state - expand on repeat "v"
 ;; ** TODO check hooks doom way? add-hook or add-hook!
 ;; ** TODO add CRNT keyword for 'current'
-;; ** TODO org variable pitch font
-;; ** TODO org no lin nrs
-;; ** TODO org latex preview all toggle etc.
+;; ** DONE org variable pitch font
+;; ** DONE org no lin nrs
+;; ** DONE org latex preview all toggle etc.
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
 (xterm-mouse-mode 1)
 (global-set-key [mouse-4] 'scroll-down-line)
@@ -663,67 +663,83 @@
 ;;NOT DOOM ;;;    ;; (english-german-translator-move-point-to-input-field)
 ;;NOT DOOM ;;;    )
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; * ipython-calculator (my)
-;;NOT DOOM ;;;  ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
-;;NOT DOOM ;;;  (defvar ipython-calculator-buffer-name "*ipython-calculator*")
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun ipython-calculator-init ()
-;;NOT DOOM ;;;    "Start a terminal-emulator in a new buffer and run ipython."
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq program "/bin/bash")
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (setq term-ansi-buffer-name (concat ipython-calculator-buffer-name))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (switch-to-buffer term-ansi-buffer-name)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (set-buffer term-ansi-buffer-name)
-;;NOT DOOM ;;;    (term-mode)
-;;NOT DOOM ;;;    (term-char-mode)
-;;NOT DOOM ;;;    (python-calculator-mode)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; Historical baggage.  A call to term-set-escape-char used to not
-;;NOT DOOM ;;;    ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
-;;NOT DOOM ;;;    ;; ended up with both C-x and C-c as escape chars.  Who knows what
-;;NOT DOOM ;;;    ;; the original intention was, but people could have become used to
-;;NOT DOOM ;;;    ;; either.   (Bug#12842)
-;;NOT DOOM ;;;    (let (term-escape-char)
-;;NOT DOOM ;;;      ;; I wanna have find-file on C-x C-f -mm
-;;NOT DOOM ;;;      ;; your mileage may definitely vary, maybe it's better to put this in your .emacs ...
-;;NOT DOOM ;;;      (term-set-escape-char ?\C-x))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; * execute ipython
-;;NOT DOOM ;;;    (cond ((equal myhost "phone")
-;;NOT DOOM ;;;           (comint-send-string ipython-calculator-buffer-name "python\n"))
-;;NOT DOOM ;;;          (t
-;;NOT DOOM ;;;           (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun ipython-calculator ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; initiate if not already exists
-;;NOT DOOM ;;;    (if (not (get-buffer ipython-calculator-buffer-name))
-;;NOT DOOM ;;;        (ipython-calculator-init)
-;;NOT DOOM ;;;        )
-;;NOT DOOM ;;;    ;; switch to that buffer
-;;NOT DOOM ;;;    (switch-to-buffer ipython-calculator-buffer-name)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;; (js/leader-def "a" 'ipython-calculator)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defvar python-calculator-mode-map
-;;NOT DOOM ;;;    (let ((m (make-sparse-keymap))) ;; i think this achieves a "local key binding" for the buffer
-;;NOT DOOM ;;;      (define-key m (kbd "M-p") 'term-send-up)
-;;NOT DOOM ;;;      m))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (define-minor-mode python-calculator-mode "this is the documentation."
-;;NOT DOOM ;;;    :init-value nil
-;;NOT DOOM ;;;    :lighter " py-calc"
-;;NOT DOOM ;;;    :keymap python-calculator-mode-map
-;;NOT DOOM ;;;    :group 'python-calculator
-;;NOT DOOM ;;;    :global nil)
+ ;;; * ipython-calculator (my)
+ ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
+ (defvar ipython-calculator-buffer-name-nostar "ipython-calculator")
+ (defvar ipython-calculator-buffer-name (concat "*" ipython-calculator-buffer-name-nostar "*"))
+
+ (defun ipython-calculator-init ()
+   (interactive)
+   (js/ansi-term ipython-calculator-buffer-name-nostar)
+   ;; (python-calculator-mode)
+   ;; * execute ipython
+   (cond ((equal myhost "phone")
+          (comint-send-string ipython-calculator-buffer-name "python\n"))
+         (t
+          (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
+
+ (defun ipython-calculator-init0 ()
+   "Start a terminal-emulator in a new buffer and run ipython."
+   (interactive)
+   (setq program "/bin/bash")
+
+   (setq term-ansi-buffer-name (concat ipython-calculator-buffer-name))
+
+   (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
+
+   (switch-to-buffer term-ansi-buffer-name)
+
+   (set-buffer term-ansi-buffer-name)
+   (term-mode)
+   (term-char-mode)
+   (python-calculator-mode)
+
+   ;; Historical baggage.  A call to term-set-escape-char used to not
+   ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
+   ;; ended up with both C-x and C-c as escape chars.  Who knows what
+   ;; the original intention was, but people could have become used to
+   ;; either.   (Bug#12842)
+   (let (term-escape-char)
+     ;; I wanna have find-file on C-x C-f -mm
+     ;; your mileage may definitely vary, maybe it's better to put this in your .emacs ...
+     (term-set-escape-char ?\C-x))
+
+   (defun js/show-buffer-name ()
+     (interactive)
+     (message (buffer-name)))
+
+   ;; * execute ipython
+   (cond ((equal myhost "phone")
+          (comint-send-string ipython-calculator-buffer-name "python\n"))
+         (t
+          (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
+
+
+ (defun ipython-calculator ()
+   (interactive)
+   ;; initiate if not already exists
+   (if (not (get-buffer ipython-calculator-buffer-name))
+       (ipython-calculator-init)
+       )
+   ;; switch to that buffer
+   (switch-to-buffer ipython-calculator-buffer-name)
+   )
+
+(map! :leader
+    "o a" 'ipython-calculator)
+
+
+ (defvar python-calculator-mode-map
+   (let ((m (make-sparse-keymap))) ;; i think this achieves a "local key binding" for the buffer
+     (define-key m (kbd "M-p") 'term-send-up)
+     m))
+
+ (define-minor-mode python-calculator-mode "this is the documentation."
+   :init-value nil
+   :lighter " py-calc"
+   :keymap python-calculator-mode-map
+   :group 'python-calculator
+   :global nil)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; * org-mode
 ;;NOT DOOM ;;;  ;; ** prior stuff
@@ -736,7 +752,12 @@
 ;;NOT DOOM ;;;  ;; org ellipsis
 ;;NOT DOOM ;;;  ;; right arrows
 ;;NOT DOOM ;;;  ;; “↝” “⇉” “⇝” “⇢” “⇨” “⇰” “➔” “➙” “➛” “➜” “➝” “➞”
-;;NOT DOOM ;;;
+;;NOT DOOM ;;;↓
+;; down/up arrow utf8
+;; (insert "\u2193")
+;; ↓↓
+;; (insert "\u2191")
+;; ↑↑
 ;;NOT DOOM ;;;  ;; “➟” “➠” “➡” “➥” “➦” “➧” “➨”
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; “➩” “➪” “➮” “➯” “➱” “➲”
@@ -1955,40 +1976,21 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;   :ensure t) ;; stickyterm builds on /requires term (variables etc. -> load term before
 ;;NOT DOOM ;;;
 (load "stickyterm.el")
-(defun js/launch-ansi-term ()
-  "Start a terminal-emulator in a new buffer."
+
+(defun js/ansi-term (&optional buffername)
+  "Start a terminal-emulator in a new buffer.
+This is almost the same as `term' apart from always creating a new buffer,
+and `C-x' being marked as a `term-escape-char'."
   (interactive)
-  ;; Pick the name of the new buffer.
-  (setq program "/bin/bash")
-  (setq new-buffer-name nil)
-  (setq term-ansi-buffer-name
-	(if new-buffer-name
-	    new-buffer-name
-	  (if term-ansi-buffer-base-name
-	      (if (eq term-ansi-buffer-base-name t)
-		  (file-name-nondirectory program)
-		term-ansi-buffer-base-name)
-	    "ansi-term")))
-
-  (setq term-ansi-buffer-name (concat "*" term-ansi-buffer-name "*"))
-
-  ;; In order to have more than one term active at a time
-  ;; I'd like to have the term names have the *term-ansi-term<?>* form,
-  ;; for now they have the *term-ansi-term*<?> form but we'll see...
-
-  (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
-  (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
-
-  (switch-to-buffer term-ansi-buffer-name)
-
-  (set-buffer term-ansi-buffer-name)
-  (term-mode)
-  (term-char-mode)
-    (evil-emacs-state)
-    (term-char-mode))
+  (setq program  (or explicit-shell-file-name
+					       (getenv "ESHELL")
+					       shell-file-name))
+  (if buffername
+      (ansi-term program buffername)
+      (ansi-term program)))
 
 (map! :leader
-      "o s" 'js/launch-ansi-term)
+      :desc "Open Terminal" "o s" 'js/ansi-term)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; (use-package term
 ;;NOT DOOM ;;;   :ensure t)
@@ -2470,6 +2472,8 @@ new-org-file-full-name)
 (map! :leader
       (:prefix-map ("y" . "paths")
        :desc "copy current path" "y" 'copy-current-path ;; analogouns to y = vim yank
+       :desc "copy file path" "u" 'copy-fullfilename
+ ;; analogouns to y = vim yank
        :desc "change path"       "p" 'change-dir-from-clipboard)) ;; analogouns to y = vim yank
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
@@ -2738,12 +2742,18 @@ new-org-file-full-name)
 ;;  after: dired)
 ;; (use-package! openwith
 ;; after: dired)
-(after! dired
+;; after! dired -> somehow not working
+;; doesn't matter -> load it straight away, not so expensive
+;; (after! dired
 	(require 'openwith)
-        (openwith-mode +1))
 
-(after! openwith
- (openwith-mode t)
+        (openwith-mode -1)
+        (openwith-mode +1)
+        (openwith-mode -1)
+        (openwith-mode +1)
+        ;; )
+
+;; (after! openwith
  (cond ((equal myhost "phone")
         (setq openwith-associations '(
                                       ("\\.jpg\\'" "termux-open" (file))
@@ -2752,7 +2762,8 @@ new-org-file-full-name)
         (setq openwith-associations '(
                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
                                ("\\.xopp\\'" "xournalpp" (file))
-                               ("\\.pdf\\'" "okular" (file)))))))
+                               ("\\.pdf\\'" "okular" (file))))))
+;; )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; * save desktop sessions
 ;;NOT DOOM ;;;  ;;    (require 'session)
@@ -4219,31 +4230,31 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;    (ssh-clipboard-copy-string currentpath)
 ;;NOT DOOM ;;;    (message (concat "copied path to ssh-clipboard: "  currentpath)))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun get-fullfilename ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;      (cond
-;;NOT DOOM ;;;          ((equal major-mode 'dired-mode)
-;;NOT DOOM ;;;              ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
-;;NOT DOOM ;;;              ;; (dired-copy-file-as-kill)
-;;NOT DOOM ;;;              ;; (setq filename (current-kill 0))
-;;NOT DOOM ;;;              ;; (setq currentpath (concat currentpath "/" filename))
-;;NOT DOOM ;;;              ;; (setq fullfilename (dired-file-name-at-point))
-;;NOT DOOM ;;;              (setq fullfilename (dired-get-filename))
-;;NOT DOOM ;;;              (setq currentpath fullfilename))
-;;NOT DOOM ;;;          (t
-;;NOT DOOM ;;;           (setq fullfilename (buffer-file-name)))))
-;;NOT DOOM ;;;
+(defun get-fullfilename ()
+  (interactive)
+    (cond
+        ((equal major-mode 'dired-mode)
+            ;; "workaround": use dired-copy-file-as-kill -> (normal) clipboard aka kill-ring -> get it from kill ring -> put it to string
+            ;; (dired-copy-file-as-kill)
+            ;; (setq filename (current-kill 0))
+            ;; (setq currentpath (concat currentpath "/" filename))
+            ;; (setq fullfilename (dired-file-name-at-point))
+            (setq fullfilename (dired-get-filename))
+            (setq currentpath fullfilename))
+        (t
+         (setq fullfilename (buffer-file-name)))))
+
 ;;NOT DOOM ;;;  (defun ssh-clipboard-copy-fullfilename ()
 ;;NOT DOOM ;;;    (interactive)
 ;;NOT DOOM ;;;    (setq fullfilename (get-fullfilename))
 ;;NOT DOOM ;;;    (ssh-clipboard-copy-string fullfilename)
 ;;NOT DOOM ;;;    (message (concat "copied fullfilename to ssh-clipboard: "  fullfilename)))
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun copy-fullfilename ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq fullfilename (get-fullfilename))
-;;NOT DOOM ;;;    (kill-new fullfilename)
-;;NOT DOOM ;;;    (message (concat "copied fullfilename to clipboard: "  fullfilename)))
+(defun copy-fullfilename ()
+  (interactive)
+  (setq fullfilename (get-fullfilename))
+  (kill-new fullfilename)
+  (message (concat "copied fullfilename to clipboard: "  fullfilename)))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;  (evil-define-key 'normal term-raw-map (kbd "C-S-p") 'ssh-clipboard-term-paste)
 ;;NOT DOOM ;;;
@@ -4973,6 +4984,9 @@ new-org-file-full-name)
   (interactive "sApp command: ")
   ;; (message (concat "your command was: " command))
   (efs/run-in-background command))
+
+(map! :leader
+      :desc "Launch (terminal) command" ">" #'js/launch-app-command)
 
 ;; * org color words
 (defface org-red-face '((nil :foreground "red")) "org red face")
