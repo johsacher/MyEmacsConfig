@@ -471,10 +471,13 @@
 
 (map! :leader
       (:prefix-map ("e" . "planet")
-       :desc "planet today"      "d" #'planet-today
-       :desc "planet week"       "y" #'planet-this-week
-       :desc "planet view week"  "w" #'planet-view-week2X4
-       :desc "planet view quit"  "q" #'planet-view-quit))
+       :desc "planet today"         "d" #'planet-today
+       :desc "planet week"          "y" #'planet-this-week
+       :desc "planet view week"     "w" #'planet-view-week2X4
+       :desc "planet view quit"     "q" #'planet-view-quit
+       :desc "planet git-save on"   "g" #'planet-git-save-turn-on
+       :desc "planet git-save off"  "G" #'planet-git-save-turn-off
+      ))
 
 ;; not working (see learnings key evil emacs):
 ;; (map! :map planet-mode-map
@@ -3312,7 +3315,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
 ;; ** F5 -> run pdflatex / F6 -> bibtex
-(after! auctex
+(after! latex
 (defun run-pdflatex-on-master-file ()
 "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 (interactive)
@@ -4995,9 +4998,9 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * orgify (my own package for orgified-file-concept)
 ;; each file can be "orgified", simply means: put it file.ext in folder file.ext
 ;; folder can contain file.ext.org file, with "connective data/id" and meta-data/description/wiki
-(orgify-dired-open ()
+(defun orgify-dired-open ()
                    (interactive)
-)                   (setq filename (dired-get-file-for-visit))
+                   (setq filename (dired-get-file-for-visit)))
 
 ;; * org-present
 ;; ** increase latex preview size also
