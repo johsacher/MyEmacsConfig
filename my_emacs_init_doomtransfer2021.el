@@ -5047,7 +5047,8 @@ and `C-x' being marked as a `term-escape-char'."
            (lambda () (interactive) (js/set-mode-line-str ("BASF Aufgabe: Stabilisierung Füllstände Turmreaktor - Analyse/Lösungskonzepte | Johannes Sacher | johannes.sacher@googlemail.com | 8.11.2021"))))
            ;; (lambda () (message "org-tree-slide-after-narrow-hook executing.."))
 
-(org-tree-slide-presentation-profile)
-
-(org-tree-slide-simple-profile)
-(org-tree-slide-narrowing-control-profile)
+(after! org-tree
+;; (org-tree-slide-presentation-profile)
+;; (org-tree-slide-simple-profile)
+;; (org-tree-slide-narrowing-control-profile)
+)
