@@ -1540,6 +1540,26 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;     )
 ;;NOT DOOM ;;;   currentpath)
 ;;NOT DOOM ;;;
+(defun js/org-preamble-default-insert ()
+  (interactive)
+  ;; allow bindings to work "#BIND+ ...
+  (setq org-export-allow-bind-keywords t)
+  (insert (concat
+         "#+title: <title>" "\n"
+         "#+options: num:t" "\n"
+         "#+options: toc:t" "\n"
+         "#+options: H:2" "\n"
+         "# itemize all bullets" "\n"
+         "#+LATEX_HEADER: \\renewcommand{\\labelitemi}{$\\bullet$}" "\n"
+         "#+LATEX_HEADER: \\renewcommand{\\labelitemii}{$\\bullet$}" "\n"
+         "#+LATEX_HEADER: \\renewcommand{\\labelitemiii}{$\\bullet$}" "\n"
+         "#+LATEX_HEADER: \\renewcommand{\\labelitemiv}{$\\bullet$}" "\n"
+         "#+LATEX_HEADER: \\usepackage[parfill]{parskip}" "\n"
+         "#+BIND: org-latex-image-default-width \".98\\linewidth\"" "\n"
+         "#+BIND: org-latex-image-default-width \"9cm\"" "\n"
+        ;; "# other export language (mind "for technical reasons" has to be first english than ngerman, otherwise english, whyever.. latex-"bug")"
+         "#+LATEX_HEADER: \\usepackage[english, ngerman]{babel}" "\n"
+         )))
 ;;NOT DOOM ;;;  ;; ** default LATEX_HEADER
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; *** allow bindings to work "#BIND+ ..."
@@ -5004,7 +5024,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; * org-present
 ;; ** increase latex preview size also
-(defvar js/org-latex-preview-scale-default 1.5)
+(defvar js/org-latex-preview-scale-default 2.0)
 (defvar js/org-latex-preview-scale-treeslide 3.0)
 ;; (add-hook! org-tree-slide-mode
 ;;            ;; (message "org-tree-slide-mode hook executing..")
