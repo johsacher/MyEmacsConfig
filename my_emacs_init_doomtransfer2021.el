@@ -5024,7 +5024,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; * org-present
 ;; ** increase latex preview size also
-(defvar js/org-latex-preview-scale-default 2.0)
+(defvar js/org-latex-preview-scale-default 3.0)
 (defvar js/org-latex-preview-scale-treeslide 3.0)
 ;; (add-hook! org-tree-slide-mode
 ;;            ;; (message "org-tree-slide-mode hook executing..")
