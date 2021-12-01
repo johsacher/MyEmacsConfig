@@ -1143,136 +1143,136 @@
 
 ;;NOT DOOM ;;;  ;; ** org latex export (settings and tweaks)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; *** make plainlists below level always unnumbered
-;;NOT DOOM ;;;  ;; the "blunt way" redefine function (better later-> use advice or sth)
-;;NOT DOOM ;;;  (defun org-latex-headline (headline contents info)
-;;NOT DOOM ;;;    "Transcode a HEADLINE element from Org to LaTeX.
-;;NOT DOOM ;;;  CONTENTS holds the contents of the headline.  INFO is a plist
-;;NOT DOOM ;;;  holding contextual information."
-;;NOT DOOM ;;;    (unless (org-element-property :footnote-section-p headline)
-;;NOT DOOM ;;;      (let* ((class (plist-get info :latex-class))
-;;NOT DOOM ;;;  	   (level (org-export-get-relative-level headline info))
-;;NOT DOOM ;;;  	   (numberedp (org-export-numbered-headline-p headline info))
-;;NOT DOOM ;;;  	   (class-sectioning (assoc class (plist-get info :latex-classes)))
-;;NOT DOOM ;;;  	   ;; Section formatting will set two placeholders: one for
-;;NOT DOOM ;;;  	   ;; the title and the other for the contents.
-;;NOT DOOM ;;;  	   (section-fmt
-;;NOT DOOM ;;;  	    (let ((sec (if (functionp (nth 2 class-sectioning))
-;;NOT DOOM ;;;  			   (funcall (nth 2 class-sectioning) level numberedp)
-;;NOT DOOM ;;;  			 (nth (1+ level) class-sectioning))))
-;;NOT DOOM ;;;  	      (cond
-;;NOT DOOM ;;;  	       ;; No section available for that LEVEL.
-;;NOT DOOM ;;;  	       ((not sec) nil)
-;;NOT DOOM ;;;  	       ;; Section format directly returned by a function.  Add
-;;NOT DOOM ;;;  	       ;; placeholder for contents.
-;;NOT DOOM ;;;  	       ((stringp sec) (concat sec "\n%s"))
-;;NOT DOOM ;;;  	       ;; (numbered-section . unnumbered-section)
-;;NOT DOOM ;;;  	       ((not (consp (cdr sec)))
-;;NOT DOOM ;;;  		(concat (funcall (if numberedp #'car #'cdr) sec) "\n%s"))
-;;NOT DOOM ;;;  	       ;; (numbered-open numbered-close)
-;;NOT DOOM ;;;  	       ((= (length sec) 2)
-;;NOT DOOM ;;;  		(when numberedp (concat (car sec) "\n%s" (nth 1 sec))))
-;;NOT DOOM ;;;  	       ;; (num-in num-out no-num-in no-num-out)
-;;NOT DOOM ;;;  	       ((= (length sec) 4)
-;;NOT DOOM ;;;  		(if numberedp (concat (car sec) "\n%s" (nth 1 sec))
-;;NOT DOOM ;;;  		  (concat (nth 2 sec) "\n%s" (nth 3 sec)))))))
-;;NOT DOOM ;;;  	   ;; Create a temporary export back-end that hard-codes
-;;NOT DOOM ;;;  	   ;; "\underline" within "\section" and alike.
-;;NOT DOOM ;;;  	   (section-back-end
-;;NOT DOOM ;;;  	    (org-export-create-backend
-;;NOT DOOM ;;;  	     :parent 'latex
-;;NOT DOOM ;;;  	     :transcoders
-;;NOT DOOM ;;;  	     '((underline . (lambda (o c i) (format "\\underline{%s}" c))))))
-;;NOT DOOM ;;;  	   (text
-;;NOT DOOM ;;;  	    (org-export-data-with-backend
-;;NOT DOOM ;;;  	     (org-element-property :title headline) section-back-end info))
-;;NOT DOOM ;;;  	   (todo
-;;NOT DOOM ;;;	    (and (plist-get info :with-todo-keywords)
-;;NOT DOOM ;;;  		 (let ((todo (org-element-property :todo-keyword headline)))
-;;NOT DOOM ;;;  		   (and todo (org-export-data todo info)))))
-;;NOT DOOM ;;;  	   (todo-type (and todo (org-element-property :todo-type headline)))
-;;NOT DOOM ;;;  	   (tags (and (plist-get info :with-tags)
-;;NOT DOOM ;;;  		      (org-export-get-tags headline info)))
-;;NOT DOOM ;;;  	   (priority (and (plist-get info :with-priority)
-;;NOT DOOM ;;;  			  (org-element-property :priority headline)))
-;;NOT DOOM ;;;  	   ;; Create the headline text along with a no-tag version.
-;;NOT DOOM ;;;  	   ;; The latter is required to remove tags from toc.
-;;NOT DOOM ;;;  	   (full-text (funcall (plist-get info :latex-format-headline-function)
-;;NOT DOOM ;;;  			       todo todo-type priority text tags info))
-;;NOT DOOM ;;;  	   ;; Associate \label to the headline for internal links.
-;;NOT DOOM ;;;  	   (headline-label (org-latex--label headline info t t))
-;;NOT DOOM ;;;  	   (pre-blanks
-;;NOT DOOM ;;;  	    (make-string (org-element-property :pre-blank headline) ?\n)))
-;;NOT DOOM ;;;        (if (or (not section-fmt) (org-export-low-level-p headline info))
-;;NOT DOOM ;;;  	  ;; This is a deep sub-tree: export it as a list item.  Also
-;;NOT DOOM ;;;  	  ;; export as items headlines for which no section format has
-;;NOT DOOM ;;;  	  ;; been found.
-;;NOT DOOM ;;;  	  (let ((low-level-body
-;;NOT DOOM ;;;  		 (concat
-;;NOT DOOM ;;;  		  ;; If headline is the first sibling, start a list.
-;;NOT DOOM ;;;  		  (when (org-export-first-sibling-p headline info)
-;;NOT DOOM ;;;  		    ;; (format "\\begin{%s}\n" (if numberedp 'enumerate 'itemize))) <===== CHANGED
-;;NOT DOOM ;;;  		    (format "\\begin{%s}\n" 'itemize))
-;;NOT DOOM ;;;  		  ;; Itemize headline
-;;NOT DOOM ;;;  		  "\\item"
-;;NOT DOOM ;;;  		  (and full-text
-;;NOT DOOM ;;;  		       (string-match-p "\\`[ \t]*\\[" full-text)
-;;NOT DOOM ;;;  		       "\\relax")
-;;NOT DOOM ;;;  		  " " full-text "\n"
-;;NOT DOOM ;;;  		  headline-label
-;;NOT DOOM ;;;  		  pre-blanks
-;;NOT DOOM ;;;  		  contents)))
-;;NOT DOOM ;;;  	    ;; If headline is not the last sibling simply return
-;;NOT DOOM ;;;  	    ;; LOW-LEVEL-BODY.  Otherwise, also close the list, before
-;;NOT DOOM ;;;  	    ;; any blank line.
-;;NOT DOOM ;;;  	    (if (not (org-export-last-sibling-p headline info)) low-level-body
-;;NOT DOOM ;;;  	      (replace-regexp-in-string
-;;NOT DOOM ;;;  	       "[ \t\n]*\\'"
-;;NOT DOOM ;;;  	       ;; (format "\n\\\\end{%s}" (if numberedp 'enumerate 'itemize)) <====== CHANGED
-;;NOT DOOM ;;;  	       (format "\n\\\\end{%s}" 'itemize)
-;;NOT DOOM ;;;  	       low-level-body)))
-;;NOT DOOM ;;;  	;; This is a standard headline.  Export it as a section.  Add
-;;NOT DOOM ;;;  	;; an alternative heading when possible, and when this is not
-;;NOT DOOM ;;;  	;; identical to the usual heading.
-;;NOT DOOM ;;;  	(let ((opt-title
-;;NOT DOOM ;;;  	       (funcall (plist-get info :latex-format-headline-function)
-;;NOT DOOM ;;;  			todo todo-type priority
-;;NOT DOOM ;;;  			(org-export-data-with-backend
-;;NOT DOOM ;;;  			 (org-export-get-alt-title headline info)
-;;NOT DOOM ;;;  			 section-back-end info)
-;;NOT DOOM ;;;  			(and (eq (plist-get info :with-tags) t) tags)
-;;NOT DOOM ;;;  			info))
-;;NOT DOOM ;;;  	      ;; Maybe end local TOC (see `org-latex-keyword').
-;;NOT DOOM ;;;  	      (contents
-;;NOT DOOM ;;;  	       (concat
-;;NOT DOOM ;;;  		contents
-;;NOT DOOM ;;;  		(let ((case-fold-search t)
-;;NOT DOOM ;;;  		      (section
-;;NOT DOOM ;;;  		       (let ((first (car (org-element-contents headline))))
-;;NOT DOOM ;;;  			 (and (eq (org-element-type first) 'section) first))))
-;;NOT DOOM ;;;  		  (org-element-map section 'keyword
-;;NOT DOOM ;;;  		    (lambda (k)
-;;NOT DOOM ;;;  		      (and (equal (org-element-property :key k) "TOC")
-;;NOT DOOM ;;;  			   (let ((v (org-element-property :value k)))
-;;NOT DOOM ;;;  			     (and (string-match-p "\\<headlines\\>" v)
-;;NOT DOOM ;;;  				  (string-match-p "\\<local\\>" v)
-;;NOT DOOM ;;;  				  (format "\\stopcontents[level-%d]" level)))))
-;;NOT DOOM ;;;  		    info t)))))
-;;NOT DOOM ;;;  	  (if (and opt-title
-;;NOT DOOM ;;;  		   (not (equal opt-title full-text))
-;;NOT DOOM ;;;  		   (string-match "\\`\\\\\\(.+?\\){" section-fmt))
-;;NOT DOOM ;;;  	      (format (replace-match "\\1[%s]" nil nil section-fmt 1)
-;;NOT DOOM ;;;  		      ;; Replace square brackets with parenthesis
-;;NOT DOOM ;;;  		      ;; since square brackets are not supported in
-;;NOT DOOM ;;;  		      ;; optional arguments.
-;;NOT DOOM ;;;  		      (replace-regexp-in-string
-;;NOT DOOM ;;;  		       "\\[" "(" (replace-regexp-in-string "\\]" ")" opt-title))
-;;NOT DOOM ;;;  		      full-text
-;;NOT DOOM ;;;  		      (concat headline-label pre-blanks contents))
-;;NOT DOOM ;;;  	    ;; Impossible to add an alternative heading.  Fallback to
-;;NOT DOOM ;;;  	    ;; regular sectioning format string.
-;;NOT DOOM ;;;  	    (format section-fmt full-text
-;;NOT DOOM ;;;  		    (concat headline-label pre-blanks contents))))))))
+;; *** make plainlists below level always unnumbered
+;; the "blunt way" redefine function (better later-> use advice or sth)
+(defun org-latex-headline (headline contents info)
+  "Transcode a HEADLINE element from Org to LaTeX.
+CONTENTS holds the contents of the headline.  INFO is a plist
+holding contextual information."
+  (unless (org-element-property :footnote-section-p headline)
+    (let* ((class (plist-get info :latex-class))
+	   (level (org-export-get-relative-level headline info))
+	   (numberedp (org-export-numbered-headline-p headline info))
+	   (class-sectioning (assoc class (plist-get info :latex-classes)))
+	   ;; Section formatting will set two placeholders: one for
+	   ;; the title and the other for the contents.
+	   (section-fmt
+	    (let ((sec (if (functionp (nth 2 class-sectioning))
+			   (funcall (nth 2 class-sectioning) level numberedp)
+			 (nth (1+ level) class-sectioning))))
+	      (cond
+	       ;; No section available for that LEVEL.
+	       ((not sec) nil)
+	       ;; Section format directly returned by a function.  Add
+	       ;; placeholder for contents.
+	       ((stringp sec) (concat sec "\n%s"))
+	       ;; (numbered-section . unnumbered-section)
+	       ((not (consp (cdr sec)))
+		(concat (funcall (if numberedp #'car #'cdr) sec) "\n%s"))
+	       ;; (numbered-open numbered-close)
+	       ((= (length sec) 2)
+		(when numberedp (concat (car sec) "\n%s" (nth 1 sec))))
+	       ;; (num-in num-out no-num-in no-num-out)
+	       ((= (length sec) 4)
+		(if numberedp (concat (car sec) "\n%s" (nth 1 sec))
+		  (concat (nth 2 sec) "\n%s" (nth 3 sec)))))))
+	   ;; Create a temporary export back-end that hard-codes
+	   ;; "\underline" within "\section" and alike.
+	   (section-back-end
+	    (org-export-create-backend
+	     :parent 'latex
+	     :transcoders
+	     '((underline . (lambda (o c i) (format "\\underline{%s}" c))))))
+	   (text
+	    (org-export-data-with-backend
+	     (org-element-property :title headline) section-back-end info))
+	   (todo
+    (and (plist-get info :with-todo-keywords)
+		 (let ((todo (org-element-property :todo-keyword headline)))
+		   (and todo (org-export-data todo info)))))
+	   (todo-type (and todo (org-element-property :todo-type headline)))
+	   (tags (and (plist-get info :with-tags)
+		      (org-export-get-tags headline info)))
+	   (priority (and (plist-get info :with-priority)
+			  (org-element-property :priority headline)))
+	   ;; Create the headline text along with a no-tag version.
+	   ;; The latter is required to remove tags from toc.
+	   (full-text (funcall (plist-get info :latex-format-headline-function)
+			       todo todo-type priority text tags info))
+	   ;; Associate \label to the headline for internal links.
+	   (headline-label (org-latex--label headline info t t))
+	   (pre-blanks
+	    (make-string (org-element-property :pre-blank headline) ?\n)))
+      (if (or (not section-fmt) (org-export-low-level-p headline info))
+	  ;; This is a deep sub-tree: export it as a list item.  Also
+	  ;; export as items headlines for which no section format has
+	  ;; been found.
+	  (let ((low-level-body
+		 (concat
+		  ;; If headline is the first sibling, start a list.
+		  (when (org-export-first-sibling-p headline info)
+		    ;; (format "\\begin{%s}\n" (if numberedp 'enumerate 'itemize))) <===== CHANGED
+		    (format "\\begin{%s}\n" 'itemize))
+		  ;; Itemize headline
+		  "\\item"
+		  (and full-text
+		       (string-match-p "\\`[ \t]*\\[" full-text)
+		       "\\relax")
+		  " " full-text "\n"
+		  headline-label
+		  pre-blanks
+		  contents)))
+	    ;; If headline is not the last sibling simply return
+	    ;; LOW-LEVEL-BODY.  Otherwise, also close the list, before
+	    ;; any blank line.
+	    (if (not (org-export-last-sibling-p headline info)) low-level-body
+	      (replace-regexp-in-string
+	       "[ \t\n]*\\'"
+	       ;; (format "\n\\\\end{%s}" (if numberedp 'enumerate 'itemize)) <====== CHANGED
+	       (format "\n\\\\end{%s}" 'itemize)
+	       low-level-body)))
+	;; This is a standard headline.  Export it as a section.  Add
+	;; an alternative heading when possible, and when this is not
+	;; identical to the usual heading.
+	(let ((opt-title
+	       (funcall (plist-get info :latex-format-headline-function)
+			todo todo-type priority
+			(org-export-data-with-backend
+			 (org-export-get-alt-title headline info)
+			 section-back-end info)
+			(and (eq (plist-get info :with-tags) t) tags)
+			info))
+	      ;; Maybe end local TOC (see `org-latex-keyword').
+	      (contents
+	       (concat
+		contents
+		(let ((case-fold-search t)
+		      (section
+		       (let ((first (car (org-element-contents headline))))
+			 (and (eq (org-element-type first) 'section) first))))
+		  (org-element-map section 'keyword
+		    (lambda (k)
+		      (and (equal (org-element-property :key k) "TOC")
+			   (let ((v (org-element-property :value k)))
+			     (and (string-match-p "\\<headlines\\>" v)
+				  (string-match-p "\\<local\\>" v)
+				  (format "\\stopcontents[level-%d]" level)))))
+		    info t)))))
+	  (if (and opt-title
+		   (not (equal opt-title full-text))
+		   (string-match "\\`\\\\\\(.+?\\){" section-fmt))
+	      (format (replace-match "\\1[%s]" nil nil section-fmt 1)
+		      ;; Replace square brackets with parenthesis
+		      ;; since square brackets are not supported in
+		      ;; optional arguments.
+		      (replace-regexp-in-string
+		       "\\[" "(" (replace-regexp-in-string "\\]" ")" opt-title))
+		      full-text
+		      (concat headline-label pre-blanks contents))
+	    ;; Impossible to add an alternative heading.  Fallback to
+	    ;; regular sectioning format string.
+	    (format section-fmt full-text
+		    (concat headline-label pre-blanks contents))))))))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; *** (? check) enable enumerations with a./b./c.
 ;;NOT DOOM ;;;  (setq org-list-allow-alphabetical t)
@@ -1549,6 +1549,7 @@ new-org-file-full-name)
          "#+options: num:t" "\n"
          "#+options: toc:t" "\n"
          "#+options: H:2" "\n"
+         "#+options: \\n:t" "\n"
          "# itemize all bullets" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemi}{$\\bullet$}" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemii}{$\\bullet$}" "\n"
@@ -3960,11 +3961,21 @@ and `C-x' being marked as a `term-escape-char'."
        :nvieomr "C-k" #'org-metaup
        :nvieomr "C-j" #'org-metadown
        :nvieomr "C-h" #'org-metaleft
-       :nvieomr "C-l" #'org-metaright
-       :nvieomr "C-K" #'org-shiftmetaup
-       :nvieomr "C-J" #'org-shiftmetadown
-       :nvieomr "C-H" #'org-shiftmetaleft
-       :nvieomr "C-L" #'org-shiftmetaright)
+       :nvieomr "C-l" #'org-metaright)
+(map! :map evil-org-mode-map
+       :nvieomr "C-S-k" #'org-shiftmetaup
+       :nvieomr "C-S-j" #'org-shiftmetadown
+       :nvieomr "C-S-h" #'org-shiftmetaleft
+       :nvieomr "C-S-l" #'org-shiftmetaright)
+(map! :map evil-org-mode-map
+       :nvieomr "C-k" nil
+       :nvieomr "C-j" nil
+       :nvieomr "C-h" nil
+       :nvieomr "C-l" nil
+       :nvieomr "C-S-k" nil
+       :nvieomr "C-S-j" nil
+       :nvieomr "C-S-h" nil
+       :nvieomr "C-S-l" nil)
 (map! :map evil-org-mode-map
        :nvieomr "M-k" nil
        :nvieomr "M-j" nil
@@ -4425,14 +4436,14 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;;                                       e.g. for 'a' (insert "\u0061")
 ;;NOT DOOM ;;;  ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
 ;;NOT DOOM ;;;  ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
-;;NOT DOOM ;;;  ;; ** contradiction ↯
-;;NOT DOOM ;;;  (defun insert-char-contradiction ()
-;;NOT DOOM ;;;    ;; inserts a contradiction-symbol ↯
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-;;NOT DOOM ;;;    ;; (insert "\u21af")
-;;NOT DOOM ;;;    (insert "\U000021af")
-;;NOT DOOM ;;;    )
+;; ** contradiction ↯
+(defun js/insert-char-contradiction ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000021af")
+  )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
 ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
@@ -5024,7 +5035,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; * org-present
 ;; ** increase latex preview size also
-(defvar js/org-latex-preview-scale-default 3.0)
+(defvar js/org-latex-preview-scale-default 2.0)
 (defvar js/org-latex-preview-scale-treeslide 3.0)
 ;; (add-hook! org-tree-slide-mode
 ;;            ;; (message "org-tree-slide-mode hook executing..")
@@ -5032,6 +5043,13 @@ and `C-x' being marked as a `term-escape-char'."
 
 (defun js/org-latex-preview-scale-set-default ()
   (interactive)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-default))
+  (org-latex-refresh-all))
+
+(defun js/org-latex-preview-scale-decrease ()
+  "decreases latex preview font by 20%"
+  (interactive)
+  (setq js/org-latex-preview-scale-default (* 0.8 js/org-latex-preview-scale-default))
   (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-default))
   (org-latex-refresh-all))
 
