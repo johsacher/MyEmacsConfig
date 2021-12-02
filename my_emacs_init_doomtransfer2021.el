@@ -1351,7 +1351,7 @@ from lines like:
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
 ;; ** paste image from clipboard in org-mode
-(defun org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
+(defun js/org-insert-clipboard-image () ;; --> insert image after screenshooting to clipboard
   (interactive)
   (setq filename
         (concat
@@ -1368,10 +1368,12 @@ from lines like:
   (org-display-inline-images)
   )
 
-;;NOT DOOM ;;;  ;; (evil-leader/set-key "ln" 'planet-open-quick-notes)
-;;NOT DOOM ;;;  ;; paste image from clipboard
-;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "i" 'org-insert-clipboard-image)
-;;NOT DOOM ;;;
+(map! :leader
+      ;; :prefix ("i" . "+insert") ;; not necessary
+      "i i" #'js/org-insert-clipboard-image)
+
+;;NOT DOOM ;;; ;; (evil-leader/set-key "ln" 'planet-open-quick-notes)
+
 ;;
 ;; begin "UNDOOMED" ;;;
 (defun create-hidden-org-file-folder (&optional filebasename path)
@@ -3956,17 +3958,19 @@ and `C-x' being marked as a `term-escape-char'."
   (switch-to-buffer buffer-name-to-move-to))
 
 ;; also affect org-mode -> this worked
+;; this achieves C-j/h/k/l pushing up/down/left/right headings WITH subtree
+;; (it s what I mostly do, so do these without shift-key)
 (after! evil-org
 (map! :map evil-org-mode-map
        :nvieomr "C-k" #'org-metaup
        :nvieomr "C-j" #'org-metadown
-       :nvieomr "C-h" #'org-metaleft
-       :nvieomr "C-l" #'org-metaright)
+       :nvieomr "C-h" #'org-shiftmetaleft
+       :nvieomr "C-l" #'org-shiftmetaright)
 (map! :map evil-org-mode-map
        :nvieomr "C-S-k" #'org-shiftmetaup
        :nvieomr "C-S-j" #'org-shiftmetadown
-       :nvieomr "C-S-h" #'org-shiftmetaleft
-       :nvieomr "C-S-l" #'org-shiftmetaright)
+       :nvieomr "C-S-h" #'org-metaleft
+       :nvieomr "C-S-l" #'org-metaright)
 (map! :map evil-org-mode-map
        :nvieomr "C-k" nil
        :nvieomr "C-j" nil
