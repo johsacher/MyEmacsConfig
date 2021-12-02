@@ -3985,10 +3985,10 @@ and `C-x' being marked as a `term-escape-char'."
        :nvieomr "M-j" nil
        :nvieomr "M-h" nil
        :nvieomr "M-l" nil
-       :nvieomr "M-K" nil
-       :nvieomr "M-J" nil
-       :nvieomr "M-H" nil
-       :nvieomr "M-L" nil))
+       :nvieomr "M-S-k" nil
+       :nvieomr "M-S-j" nil
+       :nvieomr "M-S-h" nil
+       :nvieomr "M-S-l" nil))
 
 (after! term
 (map! :map term-raw-map
