@@ -1075,34 +1075,34 @@ date)
   (interactive)
   (org-set-property "Category" "science")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "occ" 'planet-set-category-science)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkc" 'planet-set-category-science)
 
- ;; (js/leader-def :keymaps 'org-mode-mode-map "ocw" 'planet-set-category-work) ;; (did not work)
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocw" 'planet-set-category-work)
+ ;; (js/leader-def :keymaps 'org-mode-mode-map "mkw" 'planet-set-category-work) ;; (did not work)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkw" 'planet-set-category-work)
 
 (defun planet-set-category-tools ()
   (interactive)
   (org-set-property "Category" "tools")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "oct" 'planet-set-category-tools)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkt" 'planet-set-category-tools)
 
 (defun planet-set-category-private ()
   (interactive)
   (org-set-property "Category" "private")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocp" 'planet-set-category-private)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkp" 'planet-set-category-private)
 
 (defun planet-set-category-knowledge ()
   (interactive)
   (org-set-property "Category" "knowledge")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ock" 'planet-set-category-knowledge)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkk" 'planet-set-category-knowledge)
 
 (defun planet-set-category-sustainment ()
   (interactive)
   (org-set-property "Category" "sustainment")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "ocs" 'planet-set-category-sustainment)
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mks" 'planet-set-category-sustainment)
 
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
 
