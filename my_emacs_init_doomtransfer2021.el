@@ -4430,134 +4430,134 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;; (insert "\U00002712")✒
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; * termux android
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** paste from android-clipboard
-;;NOT DOOM ;;;  (defun android-paste-clipboard ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq output (shell-command-to-string "termux-clipboard-get"))
-;;NOT DOOM ;;;    (setq clipboard-string output) ;; in case no error occured, could be checked before
-;;NOT DOOM ;;;    (insert clipboard-string)
-;;NOT DOOM ;;;  )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** put frequent things to clipboard
-;;NOT DOOM ;;;  (defun android-copy-to-clipboard ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq region-string (region-to-string))
-;;NOT DOOM ;;;    (setq command-string (concat "termux-clipboard-set '" region-string "'"))
-;;NOT DOOM ;;;    (async-shell-command command-string)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defun my-phone-number-to-clipboard ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq my-phone-number "+4917657978870")
-;;NOT DOOM ;;;    (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
-;;NOT DOOM ;;;    (async-shell-command command-string)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  (defvar my-email-address "johannes.sacher@googlemail.com")
-;;NOT DOOM ;;;  (defun copy-to-clipboard-my-email ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq my-phone-number my-email-address)
-;;NOT DOOM ;;;    (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
-;;NOT DOOM ;;;    (async-shell-command command-string)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun my-address-to-clipboard ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq my-address "Fanningerstr. 52 10635 Berlin")
-;;NOT DOOM ;;;    (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
-;;NOT DOOM ;;;    (async-shell-command command-string)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun android-go-to-camera-directory ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
-;;NOT DOOM ;;;    (dired camera-pics-dir)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun android-go-to-screenshots-directory ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
-;;NOT DOOM ;;;    (dired screenshots-dir)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun latest-screenshot-pic-get-file-name ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; get current dir
-;;NOT DOOM ;;;    (setq current-path (get-current-path))
-;;NOT DOOM ;;;    ;; get cam pics dir
-;;NOT DOOM ;;;    (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
-;;NOT DOOM ;;;    ;; get file name latest
-;;NOT DOOM ;;;    (setq all-files (directory-files screenshots-dir))
-;;NOT DOOM ;;;    (setq latest-pic-file (car (last all-files)))
-;;NOT DOOM ;;;    (setq latest-pic-file-fullname (concat screenshots-dir latest-pic-file))
-;;NOT DOOM ;;;    (message (concat "latest screenshot file:" latest-pic-file-fullname))
-;;NOT DOOM ;;;    latest-pic-file)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun latest-camera-pic-get-file-name ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; get current dir
-;;NOT DOOM ;;;    (setq current-path (get-current-path))
-;;NOT DOOM ;;;    ;; get cam pics dir
-;;NOT DOOM ;;;    (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
-;;NOT DOOM ;;;    ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
-;;NOT DOOM ;;;    ;; get file name latest
-;;NOT DOOM ;;;    (setq all-files (directory-files camera-pics-dir))
-;;NOT DOOM ;;;    (setq latest-pic-file (car (last all-files)))
-;;NOT DOOM ;;;    (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
-;;NOT DOOM ;;;    latest-pic-file)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun latest-camera-pic-get-file-fullname ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; get current dir
-;;NOT DOOM ;;;    (setq current-path (get-current-path))
-;;NOT DOOM ;;;    ;; get cam pics dir
-;;NOT DOOM ;;;    (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
-;;NOT DOOM ;;;    ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
-;;NOT DOOM ;;;    ;; get file name latest
-;;NOT DOOM ;;;    (setq all-files (directory-files camera-pics-dir))
-;;NOT DOOM ;;;    (setq latest-pic-file (car (last all-files)))
-;;NOT DOOM ;;;    (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
-;;NOT DOOM ;;;    latest-pic-file-fullname)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun latest-camera-pic-copy-to-currentdir ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; get current dir
-;;NOT DOOM ;;;    (setq current-path (get-current-path))
-;;NOT DOOM ;;;    ;; get cam pics dir
-;;NOT DOOM ;;;    (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
-;;NOT DOOM ;;;    ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
-;;NOT DOOM ;;;    ;; get file name latest
-;;NOT DOOM ;;;    (setq all-files (directory-files camera-pics-dir))
-;;NOT DOOM ;;;    (setq latest-pic-file (car (last all-files)))
-;;NOT DOOM ;;;    (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
-;;NOT DOOM ;;;    (message latest-pic-file-fullname)
-;;NOT DOOM ;;;    ;; copy
-;;NOT DOOM ;;;    (copy-file latest-pic-file-fullname current-path t)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun org-insert-latest-camera-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; copy to current dir
-;;NOT DOOM ;;;    (latest-camera-pic-copy-to-currentdir)
-;;NOT DOOM ;;;    ;; make reference in org-file
-;;NOT DOOM ;;;    (setq filename (latest-camera-pic-get-file-name))
-;;NOT DOOM ;;;    (end-of-line)
-;;NOT DOOM ;;;    (newline)
-;;NOT DOOM ;;;    (insert (concat "[[file:" filename "]]"))
-;;NOT DOOM ;;;    ;; (org-redisplay-inline-images)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun org-insert-latest-screenshot-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; copy to current dir
-;;NOT DOOM ;;;    (latest-camera-pic-copy-to-currentdir)
-;;NOT DOOM ;;;    ;; make reference in org-file
-;;NOT DOOM ;;;    (setq filename (latest-screenshot-pic-get-file-name))
-;;NOT DOOM ;;;    (end-of-line)
-;;NOT DOOM ;;;    (newline)
-;;NOT DOOM ;;;    (insert (concat "[[file:" filename "]]"))
-;;NOT DOOM ;;;    ;; (org-redisplay-inline-images)
-;;NOT DOOM ;;;    )
+;; * termux android
+
+;; ** paste from android-clipboard
+(defun android-paste-clipboard ()
+  (interactive)
+  (setq output (shell-command-to-string "termux-clipboard-get"))
+  (setq clipboard-string output) ;; in case no error occured, could be checked before
+  (insert clipboard-string)
+)
+
+;; ** put frequent things to clipboard
+(defun android-copy-to-clipboard ()
+  (interactive)
+  (setq region-string (region-to-string))
+  (setq command-string (concat "termux-clipboard-set '" region-string "'"))
+  (async-shell-command command-string)
+  )
+(defun my-phone-number-to-clipboard ()
+  (interactive)
+  (setq my-phone-number "+4917657978870")
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
+(defvar my-email-address "johannes.sacher@googlemail.com")
+(defun copy-to-clipboard-my-email ()
+  (interactive)
+  (setq my-phone-number my-email-address)
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
+
+(defun my-address-to-clipboard ()
+  (interactive)
+  (setq my-address "Fanningerstr. 52 10635 Berlin")
+  (setq command-string (concat "termux-clipboard-set '" my-phone-number "'"))
+  (async-shell-command command-string)
+  )
+
+(defun android-go-to-camera-directory ()
+  (interactive)
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
+  (dired camera-pics-dir)
+  )
+
+(defun android-go-to-screenshots-directory ()
+  (interactive)
+  (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
+  (dired screenshots-dir)
+  )
+
+(defun latest-screenshot-pic-get-file-name ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq screenshots-dir "/storage/emulated/0/DCIM/Screenshots")
+  ;; get file name latest
+  (setq all-files (directory-files screenshots-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat screenshots-dir latest-pic-file))
+  (message (concat "latest screenshot file:" latest-pic-file-fullname))
+  latest-pic-file)
+
+(defun latest-camera-pic-get-file-name ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
+  ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
+  ;; get file name latest
+  (setq all-files (directory-files camera-pics-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
+  latest-pic-file)
+
+(defun latest-camera-pic-get-file-fullname ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
+  ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
+  ;; get file name latest
+  (setq all-files (directory-files camera-pics-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
+  latest-pic-file-fullname)
+
+(defun latest-camera-pic-copy-to-currentdir ()
+  (interactive)
+  ;; get current dir
+  (setq current-path (get-current-path))
+  ;; get cam pics dir
+  (setq camera-pics-dir "/storage/0000-0000/DCIM/Camera/")
+  ;; (setq camera-pics-dir "/home/johannes/dummy_camera_pics/")
+  ;; get file name latest
+  (setq all-files (directory-files camera-pics-dir))
+  (setq latest-pic-file (car (last all-files)))
+  (setq latest-pic-file-fullname (concat camera-pics-dir latest-pic-file))
+  (message latest-pic-file-fullname)
+  ;; copy
+  (copy-file latest-pic-file-fullname current-path t)
+  )
+
+(defun org-insert-latest-camera-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
+  (interactive)
+  ;; copy to current dir
+  (latest-camera-pic-copy-to-currentdir)
+  ;; make reference in org-file
+  (setq filename (latest-camera-pic-get-file-name))
+  (end-of-line)
+  (newline)
+  (insert (concat "[[file:" filename "]]"))
+  ;; (org-redisplay-inline-images)
+  )
+
+(defun org-insert-latest-screenshot-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
+  (interactive)
+  ;; copy to current dir
+  (latest-camera-pic-copy-to-currentdir)
+  ;; make reference in org-file
+  (setq filename (latest-screenshot-pic-get-file-name))
+  (end-of-line)
+  (newline)
+  (insert (concat "[[file:" filename "]]"))
+  ;; (org-redisplay-inline-images)
+  )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; * auto-complete
 ;;NOT DOOM ;;; (require 'auto-complete-config)
@@ -5062,3 +5062,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 (map! :map dired-mode-map
       :n ">" #'js/orgify-dired-open-orgified-file)
+
+(map! :leader
+      :desc "M-x" "x" #'execute-extended-command
+      )
