@@ -5052,3 +5052,13 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (org-tree-slide-simple-profile)
 ;; (org-tree-slide-narrowing-control-profile)
 )
+
+;; * orgify
+(defun js/orgify-dired-open-orgified-file ()
+  (interactive)
+  ;; get orgified-file name under cursor
+  ;; open
+  )
+
+(map! :map dired-mode-map
+      :n ">" #'js/orgify-dired-open-orgified-file)
