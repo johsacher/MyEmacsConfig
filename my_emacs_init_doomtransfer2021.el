@@ -3971,20 +3971,24 @@ and `C-x' being marked as a `term-escape-char'."
        :nvieomr "C-S-j" #'org-shiftmetadown
        :nvieomr "C-S-h" #'org-metaleft
        :nvieomr "C-S-l" #'org-metaright)
-(map! :map evil-org-mode-map
-       :nvieomr "C-k" nil
-       :nvieomr "C-j" nil
-       :nvieomr "C-h" nil
-       :nvieomr "C-l" nil
-       :nvieomr "C-S-k" nil
-       :nvieomr "C-S-j" nil
-       :nvieomr "C-S-h" nil
-       :nvieomr "C-S-l" nil)
+;; (map! :map evil-org-mode-map
+;;        :nvieomr "C-k" nil
+;;        :nvieomr "C-j" nil
+;;        :nvieomr "C-h" nil
+;;        :nvieomr "C-l" nil
+;;        :nvieomr "C-S-k" nil
+;;        :nvieomr "C-S-j" nil
+;;        :nvieomr "C-S-h" nil
+;;        :nvieomr "C-S-l" nil)
 (map! :map evil-org-mode-map
        :nvieomr "M-k" nil
        :nvieomr "M-j" nil
        :nvieomr "M-h" nil
        :nvieomr "M-l" nil
+       :nvieomr "M-K" nil ;; free for windmove general map
+       :nvieomr "M-J" nil ;; free for windmove general map
+       :nvieomr "M-H" nil ;; free for windmove general map
+       :nvieomr "M-L" nil ;; free for windmove general map
        :nvieomr "M-S-k" nil
        :nvieomr "M-S-j" nil
        :nvieomr "M-S-h" nil
@@ -5094,3 +5098,22 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (org-tree-slide-simple-profile)
 ;; (org-tree-slide-narrowing-control-profile)
 )
+
+;; * org mode - add todo-keywords
+(after! org
+(custom-declare-face '+org-todo-current  '((t (:inherit (bold error org-todo)))) "")
+(setq org-todo-keywords (append  org-todo-keywords '((sequence
+                                                    "CRNT(c)"  ; The task that is in work currently
+                                                    "|"  ;; (after "|" tells org-mode -> following do not require action)
+                                                    "CNCD(C)"  ; The task is canceled
+                                                    ))))
+(setq org-todo-keyword-faces (append  org-todo-keyword-faces '(
+                                                    ("CRNT" :foreground "orange" :weight bold)
+                                                    ("CNCD" . +org-todo-cancel)
+                                                    ))))
+
+;; * matlab term
+;; (workaround..)
+;; (after! matlab
+  (require 'term)
+  ;; )
