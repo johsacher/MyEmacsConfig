@@ -21,6 +21,10 @@
 (map! :leader
       :desc "M-x" ";" #'execute-extended-command
       :desc "Eval expression" ":" #'eval-expression)
+;; also enable SPC-x -> just to handy on mobile
+(map! :leader
+      :desc "M-x" "x" #'execute-extended-command
+      )
 
 ;; * TODOs
 ;; ** better mode-line color inactive window light-grey (?), active --> black??
@@ -5109,9 +5113,12 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :map dired-mode-map
       :n ">" #'js/orgify-dired-open-orgified-file)
 
+<<<<<<< HEAD
 (map! :leader
       :desc "M-x" "x" #'execute-extended-command
       )
+=======
+>>>>>>> 2828898f7e22518c97a17a49d61125c0f4c768b5
 ;; * org mode - add todo-keywords
 (after! org
 (custom-declare-face '+org-todo-current  '((t (:inherit (bold error org-todo)))) "")
