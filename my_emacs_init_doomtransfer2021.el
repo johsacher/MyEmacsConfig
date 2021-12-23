@@ -5113,12 +5113,9 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :map dired-mode-map
       :n ">" #'js/orgify-dired-open-orgified-file)
 
-<<<<<<< HEAD
 (map! :leader
       :desc "M-x" "x" #'execute-extended-command
       )
-=======
->>>>>>> 2828898f7e22518c97a17a49d61125c0f4c768b5
 ;; * org mode - add todo-keywords
 (after! org
 (custom-declare-face '+org-todo-current  '((t (:inherit (bold error org-todo)))) "")
@@ -5126,10 +5123,12 @@ and `C-x' being marked as a `term-escape-char'."
                                                     "CRNT(c)"  ; The task that is in work currently
                                                     "|"  ;; (after "|" tells org-mode -> following do not require action)
                                                     "CNCD(C)"  ; The task is canceled
+                                                    "POST(P)"  ; The task was postponed, but not canceled
                                                     ))))
 (setq org-todo-keyword-faces (append  org-todo-keyword-faces '(
                                                     ("CRNT" :foreground "orange" :weight bold)
                                                     ("CNCD" . +org-todo-cancel)
+                                                    ("POST" . +org-todo-cancel)
                                                     ))))
 
 ;; * matlab term
