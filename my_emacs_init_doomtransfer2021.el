@@ -5099,7 +5099,6 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (org-tree-slide-narrowing-control-profile)
 )
 
-<<<<<<< HEAD
 ;; * orgify
 (defun js/orgify-dired-open-orgified-file ()
   (interactive)
@@ -5113,7 +5112,6 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       :desc "M-x" "x" #'execute-extended-command
       )
-=======
 ;; * org mode - add todo-keywords
 (after! org
 (custom-declare-face '+org-todo-current  '((t (:inherit (bold error org-todo)))) "")
@@ -5132,4 +5130,3 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (after! matlab
   (require 'term)
   ;; )
->>>>>>> 082fca5ef32120caf1a69585efa98b7f1d6e99ae
