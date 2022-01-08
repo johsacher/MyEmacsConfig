@@ -5124,11 +5124,13 @@ and `C-x' being marked as a `term-escape-char'."
                                                     "|"  ;; (after "|" tells org-mode -> following do not require action)
                                                     "CNCD(C)"  ; The task is canceled
                                                     "POST(P)"  ; The task was postponed, but not canceled
+                                                    "PROG(g)"  ; was in progressed, but not finished
                                                     ))))
 (setq org-todo-keyword-faces (append  org-todo-keyword-faces '(
                                                     ("CRNT" :foreground "orange" :weight bold)
                                                     ("CNCD" . +org-todo-cancel)
                                                     ("POST" . +org-todo-cancel)
+                                                    ("PROG" :foreground "yellow" :weight bold)
                                                     ))))
 
 ;; * matlab term
