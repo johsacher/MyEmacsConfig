@@ -3940,7 +3940,7 @@ and `C-x' being marked as a `term-escape-char'."
         "M-1"  #'delete-other-windows
         "M-2"  #'split-window-below
         "M-3"  #'split-window-right
-        "M-d"  #'kill-this-buffer-no-prompt
+        ;; "M-d"  #'kill-this-buffer-no-prompt ;; -> used in doom by evil-multiedit-match-symbol-and-next
         "M-y" #'previous-buffer
         "M-o" #'next-buffer
         "M-u" #'get-this-buffer-to-move
