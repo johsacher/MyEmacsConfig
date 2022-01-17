@@ -2638,6 +2638,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
+      :desc "lists"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -5136,3 +5137,6 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (after! matlab
   (require 'term)
   ;; )
+
+;; * fix termux/emacs ESC
+;; (map! :niv "ESC" 'evil-force-normal-state)
