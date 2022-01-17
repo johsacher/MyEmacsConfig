@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 ;; * next todos
 ;; ** DONE gsyn SPC g ;
 ;; ** DONE M-hjkl -> windmove
@@ -5145,3 +5147,4 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
   (reftex-reparse-document))
+>>>>>>> d7f990ba132873d403db320e060781b9fb7c6821
