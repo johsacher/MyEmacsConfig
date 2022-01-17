@@ -1308,7 +1308,7 @@ holding contextual information."
 ;;NOT DOOM ;;;  ;;   or for autocompression with gs:
 ;;NOT DOOM ;;;  ;; #+export_pdf_hook: gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -sOutputFile=output.pdf {} && mv -f output.pdf {}
 
-(defun org-export-latex-pdf-with-hook ()
+(defun js/org-export-latex-pdf-with-hook ()
   (interactive)
   (save-buffer)
   ;; export to pdf
@@ -1351,7 +1351,7 @@ from lines like:
               #'doom-disable-line-numbers-h)
 
 (after! org
-(map! :map org-mode-map "<f5>" 'org-export-latex-pdf-with-hook))
+(map! :map org-mode-map "<f5>" 'js/org-export-latex-pdf-with-hook))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** evil org
 ;;NOT DOOM ;;; (use-package evil-org
@@ -3359,7 +3359,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;
 ;; ** F5 -> run pdflatex / F6 -> bibtex
 (after! latex
-(defun run-pdflatex-on-master-file ()
+(defun js/run-pdflatex-on-master-file ()
 "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 (interactive)
 ;;save buffer
@@ -3372,7 +3372,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * show compile window, where pointer is always at end
 ;; (TeX-recenter-output-buffer) ;; this did not work... try later (todo)
 )
-(define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)
+(define-key LaTeX-mode-map (kbd "<f5>") 'js/run-pdflatex-on-master-file)
 (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)
 )
 
