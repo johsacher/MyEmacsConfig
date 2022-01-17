@@ -216,8 +216,8 @@
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-3") 'split-window-right)
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-0") 'delete-window)
 ;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-1") 'delete-other-windows) ;; aka maximize
-;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-4") 'kill-this-buffer-no-prompt)
-;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-d") 'kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
+;;NOT DOOM undoomed ;;; ;; (global-set-key (kbd "M-4") 'js/kill-this-buffer-no-prompt)
+;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-d") 'js/kill-this-buffer-no-prompt) ;; let s see which "kill-binding" will dominate, delete less used in future
 ;;NOT DOOM ;;; ;; (global-set-key (kbd "M-;") 'js/open-browser)
 ;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-y") 'previous-buffer)
 ;;NOT DOOM  undoomed;;; ;; (global-set-key (kbd "M-o") 'next-buffer)
@@ -421,7 +421,7 @@
 ;;NOT DOOM ;;;    (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
 ;;NOT DOOM POT;;;    (js/leader-def
 ;;NOT DOOM POT;;;    "c" 'comment-dwim-2
-;;NOT DOOM POT;;;    "k" 'kill-this-buffer-no-prompt
+;;NOT DOOM POT;;;    "k" 'js/kill-this-buffer-no-prompt
 ;;NOT DOOM POT;;;    "s" 'save-buffer
 ;;NOT DOOM POT;;;    "f" 'helm-find
 
@@ -894,18 +894,19 @@
 ;;NOT DOOM ;;;               ))
 ;;NOT DOOM ;;; (require 'org-install)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;; ;; * insert xournal note
-;;NOT DOOM ;;; (defun async-shell-command-no-window (command output-buffer-name)
-;;NOT DOOM ;;;   (interactive)
-;;NOT DOOM ;;;   (let
-;;NOT DOOM ;;;       ((display-buffer-alist
-;;NOT DOOM ;;;         (list
-;;NOT DOOM ;;;          (cons
-;;NOT DOOM ;;;           output-buffer-name
-;;NOT DOOM ;;;           (cons #'display-buffer-no-window nil)))))
-;;NOT DOOM ;;;     (async-shell-command
-;;NOT DOOM ;;;      command output-buffer-name)))
-;;NOT DOOM ;;;
+
+;; insert xournal note
+(defun js/async-shell-command-no-window (command output-buffer-name)
+  (interactive)
+  (let
+      ((display-buffer-alist
+        (list
+         (cons
+          output-buffer-name
+          (cons #'display-buffer-no-window nil)))))
+    (async-shell-command
+     command output-buffer-name)))
+
 (defun js/org-insert-xournal-note ()
   (interactive)
   ;; * file name
@@ -920,7 +921,7 @@
   (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xopp")
   ;; * open xournal file (no popup of async output)
   (setq command_string (concat "xournalpp " filefullname))
-  (async-shell-command-no-window command_string  "*org_xournal_new_open_output*")
+  (js/async-shell-command-no-window command_string  "*org_xournal_new_open_output*")
   (copy-file template-filefullname filefullname)
   ;; * insert file link
   (end-of-line)
@@ -2652,6 +2653,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
       :desc ".doom.d"         "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
+      :desc "Literatur"       "L" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/Literatur/pdf/Promotion/")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -2788,19 +2790,19 @@ and `C-x' being marked as a `term-escape-char'."
 ;; after: dired)
 ;; after! dired -> somehow not working
 ;; doesn't matter -> load it straight away, not so expensive
-;; (after! dired
-	(require 'openwith)
+(require 'openwith)
+(openwith-mode +1)
 
-        (openwith-mode -1)
-        (openwith-mode +1)
-        (openwith-mode -1)
-        (openwith-mode +1)
-        ;; )
+(after! dired
+  (require 'openwith)
+  (openwith-mode +1)
+  )
 
 ;; (after! openwith
  (cond ((equal myhost "phone")
         (setq openwith-associations '(
                                       ("\\.jpg\\'" "termux-open" (file))
+                                      ("\\.png\\'" "termux-open" (file))
                                       ("\\.pdf\\'" "termux-open" (file)))))
        ((equal myhost "laptop")
         (setq openwith-associations '(
@@ -3954,14 +3956,19 @@ and `C-x' being marked as a `term-escape-char'."
         "M-1"  #'delete-other-windows
         "M-2"  #'split-window-below
         "M-3"  #'split-window-right
-        ;; "M-d"  #'kill-this-buffer-no-prompt ;; -> used in doom by evil-multiedit-match-symbol-and-next
+        "M-d"  #'js/kill-this-buffer-no-prompt ;; -> used in doom by evil-multiedit-match-symbol-and-next
         "M-y" #'previous-buffer
         "M-o" #'next-buffer
         "M-u" #'get-this-buffer-to-move
         "M-i" #'switch-to-buffer-to-move
         "M-b" #'consult-buffer)
 
-(defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
+;; workaround to keep M-d as
+(map! :map evil-normal-state-map
+        "M-d"  nil
+      )
+
+(defun js/kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
 (defun get-this-buffer-to-move ()
   (interactive)
