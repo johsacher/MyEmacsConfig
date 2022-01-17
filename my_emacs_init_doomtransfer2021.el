@@ -538,16 +538,28 @@
   current-git-top-level-absolute-path)
 (defun gsyn ()
   (interactive)
-  (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
-  (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
-  (message (concat "git-synchronization launched ... (executed: " command-string ")"))
-  ;;(let (shell-command-buffer-name-async "*gsyn output*")
+  (let
+      ((display-buffer-alist
+        (list
+         (cons
+          ;; "\\* gsyn output \\*.*"
+          "\*gsyn output\*"
+          (cons #'display-buffer-no-window nil)))))
+    (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
+    (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
+    (message (concat "git-synchronization launched ... (executed: " command-string ")"))
+    ;;(let (shell-command-buffer-name-async "*gsyn output*")
     (async-shell-command command-string "*gsyn output*"))
+)
 
 ;; key binding (conform with doom "SPC g ...")
 (map! :leader
       ;; :prefix ("g" . "+git") ;; not necessary
       "g ;" 'gsyn)
+
+;; ** gsyn popup rule for doom-emacs
+(set-popup-rule! ".*gsyn.*output.*" :ignore t) ;; workaround, in combination with prerequisite that (above) async-shell-command with trick: #'display-buffer-no-window
+;; (did not figure out how to simply suppress (no show) of a popup buffer with doom's set-popup-rule!)
 
 ;;NOT DOOM ;;;  ;;;+) MELPA packages - make them available (some very good additional package list)
 ;;NOT DOOM ;;; ;; (add-to-list 'package-archives
