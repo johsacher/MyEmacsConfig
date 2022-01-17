@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ;; * next todos
 ;; ** DONE gsyn SPC g ;
 ;; ** DONE M-hjkl -> windmove
@@ -3362,7 +3360,7 @@ and `C-x' being marked as a `term-escape-char'."
 (define-key LaTeX-mode-map (kbd "<f5>") 'run-pdflatex-on-master-file)
 (define-key LaTeX-mode-map (kbd "<f6>") 'run-bibtex-on-master-file)
 )
-              
+
 ;;NOT DOOM ;;;  (defun run-bibtex-on-master-file ()
 ;;NOT DOOM ;;;  "This function just runs LaTeX (pdflatex in case of TeX-PDF-mode), without asking what command to run everytime."
 ;;NOT DOOM ;;;  (interactive)
@@ -5040,7 +5038,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * org color words
 (defface org-red-face '((nil :foreground "red")) "org red face")
 (font-lock-add-keywords 'org-mode '(("\\\\red{.*}" . 'org-red-face)))
- 
+
 ;; * orgify (my own package for orgified-file-concept)
 ;; each file can be "orgified", simply means: put it file.ext in folder file.ext
 ;; folder can contain file.ext.org file, with "connective data/id" and meta-data/description/wiki
@@ -5147,4 +5145,3 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
   (reftex-reparse-document))
->>>>>>> d7f990ba132873d403db320e060781b9fb7c6821
