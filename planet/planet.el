@@ -198,7 +198,8 @@ date2)
         )
       )
     ;;* run create symlinks to "update" symlinks (existing are not changed)
-    (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
+    ;; deprecated
+    ;; (create-symlinks-for-all-hidden-org-file-folders planet-daily-dir)
     )
 
 (defun planet-get-all-daily-file-folders ()
