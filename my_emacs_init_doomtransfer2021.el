@@ -2639,6 +2639,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
       :desc "lists"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
+      :desc ".doom.d"        "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
