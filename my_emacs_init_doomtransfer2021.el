@@ -2517,7 +2517,9 @@ and `C-x' being marked as a `term-escape-char'."
        :desc "copy current path" "y" 'copy-current-path ;; analogouns to y = vim yank
        :desc "copy file path" "u" 'copy-fullfilename
  ;; analogouns to y = vim yank
-       :desc "change path"       "p" 'change-dir-from-clipboard)) ;; analogouns to y = vim yank
+       :desc "change path"       "p" 'change-dir-from-clipboard ;; analogouns to y = vim yank
+       :desc "change path"       "Y" 'android-copy-to-clipboard
+       :desc "change path"       "p" 'android-paste-clipboard)) ;; analogouns to y = vim yank
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
 ;;NOT DOOM ;;;  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
