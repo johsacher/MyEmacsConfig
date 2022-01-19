@@ -5165,3 +5165,15 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
   (reftex-reparse-document))
+
+;; * undedicate window (annoying default in some modes)
+(defun js/window-dedicated-off ()
+  (interactive)
+  (setq this-window (get-buffer-window))
+  (set-window-dedicated-p this-window nil))
+
+
+(defun js/window-is-dedicated ()
+  (interactive)
+  (setq this-window (get-buffer-window))
+  (message (concat "window dedicated status:" (window-dedicated-p this-window))))
