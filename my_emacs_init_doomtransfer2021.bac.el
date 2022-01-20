@@ -1449,7 +1449,69 @@ new-org-file-full-name)
        )
 new-org-file-full-name)
 
-;;NOT DOOM ;;;  ;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
+;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
+;; (update: it resulted that the 'hidden structure' was a bad idea
+;;          symlink fragility
+;;          dot-files have a different traditional meaning: more config files, not data
+;;          symlinks dont work in dropbox
+;;          to much overhead: in file-explorer/dired you are shown double filenames -> annoying
+;;          -> so full benefits on 'normal' folder name, but with file extension
+;;          e.g. |_ doc.org
+;;               |_ article1.pdf
+;;
+;;          so, when in in dired
+;;                 if on off.ext
+;;                    open off.ext/off.ext
+;;                 if in off.ext
+;;                    open off.ext
+;;                (off=file base name)
+;;                (ext=file extension)
+;;          well... it s only for dired :D
+;;
+(defun filefolder-string-is-a-filefolder (str)
+  (cond ((not (file-directory-p str))
+         (message (concat "not a directory: " str))
+         nil)
+        ;; test: (setq str "custom.org")
+        ;; test: (setq str "emacs_demo.org")
+        ;; test: (setq str "planet")
+        ((not (file-name-extension str))
+        (message (concat "has no extension: " str))
+        nil)
+        (t
+         (message "it s a filefolder")
+         t)))
+;;  A    dir.ext
+;;  test
+;; (filefolder-string-is-a-filefolder "planet") ;; => nil
+;; (filefolder-string-is-a-filefolder "emacs_demo.org") ;; => t
+;; (filefolder-string-is-a-filefolder "custom.org") ;; => nil
+(defun filefolder-open ()
+  (interactive)
+  ;; test1:
+  ;; (setq file-under-point "emacs_demo.org")
+  ;; (setq parent-dir "MyEmacsConfig")
+  ;; test2:
+  ;; (setq file-under-point "emacs_demo.org")
+  ;; (setq parent-dir "emacs_demo.org")
+  ;; test (defun test () (interactive) (message (dired-get-filename)))
+  ;; test (defun test () (interactive) (message (dired-get-file-for-visit)))
+  (setq filefullname (dired-get-filename)) ;;under point
+  (setq parent-dir (file-name-directory filefullname))
+  (message (concat "filefullname:" filefullname))
+  (cond ((filefolder-string-is-a-filefolder filefullname)
+         (message "on a filefolder")
+         (find-file (concat filefullname)))
+        ((filefolder-string-is-a-filefolder parent-dir)
+(message "in a filefolder")
+  (setq filename (file-name-nondirectory filefullname))
+ (setq folderedfile (concat parent-dir filename))
+         ;; always assume ffn.ext/ffn.ext
+         ;; (find-file folderedfile))
+         (message folderedfile))
+        (t (message "not on filefolder, nor in filefolder"))))
+;;
+;;
 ;;NOT DOOM ;;;  (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
 ;;NOT DOOM ;;;     (interactive)
 ;;NOT DOOM ;;;     (setq orgdotfolder (file-name-nondirectory orgdotfolder-full))
