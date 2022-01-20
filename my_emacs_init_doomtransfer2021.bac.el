@@ -1469,6 +1469,9 @@ new-org-file-full-name)
 ;;          well... it s only for dired :D
 ;;
 (defun filefolder-string-is-a-filefolder (str)
+  ;; quit the trailing "/" if dir
+  (if (file-directory-p str)
+      (setq str (directory-file-name str)))
   (cond ((not (file-directory-p str))
          (message (concat "not a directory: " str))
          nil)
@@ -1499,18 +1502,19 @@ new-org-file-full-name)
   (setq filefullname (dired-get-filename)) ;;under point
   (setq parent-dir (file-name-directory filefullname))
   (message (concat "filefullname:" filefullname))
+  (message (concat "parent-dir:" parent-dir))
   (cond ((filefolder-string-is-a-filefolder filefullname)
   (setq filename (file-name-nondirectory filefullname))
          (message "on a filefolder")
          (find-file (concat filefullname "/" filename)))
         ((filefolder-string-is-a-filefolder parent-dir)
 (message "in a filefolder")
-  (setq filename (file-name-nondirectory filefullname))
+  (setq filename (file-name-nondirectory (directory-file-name parent-dir))) ;; quit trailing "/" here is done first
  (setq folderedfile (concat parent-dir filename))
          ;; always assume ffn.ext/ffn.ext
-         ;; (find-file folderedfile))
-         (message folderedfile))
-        (t (message "not on filefolder, nor in filefolder"))))
+         (message (concat "visit folderedfile: " folderedfile))
+         (find-file folderedfile)
+        (t (message "not on filefolder, nor in filefolder")))))
 ;;
 ;;
 ;;NOT DOOM ;;;  (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
