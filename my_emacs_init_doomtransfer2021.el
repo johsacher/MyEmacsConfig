@@ -5183,4 +5183,87 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; * EIN jupyter notebooks
 ;; ** inline images
-(setq ein:output-area-inlined-images t)
+;; from reddit user
+(setq ein:worksheet-enable-undo t); very useful to undo a change
+(setq ein:output-area-inlined-images t); this one outputs the images directly in the emacs buffer, for me it's the perfect behaviour since I don't wand to switch programs to see the outputs of my matplotlib functions and stuff.
+                           ;       for the emacs experience inline plotting :
+
+;; mpl.rcParams["figure.facecolor"] = "white"
+;; mpl.rcParams["axes.facecolor"] = "white"
+;; mpl.rcParams["savefig.facecolor"] = "white"
+
+;; This is if you are like me using a dark/black theme in emacs and plotting stuff with matplotlib, you will maybe have some _issues_ because the background will be inivisble, wo this snippet just forces all matplotlib outputs to be white.
+
+;;     To automatically reload your custom libraries:
+
+;; ​
+
+;; %load_ext autoreload
+;; %autoreload 2
+
+;; this is more a jupyter tip, this auto reloads your custom modules, if you make changes in them, without having to reload the whole notebook.
+
+;;     Remember to save the notebook regularly ! there is no autosave here.
+;;     all my keybindings (very ugly code, I was planning to update it soon haha, but it's working). The real strengh of ein for me is the ability to control the WHOLE notebook from your text editor, so instead of scrolling with your mouse for hours to go back on the top of your notebook in JupyterLab, here in few keybindins you can jump anywhere haha. I also need to mention that I am an Evil user.
+
+;; ​
+(map! map: ein:notebook-mode-map
+       :nvieomr "M-y" #'ein:worksheet-copy-cell-km
+       :nvieomr "M-p" #'ein:worksheet-yank-cell-km
+       :nvieomr "M-d" #'ein:worksheet-kill-cell-km
+       :nvieomr "M-o" #'ein:worksheet-insert-cell-below-km
+       :nvieomr "M-O" #'ein:worksheet-insert-cell-above-km
+       :nvieomr "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
+       :nvieomr "C-j" #'ein:worksheet-goto-next-input-km
+       :nvieomr "C-k" #'ein:worksheet-goto-prev-input-km
+       :nvieomr "C-l" #'ein:notebook-worksheet-open-next-or-first-km
+       :nvieomr "M-H" #'ein:notebook-worksheet-move-prev-km
+       :nvieomr "M-J" #'ein:worksheet-move-cell-down-km
+       :nvieomr "M-K" #'ein:worksheet-move-cell-up-km
+       :nvieomr "M-L" #'ein:notebook-worksheet-move-next-km
+       :nvieomr  #'ein:worksheet-toggle-output-km
+       :nvieomr  "R" #'ein:worksheet-rename-sheet-km
+       :nvieomr  #'ein:worksheet-execute-cell-and-goto-next-km
+       :nvieomr "C-c x"#'ein:worksheet-clear-output-km
+       :nvieomr "C-c X"#'ein:worksheet-clear-all-output-km
+       :nvieomr "C-o" #'ein:console-open-km
+       :nvieomr bd "C-K" #'ein:worksheet-merge-cell-km
+       :nvieomr bd "C-J" #'spacemacs/ein:worksheet-merge-cell-next-km
+       :nvieomr "M-s" #'ein:worksheet-split-cell-at-point-km
+       :nvieomr "C-s" #'ein:notebook-save-notebook-command-km
+       :nvieomr "C-r" #'ein:notebook-rename-command-km
+       :nvieomr "M-1" #'ein:notebook-worksheet-open-1th-km
+       :nvieomr "M-2" #'ein:notebook-worksheet-open-2th-km
+       :nvieomr "M-3" #'ein:notebook-worksheet-open-3th-km
+       :nvieomr "M-4" #'ein:notebook-worksheet-open-4th-km
+       :nvieomr "M-5" #'ein:notebook-worksheet-open-5th-km
+       :nvieomr "M-6" #'ein:notebook-worksheet-open-6th-km
+       :nvieomr "M-7" #'ein:notebook-worksheet-open-7th-km
+       :nvieomr "M-8" #'ein:notebook-worksheet-open-8th-km
+       :nvieomr "M-9" #'ein:notebook-worksheet-open-last-km
+       :nvieomr  "+" #'ein:notebook-worksheet-insert-next-km
+       :nvieomr  "-" #'ein:notebook-worksheet-delete-km
+       :nvieomr "M-X" #'ein:notebook-close-km
+       :nvieomr "M-u" #'ein:worksheet-change-cell-type-km
+       :nvieomr "M-S" #'ein:notebook-save-notebook-command-km
+       :nvieomr "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
+       :nvieomr "C-c a" #'ein:worksheet-execute-all-cell-km
+       :nvieomr "C-c q" #'ein:notebook-kernel-interrupt-command-km
+       :nvieomr "M-9" #'ein:notebook-worksheet-open-last-km
+       :nvieomr   "+" #'ein:notebook-worksheet-insert-next-km
+       :nvieomr   "-" #'ein:notebook-worksheet-delete-km
+       :nvieomr "M-X" #'ein:notebook-close-km
+       :nvieomr "M-u" #'ein:worksheet-change-cell-type-km
+       :nvieomr "M-S" #'ein:notebook-save-notebook-command-km
+       :nvieomr "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
+       :nvieomr "C-c a" #'ein:worksheet-execute-all-cell-km
+       :nvieomr "C-c q" #'ein:notebook-kernel-interrupt-command-km
+)
+;; But yeah, even if I really prefer editing my notebooks on ein than on my browser, I do see also some negative aspects and drawbacks:
+
+;;     I don't have autocompletion. It's not a big deal, but I really appreciate also having LSP mode helping me when I'm editing regular python scripts.
+;;     It's a little buggy. Like not really problematic once you know where are the problems, but they are here. Among them there is :
+
+;;     Having to press <ESC> every time I open a notebook to have my keybindings working
+;;     Unable to delete the last line of the cell using dd (Evil command) this issue
+;;     Can sometime (with HUUGE notebooks) hangs for quite some time, and also crash

@@ -1380,39 +1380,49 @@ from lines like:
 
 ;;
 ;; begin "UNDOOMED" ;;;
-(defun create-hidden-org-file-folder (&optional filebasename path)
-"in dired -> create org mode file within hidden folder (of same name)
-(we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
-(originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
-  (interactive)
-   ;; * determine filename
-   (if (not filebasename)
-       (setq filebasename (read-string "Org-file-name (without .org-extension):"))
-     )
+;; * filefolder (own package/concept idea)
+;; update:
+;; started as: for the need to hide org files with inline images/ attachments / clutter
+;; resulted to: a beautifull KISS optimal new concept for folder/file structure in general, for *any type of file* with any exyension
+;; you can do it on any file system
+;; but you can leverage emacs dired
+;; see below for concept
 
-   ;; * path
-   (if (not path) ;; default --> put to current path
-        (setq path (get-current-path))
-     )
-   ;; (if not already exists) create the hidden (dotted) folder with same name of org file
-     (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
-     (if (not (file-directory-p new-directory-full-name))
-         (progn
-         (make-directory new-directory-full-name)
-          ;; create the org file within that folder
-          (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
-          ;; * create file (2 options)
-          ;; ** option1: with-temp-buffer
-          ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
-          ;; ** option2: write-region
-          (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
-          ;; option2 safer, in case dayfile exists, content is not deleted
-          )
-       ;; else
-        (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
-        ;; return full file name of org file
-       )
-new-org-file-full-name)
+;; deprecated 'hidden' structure
+;; ==> in favor of 'normal' filefolders
+;; (defun create-hidden-org-file-folder (&optional filebasename path)
+;; "in dired -> create org mode file within hidden folder (of same name)
+;; (we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
+;; (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
+;;   (interactive)
+;;    ;; * determine filename
+;;    (if (not filebasename)
+;;        (setq filebasename (read-string "Org-file-name (without .org-extension):"))
+;;      )
+
+;;    ;; * path
+;;    (if (not path) ;; default --> put to current path
+;;         (setq path (get-current-path))
+;;      )
+;;    ;; (if not already exists) create the hidden (dotted) folder with same name of org file
+;;      (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
+;;      (if (not (file-directory-p new-directory-full-name))
+;;          (progn
+;;          (make-directory new-directory-full-name)
+;;           ;; create the org file within that folder
+;;           (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
+;;           ;; * create file (2 options)
+;;           ;; ** option1: with-temp-buffer
+;;           ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
+;;           ;; ** option2: write-region
+;;           (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
+;;           ;; option2 safer, in case dayfile exists, content is not deleted
+;;           )
+;;        ;; else
+;;         (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
+;;         ;; return full file name of org file
+;;        )
+;; new-org-file-full-name)
 
 
 (defun create-org-file-folder (&optional filebasename path)
@@ -1473,13 +1483,13 @@ new-org-file-full-name)
   (if (file-directory-p str)
       (setq str (directory-file-name str)))
   (cond ((not (file-directory-p str))
-         (message (concat "not a directory: " str))
+         (message (concat "not a filefolder, cause not a directory: " str))
          nil)
         ;; test: (setq str "custom.org")
         ;; test: (setq str "emacs_demo.org")
         ;; test: (setq str "planet")
         ((not (file-name-extension str))
-        (message (concat "has no extension: " str))
+        (message (concat "not a filefolder, cause has no extension: " str))
         nil)
         (t
          (message "it s a filefolder")
@@ -1513,8 +1523,8 @@ new-org-file-full-name)
  (setq folderedfile (concat parent-dir filename))
          ;; always assume ffn.ext/ffn.ext
          (message (concat "visit folderedfile: " folderedfile))
-         (find-file folderedfile)
-        (t (message "not on filefolder, nor in filefolder")))))
+         (find-file folderedfile))
+        (t (message "not on filefolder, nor in filefolder"))))
 ;;
 ;;
 ;;NOT DOOM ;;;  (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
