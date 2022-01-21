@@ -5207,57 +5207,66 @@ and `C-x' being marked as a `term-escape-char'."
 ;;     all my keybindings (very ugly code, I was planning to update it soon haha, but it's working). The real strengh of ein for me is the ability to control the WHOLE notebook from your text editor, so instead of scrolling with your mouse for hours to go back on the top of your notebook in JupyterLab, here in few keybindins you can jump anywhere haha. I also need to mention that I am an Evil user.
 
 ;; ​
-(map! map: ein:notebook-mode-map
-       :nvieomr "M-y" #'ein:worksheet-copy-cell-km
-       :nvieomr "M-p" #'ein:worksheet-yank-cell-km
-       :nvieomr "M-d" #'ein:worksheet-kill-cell-km
-       :nvieomr "M-o" #'ein:worksheet-insert-cell-below-km
-       :nvieomr "M-O" #'ein:worksheet-insert-cell-above-km
-       :nvieomr "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
-       :nvieomr "C-j" #'ein:worksheet-goto-next-input-km
-       :nvieomr "C-k" #'ein:worksheet-goto-prev-input-km
-       :nvieomr "C-l" #'ein:notebook-worksheet-open-next-or-first-km
-       :nvieomr "M-H" #'ein:notebook-worksheet-move-prev-km
-       :nvieomr "M-J" #'ein:worksheet-move-cell-down-km
-       :nvieomr "M-K" #'ein:worksheet-move-cell-up-km
-       :nvieomr "M-L" #'ein:notebook-worksheet-move-next-km
-       :nvieomr  #'ein:worksheet-toggle-output-km
-       :nvieomr  "R" #'ein:worksheet-rename-sheet-km
-       :nvieomr  #'ein:worksheet-execute-cell-and-goto-next-km
-       :nvieomr "C-c x"#'ein:worksheet-clear-output-km
-       :nvieomr "C-c X"#'ein:worksheet-clear-all-output-km
-       :nvieomr "C-o" #'ein:console-open-km
-       :nvieomr bd "C-K" #'ein:worksheet-merge-cell-km
-       :nvieomr bd "C-J" #'spacemacs/ein:worksheet-merge-cell-next-km
-       :nvieomr "M-s" #'ein:worksheet-split-cell-at-point-km
-       :nvieomr "C-s" #'ein:notebook-save-notebook-command-km
-       :nvieomr "C-r" #'ein:notebook-rename-command-km
-       :nvieomr "M-1" #'ein:notebook-worksheet-open-1th-km
-       :nvieomr "M-2" #'ein:notebook-worksheet-open-2th-km
-       :nvieomr "M-3" #'ein:notebook-worksheet-open-3th-km
-       :nvieomr "M-4" #'ein:notebook-worksheet-open-4th-km
-       :nvieomr "M-5" #'ein:notebook-worksheet-open-5th-km
-       :nvieomr "M-6" #'ein:notebook-worksheet-open-6th-km
-       :nvieomr "M-7" #'ein:notebook-worksheet-open-7th-km
-       :nvieomr "M-8" #'ein:notebook-worksheet-open-8th-km
-       :nvieomr "M-9" #'ein:notebook-worksheet-open-last-km
-       :nvieomr  "+" #'ein:notebook-worksheet-insert-next-km
-       :nvieomr  "-" #'ein:notebook-worksheet-delete-km
-       :nvieomr "M-X" #'ein:notebook-close-km
-       :nvieomr "M-u" #'ein:worksheet-change-cell-type-km
-       :nvieomr "M-S" #'ein:notebook-save-notebook-command-km
-       :nvieomr "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
-       :nvieomr "C-c a" #'ein:worksheet-execute-all-cell-km
-       :nvieomr "C-c q" #'ein:notebook-kernel-interrupt-command-km
-       :nvieomr "M-9" #'ein:notebook-worksheet-open-last-km
-       :nvieomr   "+" #'ein:notebook-worksheet-insert-next-km
-       :nvieomr   "-" #'ein:notebook-worksheet-delete-km
-       :nvieomr "M-X" #'ein:notebook-close-km
-       :nvieomr "M-u" #'ein:worksheet-change-cell-type-km
-       :nvieomr "M-S" #'ein:notebook-save-notebook-command-km
-       :nvieomr "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
-       :nvieomr "C-c a" #'ein:worksheet-execute-all-cell-km
-       :nvieomr "C-c q" #'ein:notebook-kernel-interrupt-command-km
+(map! :map ein:notebook-mode-map
+      ;; na klar:
+      ;; wir haben local leader doch mit z und g!!
+      ;; go up cell g-k
+      ;; copy cell z-y
+      ;; paste cell z-p
+      ;; kill cell z-d
+      ;; move/promote cells C-hjkl like org mode
+      ;;
+      ;;
+       :n "zy" #'ein:worksheet-copy-cell-km
+       :n "zp" #'ein:worksheet-yank-cell-km
+       :n "zd" #'ein:worksheet-kill-cell-km
+       ;; :n "M-o" #'ein:worksheet-insert-cell-below-km
+       ;; :n "M-O" #'ein:worksheet-insert-cell-above-km
+       ;; :n "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
+       ;; :n "C-j" #'ein:worksheet-goto-next-input-km
+       ;; :n "C-k" #'ein:worksheet-goto-prev-input-km
+       ;; :n "C-l" #'ein:notebook-worksheet-open-next-or-first-km
+       ;; :n "M-H" #'ein:notebook-worksheet-move-prev-km
+       ;; :n "M-J" #'ein:worksheet-move-cell-down-km
+       ;; :n "M-K" #'ein:worksheet-move-cell-up-km
+       ;; :n "M-L" #'ein:notebook-worksheet-move-next-km
+       ;; :n  #'ein:worksheet-toggle-output-km
+       ;; :n  "R" #'ein:worksheet-rename-sheet-km
+       ;; :n  #'ein:worksheet-execute-cell-and-goto-next-km
+       ;; :n "C-c x"#'ein:worksheet-clear-output-km
+       ;; :n "C-c X"#'ein:worksheet-clear-all-output-km
+       ;; :n "C-o" #'ein:console-open-km
+       ;; :n "C-K" #'ein:worksheet-merge-cell-km
+       ;; :n "C-J" #'spacemacs/ein:worksheet-merge-cell-next-km
+       ;; :n "M-s" #'ein:worksheet-split-cell-at-point-km
+       ;; :n "C-s" #'ein:notebook-save-notebook-command-km
+       ;; :n "C-r" #'ein:notebook-rename-command-km
+       ;; :n "M-1" #'ein:notebook-worksheet-open-1th-km
+       ;; :n "M-2" #'ein:notebook-worksheet-open-2th-km
+       ;; :n "M-3" #'ein:notebook-worksheet-open-3th-km
+       ;; :n "M-4" #'ein:notebook-worksheet-open-4th-km
+       ;; :n "M-5" #'ein:notebook-worksheet-open-5th-km
+       ;; :n "M-6" #'ein:notebook-worksheet-open-6th-km
+       ;; :n "M-7" #'ein:notebook-worksheet-open-7th-km
+       ;; :n "M-8" #'ein:notebook-worksheet-open-8th-km
+       ;; :n "M-9" #'ein:notebook-worksheet-open-last-km
+       ;; :n  "+" #'ein:notebook-worksheet-insert-next-km
+       ;; :n  "-" #'ein:notebook-worksheet-delete-km
+       ;; :n "M-X" #'ein:notebook-close-km
+       ;; :n "M-u" #'ein:worksheet-change-cell-type-km
+       ;; :n "M-S" #'ein:notebook-save-notebook-command-km
+       ;; :n "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
+       ;; :n "C-c a" #'ein:worksheet-execute-all-cell-km
+       ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
+       ;; :n "M-9" #'ein:notebook-worksheet-open-last-km
+       ;; :n   "+" #'ein:notebook-worksheet-insert-next-km
+       ;; :n   "-" #'ein:notebook-worksheet-delete-km
+       ;; :n "M-X" #'ein:notebook-close-km
+       ;; :n "M-u" #'ein:worksheet-change-cell-type-km
+       ;; :n "M-S" #'ein:notebook-save-notebook-command-km
+       ;; :n "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
+       ;; :n "C-c a" #'ein:worksheet-execute-all-cell-km
+       ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
 )
 ;; But yeah, even if I really prefer editing my notebooks on ein than on my browser, I do see also some negative aspects and drawbacks:
 
