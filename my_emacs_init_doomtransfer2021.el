@@ -1392,40 +1392,51 @@ from lines like:
 ;;NOT DOOM ;;; ;; (evil-leader/set-key "ln" 'planet-open-quick-notes)
 
 ;;
+;;
 ;; begin "UNDOOMED" ;;;
-(defun create-hidden-org-file-folder (&optional filebasename path)
-"in dired -> create org mode file within hidden folder (of same name)
-(we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
-(originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
-  (interactive)
-   ;; * determine filename
-   (if (not filebasename)
-       (setq filebasename (read-string "Org-file-name (without .org-extension):"))
-     )
+;; * filefolder (own package/concept idea)
+;; update:
+;; started as: for the need to hide org files with inline images/ attachments / clutter
+;; resulted to: a beautifull KISS optimal new concept for folder/file structure in general, for *any type of file* with any exyension
+;; you can do it on any file system
+;; but you can leverage emacs dired
+;; see below for concept
 
-   ;; * path
-   (if (not path) ;; default --> put to current path
-        (setq path (get-current-path))
-     )
-   ;; (if not already exists) create the hidden (dotted) folder with same name of org file
-     (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
-     (if (not (file-directory-p new-directory-full-name))
-         (progn
-         (make-directory new-directory-full-name)
-          ;; create the org file within that folder
-          (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
-          ;; * create file (2 options)
-          ;; ** option1: with-temp-buffer
-          ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
-          ;; ** option2: write-region
-          (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
-          ;; option2 safer, in case dayfile exists, content is not deleted
-          )
-       ;; else
-        (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
-        ;; return full file name of org file
-       )
-new-org-file-full-name)
+;; deprecated 'hidden' structure
+;; ==> in favor of 'normal' filefolders
+;; (defun create-hidden-org-file-folder (&optional filebasename path)
+;; "in dired -> create org mode file within hidden folder (of same name)
+;; (we don t want all the \"junk\" to be seen, images, latex aux files, etc.)
+;; (originally i wanted to additionally set a soft link to org file, but discarded that, because soft links are \"mistreated/violated\" by Dropbox)"
+;;   (interactive)
+;;    ;; * determine filename
+;;    (if (not filebasename)
+;;        (setq filebasename (read-string "Org-file-name (without .org-extension):"))
+;;      )
+
+;;    ;; * path
+;;    (if (not path) ;; default --> put to current path
+;;         (setq path (get-current-path))
+;;      )
+;;    ;; (if not already exists) create the hidden (dotted) folder with same name of org file
+;;      (setq new-directory-full-name (concat (file-name-as-directory path) "." filebasename ".org"))
+;;      (if (not (file-directory-p new-directory-full-name))
+;;          (progn
+;;          (make-directory new-directory-full-name)
+;;           ;; create the org file within that folder
+;;           (setq new-org-file-full-name (concat (file-name-as-directory new-directory-full-name) filebasename ".org"))
+;;           ;; * create file (2 options)
+;;           ;; ** option1: with-temp-buffer
+;;           ;; (with-temp-buffer (write-file new-org-file-full-name)) ;; equivalent to >> echo "" > file
+;;           ;; ** option2: write-region
+;;           (write-region "" nil new-org-file-full-name) ;; equivalent to >> echo "" >> file
+;;           ;; option2 safer, in case dayfile exists, content is not deleted
+;;           )
+;;        ;; else
+;;         (message (concat "hidden folder \"" new-directory-full-name "\" already exists."))
+;;         ;; return full file name of org file
+;;        )
+;; new-org-file-full-name)
 
 
 (defun create-org-file-folder (&optional filebasename path)
@@ -1461,6 +1472,75 @@ new-org-file-full-name)
         ;; return full file name of org file
        )
 new-org-file-full-name)
+
+;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
+;; (update: it resulted that the 'hidden structure' was a bad idea
+;;          symlink fragility
+;;          dot-files have a different traditional meaning: more config files, not data
+;;          symlinks dont work in dropbox
+;;          to much overhead: in file-explorer/dired you are shown double filenames -> annoying
+;;          -> so full benefits on 'normal' folder name, but with file extension
+;;          e.g. |_ doc.org
+;;               |_ article1.pdf
+;;
+;;          so, when in in dired
+;;                 if on off.ext
+;;                    open off.ext/off.ext
+;;                 if in off.ext
+;;                    open off.ext
+;;                (off=file base name)
+;;                (ext=file extension)
+;;          well... it s only for dired :D
+;;
+(defun filefolder-string-is-a-filefolder (str)
+  ;; quit the trailing "/" if dir
+  (if (file-directory-p str)
+      (setq str (directory-file-name str)))
+  (cond ((not (file-directory-p str))
+         (message (concat "not a filefolder, cause not a directory: " str))
+         nil)
+        ;; test: (setq str "custom.org")
+        ;; test: (setq str "emacs_demo.org")
+        ;; test: (setq str "planet")
+        ((not (file-name-extension str))
+        (message (concat "not a filefolder, cause has no extension: " str))
+        nil)
+        (t
+         (message "it s a filefolder")
+         t)))
+;;  A    dir.ext
+;;  test
+;; (filefolder-string-is-a-filefolder "planet") ;; => nil
+;; (filefolder-string-is-a-filefolder "emacs_demo.org") ;; => t
+;; (filefolder-string-is-a-filefolder "custom.org") ;; => nil
+(defun filefolder-open ()
+  (interactive)
+  ;; test1:
+  ;; (setq file-under-point "emacs_demo.org")
+  ;; (setq parent-dir "MyEmacsConfig")
+  ;; test2:
+  ;; (setq file-under-point "emacs_demo.org")
+  ;; (setq parent-dir "emacs_demo.org")
+  ;; test (defun test () (interactive) (message (dired-get-filename)))
+  ;; test (defun test () (interactive) (message (dired-get-file-for-visit)))
+  (setq filefullname (dired-get-filename)) ;;under point
+  (setq parent-dir (file-name-directory filefullname))
+  (message (concat "filefullname:" filefullname))
+  (message (concat "parent-dir:" parent-dir))
+  (cond ((filefolder-string-is-a-filefolder filefullname)
+  (setq filename (file-name-nondirectory filefullname))
+         (message "on a filefolder")
+         (find-file (concat filefullname "/" filename)))
+        ((filefolder-string-is-a-filefolder parent-dir)
+(message "in a filefolder")
+  (setq filename (file-name-nondirectory (directory-file-name parent-dir))) ;; quit trailing "/" here is done first
+ (setq folderedfile (concat parent-dir filename))
+         ;; always assume ffn.ext/ffn.ext
+         (message (concat "visit folderedfile: " folderedfile))
+         (find-file folderedfile))
+        (t (message "not on filefolder, nor in filefolder"))))
+;;
+;;
 
 ;;NOT DOOM ;;;  ;; ** hidden org folder stuff (so i have everything of that "org-document" in one folder like: images, raw-files, latex-export auxiliary files etc.)
 ;;NOT DOOM ;;;  (defun create-symlink-for-hidden-org-file-folder (&optional orgdotfolder-full)
@@ -5184,6 +5264,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * EIN jupyter notebooks
 ;; ** inline images
 ;; from reddit user
+(after! ein
 (setq ein:worksheet-enable-undo t); very useful to undo a change
 (setq ein:output-area-inlined-images t); this one outputs the images directly in the emacs buffer, for me it's the perfect behaviour since I don't wand to switch programs to see the outputs of my matplotlib functions and stuff.
                            ;       for the emacs experience inline plotting :
@@ -5276,3 +5357,4 @@ and `C-x' being marked as a `term-escape-char'."
 ;;     Having to press <ESC> every time I open a notebook to have my keybindings working
 ;;     Unable to delete the last line of the cell using dd (Evil command) this issue
 ;;     Can sometime (with HUUGE notebooks) hangs for quite some time, and also crash
+)
