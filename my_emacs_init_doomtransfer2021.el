@@ -5148,12 +5148,16 @@ and `C-x' being marked as a `term-escape-char'."
                                                     "CNCD(C)"  ; The task is canceled
                                                     "POST(P)"  ; The task was postponed, but not canceled
                                                     "PROG(g)"  ; was in progressed, but not finished
+                                                    "BEST(b)"  ; best option
+                                                    "DISC(I)"  ; discarded
                                                     ))))
 (setq org-todo-keyword-faces (append  org-todo-keyword-faces '(
                                                     ("CRNT" :foreground "orange" :weight bold)
                                                     ("CNCD" . +org-todo-cancel)
                                                     ("POST" . +org-todo-cancel)
                                                     ("PROG" :foreground "yellow" :weight bold)
+                                                    ("BEST" :foreground "green" :weight bold)
+                                                    ("DISC" . +org-todo-cancel)
                                                     ))))
 
 ;; * matlab term
