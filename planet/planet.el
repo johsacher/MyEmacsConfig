@@ -1071,7 +1071,6 @@ date)
   (org-set-property "Category" "work")
   )
 
-;;* set categories (work/tools/etc.)
 (defun planet-set-category-science ()
   (interactive)
   (org-set-property "Category" "science")
@@ -1105,7 +1104,19 @@ date)
   )
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mks" 'planet-set-category-sustainment)
 
-;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc. 
+;;* set type (birthday,fullday,event)
+(defun planet-set-type-birthday ()
+  (interactive)
+  (org-set-property "type" "birthday")
+  )
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "myb" #'planet-set-type-birthday)
+
+(defun planet-set-type-fullday ()
+  (interactive)
+  (org-set-property "type" "fullday")
+  )
+(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "myf" #'planet-set-type-fullday)
+;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc.
 
 ;;** konzept:
 ;;*** schnell taggen: work / tools / etc

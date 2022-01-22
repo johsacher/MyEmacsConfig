@@ -5218,7 +5218,9 @@ and `C-x' being marked as a `term-escape-char'."
 
 (map! :leader
       :desc "M-x" "x" #'execute-extended-command
+      :desc "scratch (doom)" "z" #'doom/open-scratch-buffer
       )
+
 ;; * org mode - add todo-keywords
 (after! org
 (custom-declare-face '+org-todo-current  '((t (:inherit (bold error org-todo)))) "")
@@ -5268,7 +5270,11 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * EIN jupyter notebooks
 ;; ** inline images
 ;; from reddit user
-(after! ein
+;; (after! ein
+(defun js/ein-quirk-init ()
+  "subsitute this later with (after! ein [...]) which still does not work"
+  (interactive)
+
 (setq ein:worksheet-enable-undo t); very useful to undo a change
 (setq ein:output-area-inlined-images t); this one outputs the images directly in the emacs buffer, for me it's the perfect behaviour since I don't wand to switch programs to see the outputs of my matplotlib functions and stuff.
                            ;       for the emacs experience inline plotting :
@@ -5302,20 +5308,22 @@ and `C-x' being marked as a `term-escape-char'."
       ;; move/promote cells C-hjkl like org mode
       ;;
       ;;
+       :n "zs" #'ein:notebook-save-notebook-command-km
        :n "zy" #'ein:worksheet-copy-cell-km
        :n "zp" #'ein:worksheet-yank-cell-km
        :n "zd" #'ein:worksheet-kill-cell-km
-       ;; :n "M-o" #'ein:worksheet-insert-cell-below-km
-       ;; :n "M-O" #'ein:worksheet-insert-cell-above-km
+       :n "zb" #'ein:worksheet-insert-cell-below-km
+       :n "za" #'ein:worksheet-insert-cell-above-km
        ;; :n "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
-       ;; :n "C-j" #'ein:worksheet-goto-next-input-km
-       ;; :n "C-k" #'ein:worksheet-goto-prev-input-km
+       :n "gj" #'ein:worksheet-goto-next-input-km
+       :n "gk" #'ein:worksheet-goto-prev-input-km
        ;; :n "C-l" #'ein:notebook-worksheet-open-next-or-first-km
        ;; :n "M-H" #'ein:notebook-worksheet-move-prev-km
-       ;; :n "M-J" #'ein:worksheet-move-cell-down-km
-       ;; :n "M-K" #'ein:worksheet-move-cell-up-km
+       :n "zj" #'ein:worksheet-move-cell-down-km
+       :n "zk" #'ein:worksheet-move-cell-up-km
        ;; :n "M-L" #'ein:notebook-worksheet-move-next-km
-       ;; :n  #'ein:worksheet-toggle-output-km
+       ;; :n "??" #'ein:worksheet-toggle-output-km
+       :n "zt" #'ein:worksheet-toggle-cell-type-km
        ;; :n  "R" #'ein:worksheet-rename-sheet-km
        ;; :n  #'ein:worksheet-execute-cell-and-goto-next-km
        ;; :n "C-c x"#'ein:worksheet-clear-output-km
@@ -5340,8 +5348,6 @@ and `C-x' being marked as a `term-escape-char'."
        ;; :n "M-X" #'ein:notebook-close-km
        ;; :n "M-u" #'ein:worksheet-change-cell-type-km
        ;; :n "M-S" #'ein:notebook-save-notebook-command-km
-       ;; :n "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
-       ;; :n "C-c a" #'ein:worksheet-execute-all-cell-km
        ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
        ;; :n "M-9" #'ein:notebook-worksheet-open-last-km
        ;; :n   "+" #'ein:notebook-worksheet-insert-next-km
@@ -5353,6 +5359,15 @@ and `C-x' being marked as a `term-escape-char'."
        ;; :n "C-c a" #'ein:worksheet-execute-all-cell-km
        ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
 )
+
+(map! :map ein:notebook-mode-map
+      :leader
+      :desc "execute cell" "cc" #'ein:worksheet-execute-cell-km
+      :desc "execute cell" "cC" #'ein:worksheet-execute-all-cells
+      :desc "execute cell" "cA" #'ein:worksheet-execute-all-cells-above
+      :desc "execute cell" "cB" #'ein:worksheet-execute-all-cells-below
+      :desc "execute cell" "cx" #'ein:worksheet-execute-cell-and-goto-next-km
+      )
 ;; But yeah, even if I really prefer editing my notebooks on ein than on my browser, I do see also some negative aspects and drawbacks:
 
 ;;     I don't have autocompletion. It's not a big deal, but I really appreciate also having LSP mode helping me when I'm editing regular python scripts.
@@ -5361,4 +5376,14 @@ and `C-x' being marked as a `term-escape-char'."
 ;;     Having to press <ESC> every time I open a notebook to have my keybindings working
 ;;     Unable to delete the last line of the cell using dd (Evil command) this issue
 ;;     Can sometime (with HUUGE notebooks) hangs for quite some time, and also crash
+;;
+(defun js/ein:open-notebook-in-browser-with-jupyter-notebook ()
+  (interactive)
+  ())
+
+(defun js/buffer-name-to-clipboard ()
+  (interactive)
+  (setq this-buffer-name (buffer-name))
+  (message (concat "copied to clipboard (buffer name): " this-buffer-name))
+  (kill-new this-buffer-name))
 )
