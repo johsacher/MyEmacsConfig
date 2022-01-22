@@ -5317,6 +5317,7 @@ and `C-x' being marked as a `term-escape-char'."
        ;; :n "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
        :n "gj" #'ein:worksheet-goto-next-input-km
        :n "gk" #'ein:worksheet-goto-prev-input-km
+       :n "g;" #'ein:pytools-jump-back-command
        ;; :n "C-l" #'ein:notebook-worksheet-open-next-or-first-km
        ;; :n "M-H" #'ein:notebook-worksheet-move-prev-km
        :n "zj" #'ein:worksheet-move-cell-down-km
