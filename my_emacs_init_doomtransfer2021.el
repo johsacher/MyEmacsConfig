@@ -433,6 +433,10 @@
 (map! :leader "d" #'dired-go-current-buffer)
 
 
+;; doom had no default rg binding ->
+(map! :leader "sr" #'consult-ripgrep)
+
+
 ;;NOT DOOM POT;;;    "g" 'helm-swoop  ; only dired -> helm-rg ( ack / ag / rg --> ag did not work , rg works (if installed)
 ;;NOT DOOM POT;;;    "p" 'helm-projectile-find-file ;; -> "p" ssh-clipboard-paste, defined there
 ;;NOT DOOM POT;;;    "d" 'dired-go-current-buffer
