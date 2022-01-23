@@ -4880,46 +4880,54 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; * draft-horse-term
-;;NOT DOOM ;;;  (defvar draft-horse-term-buffer-name "*draft-horse-term*")
-;;NOT DOOM ;;;  (defun draft-horse-term-init ()
-;;NOT DOOM ;;;    "Start a terminal-emulator in a new buffer (non sticky and call it  '*draft-horse-term*')"
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq program "/bin/bash")
-;;NOT DOOM ;;;    (setq term-ansi-buffer-name (concat draft-horse-term-buffer-name))
-;;NOT DOOM ;;;    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (switch-to-buffer term-ansi-buffer-name)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (set-buffer term-ansi-buffer-name)
-;;NOT DOOM ;;;    (term-mode)
-;;NOT DOOM ;;;    (term-char-mode)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; Historical baggage.  A call to term-set-escape-char used to not
-;;NOT DOOM ;;;    ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
-;;NOT DOOM ;;;    ;; ended up with both C-x and C-c as escape chars.  Who knows what
-;;NOT DOOM ;;;    ;; the original intention was, but people could have become used to
-;;NOT DOOM ;;;    ;; either.   (Bug#12842)
-;;NOT DOOM ;;;    (let (term-escape-char)
-;;NOT DOOM ;;;      ;; I wanna have find-file on C-x C-f -mm
-;;NOT DOOM ;;;      ;; your mileage may definitely vary, maybe it's better to put this in your
-;;NOT DOOM ;;;      ;; .emacs ...
-;;NOT DOOM ;;;      (term-set-escape-char ?\C-x))
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun draft-horse-term ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; initiate if not already exists
-;;NOT DOOM ;;;    (if (not (get-buffer draft-horse-term-buffer-name))
-;;NOT DOOM ;;;        (draft-horse-term-init)
-;;NOT DOOM ;;;        )
-;;NOT DOOM ;;;    ;; switch to that buffer
-;;NOT DOOM ;;;    (switch-to-buffer draft-horse-term-buffer-name)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (js/leader-def "z" 'draft-horse-term)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
+;; * draft-horse-term
+;; update2022: KISSed my concept
+;;            -> just use ansi-term buffers
+;;            the first one *ansi-term*
+;;            acts like the 'draft horse terminal'
+;;            so just make shortcut to
+;;                switch to 1st ansi-buffer and possibly start new
+;;
+;; (defvar draft-horse-term-buffer-name "*draft-horse-term*")
+;; actually i might prefer without *
+;; so it appears in list of 'regular buffers'
+(defvar draft-horse-term-buffer-name "draft-horse-term")
+(defun draft-horse-term-init ()
+  "Start a terminal-emulator in a new buffer (non sticky and call it  '*draft-horse-term*')"
+  (interactive)
+  (setq program "/bin/bash")
+  (setq term-ansi-buffer-name (term-ansi-make-term draft-horse-term-buffer-name program))
+
+  (switch-to-buffer draft-horse-term-buffer-name)
+
+  (set-buffer draft-horse-term-buffer-name)
+  (term-mode)
+  (term-char-mode)
+
+  ;; Historical baggage.  A call to term-set-escape-char used to not
+  ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
+  ;; ended up with both C-x and C-c as escape chars.  Who knows what
+  ;; the original intention was, but people could have become used to
+  ;; either.   (Bug#12842)
+  (let (term-escape-char)
+    ;; I wanna have find-file on C-x C-f -mm
+    ;; your mileage may definitely vary, maybe it's better to put this in your
+    ;; .emacs ...
+    (term-set-escape-char ?\C-x))
+  )
+
+(defun draft-horse-term ()
+  (interactive)
+  ;; initiate if not already exists
+  (if (not (get-buffer draft-horse-term-buffer-name))
+      (draft-horse-term-init)
+      )
+  ;; switch to that buffer
+  (switch-to-buffer draft-horse-term-buffer-name)
+  )
+
+(map! :leader
+      "oh" #'draft-horse-term)
 ;;NOT DOOM ;;;  ;; * tutorials
 ;;NOT DOOM ;;;  ;; ;; ** match groups
 ;;NOT DOOM ;;;  ;; (let
