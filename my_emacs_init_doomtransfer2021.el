@@ -5281,6 +5281,9 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; * EIN jupyter notebooks
 ;; ** inline images
+(map! :leader
+      "oe" #'ein:run
+      "oE" #'ein:stop)
 ;; from reddit user
 ;; (after! ein
 (defun js/ein-quirk-init ()
