@@ -30,7 +30,7 @@
     (define-key m (kbd "C-,") 'planet-previous-day)
     m))
 
-(defvar planet-regexp-daily-file-folder ".[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$")
+(defvar planet-regexp-daily-file-folder "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_...\.org$")
 
 (defvar planet-home-dir (expand-file-name "~/org"))
 (define-minor-mode planet-mode "this is the documentation of planet-mode. blablah."
@@ -182,18 +182,19 @@ date2)
     (interactive)
     ;* filter daily-files for mondays
     (setq daily-file-folders (planet-get-all-daily-file-folders))
-    (setq daily-file-folders (-filter (lambda (x) (string-match "^\..*_Mon\.org$" x)) daily-file-folders))
+    (setq daily-file-folders (-filter (lambda (x) (string-match "^.*_Mon\.org$" x)) daily-file-folders))
     (setq file-folder (nth 1 daily-file-folders))
     (dolist (file-folder daily-file-folders) 
       (setq file-folder-basename (file-name-base file-folder))
       ;; replace "Mon" by "week"
       (setq fixedcase t)
       (setq week-filefolder-basename (replace-regexp-in-string "Mon" "week" file-folder-basename fixedcase))
-      (setq week-filebasename (replace-regexp-in-string "^." "" week-filefolder-basename))
+      ;; (setq week-filebasename (replace-regexp-in-string "^." "" week-filefolder-basename))
+      (setq week-filebasename (replace-regexp-in-string "^" "" week-filefolder-basename))
       (setq week-filefullname (planet-convert-filebasename-to-filefullname week-filebasename))
       ;; create if not already exists
       (if (not (file-exists-p week-filefullname))
-        (create-hidden-org-file-folder week-filebasename planet-daily-dir)
+        (create-org-file-folder week-filebasename planet-daily-dir)
         (message (concat "hidden folder \"" week-filefullname "\" already exists."))
         )
       )
@@ -218,7 +219,8 @@ daily-file-folders)
     (setq daily-filebasenames ())
     (dolist (daily-file-folder daily-file-folders)
       ;; get the filebasename
-      (setq this-filebasename (replace-regexp-in-string "^." "" daily-file-folder))
+      ;; (setq this-filebasename (replace-regexp-in-string "^." "" daily-file-folder))
+      (setq this-filebasename (replace-regexp-in-string "" "" daily-file-folder)) ;; filefolders not hidden anymore
       (setq this-filebasename (replace-regexp-in-string "\.org$" "" this-filebasename))
       (push this-filebasename daily-filebasenames)
     )
@@ -231,7 +233,8 @@ daily-filebasenames)
     (setq daily-filefullnames ())
     (dolist (daily-file-folder daily-file-folders)
       ;; get the filebasename
-      (setq this-filebasename (replace-regexp-in-string "^." "" daily-file-folder))
+      ;; (setq this-filebasename (replace-regexp-in-string "^." "" daily-file-folder)) ; ;; filefolders not hidden anymore
+      (setq this-filebasename (replace-regexp-in-string "" "" daily-file-folder))
       (setq this-filebasename (replace-regexp-in-string "\.org$" "" this-filebasename))
       (setq this-filefullname (planet-convert-filebasename-to-filefullname this-filebasename))
       (push this-filefullname daily-filefullnames)
@@ -348,14 +351,14 @@ last-date)
   (setq month-abbr (nth month planet-month-abbreviations-upcase))
  month-abbr)
 
-(defun create-daily-hidden-org-file(date)
+(defun create-daily-hidden-org-file(date) ;; TODO refactor -> not hidden anymore
   " creates daily file <year>_<month>_<day>_<weekdayname>.org for <date> in planet-daily-directory. 
     1 argument: date ...  format elisp date list (run decode-time first): (16 50 15 9 12 2019 1 nil 3600)
     "
   (interactive)
   ;;* concat file name 
   (setq filebasename (planet-convert-date-to-filebasename date))
-  (create-hidden-org-file-folder filebasename planet-daily-dir)
+  (create-org-file-folder filebasename planet-daily-dir)
   )
 
 ;; (setq date-raw-2 (time-add date-raw date-raw))
@@ -423,7 +426,8 @@ last-date)
 
   (setq next-day-filebasename (planet-convert-date-to-filebasename next-day-date))
 
-  (find-file (concat planet-daily-dir "/." next-day-filebasename ".org" "/" next-day-filebasename ".org"))
+  ;; (find-file (concat planet-daily-dir "/." next-day-filebasename ".org" "/" next-day-filebasename ".org"))
+  (find-file (concat planet-daily-dir "/" next-day-filebasename ".org" "/" next-day-filebasename ".org"))
   )
 
 (defun planet-previous-day ()
@@ -433,7 +437,8 @@ last-date)
 
   (setq previous-day-filebasename (planet-convert-date-to-filebasename previous-day-date))
 
-  (find-file (concat planet-daily-dir "/." previous-day-filebasename ".org" "/" previous-day-filebasename ".org"))
+  ;; (find-file (concat planet-daily-dir "/." previous-day-filebasename ".org" "/" previous-day-filebasename ".org"))
+  (find-file (concat planet-daily-dir "/" previous-day-filebasename ".org" "/" previous-day-filebasename ".org"))
   )
 
 (defun planet-get-daily-file-date ()
@@ -450,7 +455,8 @@ last-date)
   (interactive)
   (setq date (planet-get-todays-date))
   (setq filebasename (planet-convert-date-to-filebasename date))
-  (find-file (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
+  ;; (find-file (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
+  (find-file (concat planet-daily-dir "/" filebasename ".org" "/" filebasename ".org")) ;; not hidden anymore
   )
 
 (defun planet-this-week ()
@@ -504,7 +510,8 @@ last-date)
 
 (defun planet-go-week-file-for-date (date)
   (setq week-filebasename (planet-get-week-file-basename-for-date date))
-  (find-file (concat planet-daily-dir "/." week-filebasename ".org" "/" week-filebasename ".org"))
+  ;; (find-file (concat planet-daily-dir "/." week-filebasename ".org" "/" week-filebasename ".org"))
+  (find-file (concat planet-daily-dir "/" week-filebasename ".org" "/" week-filebasename ".org"))
   )
 
 (defun planet-date-get-dow (date)
@@ -572,7 +579,8 @@ date)
   full-file-name)
 
 (defun planet-convert-filebasename-to-filefullname (filebasename)
-  (setq filefullname (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
+  ;; (setq filefullname (concat planet-daily-dir "/." filebasename ".org" "/" filebasename ".org"))
+  (setq filefullname (concat planet-daily-dir "/" filebasename ".org" "/" filebasename ".org"))
   filefullname)
 
 (defun planet-convert-filefullname-to-filebasename (filefullname)
@@ -1068,12 +1076,12 @@ date)
 ;;* set categories (work/tools/etc.)
 (defun planet-set-category-work ()
   (interactive)
-  (org-set-property "Category" "work")
+  (org-set-property "category" "work")
   )
 
 (defun planet-set-category-science ()
   (interactive)
-  (org-set-property "Category" "science")
+  (org-set-property "category" "science")
   )
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkc" 'planet-set-category-science)
 
@@ -1082,25 +1090,25 @@ date)
 
 (defun planet-set-category-tools ()
   (interactive)
-  (org-set-property "Category" "tools")
+  (org-set-property "category" "tools")
   )
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkt" 'planet-set-category-tools)
 
 (defun planet-set-category-private ()
   (interactive)
-  (org-set-property "Category" "private")
+  (org-set-property "category" "private")
   )
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkp" 'planet-set-category-private)
 
 (defun planet-set-category-knowledge ()
   (interactive)
-  (org-set-property "Category" "knowledge")
+  (org-set-property "category" "knowledge")
   )
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkk" 'planet-set-category-knowledge)
 
 (defun planet-set-category-sustainment ()
   (interactive)
-  (org-set-property "Category" "sustainment")
+  (org-set-property "category" "sustainment")
   )
 (general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mks" 'planet-set-category-sustainment)
 
