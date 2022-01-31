@@ -1123,7 +1123,10 @@
     :desc "toggle bold"       "b" #'org-toggle-bold-region
     :desc "toggle italic"     "i" #'org-toggle-italic-region
     :desc "toggle code"       "c" #'org-toggle-code-region
-    :desc "toggle underline"  "u" #'org-toggle-underline-region))
+    :desc "toggle underline"  "u" #'org-toggle-underline-region
+    :desc "preview LateX"     "l" #'org-latex-preview
+    :desc "capitalize region" "C" #'capitalize-region
+      ))
   ) ;; after! org
 
  (defun region-to-string ()
@@ -5324,9 +5327,11 @@ and `C-x' being marked as a `term-escape-char'."
       ;;
       ;;
        :n "zs" #'ein:notebook-save-notebook-command-km
-       :n "zy" #'ein:worksheet-copy-cell-km
+       ;; :n "zy" #'ein:worksheet-copy-cell-km
+       :n "zy" #'ein:worksheet-copy-cell ;; did work out for multiple cells
        :n "zp" #'ein:worksheet-yank-cell-km
-       :n "zd" #'ein:worksheet-kill-cell-km
+       ;; :n "zd" #'ein:worksheet-kill-cell-km ;; did work out for multiple cells
+       :n "zd" #'ein:worksheet-kill-cell
        :n "zb" #'ein:worksheet-insert-cell-below-km
        :n "za" #'ein:worksheet-insert-cell-above-km
        ;; :n "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
@@ -5374,7 +5379,9 @@ and `C-x' being marked as a `term-escape-char'."
        ;; :n "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
        ;; :n "C-c a" #'ein:worksheet-execute-all-cell-km
        ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
+       :n "zl" #'org-latex-preview
 )
+
 
 (map! :map ein:notebook-mode-map
       :leader
