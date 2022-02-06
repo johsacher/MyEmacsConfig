@@ -626,25 +626,24 @@
 ;;NOT DOOM ;;;  (add-hook 'python-mode-hook 'pylint-add-menu-items)
 ;;NOT DOOM ;;;  (add-hook 'python-mode-hook 'pylint-add-key-bindings)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; ** python debug key-bindings
-;;NOT DOOM ;;;  (defun python-set-break-point-current-line()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (end-of-line)
-;;NOT DOOM ;;;    (newline)
-;;NOT DOOM ;;;    (insert "pdb.set_trace()")
-;;NOT DOOM ;;;    (move-beginning-of-line nil)
-;;NOT DOOM ;;;    (setq beginofline (point))
-;;NOT DOOM ;;;    (move-end-of-line nil)
-;;NOT DOOM ;;;    (setq endofline (point))
-;;NOT DOOM ;;;    (evil-indent beginofline endofline)
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;  ;; SET BREAKPOINT <F12>
-;;NOT DOOM ;;; (use-package python
-;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;;  (define-key python-mode-map
-;;NOT DOOM ;;;    (kbd "<f12>") 'python-set-break-point-current-line)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
+;;; ** python debug key-bindings
+(defun python-set-break-point-current-line()
+  (interactive)
+  (end-of-line)
+  (newline)
+  (insert "pdb.set_trace()")
+  (move-beginning-of-line nil)
+  (setq beginofline (point))
+  (move-end-of-line nil)
+  (setq endofline (point))
+  (evil-indent beginofline endofline)
+  )
+ ;; SET BREAKPOINT <F12>
+(map! :map python-mode-map
+      :leader
+    :n "cd" #'python-set-break-point-current-line)
+
+
 ;;NOT DOOM ;;;  ;;; * english-german-translator
 ;;NOT DOOM ;;;  (defvar english-german-translator-buffer-name "*english-german-translator*")
 ;;NOT DOOM ;;;
@@ -5255,7 +5254,18 @@ and `C-x' being marked as a `term-escape-char'."
                                                     ("PROG" :foreground "yellow" :weight bold)
                                                     ("BEST" :foreground "green" :weight bold)
                                                     ("DISC" . +org-todo-cancel)
-                                                    ))))
+                                                    )))
+
+
+
+(map! :localleader
+      :map org-mode-map
+     :n "0" #'(lambda () (interactive) (org-global-cycle 0))
+     :n "1" #'(lambda () (interactive) (org-global-cycle 1))
+     :n "2" #'(lambda () (interactive) (org-global-cycle 2))
+     :n "3" #'(lambda () (interactive) (org-global-cycle 3))
+     )
+)
 
 ;; * matlab term
 ;; (workaround..)
