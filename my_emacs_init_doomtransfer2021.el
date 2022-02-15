@@ -2742,6 +2742,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
       :desc ".doom.d"         "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
       :desc "Literatur"       "L" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/Literatur/pdf/Promotion/")))
+      :desc "Promotion"       "P" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -5326,6 +5327,11 @@ and `C-x' being marked as a `term-escape-char'."
 ;;     all my keybindings (very ugly code, I was planning to update it soon haha, but it's working). The real strengh of ein for me is the ability to control the WHOLE notebook from your text editor, so instead of scrolling with your mouse for hours to go back on the top of your notebook in JupyterLab, here in few keybindins you can jump anywhere haha. I also need to mention that I am an Evil user.
 
 ;; ​
+;;
+(map! :leader
+      :map ein:notebook-mode-map
+      :n "fs" #'ein:notebook-save-notebook-command-km
+      )
 (map! :map ein:notebook-mode-map
       ;; na klar:
       ;; wir haben local leader doch mit z und g!!
