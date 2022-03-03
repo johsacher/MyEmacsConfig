@@ -2733,15 +2733,18 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "home"            "h" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME")))
       :desc "downloads"       "d" #'dired-go-downloads
       :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
-      :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
-      :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
+      ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
+      ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/basking_project")))
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
+      :desc "projects file"   "P" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/projects/projects_current.org/projects_current.org")))
       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
       :desc ".doom.d"         "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
       :desc "Literatur"       "L" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/Literatur/pdf/Promotion/")))
+      :desc "Promotion"       "N" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
+      :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -4565,6 +4568,29 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\u21af")
   (insert "\U000021af")
   )
+
+(defun js/insert-char-checkmark ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U00002713") ;; ✓
+  ;; (insert "\U00002714") ;; ✔
+  ;; (insert "\U00002611"☑) ;;
+  ;; (insert "\U00002705") ;; ✅
+  ;; (insert "\U00002611") ;; ☑ ba
+  )
+
+
+
+(defun js/insert-char-crossmark ()
+  ;;✘
+  (interactive)
+  ;; (insert "\U00002718") ;; ✘
+  (insert "\U00002717") ;; ✗
+  ;; (insert "\U00002718") ;;
+  ;; (insert "\U00002718") ;;
+  )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
 ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
@@ -5326,6 +5352,11 @@ and `C-x' being marked as a `term-escape-char'."
 ;;     all my keybindings (very ugly code, I was planning to update it soon haha, but it's working). The real strengh of ein for me is the ability to control the WHOLE notebook from your text editor, so instead of scrolling with your mouse for hours to go back on the top of your notebook in JupyterLab, here in few keybindins you can jump anywhere haha. I also need to mention that I am an Evil user.
 
 ;; ​
+;;
+(map! :leader
+      :map ein:notebook-mode-map
+      :n "fs" #'ein:notebook-save-notebook-command-km
+      )
 (map! :map ein:notebook-mode-map
       ;; na klar:
       ;; wir haben local leader doch mit z und g!!
