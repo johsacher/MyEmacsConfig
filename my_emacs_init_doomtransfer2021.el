@@ -4601,7 +4601,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-char-croatian-Z ()
   ;;Ž
   (interactive)
-  (insert "\U0000017E")
+  (insert "\U0000017D")
   )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
