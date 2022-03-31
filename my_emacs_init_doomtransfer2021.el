@@ -2735,7 +2735,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
       ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
       ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
-      :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/basking_project")))
+      :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/doktorparty_songs"))) ;;basking_project")))
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
@@ -4595,7 +4595,13 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-char-croatian-z ()
   ;;ž
   (interactive)
-  (insert "\U0000017E") ;; ✗
+  (insert "\U0000017E")
+  )
+
+(defun js/insert-char-croatian-Z ()
+  ;;Ž
+  (interactive)
+  (insert "\U0000017E")
   )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
