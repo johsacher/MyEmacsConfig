@@ -4591,6 +4591,12 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\U00002718") ;;
   ;; (insert "\U00002718") ;;
   )
+
+(defun js/insert-char-croatian-z ()
+  ;;ž
+  (interactive)
+  (insert "\U0000017E") ;; ✗
+  )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
 ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
@@ -5451,3 +5457,9 @@ and `C-x' being marked as a `term-escape-char'."
   (message (concat "copied to clipboard (buffer name): " this-buffer-name))
   (kill-new this-buffer-name))
 )
+
+;; * spell checking
+;; ** no spell checking at org file init
+;; (remove-hook! 'org-mode-hook #'flyspell-mode)
+;; (add-hook! org-mode-hook #'(lambda () (interactive) (spell-fu-mode -1)))
+(add-hook! 'org-mode-hook #'spell-fu-mode-disable)
