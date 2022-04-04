@@ -5469,3 +5469,5 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (remove-hook! 'org-mode-hook #'flyspell-mode)
 ;; (add-hook! org-mode-hook #'(lambda () (interactive) (spell-fu-mode -1)))
 (add-hook! 'org-mode-hook #'spell-fu-mode-disable)
+;; (add-hook! 'latex-mode-hook #'spell-fu-mode-disable)
+(add-hook! 'LaTeX-mode-hook #'spell-fu-mode-disable)
