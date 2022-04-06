@@ -1657,7 +1657,7 @@ new-org-file-full-name)
          "#+options: \\n:t" "\n"
          "# itemize all bullets" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemi}{$\\bullet$}" "\n"
-         "#+LATEX_HEADER: \\renewcommand{\\labelitemii}{$\\bullet$}" "\n"
+         "#+LATEX_HEADER: \renewcommand{\labelitemii}{$\circ$}" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemiii}{$\\bullet$}" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemiv}{$\\bullet$}" "\n"
          "#+LATEX_HEADER: \\usepackage[parfill]{parskip}" "\n"
