@@ -473,12 +473,13 @@
 ;;NOT DOOM ;;;  (define-key evil-normal-state-map (kbd "C-l") 'drag-stuff-right)
 ;;NOT DOOM ;;;
 
-;; planet-mode (my org extension)
+;; * planet-mode (my org extension)
 (load! "planet/planet")
 
  ;; ** save git mode default
   (planet-git-save-turn-on)
 
+;; ** planet key-bindings ( -> leader SPC-e-...)
 (map! :leader
       (:prefix-map ("e" . "planet")
        :desc "planet today"         "d" #'planet-today
@@ -487,6 +488,22 @@
        :desc "planet view quit"     "q" #'planet-view-quit
        :desc "planet git-save on"   "g" #'planet-git-save-turn-on
        :desc "planet git-save off"  "G" #'planet-git-save-turn-off
+      ))
+
+
+(map! :map planet-mode-map
+      :leader
+      (:prefix ("e" . "planet")
+      (:prefix ("k" . "category")
+       "w" #'planet-set-category-work
+       "t" #'planet-set-category-tools
+       "c" #'planet-set-category-science
+       "p" #'planet-set-category-private
+       "k" #'planet-set-category-knowledge
+       "s" #'planet-set-category-sustainment)
+      (:prefix ("t" . "type")
+       "b" #'planet-set-type-birthday
+       "t" #'planet-set-type-fullday)
       ))
 
 ;; not working (see learnings key evil emacs):
