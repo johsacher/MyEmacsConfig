@@ -578,7 +578,8 @@
 ;; key binding (conform with doom "SPC g ...")
 (map! :leader
       ;; :prefix ("g" . "+git") ;; not necessary
-      "g ;" 'gsyn)
+      "g ;" #'gsyn
+      "g g" #'gsyn)
 
 ;; ** gsyn popup rule for doom-emacs
 (set-popup-rule! ".*gsyn.*output.*" :ignore t) ;; workaround, in combination with prerequisite that (above) async-shell-command with trick: #'display-buffer-no-window
