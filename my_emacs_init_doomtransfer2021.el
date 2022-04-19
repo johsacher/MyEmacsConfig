@@ -421,9 +421,9 @@
 ;;NOT DOOM ;;;    (use-package comment-dwim-2 :ensure t) ;; toggles also single line, in contrast to comment-dwim
 ;;NOT DOOM POT;;;    (js/leader-def
 ;;NOT DOOM POT;;;    "c" 'comment-dwim-2
-;;NOT DOOM POT;;;    "k" 'js/kill-this-buffer-no-prompt
 ;;NOT DOOM POT;;;    "s" 'save-buffer
 ;;NOT DOOM POT;;;    "f" 'helm-find
+;;NOT DOOM POT;;;    "?" '"gsyn"
 
 
 ;; dired-go-current-buffer
@@ -431,6 +431,8 @@
    (interactive)
        (dired default-directory))
 (map! :leader "d" #'dired-go-current-buffer)
+
+(map! :leader "SPC" #'save-buffer)
 
 
 ;; doom had no default rg binding ->
