@@ -492,7 +492,7 @@
 (map! :map planet-mode-map
       :leader
       (:prefix ("e" . "planet")
-      (:prefix ("c" . "category")
+      (:prefix ("k" . "category")
        "w" #'planet-set-category-work
        "t" #'planet-set-category-tools
        "c" #'planet-set-category-science
