@@ -1083,47 +1083,37 @@ date)
   (interactive)
   (org-set-property "category" "science")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkc" 'planet-set-category-science)
-
- ;; (js/leader-def :keymaps 'org-mode-mode-map "mkw" 'planet-set-category-work) ;; (did not work)
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkw" 'planet-set-category-work)
 
 (defun planet-set-category-tools ()
   (interactive)
   (org-set-property "category" "tools")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkt" 'planet-set-category-tools)
 
 (defun planet-set-category-private ()
   (interactive)
   (org-set-property "category" "private")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkp" 'planet-set-category-private)
 
 (defun planet-set-category-knowledge ()
   (interactive)
   (org-set-property "category" "knowledge")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mkk" 'planet-set-category-knowledge)
 
 (defun planet-set-category-sustainment ()
   (interactive)
   (org-set-property "category" "sustainment")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "mks" 'planet-set-category-sustainment)
 
 ;;* set type (birthday,fullday,event)
 (defun planet-set-type-birthday ()
   (interactive)
   (org-set-property "type" "birthday")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "myb" #'planet-set-type-birthday)
 
 (defun planet-set-type-fullday ()
   (interactive)
   (org-set-property "type" "fullday")
   )
-(general-define-key :states 'normal :keymaps 'org-mode-map :prefix "SPC" "myf" #'planet-set-type-fullday)
 ;;* concept/shortcuts for clock in / out / clocking tables / set tags "tools" "work" / etc.
 
 ;;** konzept:
