@@ -16,6 +16,10 @@
 (global-set-key [mouse-4] 'scroll-down-line)
 (global-set-key [mouse-5] 'scroll-up-line)
 
+;; * mac specific
+;;
+(if IS-MAC (setq mac-command-modifier 'meta))
+
 ;; * leader ; -> M-x
 ;;   leader : -> eval-expression
 (map! :leader
@@ -1977,9 +1981,11 @@ new-org-file-full-name)
 ;;NOT DOOM ;;; (js/leader-def :keymaps 'org-mode-map "8" 'org-toggle-heading) ;; lazy, 8 for *
 ;;NOT DOOM ;;;
 ;; ** org variable pitch for text
-(setq doom-variable-pitch-font (font-spec :family "Cantarell"))
-(add-hook! org-mode
-           (mixed-pitch-mode 1))
+(cond ((equal myhost "laptop")
+       (setq doom-variable-pitch-font (font-spec :family "Cantarell"))
+       (add-hook! org-mode
+	(mixed-pitch-mode 1))
+))
 ;; ** org -> hide emphasis markers
 (setq org-hide-emphasis-markers t)
 ;;NOT DOOM ;;;  ;; new emphasis-markers
@@ -2745,6 +2751,8 @@ and `C-x' being marked as a `term-escape-char'."
 (cond
  ((equal myhost "phone")
   (dired "/storage/emulated/0/Download/"))
+ ((equal myhost "macos")
+  (dired (substitute-in-file-name "$HOME/Downloads")))
  ((equal myhost "laptop")
   (dired (substitute-in-file-name "$HOME/Downloads")))))
 
