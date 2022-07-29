@@ -2783,7 +2783,10 @@ and `C-x' being marked as a `term-escape-char'."
  ((equal myhost "macos")
   (dired (substitute-in-file-name "$HOME/Downloads")))
  ((equal myhost "laptop")
-  (dired (substitute-in-file-name "$HOME/Downloads")))))
+  (dired (substitute-in-file-name "$HOME/Downloads")))
+ (t
+  (dired (substitute-in-file-name "$HOME/Downloads")))
+ ))
 
 (map! :leader
       (:prefix-map ("l" . "frequent dirs")
