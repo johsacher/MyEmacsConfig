@@ -499,7 +499,7 @@
 (map! :map planet-mode-map
       :leader
       (:prefix ("e" . "planet")
-      (:prefix ("c" . "category")
+       (:prefix ("k" . "category") ;; "k" (germ. kategorie) more ergonomic than c (category) after pressing "e" (left hand), then "k" (right hand)
        "w" #'planet-set-category-work
        "t" #'planet-set-category-tools
        "c" #'planet-set-category-science
@@ -1720,8 +1720,37 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  ;; ** make sure emacs visits the target of a link (otherwise currentpath is wrong -> problem with pasting images)
 ;;NOT DOOM ;;;  (setq find-file-visit-truename t)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; org-mode inline images appearance
-;;NOT DOOM ;;;  (setq org-image-actual-width 300) ;; --> makes images more readable, for closer look, just open in image viewer
+;; org-mode inline images appearance
+(setq org-image-actual-width 300) ;; --> makes images more readable, for closer look, just open in image viewer
+
+(defun js/org-image-set-width ()
+  (interactive)
+  (setq org-image-new-width (read-number "Set width in pxls (e.g. 300): "))
+  (setq org-image-actual-width org-image-new-width)
+  (org-redisplay-inline-images)
+  (message (concat "org inline image width set to: " (number-to-string org-image-new-width)))
+  )
+
+
+(defun js/org-image-increase-width ()
+  (interactive)
+  (setq org-image-new-width (round (* 1.5 org-image-actual-width)))
+  (setq org-image-actual-width org-image-new-width)
+  (org-redisplay-inline-images)
+)
+
+
+(defun js/org-image-decrease-width ()
+  (interactive)
+  (setq org-image-new-width (round (* 0.66 org-image-actual-width)))
+  (setq org-image-actual-width org-image-new-width)
+  (org-redisplay-inline-images)
+)
+
+
+(map! :map 'org-mode-map
+      :n "z=" #'js/org-image-increase-width
+      :n "z-" #'js/org-image-decrease-width)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** org mode startup appearance
 ;;NOT DOOM ;;;  ;; *** org mode pretty entities (arrows and stuff)
@@ -2763,6 +2792,8 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
       ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
       ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
+      :desc "mac/vm -> Data" "F" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data/simulation")))
+      :desc "quantica" "q" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data/simulation")))
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/doktorparty_songs"))) ;;basking_project")))
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
@@ -3841,7 +3872,24 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  (define-key c++-mode-map "\M-j" 'windmove-down)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; * openfoam
+
+;;; * openfoam
+
+(defun of-blockmesh-hex-points-to-print-faces ()
+  (interactive)
+  (setq grabbed (buffer-substring-no-properties (region-beginning) (region-end)))
+  (setq grabbed-list (split-string grabbed))
+  (setq indent-spaces "            ")
+  (setq output (concat "\n"
+                "            (" (nth 3 grabbed-list) " " (nth 2 grabbed-list) " " (nth 1 grabbed-list) " " (nth 0 grabbed-list) " ) // bottom \n"
+                "            (" (nth 4 grabbed-list) " " (nth 5 grabbed-list) " " (nth 6 grabbed-list) " " (nth 7 grabbed-list) " ) // top \n"
+                "            (" (nth 0 grabbed-list) " " (nth 4 grabbed-list) " " (nth 7 grabbed-list) " " (nth 3 grabbed-list) " ) // left \n"
+                "            (" (nth 1 grabbed-list) " " (nth 2 grabbed-list) " " (nth 6 grabbed-list) " " (nth 5 grabbed-list) " ) // right \n"
+                "            (" (nth 0 grabbed-list) " " (nth 1 grabbed-list) " " (nth 5 grabbed-list) " " (nth 4 grabbed-list) " ) // front \n"
+                "            (" (nth 2 grabbed-list) " " (nth 3 grabbed-list) " " (nth 7 grabbed-list) " " (nth 6 grabbed-list) " ) // back \n"))
+  (evil-exit-visual-state)
+  (kill-new output))
+
 ;;NOT DOOM ;;;  (defun openfoam-dired-tutorials ()
 ;;NOT DOOM ;;;     (interactive)
 ;;NOT DOOM ;;;     (dired "/opt/OpenFOAM-6/tutorials")
@@ -4065,7 +4113,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (global-set-key (kbd "<C-right>")  'windmove-right)
 ;; * TOP priority window movement/handling with M/Alt
 
-;; * "M as my leader" for prime-window/buffer management
+;; * "M is my leader" for prime-window/buffer management
 (map! :map general-override-mode-map
         "M-k"  #'windmove-up
         "M-j"  #'windmove-down
@@ -4075,12 +4123,16 @@ and `C-x' being marked as a `term-escape-char'."
         "M-1"  #'delete-other-windows
         "M-2"  #'split-window-below
         "M-3"  #'split-window-right
-        ;; "M-d"  #'kill-this-buffer-no-prompt ;; -> used in doom by evil-multiedit-match-symbol-and-next
+        "M-d"  #'kill-this-buffer-no-prompt ;; -> used in doom by evil-multiedit-match-symbol-and-next -> unbound below
         "M-y" #'previous-buffer
         "M-o" #'next-buffer
         "M-u" #'get-this-buffer-to-move
         "M-i" #'switch-to-buffer-to-move
         "M-b" #'consult-buffer)
+
+;; unbind M-d -> so it works from general-override-mode-map (above)
+(map! :map evil-normal-state-map
+      "M-d"  nil)
 
 (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
@@ -5279,3 +5331,35 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   ;; (let ((current-prefix-arg 16)) (call-interactively 'org-latex-preview))
   (reftex-reparse-document))
+
+
+;; * doc-view
+(map! :map doc-view-mode-map
+      :n "M-n" #'doc-view-next-page
+      :n "M-p" #'doc-view-previous-page)
+
+(add-hook 'doc-view-mode-hook
+  (lambda ()
+    ;; (define-key evil-normal-state-local-map "<right>" #'doc-view-next-page)
+    ;; (define-key evil-normal-state-local-map "<left>" #'doc-view-previous-page)
+    (define-key evil-normal-state-local-map "j" #'doc-view-next-page)
+    (define-key evil-normal-state-local-map "k" #'doc-view-previous-page)
+    (define-key evil-normal-state-local-map "n" #'doc-view-next-page)
+    (define-key evil-normal-state-local-map "p" #'doc-view-previous-page)
+    (define-key evil-normal-state-local-map "l" #'doc-view-next-page)
+    (define-key evil-normal-state-local-map "h" #'doc-view-previous-page)))
+
+
+;; * fu-spell
+
+;; ** [not working] disable for all = default
+;; (global-spell-fu-mode -1)
+
+;; ** disable for certain modes
+(add-hook 'org-mode-hook
+     (lambda () (spell-fu-mode -1)))
+
+
+;; * repeat command shortcut
+(map! :leader
+      :desc "repeat last command" "z" #'repeat-complex-command)
