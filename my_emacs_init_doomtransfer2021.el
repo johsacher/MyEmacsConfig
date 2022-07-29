@@ -5363,3 +5363,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * repeat command shortcut
 (map! :leader
       :desc "repeat last command" "z" #'repeat-complex-command)
+
+;; * workaround -> add ~/$HOME/bin to PATH (not automatically at quantica ubuntu VM)
+(getenv "PATH")
+(setenv "PATH" (concat "/home/parallels/bin" ":" (getenv "PATH")))
