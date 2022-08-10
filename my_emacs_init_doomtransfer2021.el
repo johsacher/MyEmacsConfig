@@ -4639,12 +4639,28 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
 ;;NOT DOOM ;;;  ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
 ;; ** contradiction ↯
-(defun js/insert-char-contradiction ()
+(defun js/insert-unicode-contradiction ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
   ;; (insert "\u21af")
   (insert "\U000021af")
+  )
+;; ** delta
+(defun js/insert-unicode-Delta ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U00000394")
+  )
+
+(defun js/insert-unicode-mu ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003BC")
   )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
