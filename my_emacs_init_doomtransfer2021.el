@@ -2795,7 +2795,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
       ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
       ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
-      :desc "mac/vm -> Data" "F" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data/simulation")))
+      :desc "mac/vm -> Data" "F" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data")))
       :desc "quantica" "q" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data/simulation")))
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/doktorparty_songs"))) ;;basking_project")))
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
@@ -2804,8 +2804,8 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "projects file"   "P" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/projects/projects_current.org/projects_current.org")))
       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
       :desc ".doom.d"         "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
-      :desc "Literatur"       "L" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/Literatur/pdf/Promotion/")))
-      :desc "Promotion"       "N" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/Dropbox/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
+      :desc "Literatur"       "L" #'(lambda () (interactive) (dired (substitute-in-file-name "$DROPBOX/MyFiles/Beruf/Literatur/pdf/Promotion/")))
+      :desc "Promotion"       "N" #'(lambda () (interactive) (dired (substitute-in-file-name "$DROPBOX/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
  ))
 
@@ -4650,17 +4650,76 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-Delta ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
   (insert "\U00000394")
+  )
+
+;; ** dot "multiply"
+(defun js/insert-unicode-dot ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  (insert "\U000000B7")
   )
 
 (defun js/insert-unicode-mu ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
+  (insert "\U000003BC")
+  )
+
+(defun js/insert-unicode-rho ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
   ;; (insert "\u21af")
-  (insert "\U000003BC")
+  (insert "\U000003C1")
+  )
+
+(defun js/insert-unicode-theta ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003B8")
+  )
+
+(defun js/insert-unicode-omega ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003C9")
+  )
+
+(defun js/insert-unicode-phi ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003C6")
+  )
+(defun js/insert-unicode-tau ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003C4")
+  )
+
+(defun js/insert-unicode-sigma ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003C3")
+  )
+
+
+(defun js/insert-unicode-degree ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000000B0")
   )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
