@@ -4165,6 +4165,7 @@ and `C-x' being marked as a `term-escape-char'."
        :nvieomr "C-S-j" #'org-shiftmetadown
        :nvieomr "C-S-h" #'org-metaleft
        :nvieomr "C-S-l" #'org-metaright)
+       :n "C-RET" #'org-metaright)
 ;; (map! :map evil-org-mode-map
 ;;        :nvieomr "C-k" nil
 ;;        :nvieomr "C-j" nil
