@@ -511,6 +511,19 @@
        "t" #'planet-set-type-fullday)
       ))
 
+;; * job -> come/go
+(defun js/job-come-book ()
+  (interactive)
+  (insert "* job come \n")
+  (insert (format-time-string "[%H:%M]"))
+  )
+
+(defun js/job-go-book ()
+  (interactive)
+  (insert "* job go \n")
+  (insert (format-time-string "[%H:%M]"))
+  )
+
 ;; not working (see learnings key evil emacs):
 ;; (map! :map planet-mode-map
 ;;       :n ">" #'planet-next
@@ -773,7 +786,7 @@
    )
 
 (map! :leader
-    "o a" 'ipython-calculator)
+    :desc "ipython calc." "oa" #'ipython-calculator)
 
 
  (defvar python-calculator-mode-map
@@ -2788,6 +2801,8 @@ and `C-x' being marked as a `term-escape-char'."
   (dired (substitute-in-file-name "$HOME/Downloads")))
  ))
 
+
+(setq dropbox-path (getenv "DROPBOX"))
 (map! :leader
       (:prefix-map ("l" . "frequent dirs")
       :desc "home"            "h" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME")))
@@ -2804,8 +2819,8 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "projects file"   "P" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/projects/projects_current.org/projects_current.org")))
       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
       :desc ".doom.d"         "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
-      :desc "Literatur"       "L" #'(lambda () (interactive) (dired (substitute-in-file-name "$DROPBOX/MyFiles/Beruf/Literatur/pdf/Promotion/")))
-      :desc "Promotion"       "N" #'(lambda () (interactive) (dired (substitute-in-file-name "$DROPBOX/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
+      :desc "Literatur"       "L" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/Literatur/pdf/Inkjet/")))
+      :desc "Promotion"       "N" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
  ))
 
@@ -2958,6 +2973,11 @@ and `C-x' being marked as a `term-escape-char'."
                                       ("\\.png\\'" "termux-open" (file))
                                       ("\\.pdf\\'" "termux-open" (file)))))
        ((equal myhost "laptop")
+        (setq openwith-associations '(
+                               ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
+                               ("\\.xopp\\'" "xournalpp" (file))
+                               ("\\.pdf\\'" "okular" (file)))))
+       (t ;; default dirty / for any linux version/machine
         (setq openwith-associations '(
                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
                                ("\\.xopp\\'" "xournalpp" (file))
@@ -5041,44 +5061,48 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;        (find-file (concat "/sudo:root@localhost:"
 ;;NOT DOOM ;;;                           (ido-read-file-name "Find file(as root): ")))
 ;;NOT DOOM ;;;      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; * draft-horse-term
-;;NOT DOOM ;;;  (defvar draft-horse-term-buffer-name "*draft-horse-term*")
-;;NOT DOOM ;;;  (defun draft-horse-term-init ()
-;;NOT DOOM ;;;    "Start a terminal-emulator in a new buffer (non sticky and call it  '*draft-horse-term*')"
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (setq program "/bin/bash")
-;;NOT DOOM ;;;    (setq term-ansi-buffer-name (concat draft-horse-term-buffer-name))
-;;NOT DOOM ;;;    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (switch-to-buffer term-ansi-buffer-name)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (set-buffer term-ansi-buffer-name)
-;;NOT DOOM ;;;    (term-mode)
-;;NOT DOOM ;;;    (term-char-mode)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    ;; Historical baggage.  A call to term-set-escape-char used to not
-;;NOT DOOM ;;;    ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
-;;NOT DOOM ;;;    ;; ended up with both C-x and C-c as escape chars.  Who knows what
-;;NOT DOOM ;;;    ;; the original intention was, but people could have become used to
-;;NOT DOOM ;;;    ;; either.   (Bug#12842)
-;;NOT DOOM ;;;    (let (term-escape-char)
-;;NOT DOOM ;;;      ;; I wanna have find-file on C-x C-f -mm
-;;NOT DOOM ;;;      ;; your mileage may definitely vary, maybe it's better to put this in your
-;;NOT DOOM ;;;      ;; .emacs ...
-;;NOT DOOM ;;;      (term-set-escape-char ?\C-x))
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun draft-horse-term ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; initiate if not already exists
-;;NOT DOOM ;;;    (if (not (get-buffer draft-horse-term-buffer-name))
-;;NOT DOOM ;;;        (draft-horse-term-init)
-;;NOT DOOM ;;;        )
-;;NOT DOOM ;;;    ;; switch to that buffer
-;;NOT DOOM ;;;    (switch-to-buffer draft-horse-term-buffer-name)
-;;NOT DOOM ;;;    )
+
+
+;; * draft-horse-term
+(defvar draft-horse-term-buffer-name "*draft-horse-term*")
+(defun draft-horse-term-init ()
+  "Start a terminal-emulator in a new buffer (non sticky and call it  '*draft-horse-term*')"
+  (interactive)
+  (setq program "/bin/bash")
+  (setq term-ansi-buffer-name (concat draft-horse-term-buffer-name))
+  (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
+
+  (switch-to-buffer term-ansi-buffer-name)
+
+  (set-buffer term-ansi-buffer-name)
+  (term-mode)
+  (term-char-mode)
+
+  ;; Historical baggage.  A call to term-set-escape-char used to not
+  ;; undo any previous call to t-s-e-c.  Because of this, ansi-term
+  ;; ended up with both C-x and C-c as escape chars.  Who knows what
+  ;; the original intention was, but people could have become used to
+  ;; either.   (Bug#12842)
+  (let (term-escape-char)
+    ;; I wanna have find-file on C-x C-f -mm
+    ;; your mileage may definitely vary, maybe it's better to put this in your
+    ;; .emacs ...
+    (term-set-escape-char ?\C-x))
+  )
+
+(defun draft-horse-term ()
+  (interactive)
+  ;; initiate if not already exists
+  (if (not (get-buffer draft-horse-term-buffer-name))
+      (draft-horse-term-init)
+      )
+  ;; switch to that buffer
+  (switch-to-buffer draft-horse-term-buffer-name)
+  )
+
+(map! :leader
+    :desc "draft horse term" "oh" #'draft-horse-term)
+
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (js/leader-def "z" 'draft-horse-term)
 ;;NOT DOOM ;;;
@@ -5446,3 +5470,139 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * workaround -> add ~/$HOME/bin to PATH (not automatically at quantica ubuntu VM)
 (getenv "PATH")
 (setenv "PATH" (concat "/home/parallels/bin" ":" (getenv "PATH")))
+
+
+
+;; * EIN jupyter notebooks
+;; ** inline images
+(map! :leader
+      "oe" #'ein:run
+      "oE" #'ein:stop)
+;; from reddit user
+;; (after! ein
+(defun js/ein-quirk-init ()
+  "subsitute this later with (after! ein [...]) which still does not work"
+  (interactive)
+
+(setq ein:worksheet-enable-undo t); very useful to undo a change
+(setq ein:output-area-inlined-images t); this one outputs the images directly in the emacs buffer, for me it's the perfect behaviour since I don't wand to switch programs to see the outputs of my matplotlib functions and stuff.
+                           ;       for the emacs experience inline plotting :
+
+;; mpl.rcParams["figure.facecolor"] = "white"
+;; mpl.rcParams["axes.facecolor"] = "white"
+;; mpl.rcParams["savefig.facecolor"] = "white"
+
+;; This is if you are like me using a dark/black theme in emacs and plotting stuff with matplotlib, you will maybe have some _issues_ because the background will be inivisble, wo this snippet just forces all matplotlib outputs to be white.
+
+;;     To automatically reload your custom libraries:
+
+;; ​
+
+;; %load_ext autoreload
+;; %autoreload 2
+
+;; this is more a jupyter tip, this auto reloads your custom modules, if you make changes in them, without having to reload the whole notebook.
+
+;;     Remember to save the notebook regularly ! there is no autosave here.
+;;     all my keybindings (very ugly code, I was planning to update it soon haha, but it's working). The real strengh of ein for me is the ability to control the WHOLE notebook from your text editor, so instead of scrolling with your mouse for hours to go back on the top of your notebook in JupyterLab, here in few keybindins you can jump anywhere haha. I also need to mention that I am an Evil user.
+
+;; ​
+;;
+(map! :leader
+      :map ein:notebook-mode-map
+      :n "fs" #'ein:notebook-save-notebook-command-km
+      )
+(map! :map ein:notebook-mode-map
+      ;; na klar:
+      ;; wir haben local leader doch mit z und g!!
+      ;; go up cell g-k
+      ;; copy cell z-y
+      ;; paste cell z-p
+      ;; kill cell z-d
+      ;; move/promote cells C-hjkl like org mode
+      ;;
+      ;;
+       :n "zs" #'ein:notebook-save-notebook-command-km
+       ;; :n "zy" #'ein:worksheet-copy-cell-km
+       :n "zy" #'ein:worksheet-copy-cell ;; did work out for multiple cells
+       :n "zp" #'ein:worksheet-yank-cell-km
+       ;; :n "zd" #'ein:worksheet-kill-cell-km ;; did work out for multiple cells
+       :n "zd" #'ein:worksheet-kill-cell
+       :n "zb" #'ein:worksheet-insert-cell-below-km
+       :n "za" #'ein:worksheet-insert-cell-above-km
+       ;; :n "C-h" #'ein:notebook-worksheet-open-prev-or-last-km
+       :n "gj" #'ein:worksheet-goto-next-input-km
+       :n "gk" #'ein:worksheet-goto-prev-input-km
+       :n "g;" #'ein:pytools-jump-back-command
+       ;; :n "C-l" #'ein:notebook-worksheet-open-next-or-first-km
+       ;; :n "M-H" #'ein:notebook-worksheet-move-prev-km
+       :n "zj" #'ein:worksheet-move-cell-down-km
+       :n "zk" #'ein:worksheet-move-cell-up-km
+       ;; :n "M-L" #'ein:notebook-worksheet-move-next-km
+       ;; :n "??" #'ein:worksheet-toggle-output-km
+       :n "zt" #'ein:worksheet-toggle-cell-type-km
+       ;; :n  "R" #'ein:worksheet-rename-sheet-km
+       ;; :n  #'ein:worksheet-execute-cell-and-goto-next-km
+       ;; :n "C-c x"#'ein:worksheet-clear-output-km
+       ;; :n "C-c X"#'ein:worksheet-clear-all-output-km
+       ;; :n "C-o" #'ein:console-open-km
+       ;; :n "C-K" #'ein:worksheet-merge-cell-km
+       ;; :n "C-J" #'spacemacs/ein:worksheet-merge-cell-next-km
+       ;; :n "M-s" #'ein:worksheet-split-cell-at-point-km
+       ;; :n "C-s" #'ein:notebook-save-notebook-command-km
+       ;; :n "C-r" #'ein:notebook-rename-command-km
+       ;; :n "M-1" #'ein:notebook-worksheet-open-1th-km
+       ;; :n "M-2" #'ein:notebook-worksheet-open-2th-km
+       ;; :n "M-3" #'ein:notebook-worksheet-open-3th-km
+       ;; :n "M-4" #'ein:notebook-worksheet-open-4th-km
+       ;; :n "M-5" #'ein:notebook-worksheet-open-5th-km
+       ;; :n "M-6" #'ein:notebook-worksheet-open-6th-km
+       ;; :n "M-7" #'ein:notebook-worksheet-open-7th-km
+       ;; :n "M-8" #'ein:notebook-worksheet-open-8th-km
+       ;; :n "M-9" #'ein:notebook-worksheet-open-last-km
+       ;; :n  "+" #'ein:notebook-worksheet-insert-next-km
+       ;; :n  "-" #'ein:notebook-worksheet-delete-km
+       ;; :n "M-X" #'ein:notebook-close-km
+       ;; :n "M-u" #'ein:worksheet-change-cell-type-km
+       ;; :n "M-S" #'ein:notebook-save-notebook-command-km
+       ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
+       ;; :n "M-9" #'ein:notebook-worksheet-open-last-km
+       ;; :n   "+" #'ein:notebook-worksheet-insert-next-km
+       ;; :n   "-" #'ein:notebook-worksheet-delete-km
+       ;; :n "M-X" #'ein:notebook-close-km
+       ;; :n "M-u" #'ein:worksheet-change-cell-type-km
+       ;; :n "M-S" #'ein:notebook-save-notebook-command-km
+       ;; :n "C-c c" #'ein:worksheet-execute-cell-and-goto-next-km
+       ;; :n "C-c a" #'ein:worksheet-execute-all-cell-km
+       ;; :n "C-c q" #'ein:notebook-kernel-interrupt-command-km
+       :n "zl" #'org-latex-preview
+)
+
+
+(map! :map ein:notebook-mode-map
+      :leader
+      :desc "execute cell" "cc" #'ein:worksheet-execute-cell-km
+      :desc "execute cell" "cC" #'ein:worksheet-execute-all-cells
+      :desc "execute cell" "cA" #'ein:worksheet-execute-all-cells-above
+      :desc "execute cell" "cB" #'ein:worksheet-execute-all-cells-below
+      :desc "execute cell" "cx" #'ein:worksheet-execute-cell-and-goto-next-km
+      )
+;; But yeah, even if I really prefer editing my notebooks on ein than on my browser, I do see also some negative aspects and drawbacks:
+
+;;     I don't have autocompletion. It's not a big deal, but I really appreciate also having LSP mode helping me when I'm editing regular python scripts.
+;;     It's a little buggy. Like not really problematic once you know where are the problems, but they are here. Among them there is :
+
+;;     Having to press <ESC> every time I open a notebook to have my keybindings working
+;;     Unable to delete the last line of the cell using dd (Evil command) this issue
+;;     Can sometime (with HUUGE notebooks) hangs for quite some time, and also crash
+;;
+(defun js/ein:open-notebook-in-browser-with-jupyter-notebook ()
+  (interactive)
+  ())
+
+(defun js/buffer-name-to-clipboard ()
+  (interactive)
+  (setq this-buffer-name (buffer-name))
+  (message (concat "copied to clipboard (buffer name): " this-buffer-name))
+  (kill-new this-buffer-name))
+)
