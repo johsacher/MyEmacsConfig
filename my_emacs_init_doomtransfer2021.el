@@ -2230,6 +2230,10 @@ and `C-x' being marked as a `term-escape-char'."
  (evil-define-key 'visual term-raw-map (kbd "M-y") 'previous-buffer)
  (evil-define-key 'visual term-raw-map (kbd "M-o") 'next-buffer)
 
+;; did not work out -> try more
+;; (evil-define-key 'emacs term-raw-map (kbd "C-M-y") #'copy-current-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+;; (evil-define-key 'emacs term-raw-map (kbd "C-M-p") #'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+
  (defun term-switch-line-mode-normal-state()
    (interactive)
    (evil-normal-state)
@@ -5100,7 +5104,7 @@ and `C-x' being marked as a `term-escape-char'."
   )
 
 (map! :leader
-    :desc "draft horse term" "oh" #'draft-horse-term)
+    :desc "draft horse term" "od" #'draft-horse-term )
 
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (js/leader-def "z" 'draft-horse-term)

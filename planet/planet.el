@@ -1111,7 +1111,7 @@ date)
   )
 
 ;; * set context
-(defun planet-set-category-work ()
+(defun planet-set-context-work ()
   (interactive)
   (org-set-property "context" "quantica")
   )
