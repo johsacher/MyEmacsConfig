@@ -4189,6 +4189,7 @@ and `C-x' being marked as a `term-escape-char'."
        :nvieomr "C-S-j" #'org-shiftmetadown
        :nvieomr "C-S-h" #'org-metaleft
        :nvieomr "C-S-l" #'org-metaright)
+       ;; todo :n "C-RET" #'org-metaright)
 ;; (map! :map evil-org-mode-map
 ;;        :nvieomr "C-k" nil
 ;;        :nvieomr "C-j" nil
@@ -4218,6 +4219,7 @@ and `C-x' being marked as a `term-escape-char'."
         "M-j"  #'windmove-down
         "M-h"  #'windmove-left
         "M-l"  #'windmove-right))
+
 
 ;;NOT DOOM ;;;  ;; tweek for org-mode, other
 ;; (define-key org-mode-map "\M-k" 'windmove-up)
@@ -4745,6 +4747,12 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\u21af")
   (insert "\U000000B0")
   )
+
+(defun js/insert-unicode-checkmark ()
+  (interactive)
+  ;; (insert "\U00002713") ;; ✓
+  (insert "\U00002705") ;; ✅
+  )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
 ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
@@ -5249,7 +5257,14 @@ and `C-x' being marked as a `term-escape-char'."
 (after! undo-fu)
 (map! :map undo-fu-mode-map
        "M-_" nil) ;; first gotto eliminate in higher priority key map
-(global-set-key (kbd "M-_") 'js/frame-font-size-decrease)
+(global-set-key (kbd "M-_") #'js/frame-font-size-decrease)
+
+(global-set-key (kbd "M-+") #'js/frame-font-size-increase)
+
+(after! term
+(map! :map term-raw-map
+        "M-+"  #'js/frame-font-size-increase
+        "M-_"  #'js/frame-font-size-decrease))
 
 ;;NOT DOOM ;;; ;; * set transparency
 ;;NOT DOOM ;;; (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
