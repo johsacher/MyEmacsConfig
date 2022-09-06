@@ -679,7 +679,8 @@
  ;; SET BREAKPOINT <F12>
 (map! :map python-mode-map
       :leader
-    :n "cd" #'python-set-break-point-current-line)
+      (:prefix ("c" . "code")
+       :desc "set break-point" :n "j" #'python-set-break-point-current-line))
 
 
 ;;NOT DOOM ;;;  ;;; * english-german-translator
