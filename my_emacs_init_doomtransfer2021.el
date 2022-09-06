@@ -675,12 +675,14 @@
   (move-end-of-line nil)
   (setq endofline (point))
   (evil-indent beginofline endofline)
+  ;; save
+  (save-buffer)
   )
  ;; SET BREAKPOINT <F12>
 (map! :map python-mode-map
       :leader
       (:prefix ("c" . "code")
-       :desc "set break-point" :n "j" #'python-set-break-point-current-line))
+       :desc "set break-point" :n "k" #'python-set-break-point-current-line))
 
 
 ;;NOT DOOM ;;;  ;;; * english-german-translator
