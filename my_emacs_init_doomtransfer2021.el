@@ -4735,13 +4735,53 @@ and `C-x' being marked as a `term-escape-char'."
   )
 
 (defun js/insert-unicode-sigma ()
-  ;; inserts a contradiction-symbol ↯
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
   (insert "\U000003C3")
   )
 
+
+(defun js/insert-unicode-psi ()
+  (interactive)
+  (insert "\U000003C8")
+  )
+
+(defun js/insert-unicode-omega ()
+  (interactive)
+  (insert "\U000003C9"))
+
+(defun js/insert-unicode-kappa ()
+  (interactive)
+  (insert "\U000003BA"))
+
+(defun js/insert-unicode-lambda ()
+  (interactive)
+  (insert "\U000003BB"))
+
+(defun js/insert-unicode-nu ()
+  (interactive)
+  (insert "\U000003BD"))
+
+(defun js/insert-unicode-xi ()
+  (interactive)
+  (insert "\U000003BE"))
+
+(defun js/insert-unicode-alpha ()
+  (interactive)
+  (insert "\U000003B1"))
+
+(defun js/insert-unicode-beta ()
+  (interactive)
+  (insert "\U000003B2"))
+
+(defun js/insert-unicode-gamma ()
+  (interactive)
+  (insert "\U000003B3"))
+
+(defun js/insert-unicode-tau ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  (insert "\U000003C4")
+  )
 
 (defun js/insert-unicode-degree ()
   ;; inserts a contradiction-symbol ↯
