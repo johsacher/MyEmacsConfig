@@ -492,7 +492,7 @@
        :desc "planet view week"     "w" #'planet-view-week2X4
        :desc "planet view quit"     "q" #'planet-view-quit
        :desc "planet auto-gsyn on"   "g" #'planet-git-save-turn-on
-       :desc "planet gsyn and revert"  "s" #'planet-git-save-turn-on
+       :desc "planet gsyn and revert"  "s" #'gsyn-and-revert
        :desc "planet auto-gsyn off"  "G" #'planet-git-save-turn-off
       ))
 
