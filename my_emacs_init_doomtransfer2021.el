@@ -491,8 +491,9 @@
        :desc "planet week"          "y" #'planet-this-week
        :desc "planet view week"     "w" #'planet-view-week2X4
        :desc "planet view quit"     "q" #'planet-view-quit
-       :desc "planet git-save on"   "g" #'planet-git-save-turn-on
-       :desc "planet git-save off"  "G" #'planet-git-save-turn-off
+       :desc "planet auto-gsyn on"   "g" #'planet-git-save-turn-on
+       :desc "planet gsyn and revert"  "s" #'planet-git-save-turn-on
+       :desc "planet auto-gsyn off"  "G" #'planet-git-save-turn-off
       ))
 
 
@@ -577,6 +578,7 @@
   ;;--> quit "new line" from output -> only path -> e.g. "/home/johannes/MyEmacsConfig"
   (setq current-git-top-level-absolute-path (replace-regexp-in-string "\n$" "" output))
   current-git-top-level-absolute-path)
+
 (defun gsyn ()
   (interactive)
   (let
@@ -591,6 +593,23 @@
     (message (concat "git-synchronization launched ... (executed: " command-string ")"))
     ;;(let (shell-command-buffer-name-async "*gsyn output*")
     (async-shell-command command-string "*gsyn output*"))
+)
+
+(defun gsyn-and-revert ()
+  (interactive)
+  (let
+      ((display-buffer-alist
+        (list
+         (cons
+          ;; "\\* gsyn output \\*.*"
+          "\*gsyn output\*"
+          (cons #'display-buffer-no-window nil)))))
+    (setq current-git-top-level-absolute-path (gsyn-find-main-git-directory-of-current-file))
+    (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
+    (message (concat "git-synchronization launched ... (executed: " command-string ")"))
+    ;;(let (shell-command-buffer-name-async "*gsyn output*")
+    (call-process-shell-command command-string)
+    (planet-revert-all-planet-buffers))
 )
 
 ;; key binding (conform with doom "SPC g ...")
@@ -2394,27 +2413,30 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (provide 'iresize)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;  -) create new big window (my-split- ... functions)
-;;NOT DOOM ;;;  (defun my-split-root-window (size direction)
-;;NOT DOOM ;;;    (split-window (frame-root-window)
-;;NOT DOOM ;;;                  (and size (prefix-numeric-value size))
-;;NOT DOOM ;;;                  direction))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun my-split-root-window-below (&optional size)
-;;NOT DOOM ;;;    (interactive "P")
-;;NOT DOOM ;;;    (my-split-root-window size 'below))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun my-split-root-window-above (&optional size)
-;;NOT DOOM ;;;    (interactive "P")
-;;NOT DOOM ;;;    (my-split-root-window size 'above))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun my-split-root-window-right (&optional size)
-;;NOT DOOM ;;;    (interactive "P")
-;;NOT DOOM ;;;    (my-split-root-window size 'right))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun my-split-root-window-left (&optional size)
-;;NOT DOOM ;;;    (interactive "P")
-;;NOT DOOM ;;;    (my-split-root-window size 'left))
+
+
+
+;;  ) create new big window (my-split- ... functions)
+(defun js/split-root-window (size direction)
+  (split-window (frame-root-window)
+                (and size (prefix-numeric-value size))
+                direction))
+
+(defun js/split-root-window-below (&optional size)
+  (interactive "P")
+  (js/split-root-window size 'below))
+
+(defun js/split-root-window-above (&optional size)
+  (interactive "P")
+  (js/split-root-window size 'above))
+
+(defun js/split-root-window-right (&optional size)
+  (interactive "P")
+  (js/split-root-window size 'right))
+
+(defun js/split-root-window-left (&optional size)
+  (interactive "P")
+  (js/split-root-window size 'left))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;;
 ;;NOT DOOM ;;;  ;;(require 'ivy)
@@ -4776,6 +4798,18 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-gamma ()
   (interactive)
   (insert "\U000003B3"))
+
+(defun js/insert-unicode-delta ()
+  (interactive)
+  (insert "\U000003B4"))
+
+(defun js/insert-unicode-umlaut-u ()
+  (interactive)
+  (insert "\U000000FC"))
+
+(defun js/insert-unicode-umlaut-a ()
+  (interactive)
+  (insert "\U000000E4"))
 
 (defun js/insert-unicode-tau ()
   ;; inserts a contradiction-symbol ↯
