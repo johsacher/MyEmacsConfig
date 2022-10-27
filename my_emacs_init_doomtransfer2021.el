@@ -4747,6 +4747,13 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00002207")
   )
 
+
+(defun js/insert-unicode-squared ()
+  ;; ²
+  (interactive)
+  (insert "\U000000B2")
+  )
+
 (defun js/insert-unicode-phi ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
