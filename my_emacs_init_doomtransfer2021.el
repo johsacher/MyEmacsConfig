@@ -4741,6 +4741,12 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000003C9")
   )
 
+(defun js/insert-unicode-nabla ()
+  ;; ∇
+  (interactive)
+  (insert "\U00002207")
+  )
+
 (defun js/insert-unicode-phi ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
