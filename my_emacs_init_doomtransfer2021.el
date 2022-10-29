@@ -4717,6 +4717,20 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000003BC")
   )
 
+
+(defun js/insert-unicode-int ()
+  ;; ∫
+  (interactive)
+  (insert "\U0000222B")
+  )
+
+(defun js/insert-unicode-dot ()
+  ;; ·
+  (interactive)
+  (insert "\U000000B7")
+  )
+
+
 (defun js/insert-unicode-rho ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
