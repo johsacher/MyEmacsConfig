@@ -4767,12 +4767,22 @@ and `C-x' being marked as a `term-escape-char'."
 (js/specialchardef
         "N" #'js/insert-unicode-nabla)
 
+(defun js/insert-unicode-Omega ()
+  ;; Ω
+  (interactive)
+  (insert "\U000003A9")
+  )
+(js/specialchardef
+        "O" #'js/insert-unicode-Omega)
+
 
 (defun js/insert-unicode-squared ()
   ;; ²
   (interactive)
   (insert "\U000000B2")
   )
+(js/specialchardef
+        "2" #'js/insert-unicode-squared)
 
 (defun js/insert-unicode-phi ()
   ;; inserts a contradiction-symbol ↯
