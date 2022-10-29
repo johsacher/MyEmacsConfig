@@ -4184,10 +4184,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; unbind M-d -> so it works from general-override-mode-map (above)
 (map! :map evil-normal-state-map
-      :leader
-      (:prefix ("z" . "specialchar")
-       ("d" . #'js/insert-unicode-delta)
-       ))
+      "M-d"  nil)
 
 (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
@@ -4692,6 +4689,8 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;;                                       e.g. for 'a' (insert "\u0061")
 ;;NOT DOOM ;;;  ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
 ;;NOT DOOM ;;;  ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
+
+(general-create-definer js/specialchardef :prefix "M-,")
 ;; ** contradiction ↯
 (defun js/insert-unicode-contradiction ()
   ;; inserts a contradiction-symbol ↯
@@ -4732,6 +4731,8 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U000000B7")
   )
+(js/specialchardef
+        "." #'js/insert-unicode-dot)
 
 
 (defun js/insert-unicode-rho ()
@@ -4763,6 +4764,8 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002207")
   )
+(js/specialchardef
+        "N" #'js/insert-unicode-nabla)
 
 
 (defun js/insert-unicode-squared ()
@@ -4830,11 +4833,11 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000003B3"))
 
 (defun js/insert-unicode-delta ()
+  ;; δ
   (interactive)
   (insert "\U000003B4"))
-
-(map! :map evil-normal-state-map
-      "M-d"  nil)
+(js/specialchardef
+        "d" #'js/insert-unicode-delta)
 
 (defun js/insert-unicode-umlaut-u ()
   (interactive)
@@ -4843,6 +4846,8 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-umlaut-a ()
   (interactive)
   (insert "\U000000E4"))
+(js/specialchardef
+        "p" #'js/insert-unicode-umlaut-a)
 
 (defun js/insert-unicode-tau ()
   ;; inserts a contradiction-symbol ↯
