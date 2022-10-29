@@ -4184,7 +4184,10 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; unbind M-d -> so it works from general-override-mode-map (above)
 (map! :map evil-normal-state-map
-      "M-d"  nil)
+      :leader
+      (:prefix ("z" . "specialchar")
+       ("d" . #'js/insert-unicode-delta)
+       ))
 
 (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
@@ -4829,6 +4832,9 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-delta ()
   (interactive)
   (insert "\U000003B4"))
+
+(map! :map evil-normal-state-map
+      "M-d"  nil)
 
 (defun js/insert-unicode-umlaut-u ()
   (interactive)
