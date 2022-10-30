@@ -2851,6 +2851,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "Literatur"       "L" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/Literatur/pdf/Inkjet/")))
       :desc "Promotion"       "N" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
+      :desc "emacs init"      "q" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/quantica")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -4699,9 +4700,9 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\u21af")
   (insert "\U000021af")
   )
-;; ** delta
+
 (defun js/insert-unicode-Delta ()
-  ;; inserts a contradiction-symbol ↯
+  ;; Δ
   (interactive)
   (insert "\U00000394")
   )
