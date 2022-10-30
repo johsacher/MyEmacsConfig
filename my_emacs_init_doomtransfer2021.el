@@ -992,7 +992,9 @@
   (insert (concat "[[file:" filename "][✎]]")) ;; insert "pencil-button" to open and edit (org file link)
   )
 
-
+(map! :leader
+      :map (evil-org-mode-map org-mode-map)
+      "i x" #'js/org-insert-xournal-note)
 
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; (defun dummy ()
