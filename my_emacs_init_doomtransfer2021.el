@@ -5450,6 +5450,13 @@ and `C-x' being marked as a `term-escape-char'."
   (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-default))
   (org-latex-refresh-all))
 
+(defun js/org-latex-preview-scale-increase ()
+  "decreases latex preview font by 20%"
+  (interactive)
+  (setq js/org-latex-preview-scale-default (* 1.2 js/org-latex-preview-scale-default))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale js/org-latex-preview-scale-default))
+  (org-latex-refresh-all))
+
 
 (defun js/org-latex-preview-scale-set-treeslide ()
   (interactive)
