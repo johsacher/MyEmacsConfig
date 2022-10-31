@@ -992,7 +992,9 @@
   (insert (concat "[[file:" filename "][✎]]")) ;; insert "pencil-button" to open and edit (org file link)
   )
 
-
+(map! :leader
+      :map (evil-org-mode-map org-mode-map)
+      "i x" #'js/org-insert-xournal-note)
 
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; (defun dummy ()
@@ -4691,7 +4693,12 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
 ;;NOT DOOM ;;;  ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
 
+;; * special characters, fast input via "M-,"
+;; first unbind "M-," -> so it does not complain
+(map! :map global-map
+      "M-,"  nil)
 (general-create-definer js/specialchardef :prefix "M-,")
+
 ;; ** contradiction ↯
 (defun js/insert-unicode-contradiction ()
   ;; inserts a contradiction-symbol ↯
@@ -5279,7 +5286,7 @@ and `C-x' being marked as a `term-escape-char'."
   )
 
 (map! :leader
-    :desc "draft horse term" "od" #'draft-horse-term )
+    :desc "draft horse term" "oh" #'draft-horse-term )
 
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (js/leader-def "z" 'draft-horse-term)
