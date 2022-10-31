@@ -4706,6 +4706,8 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00000394")
   )
+(js/specialchardef
+        "D" #'js/insert-unicode-Delta)
 
 ;; ** dot "multiply"
 (defun js/insert-unicode-dot ()
@@ -4737,12 +4739,12 @@ and `C-x' being marked as a `term-escape-char'."
 
 
 (defun js/insert-unicode-rho ()
-  ;; inserts a contradiction-symbol ↯
+  ;; ρ
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
   (insert "\U000003C1")
   )
+(js/specialchardef
+        "g r" #'js/insert-unicode-rho)
 
 (defun js/insert-unicode-theta ()
   ;; inserts a contradiction-symbol ↯
@@ -4792,6 +4794,9 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\u21af")
   (insert "\U000003C6")
   )
+(js/specialchardef
+        "g p" #'js/insert-unicode-phi)
+
 (defun js/insert-unicode-tau ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
@@ -4830,6 +4835,8 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-xi ()
   (interactive)
   (insert "\U000003BE"))
+(js/specialchardef
+        "g x" #'js/insert-unicode-xi)
 
 (defun js/insert-unicode-alpha ()
   (interactive)
@@ -4853,6 +4860,8 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-umlaut-u ()
   (interactive)
   (insert "\U000000FC"))
+(js/specialchardef
+        "y" #'js/insert-unicode-umlaut-u)
 
 (defun js/insert-unicode-umlaut-a ()
   (interactive)
@@ -4860,11 +4869,43 @@ and `C-x' being marked as a `term-escape-char'."
 (js/specialchardef
         "p" #'js/insert-unicode-umlaut-a)
 
+(defun js/insert-unicode-sum ()
+  ;; ∑
+  (interactive)
+  (insert "\U00002211")
+  )
+(js/specialchardef
+        "S" #'js/insert-unicode-sum)
+
 (defun js/insert-unicode-tau ()
   ;; inserts a contradiction-symbol ↯
   (interactive)
   (insert "\U000003C4")
   )
+
+(defun js/insert-unicode-zeta ()
+  ;; ζ
+  (interactive)
+  (insert "\U000003B6")
+  )
+(js/specialchardef
+        "g z" #'js/insert-unicode-zeta)
+
+(defun js/insert-unicode-zeta ()
+  ;; inserts a contradiction-symbol ↯
+  (interactive)
+  (insert "\U000003C4")
+  )
+
+
+
+(defun js/insert-unicode-sub-i ()
+  ;; ᵢ
+  (interactive)
+  (insert "\U00001D62")
+  )
+(js/specialchardef
+        "s i" #'js/insert-unicode-sub-i)
 
 (defun js/insert-unicode-degree ()
   ;; inserts a contradiction-symbol ↯
