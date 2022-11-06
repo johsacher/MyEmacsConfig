@@ -1397,6 +1397,27 @@ date)
     )
   )
 
+(defun planet-save-all-planet-buffers ()
+  (interactive)
+  ;; (message "syncing down planet-files - started.")
+  ;; (shell-command (concat "cd " planet-dir "; git pull ") "*planet process: git pull*")
+  ;; later:
+
+  ;; ('stolen' from org-revert-all-org-buffers - seems to be thought in it for efficiency)
+
+  ;; (todo "little cosmetics: this function still issues message of last reverted buffer filebase-name, don t know why)
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (save-buffer)))
+
+      )
+    )
+  )
+
 (defun planet-revert-all-planet-buffers-except-current ()
   (interactive)
   ;; (message "syncing down planet-files - started.")
