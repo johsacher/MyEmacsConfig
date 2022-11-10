@@ -513,17 +513,25 @@
       ))
 
 ;; * job -> come/go
-(defun js/job-come-book ()
+(defun js/job-book-in ()
   (interactive)
-  (insert "* job come \n")
-  (insert (format-time-string "[%H:%M]"))
+  (beginning-of-buffer)
+  (insert "* job book in \n")
+  (insert (format-time-string "[%H:%M]\n"))
   )
 
-(defun js/job-go-book ()
+(defun js/job-book-out ()
   (interactive)
-  (insert "* job go \n")
-  (insert (format-time-string "[%H:%M]"))
+  (end-of-buffer)
+  (insert "\n* job book out \n")
+  (insert (format-time-string "[%H:%M]\n"))
   )
+(map! :map evil-org-mode
+      :leader
+      (:prefix ("e" . "planet")
+      :desc "job in" :n  "i" #'js/job-book-in
+      :desc "job out" :n "o" #'js/job-book-out
+      ))
 
 ;; not working (see learnings key evil emacs):
 ;; (map! :map planet-mode-map
@@ -4695,7 +4703,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 ;; * special characters, fast input via "M-,"
 ;; first unbind "M-," -> so it does not complain
-(map! :map global-map
+(map! :map (global-map anaconda-mode-map)
       "M-,"  nil)
 (general-create-definer js/specialchardef :prefix "M-,")
 
@@ -4716,6 +4724,14 @@ and `C-x' being marked as a `term-escape-char'."
 (js/specialchardef
         "D" #'js/insert-unicode-Delta)
 
+(defun js/insert-unicode-tab ()
+  ;; 	(TAB)
+  (interactive)
+  (insert "\U00000009")
+  )
+(js/specialchardef
+        "TAB" #'js/insert-unicode-tab)
+
 ;; ** dot "multiply"
 (defun js/insert-unicode-dot ()
   ;; inserts a contradiction-symbol ↯
@@ -4728,7 +4744,8 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U000003BC")
   )
-
+(js/specialchardef
+        "g m" #'js/insert-unicode-mu)
 
 (defun js/insert-unicode-int ()
   ;; ∫
@@ -4865,16 +4882,26 @@ and `C-x' being marked as a `term-escape-char'."
         "d" #'js/insert-unicode-delta)
 
 (defun js/insert-unicode-umlaut-u ()
+  ;; ü
   (interactive)
   (insert "\U000000FC"))
 (js/specialchardef
         "y" #'js/insert-unicode-umlaut-u)
 
 (defun js/insert-unicode-umlaut-a ()
+  ;; ä
   (interactive)
   (insert "\U000000E4"))
 (js/specialchardef
-        "p" #'js/insert-unicode-umlaut-a)
+        "q" #'js/insert-unicode-umlaut-a)
+
+
+(defun js/insert-unicode-umlaut-o ()
+  ;; ö
+  (interactive)
+  (insert "\U000000f6"))
+(js/specialchardef
+        "p" #'js/insert-unicode-umlaut-o)
 
 (defun js/insert-unicode-sum ()
   ;; ∑
