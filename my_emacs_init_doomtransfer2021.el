@@ -4221,8 +4221,9 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   ;;(setq buffer-to-move-to-another-window (current-buffer))
   (kill-new (buffer-name))
-  (previous-buffer)
+  ;; (previous-buffer)
   (message (concat "buffer set to move: " (buffer-name))))
+
 (defun switch-to-buffer-to-move ()
   (interactive)
   (setq buffer-name-to-move-to (current-kill 0))
