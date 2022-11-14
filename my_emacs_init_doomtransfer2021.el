@@ -523,7 +523,7 @@
 (defun js/job-book-out ()
   (interactive)
   (end-of-buffer)
-  (insert "\n* job book out \n")
+  (insert "* job book out \n")
   (insert (format-time-string "[%H:%M]\n"))
   )
 (map! :map evil-org-mode
@@ -2253,7 +2253,23 @@ and `C-x' being marked as a `term-escape-char'."
 
 (define-key term-raw-map [?\C-/] 'term-switch-line-mode-normal-state) ;; glaube: der wird "durchgelassen vorbei an emacs-state und landet dann in term-raw-map ->> deshalb hier ändern"
 (define-key term-raw-map [?\M-/] 'term-switch-line-mode-normal-state) ;; sogar noch etwas mehr convenient: der wird "durchgelassen vorbei an emacs-state und landet dann in term-raw-map ->> deshalb hier ändern"
-(map! :leader :map  'term-raw-map "k" 'term-switch-char-mode-emacs-state)
+
+;; var1 not working:
+;; (general-define-key
+;;     :states 'normal
+;;     :keymaps 'term-raw-map
+;;     "SPC k" #'term-switch-char-mode-emacs-state)
+
+;; var2 not working:
+;; (general-define-key
+;;  :states 'normal
+;;  :keymaps 'term-raw-map
+;;  :prefix "SPC"
+;;  "k" 'term-switch-char-mode-emacs-state)
+
+;; var3 -> working:
+ (general-define-key :states 'normal :keymaps 'term-mode-map :prefix "SPC" "k" 'term-switch-char-mode-emacs-state)
+
  ;; **** previous/next buffer key binding, set also for term's
  (evil-define-key 'emacs term-raw-map (kbd "M-y") 'previous-buffer)
  (evil-define-key 'emacs term-raw-map (kbd "M-o") 'next-buffer)
@@ -2262,9 +2278,11 @@ and `C-x' being marked as a `term-escape-char'."
  (evil-define-key 'visual term-raw-map (kbd "M-y") 'previous-buffer)
  (evil-define-key 'visual term-raw-map (kbd "M-o") 'next-buffer)
 
-;; did not work out -> try more
-;; (evil-define-key 'emacs term-raw-map (kbd "C-M-y") #'copy-current-path) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
-;; (evil-define-key 'emacs term-raw-map (kbd "C-M-p") #'change-dir-from-clipboard) ;; (kbd "C-P") is NOT working (interpreted same as "C-p" apparently)
+;; handy shortcut for terminal -> copy/paste paths
+(map! :map term-raw-map
+     :nvieomr "C-M-y" #'copy-current-path
+     :nvieomr "C-M-p" #'change-dir-from-clipboard
+     )
 
  (defun term-switch-line-mode-normal-state()
    (interactive)
