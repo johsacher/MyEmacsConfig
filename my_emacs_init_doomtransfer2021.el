@@ -5669,7 +5669,7 @@ and `C-x' being marked as a `term-escape-char'."
                                                     ("POST" . +org-todo-cancel)
                                                     ("BEST" . +org-todo-todo)
                                                     ("DISC" . +org-todo-done)
-                                                    ("PROG" :foreground "yellow" :weight bold)
+                                                    ("PROG" . +org-todo-onhold)
                                                     ))))
 
 ;; * matlab term
