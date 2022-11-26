@@ -4741,7 +4741,16 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00000394")
   )
 (js/specialchardef
-        "D" #'js/insert-unicode-Delta)
+        "g D" #'js/insert-unicode-Delta)
+
+
+(defun js/insert-unicode-lambda ()
+  ;; λ
+  (interactive)
+  (insert "\U000003BB")
+  )
+(js/specialchardef
+        "g D" #'js/insert-unicode-lambda)
 
 (defun js/insert-unicode-tab ()
   ;; 	(TAB)
@@ -4788,6 +4797,15 @@ and `C-x' being marked as a `term-escape-char'."
   )
 (js/specialchardef
         "g r" #'js/insert-unicode-rho)
+
+
+(defun js/insert-unicode-inf ()
+  ;; ∞
+  (interactive)
+  (insert "\U0000221E")
+  )
+(js/specialchardef
+        "m i" #'js/insert-unicode-inf)
 
 (defun js/insert-unicode-theta ()
   ;; inserts a contradiction-symbol ↯
