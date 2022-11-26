@@ -4760,7 +4760,7 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00002259")
   )
 (js/specialchardef
-        "g c" #'js/insert-unicode-corresponds)
+        "m c" #'js/insert-unicode-corresponds)
 (defun js/insert-unicode-tab ()
   ;; 	(TAB)
   (interactive)
