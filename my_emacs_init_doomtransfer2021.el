@@ -2917,8 +2917,10 @@ and `C-x' being marked as a `term-escape-char'."
 (after! dired-ranger
   (map! :map dired-mode-map
         :n  "Y"  #'dired-ranger-copy
+        :n  "C"  #'dired-ranger-copy
         :n  "X"  #'dired-ranger-move
-        :n  "P"  #'dired-ranger-paste))
+        :n  "P"  #'dired-ranger-paste
+        :n  "V"  #'dired-ranger-paste))
 
   ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
   ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
@@ -4750,7 +4752,7 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000003BB")
   )
 (js/specialchardef
-        "g D" #'js/insert-unicode-lambda)
+        "g L" #'js/insert-unicode-lambda)
 
 (defun js/insert-unicode-tab ()
   ;; 	(TAB)
@@ -5687,7 +5689,7 @@ and `C-x' being marked as a `term-escape-char'."
                                                     ("POST" . +org-todo-cancel)
                                                     ("BEST" . +org-todo-todo)
                                                     ("DISC" . +org-todo-done)
-                                                    ("PROG" :foreground "yellow" :weight bold)
+                                                    ("PROG" . +org-todo-onhold)
                                                     ))))
 
 ;; * matlab term
