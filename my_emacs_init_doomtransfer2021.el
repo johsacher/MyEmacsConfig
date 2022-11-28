@@ -2284,6 +2284,15 @@ and `C-x' being marked as a `term-escape-char'."
      :nvieomr "C-M-p" #'change-dir-from-clipboard
      )
 
+;; actually.. it comes handy for all modes
+(map!  ;; (which maps by default?)
+     :nvieomr "C-M-y" #'copy-current-path
+     :nvieomr "C-M-p" #'change-dir-from-clipboard
+     )
+(map!  :map dired-mode-map
+     :nvieomr "C-M-y" nil
+     :nvieomr "C-M-p" nil)
+
  (defun term-switch-line-mode-normal-state()
    (interactive)
    (evil-normal-state)
