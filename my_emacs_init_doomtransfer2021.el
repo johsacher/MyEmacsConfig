@@ -2927,9 +2927,11 @@ and `C-x' being marked as a `term-escape-char'."
   (map! :map dired-mode-map
         :n  "Y"  #'dired-ranger-copy
         :n  "C"  #'dired-ranger-copy
+        :n  "C-c"  #'dired-ranger-copy
         :n  "X"  #'dired-ranger-move
+        :n  "C-x"  #'dired-ranger-move
         :n  "P"  #'dired-ranger-paste
-        :n  "V"  #'dired-ranger-paste))
+        :n  "C-v"  #'dired-ranger-paste)
 
   ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
   ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
