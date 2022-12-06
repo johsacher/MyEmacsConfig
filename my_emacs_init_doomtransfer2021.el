@@ -5893,3 +5893,25 @@ and `C-x' being marked as a `term-escape-char'."
   (message (concat "copied to clipboard (buffer name): " this-buffer-name))
   (kill-new this-buffer-name))
 )
+
+
+;; * yank - overwrite - stuff
+;; in some situations i wanna just overwrite what's "under the yank"
+;;
+;; this for rectangle yank:
+;; (put 'yank-rectangle 'delete-selection 'yank)
+;; (put 'yank-rectangle 'delete-selection 'yank)
+(defun js/yank-replace ()
+  (interactive)
+  (delete-char (length (current-kill 0)))
+  (yank)
+  )
+
+;; copy region and leave blank spaces
+;; (defun js/cut-blank ()
+;;   (interactive)
+;;   (delete-char (length (current-kill 0)))
+;;   (yank)
+;;   )
+
+(map! "M-P" #'js/yank-replace)
