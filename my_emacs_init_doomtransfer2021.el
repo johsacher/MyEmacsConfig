@@ -4768,8 +4768,15 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002259")
   )
+
+
+(defun js/insert-unicode-sqrt ()
+  ;; √
+  (interactive)
+  (insert "\U0000221A")
+  )
 (js/specialchardef
-        "m c" #'js/insert-unicode-corresponds)
+        "m s" #'js/insert-unicode-sqrt)
 (defun js/insert-unicode-tab ()
   ;; 	(TAB)
   (interactive)
