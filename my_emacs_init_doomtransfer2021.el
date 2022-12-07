@@ -2927,9 +2927,11 @@ and `C-x' being marked as a `term-escape-char'."
   (map! :map dired-mode-map
         :n  "Y"  #'dired-ranger-copy
         :n  "C"  #'dired-ranger-copy
+        :n  "C-c"  #'dired-ranger-copy
         :n  "X"  #'dired-ranger-move
+        :n  "C-x"  #'dired-ranger-move
         :n  "P"  #'dired-ranger-paste
-        :n  "V"  #'dired-ranger-paste))
+        :n  "C-v"  #'dired-ranger-paste)
 
   ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
   ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
@@ -4764,10 +4766,12 @@ and `C-x' being marked as a `term-escape-char'."
         "g l" #'js/insert-unicode-lambda)
 
 (defun js/insert-unicode-corresponds ()
-  ;; λ
+  ;; ≙
   (interactive)
   (insert "\U00002259")
   )
+(js/specialchardef
+        "m c" #'js/insert-unicode-corresponds)
 
 
 (defun js/insert-unicode-sqrt ()
@@ -5898,3 +5902,25 @@ and `C-x' being marked as a `term-escape-char'."
   (message (concat "copied to clipboard (buffer name): " this-buffer-name))
   (kill-new this-buffer-name))
 )
+
+
+;; * yank - overwrite - stuff
+;; in some situations i wanna just overwrite what's "under the yank"
+;;
+;; this for rectangle yank:
+;; (put 'yank-rectangle 'delete-selection 'yank)
+;; (put 'yank-rectangle 'delete-selection 'yank)
+(defun js/yank-replace ()
+  (interactive)
+  (delete-char (length (current-kill 0)))
+  (yank)
+  )
+
+;; copy region and leave blank spaces
+;; (defun js/cut-blank ()
+;;   (interactive)
+;;   (delete-char (length (current-kill 0)))
+;;   (yank)
+;;   )
+
+(map! "M-P" #'js/yank-replace)
