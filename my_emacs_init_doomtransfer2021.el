@@ -4808,6 +4808,8 @@ and `C-x' being marked as a `term-escape-char'."
   )
 (js/specialchardef
         "." #'js/insert-unicode-dot)
+(js/specialchardef
+        "m d" #'js/insert-unicode-dot)
 
 
 (defun js/insert-unicode-rho ()
