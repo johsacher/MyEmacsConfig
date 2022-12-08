@@ -4739,6 +4739,35 @@ and `C-x' being marked as a `term-escape-char'."
       "M-,"  nil)
 (general-create-definer js/specialchardef :prefix "M-,")
 
+;; ** US-international chars => "M-," ≙ "AltGr"
+(defun js/insert-unicode-umlaut-u ()
+  ;; ü
+  (interactive)
+  (insert "\U000000FC"))
+(js/specialchardef "y" #'js/insert-unicode-umlaut-u)
+
+(defun js/insert-unicode-umlaut-a ()
+  ;; ä
+  (interactive)
+  (insert "\U000000E4"))
+(js/specialchardef "q" #'js/insert-unicode-umlaut-a)
+
+
+(defun js/insert-unicode-umlaut-o ()
+  ;; ö
+  (interactive)
+  (insert "\U000000f6"))
+(js/specialchardef "p" #'js/insert-unicode-umlaut-o)
+
+(defun js/insert-unicode-umlaut-sz ()
+  ;; ß
+  (interactive)
+  (insert "\U000000df"))
+(js/specialchardef "s" #'js/insert-unicode-umlaut-sz)
+
+
+
+
 ;; ** contradiction ↯
 (defun js/insert-unicode-contradiction ()
   ;; inserts a contradiction-symbol ↯
@@ -4766,12 +4795,22 @@ and `C-x' being marked as a `term-escape-char'."
         "g l" #'js/insert-unicode-lambda)
 
 (defun js/insert-unicode-corresponds ()
-  ;; λ
+  ;; ≙
   (interactive)
   (insert "\U00002259")
   )
 (js/specialchardef
         "m c" #'js/insert-unicode-corresponds)
+
+
+(defun js/insert-unicode-sqrt ()
+  ;; √
+  (interactive)
+  (insert "\U0000221A")
+  )
+(js/specialchardef
+        "m s" #'js/insert-unicode-sqrt)
+
 (defun js/insert-unicode-tab ()
   ;; 	(TAB)
   (interactive)
@@ -4940,27 +4979,6 @@ and `C-x' being marked as a `term-escape-char'."
 (js/specialchardef
         "d" #'js/insert-unicode-delta)
 
-(defun js/insert-unicode-umlaut-u ()
-  ;; ü
-  (interactive)
-  (insert "\U000000FC"))
-(js/specialchardef
-        "y" #'js/insert-unicode-umlaut-u)
-
-(defun js/insert-unicode-umlaut-a ()
-  ;; ä
-  (interactive)
-  (insert "\U000000E4"))
-(js/specialchardef
-        "q" #'js/insert-unicode-umlaut-a)
-
-
-(defun js/insert-unicode-umlaut-o ()
-  ;; ö
-  (interactive)
-  (insert "\U000000f6"))
-(js/specialchardef
-        "p" #'js/insert-unicode-umlaut-o)
 
 (defun js/insert-unicode-sum ()
   ;; ∑
