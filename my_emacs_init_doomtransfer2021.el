@@ -1152,8 +1152,11 @@
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("H" "#+HTML: ") ("a" "#+BEGIN_EXPORT ascii
 ;;NOT DOOM ;;;  ;; ?
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
-;;NOT DOOM ;;;
-;; ** org-mode toggle bold/italic
+
+;; ** org-mode -> visual-line-mode by default
+(add-hook! 'org-mode-hook
+           (lambda() visual-line-mode 1))
+;; org-mode toggle bold/italic
 
 (after! org
   (defun org-toggle-quote-region ()
@@ -5026,10 +5029,16 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000000B0")
   )
 
-(defun js/insert-unicode-checkmark ()
+(defun js/insert-unicode-Checkmark ()
   (interactive)
   ;; (insert "\U00002713") ;; ✓
   (insert "\U00002705") ;; ✅
+  )
+
+(defun js/insert-unicode-checkmark ()
+  (interactive)
+  ;; ✓
+  (insert "\U00002713")
   )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
@@ -5935,3 +5944,8 @@ and `C-x' being marked as a `term-escape-char'."
 ;;   )
 
 (map! "M-P" #'js/yank-replace)
+
+;; * flycheck , disable for c++
+(setq flycheck-global-modes nil)
+;; (add-hook! 'c++-mode
+;;   (lambda () (flycheck-mode -1))
