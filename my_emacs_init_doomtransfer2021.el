@@ -4780,6 +4780,12 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000021af")
   )
 
+(defun js/insert-unicode-approx ()
+  ;; ≈
+  (interactive)
+  (insert "\U00002248")
+  )
+
 (defun js/insert-unicode-Delta ()
   ;; Δ
   (interactive)
@@ -4919,16 +4925,13 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\u21af")
   (insert "\U000003C6")
   )
-(js/specialchardef
-        "g p" #'js/insert-unicode-phi)
+(js/specialchardef "g p" #'js/insert-unicode-phi)
 
 (defun js/insert-unicode-tau ()
-  ;; inserts a contradiction-symbol ↯
+  ;; τ
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000003C4")
-  )
+  (insert "\U000003C4"))
+(js/specialchardef "g t" #'js/insert-unicode-tau)
 
 (defun js/insert-unicode-sigma ()
   (interactive)
@@ -4960,8 +4963,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-xi ()
   (interactive)
   (insert "\U000003BE"))
-(js/specialchardef
-        "g x" #'js/insert-unicode-xi)
+(js/specialchardef "g x" #'js/insert-unicode-xi)
 
 (defun js/insert-unicode-alpha ()
   (interactive)
@@ -4974,6 +4976,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-gamma ()
   (interactive)
   (insert "\U000003B3"))
+(js/specialchardef "g g" #'js/insert-unicode-gamma)
 
 (defun js/insert-unicode-delta ()
   ;; δ
