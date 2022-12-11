@@ -2934,7 +2934,7 @@ and `C-x' being marked as a `term-escape-char'."
         :n  "X"  #'dired-ranger-move
         :n  "C-x"  #'dired-ranger-move
         :n  "P"  #'dired-ranger-paste
-        :n  "C-v"  #'dired-ranger-paste)
+        :n  "C-v"  #'dired-ranger-paste))
 
   ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
   ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
@@ -5021,8 +5021,7 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00001D62")
   )
-(js/specialchardef
-        "s i" #'js/insert-unicode-sub-i)
+;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
 
 (defun js/insert-unicode-degree ()
   ;; inserts a contradiction-symbol ↯
