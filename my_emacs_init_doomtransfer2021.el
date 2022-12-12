@@ -3055,6 +3055,7 @@ and `C-x' being marked as a `term-escape-char'."
         (setq openwith-associations '(
                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
                                ("\\.xopp\\'" "xournalpp" (file))
+                               ("\\.avi\\'" "vlc" (file))
                                ("\\.pdf\\'" "okular" (file))))))
 ;; )
 ;;NOT DOOM ;;;
@@ -4925,13 +4926,16 @@ and `C-x' being marked as a `term-escape-char'."
         "2" #'js/insert-unicode-squared)
 
 (defun js/insert-unicode-phi ()
-  ;; inserts a contradiction-symbol ↯
+  ;; φ
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000003C6")
-  )
-(js/specialchardef "g p" #'js/insert-unicode-phi)
+  (insert "\U000003C6"))
+(js/specialchardef "g f" #'js/insert-unicode-phi)
+
+(defun js/insert-unicode-pi ()
+  ;; π
+  (interactive)
+  (insert "\U000003C0"))
+(js/specialchardef "g p" #'js/insert-unicode-pi)
 
 (defun js/insert-unicode-tau ()
   ;; τ
@@ -4949,6 +4953,7 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U000003C8")
   )
+(js/specialchardef "g y" #'js/insert-unicode-psi)
 
 (defun js/insert-unicode-omega ()
   (interactive)
