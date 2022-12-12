@@ -4742,6 +4742,15 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :map (global-map anaconda-mode-map)
       "M-,"  nil)
 (general-create-definer js/specialchardef :prefix "M-,")
+;; g -> Greek
+;; m -> Math
+;; c -> special Chars
+
+;; others: US-International-AltGr
+;; s  -> ß
+;; y  -> ü
+;; p  -> ö
+;; q  -> ä
 
 ;; ** US-international chars => "M-," ≙ "AltGr"
 (defun js/insert-unicode-umlaut-u ()
@@ -4796,37 +4805,33 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-approx ()
   ;; ≈
   (interactive)
-  (insert "\U00002248")
-  )
+  (insert "\U00002248"))
+(js/specialchardef "m a" #'js/insert-unicode-approx)
 
 (defun js/insert-unicode-Delta ()
   ;; Δ
   (interactive)
-  (insert "\U00000394")
-  )
+  (insert "\U00000394"))
 (js/specialchardef "g D" #'js/insert-unicode-Delta)
 
 
 (defun js/insert-unicode-lambda ()
   ;; λ
   (interactive)
-  (insert "\U000003BB")
-  )
+  (insert "\U000003BB"))
 (js/specialchardef "g l" #'js/insert-unicode-lambda)
 
 (defun js/insert-unicode-corresponds ()
   ;; ≙
   (interactive)
-  (insert "\U00002259")
-  )
+  (insert "\U00002259"))
 (js/specialchardef "m c" #'js/insert-unicode-corresponds)
 
 
 (defun js/insert-unicode-sqrt ()
   ;; √
   (interactive)
-  (insert "\U0000221A")
-  )
+  (insert "\U0000221A"))
 (js/specialchardef "m s" #'js/insert-unicode-sqrt)
 
 (defun js/insert-unicode-tab ()
@@ -4905,16 +4910,14 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002207")
   )
-(js/specialchardef
-        "N" #'js/insert-unicode-nabla)
+(js/specialchardef "m N" #'js/insert-unicode-nabla)
 
 (defun js/insert-unicode-Omega ()
   ;; Ω
   (interactive)
   (insert "\U000003A9")
   )
-(js/specialchardef
-        "O" #'js/insert-unicode-Omega)
+(js/specialchardef "O" #'js/insert-unicode-Omega)
 
 
 (defun js/insert-unicode-squared ()
@@ -4922,8 +4925,7 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U000000B2")
   )
-(js/specialchardef
-        "2" #'js/insert-unicode-squared)
+(js/specialchardef "2" #'js/insert-unicode-squared)
 
 (defun js/insert-unicode-phi ()
   ;; φ
@@ -4945,14 +4947,13 @@ and `C-x' being marked as a `term-escape-char'."
 
 (defun js/insert-unicode-sigma ()
   (interactive)
-  (insert "\U000003C3")
-  )
+  (insert "\U000003C3"))
+(js/specialchardef "g s" #'js/insert-unicode-sigma)
 
 
 (defun js/insert-unicode-psi ()
   (interactive)
-  (insert "\U000003C8")
-  )
+  (insert "\U000003C8"))
 (js/specialchardef "g y" #'js/insert-unicode-psi)
 
 (defun js/insert-unicode-omega ()
@@ -4962,6 +4963,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-kappa ()
   (interactive)
   (insert "\U000003BA"))
+(js/specialchardef "g k" #'js/insert-unicode-kappa)
 
 (defun js/insert-unicode-lambda ()
   (interactive)
@@ -4983,6 +4985,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-beta ()
   (interactive)
   (insert "\U000003B2"))
+(js/specialchardef "g b" #'js/insert-unicode-beta)
 
 (defun js/insert-unicode-gamma ()
   (interactive)
@@ -4993,8 +4996,7 @@ and `C-x' being marked as a `term-escape-char'."
   ;; δ
   (interactive)
   (insert "\U000003B4"))
-(js/specialchardef
-        "d" #'js/insert-unicode-delta)
+(js/specialchardef "g d" #'js/insert-unicode-delta)
 
 
 (defun js/insert-unicode-sum ()
@@ -5002,57 +5004,43 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002211")
   )
-(js/specialchardef
-        "S" #'js/insert-unicode-sum)
+(js/specialchardef "m S" #'js/insert-unicode-sum)
 
 (defun js/insert-unicode-tau ()
-  ;; inserts a contradiction-symbol ↯
+  ;; τ
   (interactive)
-  (insert "\U000003C4")
-  )
+  (insert "\U000003C4"))
+(js/specialchardef "g t" #'js/insert-unicode-tau)
 
 (defun js/insert-unicode-zeta ()
   ;; ζ
   (interactive)
   (insert "\U000003B6")
   )
-(js/specialchardef
-        "g z" #'js/insert-unicode-zeta)
-
-(defun js/insert-unicode-zeta ()
-  ;; inserts a contradiction-symbol ↯
-  (interactive)
-  (insert "\U000003C4")
-  )
-
-
+(js/specialchardef "g z" #'js/insert-unicode-zeta)
 
 (defun js/insert-unicode-sub-i ()
   ;; ᵢ
   (interactive)
-  (insert "\U00001D62")
-  )
+  (insert "\U00001D62"))
 ;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
 
 (defun js/insert-unicode-degree ()
-  ;; inserts a contradiction-symbol ↯
+  ;; °
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
   (insert "\U000000B0")
   )
+(js/specialchardef "c d" #'js/insert-unicode-degree)
 
 (defun js/insert-unicode-Checkmark ()
   (interactive)
   ;; (insert "\U00002713") ;; ✓
-  (insert "\U00002705") ;; ✅
-  )
+  (insert "\U00002705")) ;; ✅
 
 (defun js/insert-unicode-checkmark ()
   (interactive)
   ;; ✓
-  (insert "\U00002713")
-  )
+  (insert "\U00002713"))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (defun insert-char-pencil ()
 ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
