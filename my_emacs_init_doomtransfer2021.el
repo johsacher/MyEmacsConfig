@@ -4780,6 +4780,18 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000021af")
   )
 
+(defun js/insert-unicode-arrow ()
+  ;; ➜
+  (interactive)
+  (insert "\U0000279C"))
+(js/specialchardef "RET" #'js/insert-unicode-arrow)
+
+(defun js/insert-unicode-Arrow ()
+  ;; ➔
+  (interactive)
+  (insert "\U00002794"))
+(js/specialchardef ">" #'js/insert-unicode-Arrow)
+
 (defun js/insert-unicode-approx ()
   ;; ≈
   (interactive)
@@ -4791,8 +4803,7 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00000394")
   )
-(js/specialchardef
-        "g D" #'js/insert-unicode-Delta)
+(js/specialchardef "g D" #'js/insert-unicode-Delta)
 
 
 (defun js/insert-unicode-lambda ()
@@ -4800,16 +4811,14 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U000003BB")
   )
-(js/specialchardef
-        "g l" #'js/insert-unicode-lambda)
+(js/specialchardef "g l" #'js/insert-unicode-lambda)
 
 (defun js/insert-unicode-corresponds ()
   ;; ≙
   (interactive)
   (insert "\U00002259")
   )
-(js/specialchardef
-        "m c" #'js/insert-unicode-corresponds)
+(js/specialchardef "m c" #'js/insert-unicode-corresponds)
 
 
 (defun js/insert-unicode-sqrt ()
@@ -4817,16 +4826,14 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U0000221A")
   )
-(js/specialchardef
-        "m s" #'js/insert-unicode-sqrt)
+(js/specialchardef "m s" #'js/insert-unicode-sqrt)
 
 (defun js/insert-unicode-tab ()
   ;; 	(TAB)
   (interactive)
   (insert "\U00000009")
   )
-(js/specialchardef
-        "TAB" #'js/insert-unicode-tab)
+(js/specialchardef "TAB" #'js/insert-unicode-tab)
 
 ;; ** dot "multiply"
 (defun js/insert-unicode-dot ()
@@ -4836,12 +4843,11 @@ and `C-x' being marked as a `term-escape-char'."
   )
 
 (defun js/insert-unicode-mu ()
-  ;; inserts a contradiction-symbol ↯
+  ;; μ
   (interactive)
   (insert "\U000003BC")
   )
-(js/specialchardef
-        "g m" #'js/insert-unicode-mu)
+(js/specialchardef "g m" #'js/insert-unicode-mu)
 
 (defun js/insert-unicode-int ()
   ;; ∫
