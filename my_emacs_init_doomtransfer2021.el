@@ -5015,8 +5015,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-zeta ()
   ;; ζ
   (interactive)
-  (insert "\U000003B6")
-  )
+  (insert "\U000003B6"))
 (js/specialchardef "g z" #'js/insert-unicode-zeta)
 
 (defun js/insert-unicode-sub-i ()
