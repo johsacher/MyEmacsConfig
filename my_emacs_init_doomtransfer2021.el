@@ -711,6 +711,10 @@
       (:prefix ("c" . "code")
        :desc "set break-point" :n "k" #'python-set-break-point-current-line))
 
+(map! :map org-mode-map
+      :leader
+      (:prefix ("c" . "code")
+       :desc "C-c-C-c" :n "c" #'org-ctrl-c-ctrl-c))
 
 ;;NOT DOOM ;;;  ;;; * english-german-translator
 ;;NOT DOOM ;;;  (defvar english-german-translator-buffer-name "*english-german-translator*")
