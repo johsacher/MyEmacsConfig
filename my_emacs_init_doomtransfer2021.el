@@ -2287,6 +2287,26 @@ and `C-x' being marked as a `term-escape-char'."
      :nvieomr "C-M-p" #'change-dir-from-clipboard
      )
 
+(defun tempfig-revert ()
+  (interactive)
+  (with-current-buffer "tempfig1.pdf"
+    (revert-buffer t 'no-confirm)))
+
+(map!
+        :gi "C-RET"         nil
+        :gn [C-return]      nil)
+(map! :map term-raw-map
+      :nvieomr [C-return] #'tempfigs-revert)
+
+(defun tempfigs-revert ()
+  (interactive)
+  (dolist (b (buffer-list))
+    (with-current-buffer b
+      (if buffer-file-name
+          (if (string-match ".*tempfig.*" buffer-file-name)
+              (revert-buffer t 'no-confirm))))))
+
+
 ;; actually.. it comes handy for all modes
 (map!  ;; (which maps by default?)
      :nvieomr "C-M-y" #'copy-current-path
@@ -2657,6 +2677,10 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;; ;; The maximum displayed length of the branch name of version control.
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-vcs-max-length 12)
 ;;NOT DOOM ;;;
+;; * workspaces
+(map!
+ "M-[" #'+workspace/switch-right
+ "M-]" #'+workspace/switch-right)
 ;;NOT DOOM ;;;  ;; ;; Whether display the workspace name. Non-nil to display in the mode-line.
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name t)
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name nil)
