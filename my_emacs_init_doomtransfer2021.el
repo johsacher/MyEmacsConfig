@@ -398,6 +398,12 @@
 ;;NOT DOOM ;;; (use-package evil-visualstar
 ;;NOT DOOM ;;;   :ensure t)
 ;;NOT DOOM ;;;
+;; ** evil macros repeat
+(map!
+      :n "," #'(lambda () (interactive)
+(setq macro (evil-get-register evil-last-register t))
+(evil-execute-macro nil macro)))
+
 ;; quick search replace
 (defun quick-evil-search-replace-region ()
   (interactive)
@@ -716,18 +722,6 @@
       (:prefix ("c" . "code")
        :desc "C-c-C-c" :n "c" #'org-ctrl-c-ctrl-c))
 
-
-(map!
-      :n "," #'(lambda () (interactive)
-(setq macro (evil-get-register evil-last-register t))
-(evil-execute-macro nil macro)))
-
-;; (defun dummsky ()
-;;   (interactive)
-;;   (setq macro (evil-get-register evil-last-register t))
-;;   (evil-execute-macro nil macro))
-;; (map!
-;;       :n "," #'dummsky)
 
 ;;NOT DOOM ;;;  ;;; * english-german-translator
 ;;NOT DOOM ;;;  (defvar english-german-translator-buffer-name "*english-german-translator*")
