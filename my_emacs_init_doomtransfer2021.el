@@ -711,6 +711,23 @@
       (:prefix ("c" . "code")
        :desc "set break-point" :n "k" #'python-set-break-point-current-line))
 
+(map! :map org-mode-map
+      :leader
+      (:prefix ("c" . "code")
+       :desc "C-c-C-c" :n "c" #'org-ctrl-c-ctrl-c))
+
+
+(map!
+      :n "," #'(lambda () (interactive)
+(setq macro (evil-get-register evil-last-register t))
+(evil-execute-macro nil macro)))
+
+;; (defun dummsky ()
+;;   (interactive)
+;;   (setq macro (evil-get-register evil-last-register t))
+;;   (evil-execute-macro nil macro))
+;; (map!
+;;       :n "," #'dummsky)
 
 ;;NOT DOOM ;;;  ;;; * english-german-translator
 ;;NOT DOOM ;;;  (defvar english-german-translator-buffer-name "*english-german-translator*")
@@ -2915,7 +2932,8 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "Literatur"       "L" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/Literatur/pdf/Inkjet/")))
       :desc "Promotion"       "N" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
-      :desc "emacs init"      "q" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/quantica")))
+      :desc "quantica"        "q" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/quantica")))
+      :desc "frequent commands" "f" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/frequent_commands.sh")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
@@ -4818,13 +4836,13 @@ and `C-x' being marked as a `term-escape-char'."
   ;; ➜
   (interactive)
   (insert "\U0000279C"))
-(js/specialchardef "RET" #'js/insert-unicode-arrow)
 
 (defun js/insert-unicode-Arrow ()
   ;; ➔
   (interactive)
   (insert "\U00002794"))
 (js/specialchardef ">" #'js/insert-unicode-Arrow)
+(js/specialchardef "RET" #'js/insert-unicode-Arrow)
 
 (defun js/insert-unicode-approx ()
   ;; ≈
@@ -4928,6 +4946,18 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\u21af")
   (insert "\U000003C9")
   )
+(js/specialchardef "g o" #'js/insert-unicode-omega)
+
+
+(defun js/insert-unicode-epsilon ()
+  ;; ε
+  (interactive)
+  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+  ;; (insert "\u21af")
+  (insert "\U000003B5")
+  )
+(js/specialchardef "g e" #'js/insert-unicode-epsilon)
+
 
 (defun js/insert-unicode-nabla ()
   ;; ∇
