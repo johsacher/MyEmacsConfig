@@ -398,6 +398,12 @@
 ;;NOT DOOM ;;; (use-package evil-visualstar
 ;;NOT DOOM ;;;   :ensure t)
 ;;NOT DOOM ;;;
+;; ** evil macros repeat
+(map!
+      :n "," #'(lambda () (interactive)
+(setq macro (evil-get-register evil-last-register t))
+(evil-execute-macro nil macro)))
+
 ;; quick search replace
 (defun quick-evil-search-replace-region ()
   (interactive)
@@ -716,18 +722,6 @@
       (:prefix ("c" . "code")
        :desc "C-c-C-c" :n "c" #'org-ctrl-c-ctrl-c))
 
-
-(map!
-      :n "," #'(lambda () (interactive)
-(setq macro (evil-get-register evil-last-register t))
-(evil-execute-macro nil macro)))
-
-;; (defun dummsky ()
-;;   (interactive)
-;;   (setq macro (evil-get-register evil-last-register t))
-;;   (evil-execute-macro nil macro))
-;; (map!
-;;       :n "," #'dummsky)
 
 ;;NOT DOOM ;;;  ;;; * english-german-translator
 ;;NOT DOOM ;;;  (defvar english-german-translator-buffer-name "*english-german-translator*")
@@ -4952,11 +4946,19 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-epsilon ()
   ;; ε
   (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
   (insert "\U000003B5")
   )
 (js/specialchardef "g e" #'js/insert-unicode-epsilon)
+
+(defun js/insert-unicode-circled-dot ()
+  ;; ⊙
+  (interactive)
+  (insert "\U00002299"))
+
+(defun js/insert-unicode-cross ()
+  ;; ⨯
+  (interactive)
+  (insert "\U00002A2F"))
 
 
 (defun js/insert-unicode-nabla ()
@@ -4980,6 +4982,14 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000000B2")
   )
 (js/specialchardef "2" #'js/insert-unicode-squared)
+
+(defun js/insert-unicode-cubed ()
+  ;; ³
+  (interactive)
+  (insert "\U000000B3"))
+(js/specialchardef "3" #'js/insert-unicode-cubed)
+
+
 
 (defun js/insert-unicode-phi ()
   ;; φ
