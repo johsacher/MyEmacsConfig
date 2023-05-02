@@ -5036,6 +5036,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-nu ()
   (interactive)
   (insert "\U000003BD"))
+(js/specialchardef "g n" #'js/insert-unicode-nu)
 
 (defun js/insert-unicode-xi ()
   (interactive)
