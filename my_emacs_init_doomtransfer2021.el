@@ -5879,9 +5879,10 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       :desc "repeat last command" "z" #'repeat-complex-command)
 
-;; * workaround -> add ~/$HOME/bin to PATH (not automatically at quantica ubuntu VM)
-(getenv "PATH")
-(setenv "PATH" (concat "/home/parallels/bin" ":" (getenv "PATH")))
+;; * workaround -> add ~/$HOME/bin to PATH (i think this is only necessary when doom envvar file is used, maybe not necessary when turned off)
+(setenv "PATH" (concat (substitute-in-file-name "$HOME/bin")
+                       ":"
+                       (getenv "PATH")))
 
 
 
