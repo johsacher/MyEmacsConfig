@@ -5118,7 +5118,7 @@ and `C-x' being marked as a `term-escape-char'."
   ;; ᵢ
   (interactive)
   (insert "\U00001D62"))
-;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
+(js/specialchardef "s i" #'js/insert-unicode-sub-i)
 
 (defun js/insert-unicode-degree ()
   ;; °
