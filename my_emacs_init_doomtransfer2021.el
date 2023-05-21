@@ -4950,6 +4950,12 @@ and `C-x' being marked as a `term-escape-char'."
   )
 (js/specialchardef "g e" #'js/insert-unicode-epsilon)
 
+(defun js/insert-unicode-chi ()
+  ;; χ
+  (interactive)
+  (insert "\U000003C7")
+  )
+(js/specialchardef "g x" #'js/insert-unicode-chi)
 (defun js/insert-unicode-circled-dot ()
   ;; ⊙
   (interactive)
