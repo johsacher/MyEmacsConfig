@@ -5141,39 +5141,39 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002A02"))
 
-(defun js/insert-unicode-degree ()
-  ;; °
-  (interactive)
-  (insert "\U000000B0")
-  )
-(js/specialchardef "c d" #'js/insert-unicode-degree)
+;; (defun js/insert-unicode-degree ()
+;;   ;; °
+;;   (interactive)
+;;   (insert "\U000000B0")
+;;   )
+;; (js/specialchardef "c d" #'js/insert-unicode-degree)
 
-(defun js/insert-unicode-Checkmark ()
-  (interactive)
-  ;; (insert "\U00002713") ;; ✓
-  (insert "\U00002705")) ;; ✅
+;; (defun js/insert-unicode-Checkmark ()
+;;   (interactive)
+;;   ;; (insert "\U00002713") ;; ✓
+;;   (insert "\U00002705")) ;; ✅
 
-(defun js/insert-unicode-checkmark ()
-  (interactive)
-  ;; ✓
-  (insert "\U00002713"))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun insert-char-pencil ()
-;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-;;NOT DOOM ;;;    ;; (insert "\u21af")
-;;NOT DOOM ;;;    (insert "\U0000270e")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; (insert "\U0000270E")✎
-;;NOT DOOM ;;;  ;; (insert "\U0000270f")✏
-;;NOT DOOM ;;;  ;; (insert "\U00002710")✐
-;;NOT DOOM ;;;  ;; (insert "\U00002711")✑
-;;NOT DOOM ;;;  ;; (insert "\U00002712")✒
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
+;; (defun js/insert-unicode-checkmark ()
+;;   (interactive)
+;;   ;; ✓
+;;   (insert "\U00002713"))
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  (defun insert-char-pencil ()
+;; ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
+;; ;;NOT DOOM ;;;    (interactive)
+;; ;;NOT DOOM ;;;    ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+;; ;;NOT DOOM ;;;    ;; (insert "\u21af")
+;; ;;NOT DOOM ;;;    (insert "\U0000270e")
+;; ;;NOT DOOM ;;;    )
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; (insert "\U0000270E")✎
+;; ;;NOT DOOM ;;;  ;; (insert "\U0000270f")✏
+;; ;;NOT DOOM ;;;  ;; (insert "\U00002710")✐
+;; ;;NOT DOOM ;;;  ;; (insert "\U00002711")✑
+;; ;;NOT DOOM ;;;  ;; (insert "\U00002712")✒
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
 
 ;; * termux android
 
