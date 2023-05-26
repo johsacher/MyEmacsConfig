@@ -5125,10 +5125,10 @@ and `C-x' being marked as a `term-escape-char'."
 ;; Ψ 	ψ 	Psi 	ps
 ;; Ω 	ω 	Omega 	o
 
-;; (defun js/insert-unicode-sub-i ()
-;;   ;; ᵢ
-;;   (interactive)
-;;   (insert "\U00001D62"))
+(defun js/insert-unicode-sub-i ()
+  ;; ᵢ
+  (interactive)
+  (insert "\U00001D62"))
 ;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
 
 (defun js/insert-unicode-circle-dot()
