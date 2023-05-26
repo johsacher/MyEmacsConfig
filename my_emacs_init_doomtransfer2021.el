@@ -2914,15 +2914,14 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
       ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
       ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
-      :desc "mac/vm -> Data" "F" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data")))
-      :desc "quantica" "q" #'(lambda () (interactive) (dired (substitute-in-file-name "/media/psf/Home/Data/simulation")))
+      :desc "Data"            "F" #'(lambda () (interactive) (dired (substitute-in-file-name "$DATA")))
       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/doktorparty_songs"))) ;;basking_project")))
       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
       :desc "projects file"   "P" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/projects/projects_current.org/projects_current.org")))
       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
-      :desc ".doom.d"         "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.doom.d")))
+      :desc "doom"            "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.config/doom")))
       :desc "Literatur"       "L" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/Literatur/pdf/Inkjet/")))
       :desc "Promotion"       "N" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
@@ -5042,11 +5041,23 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-nu ()
   (interactive)
   (insert "\U000003BD"))
+(js/specialchardef "g n" #'js/insert-unicode-nu)
 
 (defun js/insert-unicode-xi ()
   (interactive)
   (insert "\U000003BE"))
 (js/specialchardef "g x" #'js/insert-unicode-xi)
+
+(defun js/insert-unicode-div ()
+  ;; ÷
+  (interactive)
+  (insert "\U000000F7"))
+(defun js/insert-unicode-mult ()
+  ;; ×
+  (interactive)
+  (insert "\U000000D7"))
+
+
 
 (defun js/insert-unicode-alpha ()
   (interactive)
@@ -5124,7 +5135,17 @@ and `C-x' being marked as a `term-escape-char'."
   ;; ᵢ
   (interactive)
   (insert "\U00001D62"))
-;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
+(js/specialchardef "s i" #'js/insert-unicode-sub-i)
+
+(defun js/insert-unicode-circle-dot()
+  ;; ⊙
+  (interactive)
+  (insert "\U00002299"))
+
+(defun js/insert-unicode-circle-cross()
+  ;; ⨂
+  (interactive)
+  (insert "\U00002A02"))
 
 (defun js/insert-unicode-degree ()
   ;; °
@@ -5885,9 +5906,10 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       :desc "repeat last command" "z" #'repeat-complex-command)
 
-;; * workaround -> add ~/$HOME/bin to PATH (not automatically at quantica ubuntu VM)
-(getenv "PATH")
-(setenv "PATH" (concat "/home/parallels/bin" ":" (getenv "PATH")))
+;; * workaround -> add ~/$HOME/bin to PATH (i think this is only necessary when doom envvar file is used, maybe not necessary when turned off)
+(setenv "PATH" (concat (substitute-in-file-name "$HOME/bin")
+                       ":"
+                       (getenv "PATH")))
 
 
 
