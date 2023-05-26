@@ -4922,7 +4922,7 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U0000221E")
   )
 (js/specialchardef
-        "m i" #'js/insert-unicode-inf)
+        "m f" #'js/insert-unicode-inf)
 
 (defun js/insert-unicode-theta ()
   ;; inserts a contradiction-symbol ↯
@@ -5129,7 +5129,7 @@ and `C-x' being marked as a `term-escape-char'."
   ;; ᵢ
   (interactive)
   (insert "\U00001D62"))
-;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
+(js/specialchardef "m i" #'js/insert-unicode-sub-i)
 
 (defun js/insert-unicode-circle-dot()
   ;; ⊙
