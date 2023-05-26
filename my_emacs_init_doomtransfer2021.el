@@ -2689,372 +2689,372 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;; ;; The maximum displayed length of the branch name of version control.
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-vcs-max-length 12)
 ;;NOT DOOM ;;;
-;; * workspaces
-(map!
- "M-[" #'+workspace/switch-right
- "M-]" #'+workspace/switch-right)
-;;NOT DOOM ;;;  ;; ;; Whether display the workspace name. Non-nil to display in the mode-line.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name t)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name nil)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the perspective name. Non-nil to display in the mode-line.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-persp-name t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; If non nil the default perspective name is displayed in the mode-line.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-display-default-persp-name nil)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; If non nil the perspective name is displayed alongside a folder icon.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-persp-icon t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the `lsp' state. Non-nil to display in the mode-line.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-lsp t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the GitHub notifications. It requires `ghub' package.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-github nil)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; The interval of checking GitHub.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-github-interval (* 30 60))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the modal state icon.
-;;NOT DOOM ;;;  ;; ;; Including `evil', `overwrite', `god', `ryo' and `xah-fly-keys', etc.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-modal-icon t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the mu4e notifications. It requires `mu4e-alert' package.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-mu4e nil)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the gnus notifications.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-gnus t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Wheter gnus should automatically be updated and how often (set to 0 or smaller than 0 to disable)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-gnus-timer 2)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Wheter groups should be excludede when gnus automatically being updated.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-gnus-excluded-groups '("dummy.group"))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the IRC notifications. It requires `circe' or `erc' package.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-irc t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Function to stylize the irc buffer names.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-irc-stylize 'identity)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Whether display the environment version.
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-version t)
-;;NOT DOOM ;;;  ;; ;; Or for individual languages
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-python t)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-ruby t)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-perl t)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-go t)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-elixir t)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-rust t)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Change the executables to use for the language version string
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-ruby-executable "ruby")
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-perl-executable "perl")
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-go-executable "go")
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-elixir-executable "iex")
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-rust-executable "rustc")
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; What to display as the version while a new one is being loaded
-;;NOT DOOM ;;;  ;; (setq doom-modeline-env-load-string "...")
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; Hooks that run before/after the modeline version string is updated
-;;NOT DOOM ;;;  ;; (setq doom-modeline-before-update-env-hook nil)
-;;NOT DOOM ;;;  ;; (setq doom-modeline-after-update-env-hook nil)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; * WINDOW / BUFFER NAVIGATION STUFF
-;;NOT DOOM ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; ** copy/paste path between buffers (terminal/dired)
-(load "copy-paste-paths.el")
-;; copy current path key bindings
-;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
-(map! :leader
-      (:prefix-map ("y" . "paths")
-       :desc "copy current path" "y" 'copy-current-path ;; analogouns to y = vim yank
-       :desc "copy file path" "u" 'copy-fullfilename
- ;; analogouns to y = vim yank
-       :desc "change path"       "p" 'change-dir-from-clipboard ;; analogouns to y = vim yank
-       :desc "change path"       "Y" 'android-copy-to-clipboard
-       :desc "change path"       "P" 'android-paste-clipboard)) ;; analogouns to y = vim yank
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
-;;NOT DOOM ;;;  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; ** avy/ace jump
-;;NOT DOOM ;;; (use-package avy
-;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;;  (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
-;;NOT DOOM ;;;  (js/leader-def "m" 'avy-goto-char)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (setq dired-recursive-copies 'always)
-;;NOT DOOM ;;;  (setq dired-dwim-target t) ;; do what i mean --> automatic "inteligent" copy location etc.
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; * ) quickly move buffer to another window
-;;NOT DOOM ;;;  (load "quickly-move-buffer-to-other-window.el")
-;;NOT DOOM ;;;  ;; copy current path key bindings
-;;NOT DOOM ;;;  (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
-;;NOT DOOM ;;;  (global-set-key (kbd "M-u") 'get-this-buffer-to-move)
-;;NOT DOOM ;;; (require 'dired)
-;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
-;;NOT DOOM ;;;  (global-set-key (kbd "M-i") 'switch-to-buffer-to-move)
-;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<f4>") 'switch-to-buffer-to-move)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; .) disable the "nerviges/sinnloses" automatic copy-path of other dired buffer (especially when renaming)
-;;NOT DOOM ;;;  ;;    (this was suppose to "help" when performing copy / rename etc. operations in mini-buffer, so you would not have to type the location manually but get some "intelligent guess" from clipboard, BUT:
-;;NOT DOOM ;;;  ;;    this is obsolete with dired-ranger --> much better copy/paste workflow)
-;;NOT DOOM ;;;  (setq dired-dwim-target nil)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; * dired
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** hide details by default
-(add-hook 'dired-mode-hook
-            'dired-hide-details-mode)
-;;NOT DOOM ;;;  	    (dired-do-kill-lines))
-;;NOT DOOM ;;;  	(progn (revert-buffer) ; otherwise just revert to re-show
-;;NOT DOOM ;;;                 (set (make-local-variable 'dired-dotfiles-show-p) t)))))
-;;NOT DOOM ;;;  ;; ** add option to list directories first
-;;NOT DOOM ;;;  ;;(setq dired-listing-switches "-aBhl  --group-directories-first")
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** open in dired with external applications --> see '* open with external applications' (below)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;;; * ) dired "options" (minor-modes)
-;;NOT DOOM ;;;  ;; ;;;--------------------------------------------
-;;NOT DOOM ;;;  ;; ;;    .) open recent directories
-;;NOT DOOM ;;;  ;; (global-set-key (kbd "C-x C-d") 'dired-recent-dirs-ivy-bjm) ;; see definition recent_dirs.el
-;;NOT DOOM ;;;
+;; ;; * workspaces
+;; (map!
+;;  "M-[" #'+workspace/switch-right
+;;  "M-]" #'+workspace/switch-right)
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the workspace name. Non-nil to display in the mode-line.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name t)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name nil)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the perspective name. Non-nil to display in the mode-line.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-persp-name t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; If non nil the default perspective name is displayed in the mode-line.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-display-default-persp-name nil)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; If non nil the perspective name is displayed alongside a folder icon.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-persp-icon t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the `lsp' state. Non-nil to display in the mode-line.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-lsp t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the GitHub notifications. It requires `ghub' package.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-github nil)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; The interval of checking GitHub.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-github-interval (* 30 60))
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the modal state icon.
+;; ;;NOT DOOM ;;;  ;; ;; Including `evil', `overwrite', `god', `ryo' and `xah-fly-keys', etc.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-modal-icon t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the mu4e notifications. It requires `mu4e-alert' package.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-mu4e nil)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the gnus notifications.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-gnus t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Wheter gnus should automatically be updated and how often (set to 0 or smaller than 0 to disable)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-gnus-timer 2)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Wheter groups should be excludede when gnus automatically being updated.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-gnus-excluded-groups '("dummy.group"))
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the IRC notifications. It requires `circe' or `erc' package.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-irc t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Function to stylize the irc buffer names.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-irc-stylize 'identity)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Whether display the environment version.
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-version t)
+;; ;;NOT DOOM ;;;  ;; ;; Or for individual languages
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-python t)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-ruby t)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-perl t)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-go t)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-elixir t)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-enable-rust t)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Change the executables to use for the language version string
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-ruby-executable "ruby")
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-perl-executable "perl")
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-go-executable "go")
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-elixir-executable "iex")
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-rust-executable "rustc")
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; What to display as the version while a new one is being loaded
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-env-load-string "...")
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; Hooks that run before/after the modeline version string is updated
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-before-update-env-hook nil)
+;; ;;NOT DOOM ;;;  ;; (setq doom-modeline-after-update-env-hook nil)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;; * WINDOW / BUFFER NAVIGATION STUFF
+;; ;;NOT DOOM ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; ** copy/paste path between buffers (terminal/dired)
+;; (load "copy-paste-paths.el")
+;; ;; copy current path key bindings
+;; ;; *** this got sooo usefull/frequent -> bind also to evil leader (prime positions spc-y/ spc-p )
+;; (map! :leader
+;;       (:prefix-map ("y" . "paths")
+;;        :desc "copy current path" "y" 'copy-current-path ;; analogouns to y = vim yank
+;;        :desc "copy file path" "u" 'copy-fullfilename
+;;  ;; analogouns to y = vim yank
+;;        :desc "change path"       "p" 'change-dir-from-clipboard ;; analogouns to y = vim yank
+;;        :desc "change path"       "Y" 'android-copy-to-clipboard
+;;        :desc "change path"       "P" 'android-paste-clipboard)) ;; analogouns to y = vim yank
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
+;; ;;NOT DOOM ;;;  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;; ** avy/ace jump
+;; ;;NOT DOOM ;;; (use-package avy
+;; ;;NOT DOOM ;;;   :ensure t)
+;; ;;NOT DOOM ;;;  (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
+;; ;;NOT DOOM ;;;  (js/leader-def "m" 'avy-goto-char)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  (setq dired-recursive-copies 'always)
+;; ;;NOT DOOM ;;;  (setq dired-dwim-target t) ;; do what i mean --> automatic "inteligent" copy location etc.
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;; * ) quickly move buffer to another window
+;; ;;NOT DOOM ;;;  (load "quickly-move-buffer-to-other-window.el")
+;; ;;NOT DOOM ;;;  ;; copy current path key bindings
+;; ;;NOT DOOM ;;;  (global-set-key (kbd "<f3>") 'get-this-buffer-to-move)
+;; ;;NOT DOOM ;;;  (global-set-key (kbd "M-u") 'get-this-buffer-to-move)
+;; ;;NOT DOOM ;;; (require 'dired)
+;; ;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<f3>") 'get-this-buffer-to-move)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  (global-set-key (kbd "<f4>") 'switch-to-buffer-to-move)
+;; ;;NOT DOOM ;;;  (global-set-key (kbd "M-i") 'switch-to-buffer-to-move)
+;; ;;NOT DOOM ;;;  (define-key dired-mode-map (kbd "<f4>") 'switch-to-buffer-to-move)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; .) disable the "nerviges/sinnloses" automatic copy-path of other dired buffer (especially when renaming)
+;; ;;NOT DOOM ;;;  ;;    (this was suppose to "help" when performing copy / rename etc. operations in mini-buffer, so you would not have to type the location manually but get some "intelligent guess" from clipboard, BUT:
+;; ;;NOT DOOM ;;;  ;;    this is obsolete with dired-ranger --> much better copy/paste workflow)
+;; ;;NOT DOOM ;;;  (setq dired-dwim-target nil)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;; * dired
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ** hide details by default
+;; (add-hook 'dired-mode-hook
+;;             'dired-hide-details-mode)
+;; ;;NOT DOOM ;;;  	    (dired-do-kill-lines))
+;; ;;NOT DOOM ;;;  	(progn (revert-buffer) ; otherwise just revert to re-show
+;; ;;NOT DOOM ;;;                 (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+;; ;;NOT DOOM ;;;  ;; ** add option to list directories first
+;; ;;NOT DOOM ;;;  ;;(setq dired-listing-switches "-aBhl  --group-directories-first")
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ** open in dired with external applications --> see '* open with external applications' (below)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;;; * ) dired "options" (minor-modes)
+;; ;;NOT DOOM ;;;  ;; ;;;--------------------------------------------
+;; ;;NOT DOOM ;;;  ;; ;;    .) open recent directories
+;; ;;NOT DOOM ;;;  ;; (global-set-key (kbd "C-x C-d") 'dired-recent-dirs-ivy-bjm) ;; see definition recent_dirs.el
+;; ;;NOT DOOM ;;;
 
-;; create empty file ( = bash's touch)
-(defun dired-create-new-empty-file ()
-   (interactive)
-   ;; create the hidden (dotted) folder with same name of org file
-   (setq filename (read-string "file-name: "))
-   (setq file-full-name (concat  (dired-current-directory) "/" filename))
-   (with-temp-buffer (write-file file-full-name)))
+;; ;; create empty file ( = bash's touch)
+;; (defun dired-create-new-empty-file ()
+;;    (interactive)
+;;    ;; create the hidden (dotted) folder with same name of org file
+;;    (setq filename (read-string "file-name: "))
+;;    (setq file-full-name (concat  (dired-current-directory) "/" filename))
+;;    (with-temp-buffer (write-file file-full-name)))
 
-(defun dired-create-new-empty-file-and-visit ()
-   (interactive)
-   ;; create the hidden (dotted) folder with same name of org file
-   (setq filename (read-string "file-name: "))
-   (setq file-full-name (concat  (dired-current-directory) "/" filename))
-   (with-temp-buffer (write-file file-full-name)))
+;; (defun dired-create-new-empty-file-and-visit ()
+;;    (interactive)
+;;    ;; create the hidden (dotted) folder with same name of org file
+;;    (setq filename (read-string "file-name: "))
+;;    (setq file-full-name (concat  (dired-current-directory) "/" filename))
+;;    (with-temp-buffer (write-file file-full-name)))
 
-(defun dired-create-new-xournal-file-and-visit ()
-  (interactive)
-  ;; * file name
-  (setq filename (read-string "xournal file name (without .xopp extension): "))
-  ;; (message filename)
-  ;; * create file from template
-  (setq currentpath (file-name-directory (dired-current-directory)))
-  (setq filefullname (concat  currentpath "/" filename))
-  (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xopp")
-  ;; * open xournal file (no popup of async output)
-  (setq command_string (concat "xournalpp " filefullname))
-  (efs/run-in-background command_string)
-  (copy-file template-filefullname filefullname))
+;; (defun dired-create-new-xournal-file-and-visit ()
+;;   (interactive)
+;;   ;; * file name
+;;   (setq filename (read-string "xournal file name (without .xopp extension): "))
+;;   ;; (message filename)
+;;   ;; * create file from template
+;;   (setq currentpath (file-name-directory (dired-current-directory)))
+;;   (setq filefullname (concat  currentpath "/" filename))
+;;   (setq template-filefullname "/home/johannes/MyEmacsConfig/xournal_org_template_new.xopp")
+;;   ;; * open xournal file (no popup of async output)
+;;   (setq command_string (concat "xournalpp " filefullname))
+;;   (efs/run-in-background command_string)
+;;   (copy-file template-filefullname filefullname))
 
-(map! :localleader
-      :map dired-mode-map
-      "m" #'dired-create-new-empty-file
-      "v" #'dired-create-new-empty-file-and-visit
-      "x" #'dired-create-new-xournal-file-and-visit)
+;; (map! :localleader
+;;       :map dired-mode-map
+;;       "m" #'dired-create-new-empty-file
+;;       "v" #'dired-create-new-empty-file-and-visit
+;;       "x" #'dired-create-new-xournal-file-and-visit)
 
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; * helm-rg
-;;NOT DOOM ;;; (use-package helm-rg
-;;NOT DOOM ;;;   :ensure t)
-;;NOT DOOM ;;;  (setq helm-rg-default-extra-args '("--hidden"))
-;;NOT DOOM ;;;  ;; only makes sence in dired buffers, for others-> helm-soop
-;;NOT DOOM ;;;  (js/leader-def :keymaps 'dired-mode-mode-map "g" 'helm-rg) ;
-;;NOT DOOM ;;;  ;; DIRED+ STUFF -> no longer officially supported MELPA (security reasons) --> outcommented
-;;NOT DOOM ;;;  ;;  (https://emacs.stackexchange.com/questions/38553/dired-missing-from-melpa)
-;;NOT DOOM ;;;  ;; ;;    .) reuse buffer,  don't open always new buffer when
-;;NOT DOOM ;;;  ;;(require 'dired+) ;; was "somehow" necessary, otherwise not "launched"
-;;NOT DOOM ;;;  ;; ;;;   .) reuse buffer when clicking on directory
-;;NOT DOOM ;;;  ;; (diredp-toggle-find-file-reuse-dir 1)
-;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "<mouse-2>") 'diredp-mouse-find-file)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;;   .) toggle sudo-rights
-;;NOT DOOM ;;;  ;; (require 'dired-toggle-sudo)
-;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "C-c C-s") 'dired-toggle-sudo)
-;;NOT DOOM ;;;  ;; (eval-after-load 'tramp
-;;NOT DOOM ;;;  ;;  '(progn
-;;NOT DOOM ;;;  ;;     ;; Allow to use: /sudo:user@host:/path/to/file
-;;NOT DOOM ;;;  ;;     (add-to-list 'tramp-default-proxies-alist
-;;NOT DOOM ;;;  ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
-;;NOT DOOM ;;;
-;;
-;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
-(defun dired-go-downloads ()
-  (interactive)
-(cond
- ((equal myhost "phone")
-  (dired "/storage/emulated/0/Download/"))
- ((equal myhost "macos")
-  (dired (substitute-in-file-name "$HOME/Downloads")))
- ((equal myhost "laptop")
-  (dired (substitute-in-file-name "$HOME/Downloads")))
- (t
-  (dired (substitute-in-file-name "$HOME/Downloads")))
- ))
-
-
-(setq dropbox-path (getenv "DROPBOX"))
-(map! :leader
-      (:prefix-map ("l" . "frequent dirs")
-      :desc "home"            "h" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME")))
-      :desc "downloads"       "d" #'dired-go-downloads
-      :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
-      ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
-      ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
-      :desc "Data"            "F" #'(lambda () (interactive) (dired (substitute-in-file-name "$DATA")))
-      :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/doktorparty_songs"))) ;;basking_project")))
-      :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
-      :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
-      :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
-      :desc "projects file"   "P" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/projects/projects_current.org/projects_current.org")))
-      :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
-      :desc "doom"            "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.config/doom")))
-      :desc "Literatur"       "L" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/Literatur/pdf/Inkjet/")))
-      :desc "Promotion"       "N" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
-      :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
-      :desc "quantica"        "q" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/quantica")))
-      :desc "frequent commands" "f" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/frequent_commands.sh")))
- ))
-
-;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
-;;NOT DOOM ;;;  (js/leader-def "hb" 'helm-bookmarks)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;    .) auto revert dired default
-;;NOT DOOM ;;;  (add-hook 'dired-mode-hook 'auto-revert-mode)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;    .) don't confirm deletion on every
-;;NOT DOOM ;;;        (setq dired-recursive-deletes 'always)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;;;   .) add icons
-;;NOT DOOM ;;;  ;; ;;(require 'dired-icon)
-;;NOT DOOM ;;;  ;; ;;(add-hook 'dired-mode-hook 'dired-icon-mode)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; go up directory with backspace
-(map! :map dired-mode-map :n "<DEL>" 'dired-up-directory)
-;;NOT DOOM ;;; ;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; quickly choose files by letters
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; dired-narrow was not so handy.. this was not soo effective...
-;;NOT DOOM ;;;  ;; todo -> better solution (maybe use / ? evil like to simply search)
-;;NOT DOOM ;;;  ;; (require 'dired-narrow)
-;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "<SPC>") 'dired-narrow)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-
- ;; ;;; dired ranger key's - nicely copy/paste files/dirs
-(after! org
-        (require 'dired-ranger))
-
-(after! dired-ranger
-  (map! :map dired-mode-map
-        :n  "Y"  #'dired-ranger-copy
-        :n  "C"  #'dired-ranger-copy
-        :n  "C-c"  #'dired-ranger-copy
-        :n  "X"  #'dired-ranger-move
-        :n  "C-x"  #'dired-ranger-move
-        :n  "P"  #'dired-ranger-paste
-        :n  "C-v"  #'dired-ranger-paste))
-
-  ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
-  ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
-  ;; (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; * helm-rg
+;; ;;NOT DOOM ;;; (use-package helm-rg
+;; ;;NOT DOOM ;;;   :ensure t)
+;; ;;NOT DOOM ;;;  (setq helm-rg-default-extra-args '("--hidden"))
+;; ;;NOT DOOM ;;;  ;; only makes sence in dired buffers, for others-> helm-soop
+;; ;;NOT DOOM ;;;  (js/leader-def :keymaps 'dired-mode-mode-map "g" 'helm-rg) ;
+;; ;;NOT DOOM ;;;  ;; DIRED+ STUFF -> no longer officially supported MELPA (security reasons) --> outcommented
+;; ;;NOT DOOM ;;;  ;;  (https://emacs.stackexchange.com/questions/38553/dired-missing-from-melpa)
+;; ;;NOT DOOM ;;;  ;; ;;    .) reuse buffer,  don't open always new buffer when
+;; ;;NOT DOOM ;;;  ;;(require 'dired+) ;; was "somehow" necessary, otherwise not "launched"
+;; ;;NOT DOOM ;;;  ;; ;;;   .) reuse buffer when clicking on directory
+;; ;;NOT DOOM ;;;  ;; (diredp-toggle-find-file-reuse-dir 1)
+;; ;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "<mouse-2>") 'diredp-mouse-find-file)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;;   .) toggle sudo-rights
+;; ;;NOT DOOM ;;;  ;; (require 'dired-toggle-sudo)
+;; ;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "C-c C-s") 'dired-toggle-sudo)
+;; ;;NOT DOOM ;;;  ;; (eval-after-load 'tramp
+;; ;;NOT DOOM ;;;  ;;  '(progn
+;; ;;NOT DOOM ;;;  ;;     ;; Allow to use: /sudo:user@host:/path/to/file
+;; ;;NOT DOOM ;;;  ;;     (add-to-list 'tramp-default-proxies-alist
+;; ;;NOT DOOM ;;;  ;; 		  '(".*" "\\`.+\\'" "/ssh:%h:"))))
+;; ;;NOT DOOM ;;;
+;; ;;
+;; ;; ** dired short cut s: go frequent places -> "go home" / "go $WORK" / bookmarks / etc.
+;; (defun dired-go-downloads ()
+;;   (interactive)
+;; (cond
+;;  ((equal myhost "phone")
+;;   (dired "/storage/emulated/0/Download/"))
+;;  ((equal myhost "macos")
+;;   (dired (substitute-in-file-name "$HOME/Downloads")))
+;;  ((equal myhost "laptop")
+;;   (dired (substitute-in-file-name "$HOME/Downloads")))
+;;  (t
+;;   (dired (substitute-in-file-name "$HOME/Downloads")))
+;;  ))
 
 
+;; (setq dropbox-path (getenv "DROPBOX"))
+;; (map! :leader
+;;       (:prefix-map ("l" . "frequent dirs")
+;;       :desc "home"            "h" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME")))
+;;       :desc "downloads"       "d" #'dired-go-downloads
+;;       :desc "MyEmacsConfig"   "e" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/MyEmacsConfig")))
+;;       ;; :desc "cluster -> WORK" "w" #'(lambda () (interactive) (dired (substitute-in-file-name "$WORK")))
+;;       ;; :desc "cluster -> FAST" "f" #'(lambda () (interactive) (dired (substitute-in-file-name "$FAST")))
+;;       :desc "Data"            "F" #'(lambda () (interactive) (dired (substitute-in-file-name "$DATA")))
+;;       :desc "mucke"           "m" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/mucke/doktorparty_songs"))) ;;basking_project")))
+;;       :desc "temp"            "t" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/temp")))
+;;       :desc "org"             "o" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org")))
+;;       :desc "projects"        "p" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/projects")))
+;;       :desc "projects file"   "P" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/projects/projects_current.org/projects_current.org")))
+;;       :desc "lists"           "l" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/org/lists")))
+;;       :desc "doom"            "D" #'(lambda () (interactive) (dired (substitute-in-file-name "$HOME/.config/doom")))
+;;       :desc "Literatur"       "L" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/Literatur/pdf/Inkjet/")))
+;;       :desc "Promotion"       "N" #'(lambda () (interactive) (dired (concat dropbox-path "/MyFiles/Beruf/TUBerlinPromo/Promotionsprojekt/")))
+;;       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
+;;       :desc "quantica"        "q" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/quantica")))
+;;       :desc "frequent commands" "f" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/frequent_commands.sh")))
+;;  ))
 
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; evil dired - (results in mixture of evil and dired, evil: gg,G,/,?,yy,v  , dired, s,m,W,X,Y, etc.)
-;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "W") 'dired-ranger-copy)
-;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "X") 'dired-ranger-move)
-;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "Y") 'dired-ranger-paste)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map (kbd "<DEL>") 'dired-up-directory)
-;;NOT DOOM ;;;    ;; (evil-define-key 'normal dired-mode-map "l" 'dired-find-alternate-file)
-;;NOT DOOM ;;;   ;; (evil-define-key 'normal dired-mode-map "o" 'dired-sort-toggle-or-edit)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "s" 'dired-sort-toggle-or-edit)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "(" 'dired-hide-details-mode)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "m" 'dired-mark)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "o" 'dired-mark)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "u" 'dired-unmark)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "U" 'dired-unmark-all-marks)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "+" 'dired-create-directory)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "n" 'evil-search-next)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "N" 'evil-search-previous)
-;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "q" 'kill-this-buffer)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ** )  by hitting enter -> exit narrow-mode and enter file/dir
-;;NOT DOOM ;;;  ;; --------------------------------------------------------------------
-;;NOT DOOM ;;;  ;; ;;; (quick and dirty way)
-;;NOT DOOM ;;;  ;; ;; source: http://oremacs.com/2015/07/16/callback-quit/
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;;; adjust some stuff for dired-narrow work-flow:
-;;NOT DOOM ;;;  ;; ;;; this macro is necessary (don't understand but ok...)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; (defmacro dired-narrow-quit-and-run (&rest body)
-;;NOT DOOM ;;;  ;;   "Quit the minibuffer and run BODY afterwards."
-;;NOT DOOM ;;;  ;;   `(progn
-;;NOT DOOM ;;;  ;;      (put 'quit 'error-message "")
-;;NOT DOOM ;;;  ;;      (run-at-time nil nil
-;;NOT DOOM ;;;  ;;                   (lambda ()
-;;NOT DOOM ;;;  ;;                     (put 'quit 'error-message "Quit")
-;;NOT DOOM ;;;  ;;                     ,@body))
-;;NOT DOOM ;;;  ;;      (minibuffer-keyboard-quit)))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;;
-;;NOT DOOM ;;;  ;; (defun dired-narrow-quit-and-enter-file-or-dir ()
-;;NOT DOOM ;;;  ;;    (interactive)
-;;NOT DOOM ;;;  ;;        (dired-narrow-quit-and-run
-;;NOT DOOM ;;;  ;;           (dired-find-file)  ;; <--- put here what you wanna do after exiting from dired-narrow
-;;NOT DOOM ;;;  ;;         )
-;;NOT DOOM ;;;  ;;      (user-error
-;;NOT DOOM ;;;  ;;       "Not completing files currently")
-;;NOT DOOM ;;;  ;;   )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "<return>") 'dired-narrow-quit-and-enter-file-or-dir)
-;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "RET") 'dired-narrow-quit-and-enter-file-or-dir)
-;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "C-e") 'exit-minibuffer)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; however the RET key by default is used to actually: start operating on the filtered files
-;;NOT DOOM ;;;  ;; ;; --> define another key for that
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "<SPC>") 'exit-minibuffer)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; ;; (defun exit-minibuffer-and-diredp-find-file-reuse-dir-buffer ()
-;;NOT DOOM ;;;  ;; ;;   (interactive)
-;;NOT DOOM ;;;  ;; ;;   (exit-minibuffer)
-;;NOT DOOM ;;;  ;; ;;   (diredp-find-file-reuse-dir-buffer)
-;;NOT DOOM ;;;  ;; ;; )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "RET") 'dired-narrow-quit-and-enter-file-or-dir)
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;NOT DOOM ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
+;; ;;NOT DOOM ;;;  (js/leader-def "hb" 'helm-bookmarks)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;    .) auto revert dired default
+;; ;;NOT DOOM ;;;  (add-hook 'dired-mode-hook 'auto-revert-mode)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;    .) don't confirm deletion on every
+;; ;;NOT DOOM ;;;        (setq dired-recursive-deletes 'always)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;;;   .) add icons
+;; ;;NOT DOOM ;;;  ;; ;;(require 'dired-icon)
+;; ;;NOT DOOM ;;;  ;; ;;(add-hook 'dired-mode-hook 'dired-icon-mode)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; go up directory with backspace
+;; (map! :map dired-mode-map :n "<DEL>" 'dired-up-directory)
+;; ;;NOT DOOM ;;; ;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; quickly choose files by letters
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; dired-narrow was not so handy.. this was not soo effective...
+;; ;;NOT DOOM ;;;  ;; todo -> better solution (maybe use / ? evil like to simply search)
+;; ;;NOT DOOM ;;;  ;; (require 'dired-narrow)
+;; ;;NOT DOOM ;;;  ;; (define-key dired-mode-map (kbd "<SPC>") 'dired-narrow)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+
+;;  ;; ;;; dired ranger key's - nicely copy/paste files/dirs
+;; (after! org
+;;         (require 'dired-ranger))
+
+;; (after! dired-ranger
+;;   (map! :map dired-mode-map
+;;         :n  "Y"  #'dired-ranger-copy
+;;         :n  "C"  #'dired-ranger-copy
+;;         :n  "C-c"  #'dired-ranger-copy
+;;         :n  "X"  #'dired-ranger-move
+;;         :n  "C-x"  #'dired-ranger-move
+;;         :n  "P"  #'dired-ranger-paste
+;;         :n  "C-v"  #'dired-ranger-paste))
+
+;;   ;; (define-key dired-mode-map (kbd "Y") 'dired-ranger-copy)
+;;   ;; (define-key dired-mode-map (kbd "X") 'dired-ranger-move)
+;;   ;; (define-key dired-mode-map (kbd "P") 'dired-ranger-paste)
+
+
+
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; function to quickly open a buffer's directory (or home if there is no meaningful directory like for *scratch*)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;; evil dired - (results in mixture of evil and dired, evil: gg,G,/,?,yy,v  , dired, s,m,W,X,Y, etc.)
+;; ;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "W") 'dired-ranger-copy)
+;; ;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "X") 'dired-ranger-move)
+;; ;;NOT DOOM ;;;   (evil-define-key 'normal dired-mode-map (kbd "Y") 'dired-ranger-paste)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map (kbd "<DEL>") 'dired-up-directory)
+;; ;;NOT DOOM ;;;    ;; (evil-define-key 'normal dired-mode-map "l" 'dired-find-alternate-file)
+;; ;;NOT DOOM ;;;   ;; (evil-define-key 'normal dired-mode-map "o" 'dired-sort-toggle-or-edit)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "s" 'dired-sort-toggle-or-edit)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "(" 'dired-hide-details-mode)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "m" 'dired-mark)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "o" 'dired-mark)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "u" 'dired-unmark)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "U" 'dired-unmark-all-marks)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "+" 'dired-create-directory)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "n" 'evil-search-next)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "N" 'evil-search-previous)
+;; ;;NOT DOOM ;;;    (evil-define-key 'normal dired-mode-map "q" 'kill-this-buffer)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ** )  by hitting enter -> exit narrow-mode and enter file/dir
+;; ;;NOT DOOM ;;;  ;; --------------------------------------------------------------------
+;; ;;NOT DOOM ;;;  ;; ;;; (quick and dirty way)
+;; ;;NOT DOOM ;;;  ;; ;; source: http://oremacs.com/2015/07/16/callback-quit/
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;;; adjust some stuff for dired-narrow work-flow:
+;; ;;NOT DOOM ;;;  ;; ;;; this macro is necessary (don't understand but ok...)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; (defmacro dired-narrow-quit-and-run (&rest body)
+;; ;;NOT DOOM ;;;  ;;   "Quit the minibuffer and run BODY afterwards."
+;; ;;NOT DOOM ;;;  ;;   `(progn
+;; ;;NOT DOOM ;;;  ;;      (put 'quit 'error-message "")
+;; ;;NOT DOOM ;;;  ;;      (run-at-time nil nil
+;; ;;NOT DOOM ;;;  ;;                   (lambda ()
+;; ;;NOT DOOM ;;;  ;;                     (put 'quit 'error-message "Quit")
+;; ;;NOT DOOM ;;;  ;;                     ,@body))
+;; ;;NOT DOOM ;;;  ;;      (minibuffer-keyboard-quit)))
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;;
+;; ;;NOT DOOM ;;;  ;; (defun dired-narrow-quit-and-enter-file-or-dir ()
+;; ;;NOT DOOM ;;;  ;;    (interactive)
+;; ;;NOT DOOM ;;;  ;;        (dired-narrow-quit-and-run
+;; ;;NOT DOOM ;;;  ;;           (dired-find-file)  ;; <--- put here what you wanna do after exiting from dired-narrow
+;; ;;NOT DOOM ;;;  ;;         )
+;; ;;NOT DOOM ;;;  ;;      (user-error
+;; ;;NOT DOOM ;;;  ;;       "Not completing files currently")
+;; ;;NOT DOOM ;;;  ;;   )
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "<return>") 'dired-narrow-quit-and-enter-file-or-dir)
+;; ;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "RET") 'dired-narrow-quit-and-enter-file-or-dir)
+;; ;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "C-e") 'exit-minibuffer)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; however the RET key by default is used to actually: start operating on the filtered files
+;; ;;NOT DOOM ;;;  ;; ;; --> define another key for that
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "<SPC>") 'exit-minibuffer)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; ;; (defun exit-minibuffer-and-diredp-find-file-reuse-dir-buffer ()
+;; ;;NOT DOOM ;;;  ;; ;;   (interactive)
+;; ;;NOT DOOM ;;;  ;; ;;   (exit-minibuffer)
+;; ;;NOT DOOM ;;;  ;; ;;   (diredp-find-file-reuse-dir-buffer)
+;; ;;NOT DOOM ;;;  ;; ;; )
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; (define-key dired-narrow-map (kbd "RET") 'dired-narrow-quit-and-enter-file-or-dir)
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;;;; END DIRED STUFF ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;NOT DOOM ;;;  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
