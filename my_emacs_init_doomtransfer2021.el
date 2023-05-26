@@ -5131,15 +5131,15 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00001D62"))
 (js/specialchardef "s i" #'js/insert-unicode-sub-i)
 
-(defun js/insert-unicode-circle-dot()
-  ;; ⊙
-  (interactive)
-  (insert "\U00002299"))
+;; (defun js/insert-unicode-circle-dot()
+;;   ;; ⊙
+;;   (interactive)
+;;   (insert "\U00002299"))
 
-(defun js/insert-unicode-circle-cross()
-  ;; ⨂
-  (interactive)
-  (insert "\U00002A02"))
+;; (defun js/insert-unicode-circle-cross()
+;;   ;; ⨂
+;;   (interactive)
+;;   (insert "\U00002A02"))
 
 ;; (defun js/insert-unicode-degree ()
 ;;   ;; °
