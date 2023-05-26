@@ -12,9 +12,10 @@
 ;; ** DONE org no lin nrs
 ;; ** DONE org latex preview all toggle etc.
 ;; ** [?] when does doom-emacs load my config.el and why do keybinds get overriden? what s the conceptual solution to that, just ":after org-mode"?
-(xterm-mouse-mode 1)
-(global-set-key [mouse-4] 'scroll-down-line)
-(global-set-key [mouse-5] 'scroll-up-line)
+
+;; (xterm-mouse-mode 1)
+;; (global-set-key [mouse-4] 'scroll-down-line)
+;; (global-set-key [mouse-5] 'scroll-up-line)
 
 ;; * mac specific
 ;;
