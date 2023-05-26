@@ -5125,38 +5125,38 @@ and `C-x' being marked as a `term-escape-char'."
 ;; Ψ 	ψ 	Psi 	ps
 ;; Ω 	ω 	Omega 	o
 
-(defun js/insert-unicode-sub-i ()
-  ;; ᵢ
+;; (defun js/insert-unicode-sub-i ()
+;;   ;; ᵢ
+;;   (interactive)
+;;   (insert "\U00001D62"))
+;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
+
+(defun js/insert-unicode-circle-dot()
+  ;; ⊙
   (interactive)
-  (insert "\U00001D62"))
-(js/specialchardef "s i" #'js/insert-unicode-sub-i)
+  (insert "\U00002299"))
 
-;; (defun js/insert-unicode-circle-dot()
-;;   ;; ⊙
-;;   (interactive)
-;;   (insert "\U00002299"))
+(defun js/insert-unicode-circle-cross()
+  ;; ⨂
+  (interactive)
+  (insert "\U00002A02"))
 
-;; (defun js/insert-unicode-circle-cross()
-;;   ;; ⨂
-;;   (interactive)
-;;   (insert "\U00002A02"))
+(defun js/insert-unicode-degree ()
+  ;; °
+  (interactive)
+  (insert "\U000000B0")
+  )
+(js/specialchardef "c d" #'js/insert-unicode-degree)
 
-;; (defun js/insert-unicode-degree ()
-;;   ;; °
-;;   (interactive)
-;;   (insert "\U000000B0")
-;;   )
-;; (js/specialchardef "c d" #'js/insert-unicode-degree)
+(defun js/insert-unicode-Checkmark ()
+  (interactive)
+  ;; (insert "\U00002713") ;; ✓
+  (insert "\U00002705")) ;; ✅
 
-;; (defun js/insert-unicode-Checkmark ()
-;;   (interactive)
-;;   ;; (insert "\U00002713") ;; ✓
-;;   (insert "\U00002705")) ;; ✅
-
-;; (defun js/insert-unicode-checkmark ()
-;;   (interactive)
-;;   ;; ✓
-;;   (insert "\U00002713"))
+(defun js/insert-unicode-checkmark ()
+  (interactive)
+  ;; ✓
+  (insert "\U00002713"))
 ;; ;;NOT DOOM ;;;
 ;; ;;NOT DOOM ;;;  (defun insert-char-pencil ()
 ;; ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
