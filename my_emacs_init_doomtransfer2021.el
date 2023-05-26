@@ -2691,9 +2691,11 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-vcs-max-length 12)
 ;;NOT DOOM ;;;
 ;; * workspaces
-(map!
- "M-[" #'+workspace/switch-right
- "M-]" #'+workspace/switch-right)
+;; TODO conflict with termux (donnow why?) destroys termux touch navigation
+;; --> outcomment for now
+;; (map!
+;;  "M-[" #'+workspace/switch-right
+;;  "M-]" #'+workspace/switch-right)
 ;;NOT DOOM ;;;  ;; ;; Whether display the workspace name. Non-nil to display in the mode-line.
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name t)
 ;;NOT DOOM ;;;  ;; (setq doom-modeline-workspace-name nil)
