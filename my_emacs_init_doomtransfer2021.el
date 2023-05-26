@@ -4772,408 +4772,408 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;;    -- 3 byte or 4 byte unicode character -> use capital \U : "\U<byte4><byte3><byte2>byte1>
 ;;NOT DOOM ;;;  ;;         ( u can also use capital \U for ascii, but have to preceed with THREE "empty" 00 bytes. e.g. (insert "\U00000061) ;; -> "a"
 
-;; * special characters, fast input via "M-,"
-;; first unbind "M-," -> so it does not complain
-(map! :map (global-map anaconda-mode-map)
-      "M-,"  nil)
-(general-create-definer js/specialchardef :prefix "M-,")
-;; g -> Greek
-;; m -> Math
-;; c -> special Chars
-
-;; others: US-International-AltGr
-;; s  -> ß
-;; y  -> ü
-;; p  -> ö
-;; q  -> ä
-
-;; ** US-international chars => "M-," ≙ "AltGr"
-(defun js/insert-unicode-umlaut-u ()
-  ;; ü
-  (interactive)
-  (insert "\U000000FC"))
-(js/specialchardef "y" #'js/insert-unicode-umlaut-u)
-
-(defun js/insert-unicode-umlaut-a ()
-  ;; ä
-  (interactive)
-  (insert "\U000000E4"))
-(js/specialchardef "q" #'js/insert-unicode-umlaut-a)
-
-
-(defun js/insert-unicode-umlaut-o ()
-  ;; ö
-  (interactive)
-  (insert "\U000000f6"))
-(js/specialchardef "p" #'js/insert-unicode-umlaut-o)
-
-(defun js/insert-unicode-umlaut-sz ()
-  ;; ß
-  (interactive)
-  (insert "\U000000df"))
-(js/specialchardef "s" #'js/insert-unicode-umlaut-sz)
-
-
-
-
-;; ** contradiction ↯
-(defun js/insert-unicode-contradiction ()
-  ;; inserts a contradiction-symbol ↯
-  (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000021af")
-  )
-
-(defun js/insert-unicode-arrow ()
-  ;; ➜
-  (interactive)
-  (insert "\U0000279C"))
-
-(defun js/insert-unicode-Arrow ()
-  ;; ➔
-  (interactive)
-  (insert "\U00002794"))
-(js/specialchardef ">" #'js/insert-unicode-Arrow)
-(js/specialchardef "RET" #'js/insert-unicode-Arrow)
-
-(defun js/insert-unicode-approx ()
-  ;; ≈
-  (interactive)
-  (insert "\U00002248"))
-(js/specialchardef "m a" #'js/insert-unicode-approx)
-
-(defun js/insert-unicode-Delta ()
-  ;; Δ
-  (interactive)
-  (insert "\U00000394"))
-(js/specialchardef "g D" #'js/insert-unicode-Delta)
-
-
-(defun js/insert-unicode-lambda ()
-  ;; λ
-  (interactive)
-  (insert "\U000003BB"))
-(js/specialchardef "g l" #'js/insert-unicode-lambda)
-
-(defun js/insert-unicode-corresponds ()
-  ;; ≙
-  (interactive)
-  (insert "\U00002259"))
-(js/specialchardef "m c" #'js/insert-unicode-corresponds)
-
-
-(defun js/insert-unicode-sqrt ()
-  ;; √
-  (interactive)
-  (insert "\U0000221A"))
-(js/specialchardef "m s" #'js/insert-unicode-sqrt)
-
-(defun js/insert-unicode-tab ()
-  ;; 	(TAB)
-  (interactive)
-  (insert "\U00000009")
-  )
-(js/specialchardef "TAB" #'js/insert-unicode-tab)
-
-;; ** dot "multiply"
-(defun js/insert-unicode-dot ()
-  ;; inserts a contradiction-symbol ↯
-  (interactive)
-  (insert "\U000000B7")
-  )
-
-(defun js/insert-unicode-mu ()
-  ;; μ
-  (interactive)
-  (insert "\U000003BC")
-  )
-(js/specialchardef "g m" #'js/insert-unicode-mu)
-
-(defun js/insert-unicode-int ()
-  ;; ∫
-  (interactive)
-  (insert "\U0000222B")
-  )
-
-(defun js/insert-unicode-dot ()
-  ;; ·
-  (interactive)
-  (insert "\U000000B7")
-  )
-(js/specialchardef
-        "." #'js/insert-unicode-dot)
-(js/specialchardef
-        "m d" #'js/insert-unicode-dot)
-
-
-(defun js/insert-unicode-rho ()
-  ;; ρ
-  (interactive)
-  (insert "\U000003C1")
-  )
-(js/specialchardef
-        "g r" #'js/insert-unicode-rho)
-
-
-(defun js/insert-unicode-inf ()
-  ;; ∞
-  (interactive)
-  (insert "\U0000221E")
-  )
-(js/specialchardef
-        "m i" #'js/insert-unicode-inf)
-
-(defun js/insert-unicode-theta ()
-  ;; inserts a contradiction-symbol ↯
-  (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000003B8")
-  )
-
-(defun js/insert-unicode-omega ()
-  ;; inserts a contradiction-symbol ↯
-  (interactive)
-  ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-  ;; (insert "\u21af")
-  (insert "\U000003C9")
-  )
-(js/specialchardef "g o" #'js/insert-unicode-omega)
-
-
-(defun js/insert-unicode-epsilon ()
-  ;; ε
-  (interactive)
-  (insert "\U000003B5")
-  )
-(js/specialchardef "g e" #'js/insert-unicode-epsilon)
-
-(defun js/insert-unicode-circled-dot ()
-  ;; ⊙
-  (interactive)
-  (insert "\U00002299"))
-
-(defun js/insert-unicode-cross ()
-  ;; ⨯
-  (interactive)
-  (insert "\U00002A2F"))
-
-
-(defun js/insert-unicode-nabla ()
-  ;; ∇
-  (interactive)
-  (insert "\U00002207")
-  )
-(js/specialchardef "m N" #'js/insert-unicode-nabla)
-
-(defun js/insert-unicode-Omega ()
-  ;; Ω
-  (interactive)
-  (insert "\U000003A9")
-  )
-(js/specialchardef "O" #'js/insert-unicode-Omega)
-
-
-(defun js/insert-unicode-squared ()
-  ;; ²
-  (interactive)
-  (insert "\U000000B2")
-  )
-(js/specialchardef "2" #'js/insert-unicode-squared)
-
-(defun js/insert-unicode-cubed ()
-  ;; ³
-  (interactive)
-  (insert "\U000000B3"))
-(js/specialchardef "3" #'js/insert-unicode-cubed)
-
-
-
-(defun js/insert-unicode-phi ()
-  ;; φ
-  (interactive)
-  (insert "\U000003C6"))
-(js/specialchardef "g f" #'js/insert-unicode-phi)
-
-(defun js/insert-unicode-pi ()
-  ;; π
-  (interactive)
-  (insert "\U000003C0"))
-(js/specialchardef "g p" #'js/insert-unicode-pi)
-
-(defun js/insert-unicode-tau ()
-  ;; τ
-  (interactive)
-  (insert "\U000003C4"))
-(js/specialchardef "g t" #'js/insert-unicode-tau)
-
-(defun js/insert-unicode-sigma ()
-  (interactive)
-  (insert "\U000003C3"))
-(js/specialchardef "g s" #'js/insert-unicode-sigma)
-
-
-(defun js/insert-unicode-psi ()
-  (interactive)
-  (insert "\U000003C8"))
-(js/specialchardef "g y" #'js/insert-unicode-psi)
-
-(defun js/insert-unicode-omega ()
-  (interactive)
-  (insert "\U000003C9"))
-
-(defun js/insert-unicode-kappa ()
-  (interactive)
-  (insert "\U000003BA"))
-(js/specialchardef "g k" #'js/insert-unicode-kappa)
-
-(defun js/insert-unicode-lambda ()
-  (interactive)
-  (insert "\U000003BB"))
-
-(defun js/insert-unicode-nu ()
-  (interactive)
-  (insert "\U000003BD"))
-(js/specialchardef "g n" #'js/insert-unicode-nu)
-
-(defun js/insert-unicode-xi ()
-  (interactive)
-  (insert "\U000003BE"))
-(js/specialchardef "g x" #'js/insert-unicode-xi)
-
-(defun js/insert-unicode-div ()
-  ;; ÷
-  (interactive)
-  (insert "\U000000F7"))
-(defun js/insert-unicode-mult ()
-  ;; ×
-  (interactive)
-  (insert "\U000000D7"))
-
-
-
-(defun js/insert-unicode-alpha ()
-  (interactive)
-  (insert "\U000003B1"))
-
-(defun js/insert-unicode-beta ()
-  (interactive)
-  (insert "\U000003B2"))
-(js/specialchardef "g b" #'js/insert-unicode-beta)
-
-(defun js/insert-unicode-gamma ()
-  (interactive)
-  (insert "\U000003B3"))
-(js/specialchardef "g g" #'js/insert-unicode-gamma)
-
-(defun js/insert-unicode-delta ()
-  ;; δ
-  (interactive)
-  (insert "\U000003B4"))
-(js/specialchardef "g d" #'js/insert-unicode-delta)
-
-
-(defun js/insert-unicode-sum ()
-  ;; ∑
-  (interactive)
-  (insert "\U00002211")
-  )
-(js/specialchardef "m S" #'js/insert-unicode-sum)
-
-(defun js/insert-unicode-tau ()
-  ;; τ
-  (interactive)
-  (insert "\U000003C4"))
-(js/specialchardef "g t" #'js/insert-unicode-tau)
-
-(defun js/insert-unicode-zeta ()
-  ;; ζ
-  (interactive)
-  (insert "\U000003B6"))
-(js/specialchardef "g z" #'js/insert-unicode-zeta)
-
-(defun js/insert-unicode-eta ()
-  ;; η
-  (interactive)
-  (insert "\U000003B7"))
-(js/specialchardef "g h" #'js/insert-unicode-eta)
-
-;; latin equivalents for greek letters (➜ choose my key-combos)
-;; Α 	α 	Alpha 	a
-;; Β 	β 	Beta 	b
-;; Γ 	γ 	Gamma 	g
-;; Δ 	δ 	Delta 	d
-;; Ε 	ε 	Epsilon 	e
-;; Ζ 	ζ 	Zeta 	z
-;; Η 	η 	Eta 	h
-;; Θ 	θ 	Theta 	th
-;; Ι 	ι 	Iota 	i
-;; Κ 	κ 	Kappa 	k
-;; Λ 	λ 	Lambda 	l
-;; Μ 	μ 	Mu 	m
-;; Ν 	ν 	Nu 	n
-;; Ξ 	ξ 	Xi 	x
-;; Ο 	ο 	Omicron 	o
-;; Π 	π 	Pi 	p
-;; Ρ 	ρ 	Rho 	r
-;; Σ 	σ,ς * 	Sigma 	s
-;; Τ 	τ 	Tau 	t
-;; Υ 	υ 	Upsilon 	u
-;; Φ 	φ 	Phi 	ph
-;; Χ 	χ 	Chi 	ch
-;; Ψ 	ψ 	Psi 	ps
-;; Ω 	ω 	Omega 	o
-
-(defun js/insert-unicode-sub-i ()
-  ;; ᵢ
-  (interactive)
-  (insert "\U00001D62"))
-(js/specialchardef "s i" #'js/insert-unicode-sub-i)
-
-(defun js/insert-unicode-circle-dot()
-  ;; ⊙
-  (interactive)
-  (insert "\U00002299"))
-
-(defun js/insert-unicode-circle-cross()
-  ;; ⨂
-  (interactive)
-  (insert "\U00002A02"))
-
-(defun js/insert-unicode-degree ()
-  ;; °
-  (interactive)
-  (insert "\U000000B0")
-  )
-(js/specialchardef "c d" #'js/insert-unicode-degree)
-
-(defun js/insert-unicode-Checkmark ()
-  (interactive)
-  ;; (insert "\U00002713") ;; ✓
-  (insert "\U00002705")) ;; ✅
-
-(defun js/insert-unicode-checkmark ()
-  (interactive)
-  ;; ✓
-  (insert "\U00002713"))
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  (defun insert-char-pencil ()
-;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
-;;NOT DOOM ;;;    ;; (insert "\u21af")
-;;NOT DOOM ;;;    (insert "\U0000270e")
-;;NOT DOOM ;;;    )
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;; (insert "\U0000270E")✎
-;;NOT DOOM ;;;  ;; (insert "\U0000270f")✏
-;;NOT DOOM ;;;  ;; (insert "\U00002710")✐
-;;NOT DOOM ;;;  ;; (insert "\U00002711")✑
-;;NOT DOOM ;;;  ;; (insert "\U00002712")✒
-;;NOT DOOM ;;;
-;;NOT DOOM ;;;
+;; ;; * special characters, fast input via "M-,"
+;; ;; first unbind "M-," -> so it does not complain
+;; (map! :map (global-map anaconda-mode-map)
+;;       "M-,"  nil)
+;; (general-create-definer js/specialchardef :prefix "M-,")
+;; ;; g -> Greek
+;; ;; m -> Math
+;; ;; c -> special Chars
+
+;; ;; others: US-International-AltGr
+;; ;; s  -> ß
+;; ;; y  -> ü
+;; ;; p  -> ö
+;; ;; q  -> ä
+
+;; ;; ** US-international chars => "M-," ≙ "AltGr"
+;; (defun js/insert-unicode-umlaut-u ()
+;;   ;; ü
+;;   (interactive)
+;;   (insert "\U000000FC"))
+;; (js/specialchardef "y" #'js/insert-unicode-umlaut-u)
+
+;; (defun js/insert-unicode-umlaut-a ()
+;;   ;; ä
+;;   (interactive)
+;;   (insert "\U000000E4"))
+;; (js/specialchardef "q" #'js/insert-unicode-umlaut-a)
+
+
+;; (defun js/insert-unicode-umlaut-o ()
+;;   ;; ö
+;;   (interactive)
+;;   (insert "\U000000f6"))
+;; (js/specialchardef "p" #'js/insert-unicode-umlaut-o)
+
+;; (defun js/insert-unicode-umlaut-sz ()
+;;   ;; ß
+;;   (interactive)
+;;   (insert "\U000000df"))
+;; (js/specialchardef "s" #'js/insert-unicode-umlaut-sz)
+
+
+
+
+;; ;; ** contradiction ↯
+;; (defun js/insert-unicode-contradiction ()
+;;   ;; inserts a contradiction-symbol ↯
+;;   (interactive)
+;;   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+;;   ;; (insert "\u21af")
+;;   (insert "\U000021af")
+;;   )
+
+;; (defun js/insert-unicode-arrow ()
+;;   ;; ➜
+;;   (interactive)
+;;   (insert "\U0000279C"))
+
+;; (defun js/insert-unicode-Arrow ()
+;;   ;; ➔
+;;   (interactive)
+;;   (insert "\U00002794"))
+;; (js/specialchardef ">" #'js/insert-unicode-Arrow)
+;; (js/specialchardef "RET" #'js/insert-unicode-Arrow)
+
+;; (defun js/insert-unicode-approx ()
+;;   ;; ≈
+;;   (interactive)
+;;   (insert "\U00002248"))
+;; (js/specialchardef "m a" #'js/insert-unicode-approx)
+
+;; (defun js/insert-unicode-Delta ()
+;;   ;; Δ
+;;   (interactive)
+;;   (insert "\U00000394"))
+;; (js/specialchardef "g D" #'js/insert-unicode-Delta)
+
+
+;; (defun js/insert-unicode-lambda ()
+;;   ;; λ
+;;   (interactive)
+;;   (insert "\U000003BB"))
+;; (js/specialchardef "g l" #'js/insert-unicode-lambda)
+
+;; (defun js/insert-unicode-corresponds ()
+;;   ;; ≙
+;;   (interactive)
+;;   (insert "\U00002259"))
+;; (js/specialchardef "m c" #'js/insert-unicode-corresponds)
+
+
+;; (defun js/insert-unicode-sqrt ()
+;;   ;; √
+;;   (interactive)
+;;   (insert "\U0000221A"))
+;; (js/specialchardef "m s" #'js/insert-unicode-sqrt)
+
+;; (defun js/insert-unicode-tab ()
+;;   ;; 	(TAB)
+;;   (interactive)
+;;   (insert "\U00000009")
+;;   )
+;; (js/specialchardef "TAB" #'js/insert-unicode-tab)
+
+;; ;; ** dot "multiply"
+;; (defun js/insert-unicode-dot ()
+;;   ;; inserts a contradiction-symbol ↯
+;;   (interactive)
+;;   (insert "\U000000B7")
+;;   )
+
+;; (defun js/insert-unicode-mu ()
+;;   ;; μ
+;;   (interactive)
+;;   (insert "\U000003BC")
+;;   )
+;; (js/specialchardef "g m" #'js/insert-unicode-mu)
+
+;; (defun js/insert-unicode-int ()
+;;   ;; ∫
+;;   (interactive)
+;;   (insert "\U0000222B")
+;;   )
+
+;; (defun js/insert-unicode-dot ()
+;;   ;; ·
+;;   (interactive)
+;;   (insert "\U000000B7")
+;;   )
+;; (js/specialchardef
+;;         "." #'js/insert-unicode-dot)
+;; (js/specialchardef
+;;         "m d" #'js/insert-unicode-dot)
+
+
+;; (defun js/insert-unicode-rho ()
+;;   ;; ρ
+;;   (interactive)
+;;   (insert "\U000003C1")
+;;   )
+;; (js/specialchardef
+;;         "g r" #'js/insert-unicode-rho)
+
+
+;; (defun js/insert-unicode-inf ()
+;;   ;; ∞
+;;   (interactive)
+;;   (insert "\U0000221E")
+;;   )
+;; (js/specialchardef
+;;         "m i" #'js/insert-unicode-inf)
+
+;; (defun js/insert-unicode-theta ()
+;;   ;; inserts a contradiction-symbol ↯
+;;   (interactive)
+;;   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+;;   ;; (insert "\u21af")
+;;   (insert "\U000003B8")
+;;   )
+
+;; (defun js/insert-unicode-omega ()
+;;   ;; inserts a contradiction-symbol ↯
+;;   (interactive)
+;;   ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+;;   ;; (insert "\u21af")
+;;   (insert "\U000003C9")
+;;   )
+;; (js/specialchardef "g o" #'js/insert-unicode-omega)
+
+
+;; (defun js/insert-unicode-epsilon ()
+;;   ;; ε
+;;   (interactive)
+;;   (insert "\U000003B5")
+;;   )
+;; (js/specialchardef "g e" #'js/insert-unicode-epsilon)
+
+;; (defun js/insert-unicode-circled-dot ()
+;;   ;; ⊙
+;;   (interactive)
+;;   (insert "\U00002299"))
+
+;; (defun js/insert-unicode-cross ()
+;;   ;; ⨯
+;;   (interactive)
+;;   (insert "\U00002A2F"))
+
+
+;; (defun js/insert-unicode-nabla ()
+;;   ;; ∇
+;;   (interactive)
+;;   (insert "\U00002207")
+;;   )
+;; (js/specialchardef "m N" #'js/insert-unicode-nabla)
+
+;; (defun js/insert-unicode-Omega ()
+;;   ;; Ω
+;;   (interactive)
+;;   (insert "\U000003A9")
+;;   )
+;; (js/specialchardef "O" #'js/insert-unicode-Omega)
+
+
+;; (defun js/insert-unicode-squared ()
+;;   ;; ²
+;;   (interactive)
+;;   (insert "\U000000B2")
+;;   )
+;; (js/specialchardef "2" #'js/insert-unicode-squared)
+
+;; (defun js/insert-unicode-cubed ()
+;;   ;; ³
+;;   (interactive)
+;;   (insert "\U000000B3"))
+;; (js/specialchardef "3" #'js/insert-unicode-cubed)
+
+
+
+;; (defun js/insert-unicode-phi ()
+;;   ;; φ
+;;   (interactive)
+;;   (insert "\U000003C6"))
+;; (js/specialchardef "g f" #'js/insert-unicode-phi)
+
+;; (defun js/insert-unicode-pi ()
+;;   ;; π
+;;   (interactive)
+;;   (insert "\U000003C0"))
+;; (js/specialchardef "g p" #'js/insert-unicode-pi)
+
+;; (defun js/insert-unicode-tau ()
+;;   ;; τ
+;;   (interactive)
+;;   (insert "\U000003C4"))
+;; (js/specialchardef "g t" #'js/insert-unicode-tau)
+
+;; (defun js/insert-unicode-sigma ()
+;;   (interactive)
+;;   (insert "\U000003C3"))
+;; (js/specialchardef "g s" #'js/insert-unicode-sigma)
+
+
+;; (defun js/insert-unicode-psi ()
+;;   (interactive)
+;;   (insert "\U000003C8"))
+;; (js/specialchardef "g y" #'js/insert-unicode-psi)
+
+;; (defun js/insert-unicode-omega ()
+;;   (interactive)
+;;   (insert "\U000003C9"))
+
+;; (defun js/insert-unicode-kappa ()
+;;   (interactive)
+;;   (insert "\U000003BA"))
+;; (js/specialchardef "g k" #'js/insert-unicode-kappa)
+
+;; (defun js/insert-unicode-lambda ()
+;;   (interactive)
+;;   (insert "\U000003BB"))
+
+;; (defun js/insert-unicode-nu ()
+;;   (interactive)
+;;   (insert "\U000003BD"))
+;; (js/specialchardef "g n" #'js/insert-unicode-nu)
+
+;; (defun js/insert-unicode-xi ()
+;;   (interactive)
+;;   (insert "\U000003BE"))
+;; (js/specialchardef "g x" #'js/insert-unicode-xi)
+
+;; (defun js/insert-unicode-div ()
+;;   ;; ÷
+;;   (interactive)
+;;   (insert "\U000000F7"))
+;; (defun js/insert-unicode-mult ()
+;;   ;; ×
+;;   (interactive)
+;;   (insert "\U000000D7"))
+
+
+
+;; (defun js/insert-unicode-alpha ()
+;;   (interactive)
+;;   (insert "\U000003B1"))
+
+;; (defun js/insert-unicode-beta ()
+;;   (interactive)
+;;   (insert "\U000003B2"))
+;; (js/specialchardef "g b" #'js/insert-unicode-beta)
+
+;; (defun js/insert-unicode-gamma ()
+;;   (interactive)
+;;   (insert "\U000003B3"))
+;; (js/specialchardef "g g" #'js/insert-unicode-gamma)
+
+;; (defun js/insert-unicode-delta ()
+;;   ;; δ
+;;   (interactive)
+;;   (insert "\U000003B4"))
+;; (js/specialchardef "g d" #'js/insert-unicode-delta)
+
+
+;; (defun js/insert-unicode-sum ()
+;;   ;; ∑
+;;   (interactive)
+;;   (insert "\U00002211")
+;;   )
+;; (js/specialchardef "m S" #'js/insert-unicode-sum)
+
+;; (defun js/insert-unicode-tau ()
+;;   ;; τ
+;;   (interactive)
+;;   (insert "\U000003C4"))
+;; (js/specialchardef "g t" #'js/insert-unicode-tau)
+
+;; (defun js/insert-unicode-zeta ()
+;;   ;; ζ
+;;   (interactive)
+;;   (insert "\U000003B6"))
+;; (js/specialchardef "g z" #'js/insert-unicode-zeta)
+
+;; (defun js/insert-unicode-eta ()
+;;   ;; η
+;;   (interactive)
+;;   (insert "\U000003B7"))
+;; (js/specialchardef "g h" #'js/insert-unicode-eta)
+
+;; ;; latin equivalents for greek letters (➜ choose my key-combos)
+;; ;; Α 	α 	Alpha 	a
+;; ;; Β 	β 	Beta 	b
+;; ;; Γ 	γ 	Gamma 	g
+;; ;; Δ 	δ 	Delta 	d
+;; ;; Ε 	ε 	Epsilon 	e
+;; ;; Ζ 	ζ 	Zeta 	z
+;; ;; Η 	η 	Eta 	h
+;; ;; Θ 	θ 	Theta 	th
+;; ;; Ι 	ι 	Iota 	i
+;; ;; Κ 	κ 	Kappa 	k
+;; ;; Λ 	λ 	Lambda 	l
+;; ;; Μ 	μ 	Mu 	m
+;; ;; Ν 	ν 	Nu 	n
+;; ;; Ξ 	ξ 	Xi 	x
+;; ;; Ο 	ο 	Omicron 	o
+;; ;; Π 	π 	Pi 	p
+;; ;; Ρ 	ρ 	Rho 	r
+;; ;; Σ 	σ,ς * 	Sigma 	s
+;; ;; Τ 	τ 	Tau 	t
+;; ;; Υ 	υ 	Upsilon 	u
+;; ;; Φ 	φ 	Phi 	ph
+;; ;; Χ 	χ 	Chi 	ch
+;; ;; Ψ 	ψ 	Psi 	ps
+;; ;; Ω 	ω 	Omega 	o
+
+;; (defun js/insert-unicode-sub-i ()
+;;   ;; ᵢ
+;;   (interactive)
+;;   (insert "\U00001D62"))
+;; (js/specialchardef "s i" #'js/insert-unicode-sub-i)
+
+;; (defun js/insert-unicode-circle-dot()
+;;   ;; ⊙
+;;   (interactive)
+;;   (insert "\U00002299"))
+
+;; (defun js/insert-unicode-circle-cross()
+;;   ;; ⨂
+;;   (interactive)
+;;   (insert "\U00002A02"))
+
+;; (defun js/insert-unicode-degree ()
+;;   ;; °
+;;   (interactive)
+;;   (insert "\U000000B0")
+;;   )
+;; (js/specialchardef "c d" #'js/insert-unicode-degree)
+
+;; (defun js/insert-unicode-Checkmark ()
+;;   (interactive)
+;;   ;; (insert "\U00002713") ;; ✓
+;;   (insert "\U00002705")) ;; ✅
+
+;; (defun js/insert-unicode-checkmark ()
+;;   (interactive)
+;;   ;; ✓
+;;   (insert "\U00002713"))
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  (defun insert-char-pencil ()
+;; ;;NOT DOOM ;;;    ;; inserts a pencil-symbol ✎
+;; ;;NOT DOOM ;;;    (interactive)
+;; ;;NOT DOOM ;;;    ;; (insert (char-from-name "DOWNWARDS ZIGZAG ARROW"))
+;; ;;NOT DOOM ;;;    ;; (insert "\u21af")
+;; ;;NOT DOOM ;;;    (insert "\U0000270e")
+;; ;;NOT DOOM ;;;    )
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;  ;; (insert "\U0000270E")✎
+;; ;;NOT DOOM ;;;  ;; (insert "\U0000270f")✏
+;; ;;NOT DOOM ;;;  ;; (insert "\U00002710")✐
+;; ;;NOT DOOM ;;;  ;; (insert "\U00002711")✑
+;; ;;NOT DOOM ;;;  ;; (insert "\U00002712")✒
+;; ;;NOT DOOM ;;;
+;; ;;NOT DOOM ;;;
 
 ;; * termux android
 
