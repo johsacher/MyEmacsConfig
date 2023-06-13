@@ -1167,8 +1167,6 @@
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
 ;; ** org-mode -> visual-line-mode by default
-(add-hook! 'org-mode-hook
-           (lambda() visual-line-mode 1))
 ;; org-mode toggle bold/italic
 
 (after! org
@@ -6072,3 +6070,9 @@ and `C-x' being marked as a `term-escape-char'."
 (setq flycheck-global-modes nil)
 ;; (add-hook! 'c++-mode
 ;;   (lambda () (flycheck-mode -1))
+
+;; * test
+;; (defun test ()
+;;   (interactive)
+;;   (setq buf1 ())
+;;   )
