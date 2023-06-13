@@ -4269,6 +4269,14 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :map evil-normal-state-map
       "M-d"  nil)
 
+
+(map! :leader
+      :desc "win0" "0" #'execute-extended-command
+      :desc "win0" "0" #'delete-window
+      :desc "win1" "1" #'delete-other-windows
+      :desc "win2" "2" #'split-window-below
+      :desc "win3" "3" #'split-window-right)
+
 (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
 (defun get-this-buffer-to-move ()
