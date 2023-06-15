@@ -4817,7 +4817,16 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000000df"))
 (js/specialchardef "s" #'js/insert-unicode-umlaut-sz)
 
+(defun js/insert-unicode-S-bar ()
+  (interactive)
+  (insert "\U00000053")
+  (insert "\U00000305")
+  )
 
+(defun js/insert-unicode-diac-bar ()
+  (interactive)
+  (insert "\U00000305")
+  )
 
 
 ;; ** contradiction ↯
@@ -4865,6 +4874,17 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002259"))
 (js/specialchardef "m c" #'js/insert-unicode-corresponds)
+
+(defun js/insert-unicode-plusminus ()
+  ;; ±
+  (interactive)
+  (insert "\U000000B1"))
+
+(defun js/insert-unicode-euro ()
+  ;; €
+  (interactive)
+  (insert "\U000020AC"))
+(js/specialchardef "c e" #'js/insert-unicode-euro)
 
 
 (defun js/insert-unicode-sqrt ()
@@ -6072,3 +6092,14 @@ and `C-x' being marked as a `term-escape-char'."
 (setq flycheck-global-modes nil)
 ;; (add-hook! 'c++-mode
 ;;   (lambda () (flycheck-mode -1))
+
+
+
+;; * align
+;;
+;; \(\s-*\):, 1, 1
+
+;; (defun js/align ()
+;;     (interactive)
+;;     (align-regexp )
+;;     )
