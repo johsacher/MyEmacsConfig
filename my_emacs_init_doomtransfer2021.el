@@ -1167,8 +1167,6 @@
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
 ;; ** org-mode -> visual-line-mode by default
-(add-hook! 'org-mode-hook
-           (lambda() visual-line-mode 1))
 ;; org-mode toggle bold/italic
 
 (after! org
@@ -1210,6 +1208,7 @@
     :desc "toggle underline"  "u" #'org-toggle-underline-region
     :desc "preview LateX"     "l" #'org-latex-preview
     :desc "capitalize region" "C" #'capitalize-region
+    :desc "toggle code"       "q" #'org-toggle-quote-region
       ))
   ) ;; after! org
 
@@ -4271,6 +4270,14 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :map evil-normal-state-map
       "M-d"  nil)
 
+
+(map! :leader
+      :desc "win0" "0" #'execute-extended-command
+      :desc "win0" "0" #'delete-window
+      :desc "win1" "1" #'delete-other-windows
+      :desc "win2" "2" #'split-window-below
+      :desc "win3" "3" #'split-window-right)
+
 (defun kill-this-buffer-no-prompt () (interactive) (kill-buffer nil))
 
 (defun get-this-buffer-to-move ()
@@ -4881,10 +4888,21 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000000B1"))
 
 (defun js/insert-unicode-euro ()
-  ;; €
+;; €
   (interactive)
   (insert "\U000020AC"))
 (js/specialchardef "c e" #'js/insert-unicode-euro)
+
+
+(defun js/insert-unicode-plane ()
+;; ✈
+  (interactive)
+  (insert "\U00002708"))
+
+(defun js/insert-unicode-train ()
+;; 🚂
+  (interactive)
+  (insert "\U0001F682"))
 
 
 (defun js/insert-unicode-sqrt ()
@@ -6093,8 +6111,6 @@ and `C-x' being marked as a `term-escape-char'."
 ;; (add-hook! 'c++-mode
 ;;   (lambda () (flycheck-mode -1))
 
-
-
 ;; * align
 ;;
 ;; \(\s-*\):, 1, 1
@@ -6103,3 +6119,8 @@ and `C-x' being marked as a `term-escape-char'."
 ;;     (interactive)
 ;;     (align-regexp )
 ;;     )
+;; * test
+;; (defun test ()
+;;   (interactive)
+;;   (setq buf1 ())
+;;   )

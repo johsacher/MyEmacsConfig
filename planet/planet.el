@@ -1190,7 +1190,7 @@ date)
   (interactive)
   ;; (message "planet-mode start up script started...")
   ;; settings all
-  (planet-theme-1)
+  (planet-theme-0)
   ;; settings day-files
   (cond ( (planet-current-buffer-is-day-file)
           (planet-day-file-start-up)
@@ -1393,6 +1393,20 @@ date)
 		   (with-current-buffer b buffer-file-name))
           (pop-to-buffer-same-window b)
           (revert-buffer t 'no-confirm)))
+      )
+    )
+  )
+
+
+(defun planet-do-all-planet-buffers (command)
+  (interactive)
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+	(when (and (with-current-buffer b (bound-and-true-p planet-mode))
+		   (with-current-buffer b buffer-file-name))
+          (pop-to-buffer-same-window b)
+          (funcall command)))
       )
     )
   )
@@ -1817,9 +1831,31 @@ date)
   (interactive)
   (planet-theme-1)
   (org-superstar-restart)
+  ;; (save-buffer)
+  ;; (revert-buffer)
+  )
+(defun planet-change-theme-0 ()
+  (interactive)
+  (planet-theme-0)
+  (org-superstar-restart)
+  ;; (save-buffer)
+  ;; (revert-buffer)
   )
 
-(defun planet-change-theme-0 () ;; default org theme like in other org buffers
+(defun planet-change-theme-1-all ()
+
+  (interactive)
+    (planet-do-all-planet-buffers
+  #'planet-change-theme-1)
+  )
+(defun planet-change-theme-0-all ()
+
+  (interactive)
+    (planet-do-all-planet-buffers
+  #'planet-change-theme-0)
+  )
+
+(defun planet-theme-0 () ;; default org theme like in other org buffers
   (interactive)
   ;; TODO ensure org-superstar "is there"
   (make-variable-buffer-local 'org-superstar-headline-bullets-list)
@@ -1835,4 +1871,4 @@ date)
                                               "♥"
                                               "♦"))
   (visual-line-mode +1)
-  (org-superstar-restart))
+  )

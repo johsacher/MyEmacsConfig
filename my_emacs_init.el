@@ -12,7 +12,7 @@
 ;; (set at start so comfortable debugging of init file in case it a biggy)
 (add-hook 'debugger-mode-hook
           (lambda ()
-            (visual-line-mode)))
+            (visual-line-mode 1)))
 
 ;; * debug on start-up
 (setq debug-only-on-start-up t)
