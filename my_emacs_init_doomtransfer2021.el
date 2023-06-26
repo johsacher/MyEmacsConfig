@@ -2309,6 +2309,25 @@ and `C-x' being marked as a `term-escape-char'."
   (with-current-buffer "tempfig.png"
     (revert-buffer t 'no-confirm)))))
 
+(defun tempfig-html-open ()
+  (interactive)
+  (setq command-string (concat
+        "firefox --new-window "/home/jo/tempfig1.html"" "\n")))
+
+(defun tempfig-html-revert()
+  (interactive)
+  (setq command-string (concat
+        ;; get window id's
+        "MYWINDOW=$(xdotool getactivewindow)" "\n"
+        "TEMPFIGWINDOW=$(xdotool search --name "tempfig1" 2>/dev/null)" "\n"
+        ;; send F5
+        "xdotool windowactivate --sync $TEMPFIGWINDOW key F5" "\n"
+        ;; re-focus original window
+        "xdotool windowfocus --sync ${MYWINDOW}" "\n"
+        "xdotool windowactivate --sync ${MYWINDOW}" "\n"))
+  (async-shell-command command-string))
+
+
 (map!
         :gi "C-RET"         nil
         :gn [C-return]      nil)
