@@ -778,6 +778,9 @@
    ;; * execute ipython
    (cond ((equal myhost "phone")
           (comint-send-string ipython-calculator-buffer-name "python\n"))
+         ((equal myhost "quantica")
+          (comint-send-string ipython-calculator-buffer-name "ip\n"))
+           ;; alias ip for /opt/anaconda/bin/ipython
          (t
           (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
 
@@ -1741,7 +1744,7 @@ new-org-file-full-name)
          "#+options: \\n:t" "\n"
          "# itemize all bullets" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemi}{$\\bullet$}" "\n"
-         "#+LATEX_HEADER: \renewcommand{\labelitemii}{$\circ$}" "\n"
+         "#+LATEX_HEADER: \\renewcommand{\labelitemii}{$\circ$}" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemiii}{$\\bullet$}" "\n"
          "#+LATEX_HEADER: \\renewcommand{\\labelitemiv}{$\\bullet$}" "\n"
          "#+LATEX_HEADER: \\usepackage[parfill]{parskip}" "\n"
@@ -2301,8 +2304,10 @@ and `C-x' being marked as a `term-escape-char'."
 
 (defun tempfig-revert ()
   (interactive)
-  (with-current-buffer "tempfig1.pdf"
-    (revert-buffer t 'no-confirm)))
+  (save-excursion
+    (save-window-excursion
+  (with-current-buffer "tempfig.png"
+    (revert-buffer t 'no-confirm)))))
 
 (map!
         :gi "C-RET"         nil
@@ -2312,11 +2317,13 @@ and `C-x' being marked as a `term-escape-char'."
 
 (defun tempfigs-revert ()
   (interactive)
-  (dolist (b (buffer-list))
-    (with-current-buffer b
-      (if buffer-file-name
-          (if (string-match ".*tempfig.*" buffer-file-name)
-              (revert-buffer t 'no-confirm))))))
+  (save-excursion
+    (save-window-excursion
+      (dolist (b (buffer-list))
+        (with-current-buffer b
+          (if buffer-file-name
+              (if (string-match ".*tempfig.*" buffer-file-name)
+                  (revert-buffer t 'no-confirm))))))))
 
 
 ;; actually.. it comes handy for all modes
@@ -5183,6 +5190,12 @@ and `C-x' being marked as a `term-escape-char'."
   (interactive)
   (insert "\U00002A02"))
 
+(defun js/insert-unicode-circle-horbar()
+  ;; ―
+  (interactive)
+  (insert "\U00002015"))
+
+
 (defun js/insert-unicode-degree ()
   ;; °
   (interactive)
@@ -5888,6 +5901,7 @@ and `C-x' being marked as a `term-escape-char'."
                                                     "POST(P)"  ; The task was postponed, but not canceled
                                                     "PROG(g)"  ; was in progressed, but not finished
                                                     "BEST(b)"  ; best choice /  chosen
+                                                    "LATE(l)"  ; done later
                                                     "DISC(D)"  ; discarded
                                                     ))))
 (setq org-todo-keyword-faces (append  org-todo-keyword-faces '(
@@ -5896,6 +5910,7 @@ and `C-x' being marked as a `term-escape-char'."
                                                     ("POST" . +org-todo-cancel)
                                                     ("BEST" . +org-todo-todo)
                                                     ("DISC" . +org-todo-done)
+                                                    ("LATE" . +org-todo-done)
                                                     ("PROG" . +org-todo-onhold)
                                                     ))))
 
