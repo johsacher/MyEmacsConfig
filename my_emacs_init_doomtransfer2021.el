@@ -2312,19 +2312,21 @@ and `C-x' being marked as a `term-escape-char'."
 (defun tempfig-html-open ()
   (interactive)
   (setq command-string (concat
-        "firefox --new-window "/home/jo/tempfig1.html"" "\n")))
+        "firefox --new-window /home/jo/tempfig1.html" "\n"
+        ))
+  (async-shell-command command-string))
 
 (defun tempfig-html-revert()
   (interactive)
   (setq command-string (concat
         ;; get window id's
         "MYWINDOW=$(xdotool getactivewindow)" "\n"
-        "TEMPFIGWINDOW=$(xdotool search --name "tempfig1" 2>/dev/null)" "\n"
+        "TEMPFIGWINDOW=$(xdotool search --name tempfig1 2>/dev/null)" "\n"
         ;; send F5
         "xdotool windowactivate --sync $TEMPFIGWINDOW key F5" "\n"
         ;; re-focus original window
         "xdotool windowfocus --sync ${MYWINDOW}" "\n"
-        "xdotool windowactivate --sync ${MYWINDOW}" "\n"))
+        "xdotool windowactivate --sync ${MYWINDOW}"))
   (async-shell-command command-string))
 
 
@@ -2342,7 +2344,10 @@ and `C-x' being marked as a `term-escape-char'."
         (with-current-buffer b
           (if buffer-file-name
               (if (string-match ".*tempfig.*" buffer-file-name)
-                  (revert-buffer t 'no-confirm))))))))
+                  (revert-buffer t 'no-confirm)))))))
+  ;; also revert html plots
+  (tempfig-html-revert)
+  )
 
 
 ;; actually.. it comes handy for all modes
