@@ -2316,7 +2316,7 @@ and `C-x' being marked as a `term-escape-char'."
         ))
   (async-shell-command command-string))
 
-(defun tempfig-html-revert()
+(defun tempfig1-html-revert()
   (interactive)
   (setq command-string (concat
         ;; get window id's
@@ -2327,7 +2327,44 @@ and `C-x' being marked as a `term-escape-char'."
         ;; re-focus original window
         "xdotool windowfocus --sync ${MYWINDOW}" "\n"
         "xdotool windowactivate --sync ${MYWINDOW}"))
-  (async-shell-command command-string))
+  (async-shell-command command-string)
+  ;; better (inhibit 'lengthy message'):
+  ;; [only with boiler-plate fun 'inhibit-sent.. blabla] (inhibit-sentinel-messages #'async-shell-command command-string)
+  ;; [not working yet] (efs/run-in-background command-string)
+  )
+
+(defun tempfigs-html-revert()
+  (interactive)
+  (setq command-string (concat
+        ;; get window id's
+        "MYWINDOW=$(xdotool getactivewindow)" "\n"
+        "TEMPFIGWINDOWS=$(xdotool search --name tempfig 2>/dev/null)" "\n"
+        ;; send F5
+        "for win in $TEMPFIGWINDOWS; do xdotool windowactivate --sync $win key F5; done" "\n"
+        ;; re-focus original window
+        "xdotool windowfocus --sync ${MYWINDOW}" "\n"
+        "xdotool windowactivate --sync ${MYWINDOW}"))
+  (async-shell-command command-string)
+  ;; better (inhibit 'lengthy message'):
+  ;; [only with boiler-plate fun 'inhibit-sent.. blabla] (inhibit-sentinel-messages #'async-shell-command command-string)
+  ;; [not working yet] (efs/run-in-background command-string)
+  )
+(defun tempfig2-html-revert()
+  (interactive)
+  (setq command-string (concat
+        ;; get window id's
+        "MYWINDOW=$(xdotool getactivewindow)" "\n"
+        "TEMPFIGWINDOW=$(xdotool search --name tempfig2 2>/dev/null)" "\n"
+        ;; send F5
+        "xdotool windowactivate --sync $TEMPFIGWINDOW key F5" "\n"
+        ;; re-focus original window
+        "xdotool windowfocus --sync ${MYWINDOW}" "\n"
+        "xdotool windowactivate --sync ${MYWINDOW}"))
+  (async-shell-command command-string)
+  ;; better (inhibit 'lengthy message'):
+  ;; [only with boiler-plate fun 'inhibit-sent.. blabla] (inhibit-sentinel-messages #'async-shell-command command-string)
+  ;; [not working yet] (efs/run-in-background command-string)
+  )
 
 
 (map!
@@ -2338,6 +2375,7 @@ and `C-x' being marked as a `term-escape-char'."
 
 (defun tempfigs-revert ()
   (interactive)
+  ;; 1. revert emacs 'tempfig'-buffers
   (save-excursion
     (save-window-excursion
       (dolist (b (buffer-list))
@@ -2345,8 +2383,8 @@ and `C-x' being marked as a `term-escape-char'."
           (if buffer-file-name
               (if (string-match ".*tempfig.*" buffer-file-name)
                   (revert-buffer t 'no-confirm)))))))
-  ;; also revert html plots
-  (tempfig-html-revert)
+  ;; 2. also revert html 'tempfig' windows
+  (tempfigs-html-revert)
   )
 
 
