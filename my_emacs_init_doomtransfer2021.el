@@ -20,6 +20,7 @@
 
 ;; * mac specific
 ;;
+(setq auto-save-default nil)
 (if IS-MAC (setq mac-command-modifier 'meta))
 
 ;; * leader ; -> M-x
@@ -4925,6 +4926,17 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00002794"))
 (js/specialchardef ">" #'js/insert-unicode-Arrow)
 (js/specialchardef "RET" #'js/insert-unicode-Arrow)
+
+
+(defun js/insert-unicode-arrow-up ()
+  ;; ↑
+  (interactive)
+  (insert "\U00002191"))
+
+(defun js/insert-unicode-arrow-down ()
+  ;; ↓
+  (interactive)
+  (insert "\U00002193"))
 
 (defun js/insert-unicode-approx ()
   ;; ≈
