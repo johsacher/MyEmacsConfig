@@ -4929,14 +4929,18 @@ and `C-x' being marked as a `term-escape-char'."
 
 
 (defun js/insert-unicode-arrow-up ()
-  ;; ↑
+  ;; ↑⬆
   (interactive)
-  (insert "\U00002191"))
+  ;; (insert "\U00002191")
+  (insert "\U00002B06")
+  )
 
 (defun js/insert-unicode-arrow-down ()
-  ;; ↓
+  ;; ↓⬇
   (interactive)
-  (insert "\U00002193"))
+  ;; (insert "\U00002193")
+  (insert "\U00002B07")
+  )
 
 (defun js/insert-unicode-approx ()
   ;; ≈
