@@ -3000,6 +3000,7 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "emacs init"      "i" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/MyEmacsConfig/my_emacs_init_doomtransfer2021.el")))
       :desc "quantica"        "q" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/quantica")))
       :desc "frequent commands" "f" #'(lambda () (interactive) (find-file (substitute-in-file-name "$HOME/org/frequent_commands.sh")))
+      :desc "root"             "r" #'(lambda () (interactive) (find-file (substitute-in-file-name "/")))
  ))
 
 ;;NOT DOOM ;;;  (js/leader-def "hm" 'dired-go-mucke)
