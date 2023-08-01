@@ -5287,6 +5287,11 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (insert "\U00002713") ;; ✓
   (insert "\U00002705")) ;; ✅
 
+(defun js/insert-unicode-Unchecked ()
+  ;; ☐
+  (interactive)
+  (insert "\U00002610"))
+
 (defun js/insert-unicode-Crossmark ()
   (interactive)
   ;; ❌
