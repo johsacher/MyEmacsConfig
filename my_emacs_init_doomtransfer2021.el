@@ -249,6 +249,13 @@
 "M-J" '(lambda () (interactive) (shrink-window 4))
 "M-H" '(lambda () (interactive) (enlarge-window-horizontally 4))
 "M-L" '(lambda () (interactive) (shrink-window-horizontally 4)))
+
+(after! term
+(map! :map term-raw-map
+      "M-K" '(lambda () (interactive) (enlarge-window 4))
+      "M-J" '(lambda () (interactive) (shrink-window 4))
+      "M-H" '(lambda () (interactive) (enlarge-window-horizontally 4))
+      "M-L" '(lambda () (interactive) (shrink-window-horizontally 4))))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;; ;; kbd "M-[" makes (xterm-mouse-mode behave strange/break (bug?)
 ;;NOT DOOM ;;;
