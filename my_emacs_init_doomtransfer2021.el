@@ -6236,3 +6236,17 @@ and `C-x' being marked as a `term-escape-char'."
 ;;   (interactive)
 ;;   (setq buf1 ())
 ;;   )
+
+
+;; * translate gmsh.geo to gmsh.py
+(defun replace-regexp-in-region (start end regexp replacement)
+  "Replace occurrences of REGEXP with REPLACEMENT in the selected region."
+  (save-excursion
+    (goto-char start)
+    (while (re-search-forward regexp end t)
+      (replace-match replacement))))
+
+(defun js/gmsh-geo-to-py ()
+  (interactive)
+  (replace-regexp-in-region (region-beginning) (region-end) ";" "")
+  )
