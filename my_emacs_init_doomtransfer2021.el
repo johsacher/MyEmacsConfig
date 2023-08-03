@@ -6248,5 +6248,15 @@ and `C-x' being marked as a `term-escape-char'."
 
 (defun js/gmsh-geo-to-py ()
   (interactive)
+  ;; comments
+  (replace-regexp-in-region (region-beginning) (region-end) "\/\/" "#")
+  ;; semicolon
   (replace-regexp-in-region (region-beginning) (region-end) ";" "")
+  (replace-regexp-in-region (region-beginning) (region-end) " *newp.*=" "geom.addPoint")
+  (replace-regexp-in-region (region-beginning) (region-end) " *newl.*Line.*=" "geom.addLine")
+  (replace-regexp-in-region (region-beginning) (region-end) " *newl.*Circle.*=" "geom.addCircleArc")
+  (replace-regexp-in-region (region-beginning) (region-end) " *news.*Plane Surface.*=" "geom.addPlaneSurface")
+  (replace-regexp-in-region (region-beginning) (region-end) " *newcl.*Curve Loop.*=" "geom.addCurveLoop")
+  (replace-regexp-in-region (region-beginning) (region-end) "\{" "(")
+  (replace-regexp-in-region (region-beginning) (region-end) "\}" ")")
   )
