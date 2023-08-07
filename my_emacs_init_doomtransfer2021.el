@@ -785,7 +785,7 @@
    ;; (python-calculator-mode)
    ;; * execute ipython
    (cond ((equal myhost "phone")
-          (comint-send-string ipython-calculator-buffer-name "python\n"))
+          (comint-send-string ipython-calculator-buffer-name "ipython\n"))
          ((equal myhost "quantica")
           (comint-send-string ipython-calculator-buffer-name "ip\n"))
            ;; alias ip for /opt/anaconda/bin/ipython
@@ -824,7 +824,7 @@
 
    ;; * execute ipython
    (cond ((equal myhost "phone")
-          (comint-send-string ipython-calculator-buffer-name "python\n"))
+          (comint-send-string ipython-calculator-buffer-name "ipython\n"))
          (t
           (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
 
