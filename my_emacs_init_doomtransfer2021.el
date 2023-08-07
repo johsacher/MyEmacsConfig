@@ -778,6 +778,10 @@
  ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
  (defvar ipython-calculator-buffer-name-nostar "ipython-calculator")
  (defvar ipython-calculator-buffer-name (concat "*" ipython-calculator-buffer-name-nostar "*"))
+(defvar ipython-calculator-preamble (concat
+        "print('hello')\n"
+"%config InteractiveShell.ast_node_interactivity='last_expr_or_assign'\n"
+                                     ))
 
  (defun ipython-calculator-init ()
    (interactive)
@@ -790,7 +794,9 @@
           (comint-send-string ipython-calculator-buffer-name "ip\n"))
            ;; alias ip for /opt/anaconda/bin/ipython
          (t
-          (comint-send-string ipython-calculator-buffer-name "ipython\n"))))
+          (comint-send-string ipython-calculator-buffer-name "ipython\n")))
+   (comint-send-string ipython-calculator-buffer-name ipython-calculator-preamble)
+   )
 
  (defun ipython-calculator-init0 ()
    "Start a terminal-emulator in a new buffer and run ipython."
