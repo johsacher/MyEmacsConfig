@@ -778,9 +778,12 @@
  ;; todo: if not exists --> create ansi-term (non-sticky), enter ipython, and rename *ipython-calculator*
  (defvar ipython-calculator-buffer-name-nostar "ipython-calculator")
  (defvar ipython-calculator-buffer-name (concat "*" ipython-calculator-buffer-name-nostar "*"))
-(defvar ipython-calculator-preamble (concat
-        "print('hello')\n"
-"%config InteractiveShell.ast_node_interactivity='last_expr_or_assign'\n"
+ (defvar ipython-calculator-preamble (concat
+        ;; "print('hello')\n"
+        ;; set in ~/.ipython/profile_default/ipython_config.py -> c.InteractiveShell ...
+        ;; (though for all ipython sessions, in case you want only for ipython-calculator
+        ;;  outcommenting this would be the way to go)
+        ;; "%config InteractiveShell.ast_node_interactivity='last_expr_or_assign'\n"
                                      ))
 
  (defun ipython-calculator-init ()
