@@ -5200,6 +5200,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/insert-unicode-alpha ()
   (interactive)
   (insert "\U000003B1"))
+(js/specialchardef "g a" #'js/insert-unicode-alpha)
 
 (defun js/insert-unicode-beta ()
   (interactive)
