@@ -697,6 +697,7 @@
 ;;NOT DOOM ;;;              ))
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;;; * python
+(setq org-babel-python-command "/opt/anaconda/bin/python")
 ;;NOT DOOM ;;;  (add-hook 'python-mode-hook
 ;;NOT DOOM ;;;            (lambda ()
 ;;NOT DOOM ;;;              (auto-complete-mode)
@@ -1185,6 +1186,15 @@
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("H" "#+HTML: ") ("a" "#+BEGIN_EXPORT ascii
 ;;NOT DOOM ;;;  ;; ?
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
+
+;; ** markdown
+(after! markdown
+  (map!  :map evil-markdown-mode-map
+     :nvieomr "M-h" nil
+     :nvieomr "M-j" nil
+     :nvieomr "M-k" nil
+     :nvieomr "M-l" nil)
+  )
 
 ;; ** org-mode -> visual-line-mode by default
 ;; org-mode toggle bold/italic
