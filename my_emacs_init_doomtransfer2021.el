@@ -5056,6 +5056,16 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U0000222B")
   )
 
+(defun js/insert-unicode-int ()
+  ;; ∫
+  (interactive)
+  (insert "\U0000222B")
+  )
+(defun js/insert-unicode-prop ()
+  ;; ∝
+  (interactive)
+  (insert "\U0000221D")
+  )
 (defun js/insert-unicode-dot ()
   ;; ·
   (interactive)
