@@ -5859,9 +5859,9 @@ and `C-x' being marked as a `term-escape-char'."
         "M-+"  #'js/frame-font-size-increase
         "M-_"  #'js/frame-font-size-decrease))
 
-;;NOT DOOM ;;; ;; * set transparency
-;;NOT DOOM ;;; (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
-;;NOT DOOM ;;; (add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
+;; * set transparency
+(set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
+(add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
 ;;NOT DOOM ;;; ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;;NOT DOOM ;;; ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;;NOT DOOM ;;;
