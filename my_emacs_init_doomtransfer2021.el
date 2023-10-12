@@ -6296,3 +6296,20 @@ and `C-x' being marked as a `term-escape-char'."
   (replace-regexp-in-region (region-beginning) (region-end) "\{" "(")
   (replace-regexp-in-region (region-beginning) (region-end) "\}" ")")
   )
+
+;; * quantica cae workflow
+(defun cae/copy-fullfilename-conv-docker ()
+  (interactive)
+  ;; get current path
+  (setq fullfilename (get-fullfilename))
+  (kill-new fullfilename)
+  ;; test
+  ;; (setq fullfilename "/home/jo/Data/quantica_cfd_cases/cases27_channel_restrictors_pressurization_and_impedance/cases27a_pressurization_study/template_case/mesh/mesh.hdf")
+  (setq fullfilename-conv-docker
+        (replace-regexp-in-string (regexp-quote "/home/jo/Data") "/root/Data" fullfilename))
+  (kill-new fullfilename-conv-docker)
+  (message (concat "copied full file name - docker converted - to clipboard: \n"  fullfilename-conv-docker)
+  fullfilename-conv-docker))
+
+(map! :leader
+      "yd" #'cae/copy-fullfilename-conv-docker)
