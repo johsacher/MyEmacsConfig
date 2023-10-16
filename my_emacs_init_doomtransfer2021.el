@@ -1500,10 +1500,11 @@ from lines like:
   ;; insert new line with file ref
   (end-of-line)
   (newline)
+  (insert "#+ATTR_ORG: :width 800") ;; some default width
+  (newline)
   (insert (concat "[[./" filename "]]"))
   ;; (insert command_string)
-  (org-display-inline-images)
-  )
+  (org-display-inline-images))
 
 (map! :leader
       ;; :prefix ("i" . "+insert") ;; not necessary
@@ -5862,6 +5863,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * set transparency
 (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
 (add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
+;; (set-frame-parameter (selected-frame) 'alpha '(100 . 100)) ;; 90 90 refers to when active/when inactive
 ;;NOT DOOM ;;; ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;;NOT DOOM ;;; ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;;NOT DOOM ;;;
@@ -6312,4 +6314,21 @@ and `C-x' being marked as a `term-escape-char'."
   fullfilename-conv-docker))
 
 (map! :leader
-      "yd" #'cae/copy-fullfilename-conv-docker)
+      (:prefix ("[" . "cae")
+      :desc "file docker path" "d" #'cae/copy-fullfilename-conv-docker))
+
+;; open case paraview
+(defun cae/open-of-case-paraview ()
+  (interactive)
+  (setq currentpath (get-current-path))
+  (setq paraview-file-name (concat currentpath "a.foam"))
+  ;; (setq command1 (concat "touch " paraview-file-name ))
+  ;; (shell-command command1)
+  ;; (sleep-for 0.1)
+  (setq command2 (concat "paraview " paraview-file-name ))
+  (message command2)
+  (efs/run-in-background command2))
+
+(map! :leader
+      (:prefix ("[" . "cae")
+      :desc "paraview openfoam case" "p" #'cae/open-of-case-paraview))
