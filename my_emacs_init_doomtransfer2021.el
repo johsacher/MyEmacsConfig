@@ -4982,6 +4982,11 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00002248"))
 (js/specialchardef "m a" #'js/insert-unicode-approx)
 
+(defun js/insert-unicode-much-smaller ()
+  ;; ≪
+  (interactive)
+  (insert "\U0000226A"))
+
 (defun js/insert-unicode-Delta ()
   ;; Δ
   (interactive)
@@ -5235,9 +5240,17 @@ and `C-x' being marked as a `term-escape-char'."
 (js/specialchardef "g b" #'js/insert-unicode-beta)
 
 (defun js/insert-unicode-gamma ()
+  ;; γ
   (interactive)
   (insert "\U000003B3"))
 (js/specialchardef "g g" #'js/insert-unicode-gamma)
+
+(defun js/insert-unicode-Gamma ()
+  ;; Γ
+  (interactive)
+  (insert "\U00000393"))
+(js/specialchardef "g G" #'js/insert-unicode-Gamma)
+
 
 (defun js/insert-unicode-delta ()
   ;; δ
@@ -6332,3 +6345,13 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       (:prefix ("[" . "cae")
       :desc "paraview openfoam case" "p" #'cae/open-of-case-paraview))
+
+
+;; shebangs
+(defun js/python-preamble ()
+  (interactive)
+  (insert (concat
+         "#!opt/anaconda/bin/python" "\n"
+         "import numpy as np" "\n"
+         "from matplotlib import pyplot as plt" "\n"
+         )))
