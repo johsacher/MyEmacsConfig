@@ -5062,6 +5062,17 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U0000222B")
   )
 
+(defun js/insert-unicode-horizontal-line ()
+  ;; ⎯
+  (interactive)
+  (insert "\U000023AF")
+  )
+
+(js/specialchardef
+        "m h" #'js/insert-unicode-horizontal-line)
+
+
+
 (defun js/insert-unicode-int ()
   ;; ∫
   (interactive)
