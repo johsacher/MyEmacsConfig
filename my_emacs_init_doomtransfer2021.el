@@ -6355,7 +6355,20 @@ and `C-x' being marked as a `term-escape-char'."
 
 (map! :leader
       (:prefix ("[" . "cae")
-      :desc "paraview openfoam case" "p" #'cae/open-of-case-paraview))
+      :desc "paraview openfoam case" "P" #'cae/open-of-case-paraview))
+
+(defun cae/open-file-paraview ()
+  (interactive)
+  (setq paraview-file-name (get-fullfilename))
+  (setq command2 (concat "paraview " paraview-file-name ))
+  (message command2)
+  (efs/run-in-background command2))
+
+(map! :leader
+      (:prefix ("[" . "cae")
+      :desc "paraview file" "p" #'cae/open-file-paraview))
+
+
 
 
 ;; shebangs
