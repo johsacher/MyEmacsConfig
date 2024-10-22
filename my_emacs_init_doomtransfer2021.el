@@ -434,6 +434,10 @@
   (evil-visual-char)
   (evil-goto-mark ?\]))
 
+(map! :n "M-;" 'evil-goto-last-change)
+(map! :n "M-'" 'evil-goto-last-change-reverse)
+(map! :n "M-f" 'comment-line)
+
 (map! :n "zv" 'evil-select-pasted)
 ;; ( -> mapped to evil leader v)
 ;;NOT DOOM ;;;
@@ -2087,10 +2091,10 @@ new-org-file-full-name)
 ;;NOT DOOM ;;;  (evil-define-key 'insert org-mode-map (kbd "C-j") 'org-metadown)
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; (evil-define-key 'normal org-mode-map (kbd "left") 'dummy-message)
-;;NOT DOOM ;;;  (defun dummy-message ()
-;;NOT DOOM ;;;    (interactive)
-;;NOT DOOM ;;;    (message "this is a message from dummy-message")
-;;NOT DOOM ;;;    )
+(defun dummy-message ()
+  (interactive)
+  (message "this is a message from dummy-message")
+  )
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  (evil-define-key 'normal org-mode-map (kbd "C-l") 'org-shiftmetaright)
 ;;NOT DOOM ;;;  (evil-define-key 'normal org-mode-map (kbd "C-h") 'org-shiftmetaleft)
@@ -2882,7 +2886,23 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;; copy current filename (e.g. execute in matlab command window)
 ;;NOT DOOM ;;;  (global-set-key (kbd "<f9>") 'copy-current-file-name-no-extension)
 ;;NOT DOOM ;;;
-;;NOT DOOM ;;;  ;;; ** avy/ace jump
+;; ** avy/ace jump
+
+;; all not working
+;; (map! :map evil-normal-state-map
+;;       "gl"   nil)
+;; (map! :map evil-normal-state-map
+;;       :n "gl" #'dummy-message)
+;; (map! :map evil-normal-state-local-map
+;;       :n "gl" #'dummy-message)
+
+;; (map! :map evil-normal-state-local-map
+;;       :n "9" #'dummy-message)
+
+; avy-goto-line
+
+
+
 ;;NOT DOOM ;;; (use-package avy
 ;;NOT DOOM ;;;   :ensure t)
 ;;NOT DOOM ;;;  (js/leader-def "j" 'avy-goto-char-2) ;; 'avy-goto-char
@@ -3192,6 +3212,7 @@ and `C-x' being marked as a `term-escape-char'."
                                ("\\.xoj\\'" "xournalpp" (file)) ;; xournalpp *can* open xoj-files (luckily)
                                ("\\.xopp\\'" "xournalpp" (file))
                                ("\\.avi\\'" "vlc" (file))
+                               ("\\.asc\\'" "ltspice_docker_ubuntu.sh" (file))
                                ("\\.pdf\\'" "okular" (file))))))
 ;; )
 ;;NOT DOOM ;;;
@@ -4369,6 +4390,7 @@ and `C-x' being marked as a `term-escape-char'."
       "M-d"  nil)
 
 
+
 (map! :leader
       :desc "win0" "0" #'execute-extended-command
       :desc "win0" "0" #'delete-window
@@ -5070,6 +5092,9 @@ and `C-x' being marked as a `term-escape-char'."
 
 (js/specialchardef
         "m h" #'js/insert-unicode-horizontal-line)
+
+(js/specialchardef
+        "-" #'js/insert-unicode-horizontal-line)
 
 
 
@@ -5887,6 +5912,18 @@ and `C-x' being marked as a `term-escape-char'."
 ;; * set transparency
 (set-frame-parameter (selected-frame) 'alpha '(92 . 92)) ;; 90 90 refers to when active/when inactive
 (add-to-list 'default-frame-alist '(alpha . (92 . 92))) ;; make it also for new frames
+(defun js/set-frame-transparent ()
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(92 . 92))
+  )
+
+(defun js/set-frame-non-transparent ()
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
+  )
+
+
+
 ;; (set-frame-parameter (selected-frame) 'alpha '(100 . 100)) ;; 90 90 refers to when active/when inactive
 ;;NOT DOOM ;;; ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;;NOT DOOM ;;; ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -6357,6 +6394,28 @@ and `C-x' being marked as a `term-escape-char'."
       (:prefix ("[" . "cae")
       :desc "paraview openfoam case" "P" #'cae/open-of-case-paraview))
 
+
+(map! :leader
+      (:prefix ("[" . "cae")
+      :desc "open docker spice" "s" #'cae/open-with-ltspice))
+
+(defun cae/open-with-ltspice ()
+  (interactive)
+  (setq file-name (get-fullfilename))
+  (setq command (concat "ltspice_docker_ubuntu.sh " file-name ))
+  (message command)
+  (async-shell-command command-string "*ltspice*"))
+
+(defun cae/open-with-ltspice ()
+  (interactive)
+  (setq file-name (get-fullfilename))
+  (setq command (concat "ltspice_docker_ubuntu.sh " file-name ))
+  (message command)
+  (async-shell-command command "*ltspice*"))
+  ;; (efs/run-in-background command))
+  ;; (efs/run-in-background command))
+
+
 (defun cae/open-file-paraview ()
   (interactive)
   (setq paraview-file-name (get-fullfilename))
@@ -6367,6 +6426,18 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       (:prefix ("[" . "cae")
       :desc "paraview file" "p" #'cae/open-file-paraview))
+
+(defun js/open-file-pdf ()
+  (interactive)
+  (setq file-name (get-fullfilename))
+  (setq command (concat "okular " file-name ))
+  (message command)
+  (efs/run-in-background command))
+
+(map! :leader
+      (:prefix ("[" . "cae")
+      :desc "pdf" "o" #'js/open-file-pdf))
+
 
 
 
