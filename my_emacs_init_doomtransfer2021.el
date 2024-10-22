@@ -6439,6 +6439,26 @@ and `C-x' being marked as a `term-escape-char'."
       :desc "pdf" "o" #'js/open-file-pdf))
 
 
+(defun js/open-file-external ()
+  (interactive)
+  (setq file-name (get-fullfilename))
+  ;; get extension
+  (setq ext (file-name-extension file-name))
+  (setq program "not-found")
+  (cond
+      ((equal ext "pdf")
+      (setq program "okular"))
+      ((equal ext "xopp")
+      (setq program "xournalpp")))
+  (setq command (concat program  " " file-name ))
+  (message command)
+  (efs/run-in-background command)
+  )
+(setq ext "xopp")
+(map! :leader
+      :desc "open file external" "RET" #'js/open-file-external)
+
+
 
 
 
