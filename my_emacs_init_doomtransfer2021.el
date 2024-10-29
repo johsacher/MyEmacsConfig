@@ -6097,7 +6097,7 @@ and `C-x' being marked as a `term-escape-char'."
                                                     "POST(P)"  ; The task was postponed, but not canceled
                                                     "PROG(g)"  ; was in progressed, but not finished
                                                     "BEST(b)"  ; best choice /  chosen
-                                                    "LATE(l)"  ; done later
+                                                    "DNLT(l)"  ; done later
                                                     "DISC(D)"  ; discarded
                                                     ))))
 (setq org-todo-keyword-faces (append  org-todo-keyword-faces '(
