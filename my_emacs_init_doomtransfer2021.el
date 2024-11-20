@@ -6302,20 +6302,30 @@ and `C-x' being marked as a `term-escape-char'."
 ;; this for rectangle yank:
 ;; (put 'yank-rectangle 'delete-selection 'yank)
 ;; (put 'yank-rectangle 'delete-selection 'yank)
-(defun js/yank-replace ()
+(defun js/paste-replace ()
   (interactive)
   (delete-char (length (current-kill 0)))
   (yank)
   )
 
-;; copy region and leave blank spaces
+(defun js/cut-replace-blank ()
+  (interactive)
+  (setq Nspaces (- (region-end) (region-beginning)))
+  ;; (message "region length: %d" Nspaces)
+  (kill-region (region-beginning) (region-end))
+  (insert (make-string Nspaces ? )) ;; ? means blank character
+  )
+
+;;                 leave blank spaces
 ;; (defun js/cut-blank ()
 ;;   (interactive)
 ;;   (delete-char (length (current-kill 0)))
 ;;   (yank)
 ;;   )
 
-(map! "M-P" #'js/yank-replace)
+(map! "M-P" #'js/paste-replace)
+(map! "M-K" #'js/cut-replace-blank)
+(map! "M-D" #'js/cut-replace-blank)
 
 ;; * flycheck , disable for c++
 (setq flycheck-global-modes nil)
