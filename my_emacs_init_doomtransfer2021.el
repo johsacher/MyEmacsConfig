@@ -6324,7 +6324,6 @@ and `C-x' being marked as a `term-escape-char'."
 ;;   )
 
 (map! "M-P" #'js/paste-replace)
-(map! "M-K" #'js/cut-replace-blank)
 (map! "M-D" #'js/cut-replace-blank)
 
 ;; * flycheck , disable for c++
