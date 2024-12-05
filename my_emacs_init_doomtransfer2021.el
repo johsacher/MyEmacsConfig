@@ -4977,6 +4977,18 @@ and `C-x' being marked as a `term-escape-char'."
 (js/specialchardef ">" #'js/insert-unicode-Arrow)
 (js/specialchardef "RET" #'js/insert-unicode-Arrow)
 
+(defun js/insert-unicode-tab ()
+  ;; ➔
+  (interactive)
+  (insert "\U00000009"))
+(js/specialchardef "t" #'js/insert-unicode-tab)
+
+(defun js/insert-unicode-no-break-space ()
+  ;;  
+  (interactive)
+  (insert "\U000000A0"))
+(js/specialchardef "n" #'js/insert-unicode-no-break-space)
+
 
 (defun js/insert-unicode-arrow-up ()
   ;; ↑⬆
@@ -6092,6 +6104,9 @@ and `C-x' being marked as a `term-escape-char'."
 (custom-declare-face '+org-todo-current  '((t (:inherit (bold error org-todo)))) "")
 (setq org-todo-keywords (append  org-todo-keywords '((sequence
                                                     "CRNT(c)"  ; The task that is in work currently
+                                                    "MUST(m)"
+                                                    "CAN(a)"
+                                                    "NCTH(n)"  ; nice to have
                                                     "|"  ;; (after "|" tells org-mode -> following do not require action)
                                                     "CNCD(C)"  ; The task is canceled
                                                     "POST(P)"  ; The task was postponed, but not canceled
