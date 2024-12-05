@@ -4989,6 +4989,12 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U000000A0"))
 (js/specialchardef "n" #'js/insert-unicode-no-break-space)
 
+(defun js/insert-unicode-zero-width-space ()
+  ;; ﻿<-- here is a zero width charactor xD
+  (interactive)
+  (insert "\U0000FEFF"))
+
+
 
 (defun js/insert-unicode-arrow-up ()
   ;; ↑⬆
