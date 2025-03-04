@@ -1192,7 +1192,7 @@
 ;;NOT DOOM ;;;  ;; #+END_EXPORT") ("A" "#+ASCII: ") ("i" "#+INDEX: ?") ("I" "#+INCLUDE: %file ?"))
 
 ;; ** markdown
-(after! markdown
+(after! evil-markdown
   (map!  :map evil-markdown-mode-map
      :nvieomr "M-h" nil
      :nvieomr "M-j" nil
@@ -1217,6 +1217,11 @@
     (my-toggle-marker-around-region "~" "\~"  "~" "\~")
     )
 
+  (defun org-toggle-code-md-region ()
+    (interactive)
+    (my-toggle-marker-around-region "`" "\`"  "`" "\`")
+    )
+
   (defun org-toggle-red-region ()
     (interactive)
     (my-toggle-marker-around-region "=" "="  "=" "=")
@@ -1239,6 +1244,7 @@
     :desc "toggle bold"       "b" #'org-toggle-bold-region
     :desc "toggle italic"     "i" #'org-toggle-italic-region
     :desc "toggle code"       "c" #'org-toggle-code-region
+    :desc "toggle code md"    "'" #'org-toggle-code-md-region
     :desc "toggle underline"  "u" #'org-toggle-underline-region
     :desc "preview LateX"     "l" #'org-latex-preview
     :desc "capitalize region" "C" #'capitalize-region
@@ -6478,6 +6484,8 @@ and `C-x' being marked as a `term-escape-char'."
   (cond
       ((equal ext "pdf")
       (setq program "okular"))
+      ((equal ext "xlsx")
+      (setq program "onlyoffice"))
       ((equal ext "xopp")
       (setq program "xournalpp")))
   (setq command (concat program  " " file-name ))
