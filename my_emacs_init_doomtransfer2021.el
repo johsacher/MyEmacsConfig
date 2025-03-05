@@ -6488,9 +6488,11 @@ and `C-x' being marked as a `term-escape-char'."
       (setq program "onlyoffice"))
       ((equal ext "xopp")
       (setq program "xournalpp")))
-  (setq command (concat program  " " file-name ))
+  (setq command (concat program  " \"" file-name "\"" "&" ))
   (message command)
-  (efs/run-in-background command)
+  ;; (efs/run-in-background command)
+  ;; (async-shell-command command nil)
+  (call-process-shell-command command nil 0)
   )
 (setq ext "xopp")
 (map! :leader
