@@ -10,9 +10,11 @@
 	     (setq currentpath (file-name-directory buffer-file-name))
 	)
    )
- (kill-new currentpath)
- (message (concat "copied path to clipboard: "  currentpath))
- currentpath)
+  ;; (setq currentpath_quoted (concat "'" currentpath "'"))
+  (setq currentpath_quoted currentpath)
+ (kill-new currentpath_quoted)
+ (message (concat "copied path to clipboard: "  currentpath_quoted))
+ currentpath_quoted)
 
 
 (defun change-dir-from-clipboard () 

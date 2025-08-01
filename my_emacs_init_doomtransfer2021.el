@@ -2940,8 +2940,9 @@ and `C-x' being marked as a `term-escape-char'."
 ;;NOT DOOM ;;;  ;;; * dired
 ;;NOT DOOM ;;;
 ;;NOT DOOM ;;;  ;; ** hide details by default
-(add-hook 'dired-mode-hook
-            'dired-hide-details-mode)
+(setq dired-listing-switches "-1")
+(after! dired
+(add-hook 'dired-mode-hook #'dired-hide-details-mode))
 ;;NOT DOOM ;;;  	    (dired-do-kill-lines))
 ;;NOT DOOM ;;;  	(progn (revert-buffer) ; otherwise just revert to re-show
 ;;NOT DOOM ;;;                 (set (make-local-variable 'dired-dotfiles-show-p) t)))))
@@ -3030,6 +3031,11 @@ and `C-x' being marked as a `term-escape-char'."
  (t
   (dired (substitute-in-file-name "$HOME/Downloads")))
  ))
+
+;; dired show hidden files
+(after! dired
+  (dired-omit-mode 0)
+  )
 
 
 (setq dropbox-path (getenv "DROPBOX"))
@@ -4394,6 +4400,17 @@ and `C-x' being marked as a `term-escape-char'."
 ;; unbind M-d -> so it works from general-override-mode-map (above)
 (map! :map evil-normal-state-map
       "M-d"  nil)
+
+(map! :map outline-mode-map
+      :nvieomr "M-h" nil
+      :nvieomr "M-j" nil
+      :nvieomr "M-k" nil
+      :nvieomr "M-l" nil
+      :nvieomr "M-H" nil
+      :nvieomr "M-J" nil
+      :nvieomr "M-K" nil
+      :nvieomr "M-L" nil
+      )
 
 
 
