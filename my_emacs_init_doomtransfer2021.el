@@ -2943,6 +2943,8 @@ and `C-x' being marked as a `term-escape-char'."
 (setq dired-listing-switches "-1")
 (after! dired
 (add-hook 'dired-mode-hook #'dired-hide-details-mode))
+(after! dirvish
+  (setq dirvish-hide-details t))
 ;;NOT DOOM ;;;  	    (dired-do-kill-lines))
 ;;NOT DOOM ;;;  	(progn (revert-buffer) ; otherwise just revert to re-show
 ;;NOT DOOM ;;;                 (set (make-local-variable 'dired-dotfiles-show-p) t)))))
