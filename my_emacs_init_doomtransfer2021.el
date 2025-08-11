@@ -618,6 +618,8 @@
   (setq current-git-top-level-absolute-path (replace-regexp-in-string "\n$" "" output))
   current-git-top-level-absolute-path)
 
+
+(advice-remove 'comint-output-filter #'doom--comint-enable-undo-a);; doom bug fix
 (defun gsyn ()
   (interactive)
   (let
@@ -5015,6 +5017,33 @@ and `C-x' being marked as a `term-escape-char'."
   (insert "\U00002794"))
 (js/specialchardef ">" #'js/insert-unicode-Arrow)
 (js/specialchardef "RET" #'js/insert-unicode-Arrow)
+
+
+(defun js/insert-unicode-box-top-right ()
+  ;; ┐
+  (interactive)
+  (insert "\U00002510"))
+
+(defun js/insert-unicode-box-top-left ()
+  ;; ┌
+  (interactive)
+  (insert "\U0000250C"))
+
+(defun js/insert-unicode-box-bottom-left ()
+  ;; └
+  (interactive)
+  (insert "\U00002514"))
+
+(defun js/insert-unicode-box-bottom-right ()
+  ;; ┘
+  (interactive)
+  (insert "\U00002518"))
+
+(js/specialchardef "b j" #'js/insert-unicode-box-bottom-left)
+(js/specialchardef "b u" #'js/insert-unicode-box-top-left)
+(js/specialchardef "b k" #'js/insert-unicode-box-bottom-right)
+(js/specialchardef "b i" #'js/insert-unicode-box-top-right)
+
 
 (defun js/insert-unicode-tab ()
   ;; ➔
