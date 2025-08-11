@@ -633,8 +633,7 @@
     ;;(let (shell-command-buffer-name-async "*gsyn output*")
     (when (get-buffer "*gsyn output*")
       (kill-buffer "*gsyn output*"))
-    (message "hello")
-    (async-shell-command command-string "*gsyn output*")
+    ;; (async-shell-command command-string "*gsyn output*")
 
 ))
 
