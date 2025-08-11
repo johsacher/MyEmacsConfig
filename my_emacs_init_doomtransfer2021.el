@@ -282,6 +282,17 @@
    )
   )
 
+;; (after! org
+;;   :nvieomr "M-h" nil
+;;   :nvieomr "M-j" nil
+;;   :nvieomr "M-k" nil
+;;   :nvieomr "M-l" nil
+;;   :nvieomr "M-H" nil
+;;   :nvieomr "M-J" nil
+;;   :nvieomr "M-K" nil
+;;   :nvieomr "M-L" nil
+;;   )
+
 
 ;;NOT DOOM POT ;;;  ;; ** suppress "spamy" auto-revert messages
 ;;NOT DOOM ;;;  (setq auto-revert-verbose nil)
@@ -620,12 +631,11 @@
     (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
     (message (concat "git-synchronization launched ... (executed: " command-string ")"))
     ;;(let (shell-command-buffer-name-async "*gsyn output*")
-    ;; (when (get-buffer "*gsyn output*")
-    ;;  (kill-buffer "*gsyn output*"))
-    ;; (async-shell-command command-string "*gsyn output*"))
+    (when (get-buffer "*gsyn output*")
+      (kill-buffer "*gsyn output*"))
+    (async-shell-command command-string "*gsyn output*")
 
-)
-(get-buffer "*gsyn output*")
+))
 
 (defun gsyn-and-revert ()
   (interactive)
@@ -4406,7 +4416,7 @@ and `C-x' being marked as a `term-escape-char'."
 ;; unbind M-d -> so it works from general-override-mode-map (above)
 (map! :map evil-normal-state-map
       "M-d"  nil)
-
+(after! org
 (map! :map outline-mode-map
       :nvieomr "M-h" nil
       :nvieomr "M-j" nil
@@ -4416,7 +4426,7 @@ and `C-x' being marked as a `term-escape-char'."
       :nvieomr "M-J" nil
       :nvieomr "M-K" nil
       :nvieomr "M-L" nil
-      )
+      ))
 
 
 
