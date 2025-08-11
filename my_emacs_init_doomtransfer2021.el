@@ -620,8 +620,12 @@
     (setq command-string (concat "gsyn " current-git-top-level-absolute-path))
     (message (concat "git-synchronization launched ... (executed: " command-string ")"))
     ;;(let (shell-command-buffer-name-async "*gsyn output*")
-    (async-shell-command command-string "*gsyn output*"))
+    ;; (when (get-buffer "*gsyn output*")
+    ;;  (kill-buffer "*gsyn output*"))
+    ;; (async-shell-command command-string "*gsyn output*"))
+
 )
+(get-buffer "*gsyn output*")
 
 (defun gsyn-and-revert ()
   (interactive)
