@@ -5247,6 +5247,15 @@ and `C-x' being marked as a `term-escape-char'."
   )
 (js/specialchardef "g e" #'js/insert-unicode-epsilon)
 
+(defun js/insert-unicode-varepsilon ()
+  ;; ϵ
+  (interactive)
+  (insert "\U000003F5")
+  )
+(js/specialchardef "g E" #'js/insert-unicode-varepsilon)
+
+
+
 (defun js/insert-unicode-circled-dot ()
   ;; ⊙
   (interactive)
@@ -5615,6 +5624,14 @@ and `C-x' being marked as a `term-escape-char'."
   (insert (concat "[[file:" filename "]]"))
   ;; (org-redisplay-inline-images)
   )
+
+(defun js/take-screen-shot ()
+  (interactive)
+  (efs/run-in-background "flameshot gui")
+  )
+(map! :leader
+      :n "v" #'js/take-screen-shot)
+
 
 (defun org-insert-latest-screenshot-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
   (interactive)
