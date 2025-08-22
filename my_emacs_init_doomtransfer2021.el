@@ -5632,7 +5632,7 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       :n "v" #'js/take-screen-shot)
 
-
+;;
 (defun org-insert-latest-screenshot-pic () ;; --> insert image after after shooting a photo with camera (working only on mobile phone))
   (interactive)
   ;; copy to current dir
