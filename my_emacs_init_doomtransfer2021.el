@@ -6497,7 +6497,7 @@ and `C-x' being marked as a `term-escape-char'."
 (defun cae/open-of-case-paraview ()
   (interactive)
   (setq currentpath (get-current-path))
-  (setq paraview-file-name (concat currentpath "a.foam"))
+  (setq paraview-file-name (concat currentpath ".foam"))
   ;; (setq command1 (concat "touch " paraview-file-name ))
   ;; (shell-command command1)
   ;; (sleep-for 0.1)
@@ -6589,3 +6589,6 @@ and `C-x' being marked as a `term-escape-char'."
          "import numpy as np" "\n"
          "from matplotlib import pyplot as plt" "\n"
          )))
+
+
+;; macros
