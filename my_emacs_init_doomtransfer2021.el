@@ -6493,6 +6493,23 @@ and `C-x' being marked as a `term-escape-char'."
       (:prefix ("[" . "cae")
       :desc "file docker path" "d" #'cae/copy-fullfilename-conv-docker))
 
+(defun cae/copy-fullfilename-conv-remote ()
+  (interactive)
+  ;; get current path
+  (setq fullfilename (get-fullfilename))
+  (kill-new fullfilename)
+  ;; test
+  ;; (setq fullfilename "/home/jo/Data/quantica_cfd_cases/cases27_channel_restrictors_pressurization_and_impedance/cases27a_pressurization_study/template_case/mesh/mesh.hdf")
+  (setq fullfilename-conv-remote
+        (replace-regexp-in-string (regexp-quote "/home/jo/Data") "ubuntu@$instance_ip:/home/ubuntu/Data" fullfilename))
+  (kill-new fullfilename-conv-remote)
+  (message (concat "copied full file name - remote converted - to clipboard: \n"  fullfilename-conv-remote)
+  fullfilename-conv-remote))
+
+(map! :leader
+      (:prefix ("[" . "cae")
+      :desc "file remote path" "r" #'cae/copy-fullfilename-conv-remote))
+
 ;; open case paraview
 (defun cae/open-of-case-paraview ()
   (interactive)
@@ -6592,3 +6609,9 @@ and `C-x' being marked as a `term-escape-char'."
 
 
 ;; macros
+(defun js/open-file-mpv ()
+  (interactive)
+  (setq file-name (get-fullfilename))
+  (setq command (concat "mpv " file-name ))
+  (message command)
+  (efs/run-in-background command))
