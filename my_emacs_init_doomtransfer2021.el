@@ -6612,6 +6612,6 @@ and `C-x' being marked as a `term-escape-char'."
 (defun js/open-file-mpv ()
   (interactive)
   (setq file-name (get-fullfilename))
-  (setq command (concat "mpv " file-name ))
+  (setq command (concat "mpv -loop " file-name ))
   (message command)
   (efs/run-in-background command))
