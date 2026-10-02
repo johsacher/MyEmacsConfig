@@ -6522,6 +6522,7 @@ and `C-x' being marked as a `term-escape-char'."
   (message command2)
   (efs/run-in-background command2))
 
+
 (map! :leader
       (:prefix ("[" . "cae")
       :desc "paraview openfoam case" "P" #'cae/open-of-case-paraview))
@@ -6558,6 +6559,17 @@ and `C-x' being marked as a `term-escape-char'."
 (map! :leader
       (:prefix ("[" . "cae")
       :desc "paraview file" "p" #'cae/open-file-paraview))
+
+(defun cae/open-file-salome ()
+  (interactive)
+  (setq salome-file-name (get-fullfilename))
+  (setq command2 (concat "salome " salome-file-name ))
+  (message command2)
+  (efs/run-in-background command2))
+
+(map! :leader
+      (:prefix ("[" . "cae")
+      :desc "salome file" "s" #'cae/open-file-salome))
 
 (defun js/open-file-pdf ()
   (interactive)
