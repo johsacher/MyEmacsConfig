@@ -6518,7 +6518,7 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (setq command1 (concat "touch " paraview-file-name ))
   ;; (shell-command command1)
   ;; (sleep-for 0.1)
-  (setq command2 (concat "paraview " paraview-file-name ))
+  (setq command2 (concat paraview-command " " paraview-file-name ))
   (message command2)
   (efs/run-in-background command2))
 
@@ -6548,11 +6548,12 @@ and `C-x' being marked as a `term-escape-char'."
   ;; (efs/run-in-background command))
   ;; (efs/run-in-background command))
 
+(setq paraview-command "paraview6")
 
 (defun cae/open-file-paraview ()
   (interactive)
   (setq paraview-file-name (get-fullfilename))
-  (setq command2 (concat "paraview " paraview-file-name ))
+  (setq command2 (concat paraview-command " " paraview-file-name ))
   (message command2)
   (efs/run-in-background command2))
 
